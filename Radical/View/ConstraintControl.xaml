@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="Radical.ConstraintControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Radical"
+             mc:Ignorable="d" 
+             d:DesignHeight="50" d:DesignWidth="330">
+    <Grid>
+        <Grid Style="{x:Null}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60"></ColumnDefinition>
+                <ColumnDefinition Width="60"></ColumnDefinition>
+                <ColumnDefinition Width="150"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" BorderBrush="DarkGray" BorderThickness="0,0,0.5,0"></Border>
+            <TextBox Grid.Column="0" Text="{Binding Name, Mode=TwoWay}"  FontFamily="Roboto" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0" Width="40"></TextBox>
+            <CheckBox Grid.Column="1" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" IsChecked="{Binding IsEnabled, Mode=TwoWay }"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0"></CheckBox>
+
+            <ComboBox FontSize="12"  SelectedIndex="{Binding ConstraintType, Mode=TwoWay}"  HorizontalContentAlignment="Right" Grid.Column="2">
+                <ComboBoxItem Content="Less Than" HorizontalAlignment="Right"></ComboBoxItem>
+                <ComboBoxItem Content="More Than" HorizontalAlignment="Right"></ComboBoxItem>
+                <ComboBoxItem Content="Equal To" HorizontalAlignment="Right"></ComboBoxItem>
+            </ComboBox>
+            <TextBox PreviewTextInput="TextBox_PreviewTextInput" Text="{Binding ConstraintLimit, Mode=TwoWay}" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="12" Margin="10,0" BorderBrush="{x:Null}" Grid.Column="3" Width="40" HorizontalContentAlignment="Right"></TextBox>
+        </Grid>
+
+    </Grid>
+</UserControl>

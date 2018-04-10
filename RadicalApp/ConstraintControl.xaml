@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="RadicalApp.ConstraintControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RadicalApp"
+             mc:Ignorable="d" 
+             d:DesignHeight="50" d:DesignWidth="330">
+    <Grid>
+        <Grid Style="{x:Null}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60"></ColumnDefinition>
+                <ColumnDefinition Width="60"></ColumnDefinition>
+                <ColumnDefinition Width="150"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" BorderBrush="DarkGray" BorderThickness="0,0,0.5,0"></Border>
+            <TextBlock Grid.Column="0" Text="C1" FontFamily="Roboto" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0" Width="20"></TextBlock>
+            <CheckBox Grid.Column="1" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0"></CheckBox>
+
+            <ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Right" Grid.Column="2">
+                <ComboBoxItem Content="larger than"></ComboBoxItem>
+                <ComboBoxItem Content="smaller than"></ComboBoxItem>
+                <ComboBoxItem Content="equal to" ></ComboBoxItem>
+                <ComboBoxItem></ComboBoxItem>
+            </ComboBox>
+            <TextBox Text="1.0" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="12" Margin="10,0" BorderBrush="{x:Null}" Grid.Column="3" Width="60" HorizontalContentAlignment="Right"></TextBox>
+        </Grid>
+
+    </Grid>
+</UserControl>
