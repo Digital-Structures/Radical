@@ -40,6 +40,10 @@ namespace Radical.TestComponents
             pManager.AddTextParameter("Filename", "F", "Name of sampling data file", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Algorithm", "Alg", "Sampling algorithm", GH_ParamAccess.item, 2);
             //pManager.AddIntegerParameter("Seed", "s", "Seed for random processes", GH_ParamAccess.item, 0);
+            pManager[1].Optional = true;
+            pManager[3].Optional = true;
+            pManager[4].Optional = true;
+            pManager[5].Optional = true;
         }
 
         /// <summary>
@@ -107,10 +111,13 @@ namespace Radical.TestComponents
                 (Grasshopper.GUI.Canvas.GH_Canvas sender, Grasshopper.GUI.GH_CanvasMouseEvent e)
             {
                 Design design = HelperFunctions.GenerateDesign(MyComponent);
-                
+
                 DialogResult result = MessageBox.Show("Run Sampling?", "Sampling", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (result == DialogResult.Yes) { design.Sample(MyComponent.algorithm); }
-                Radical.Integration.csvWriter.CreateSamplingRecord(MyComponent.path, MyComponent.filename, design);
+                if (MyComponent.path != null || MyComponent.filename != null)
+                {
+                    Radical.Integration.csvWriter.CreateSamplingRecord(MyComponent.path, MyComponent.filename, design);
+                }
                 return base.RespondToMouseDoubleClick(sender, e);
             }
         }

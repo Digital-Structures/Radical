@@ -43,7 +43,7 @@ namespace Radical.Integration
                     IVariable var = Design.Variables[i];
                     var.UpdateValue(newvars[i]);
                 }
-                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
+                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true,Grasshopper.Kernel.GH_SolutionMode.Silent);
                 Design.Samples.Add(((Design)Design).ExpComponent.dVars);
                 Design.Properties.Add(((Design)Design).ExpComponent.dProp);
             }
