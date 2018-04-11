@@ -120,6 +120,7 @@
     <Compile Include="TestComponents\GuideTestCurveConstOptComponent.cs" />
     <Compile Include="TestComponents\GuideTestSurfConstOptComponent.cs" />
     <Compile Include="TestComponents\GuideTestSurfOptComponent.cs" />
+    <Compile Include="TestComponents\IncrementComponent.cs" />
     <Compile Include="TestComponents\RadicalComponent.cs" />
     <Compile Include="ViewModel\BaseVM.cs" />
     <Compile Include="ViewModel\ConstVM.cs" />

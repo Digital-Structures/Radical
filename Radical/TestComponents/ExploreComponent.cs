@@ -68,10 +68,10 @@ namespace Radical.TestComponents
             string f = null;
             int alg = 0;
             if (!DA.GetDataList(0, dVars)) { return; };
-            if (!DA.GetDataList(1, dProp)) { return; };
+            DA.GetDataList(1, dProp);
             if (!DA.GetData(2, ref n)) { return; };
-            if (!DA.GetData(3, ref p)) { return; };
-            if (!DA.GetData(4, ref f)) { return; };
+            DA.GetData(3, ref p);
+            DA.GetData(4, ref f);
             DA.GetData(5, ref alg);
             filename = f;
             path = p;
@@ -114,7 +114,7 @@ namespace Radical.TestComponents
 
                 DialogResult result = MessageBox.Show("Run Sampling?", "Sampling", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (result == DialogResult.Yes) { design.Sample(MyComponent.algorithm); }
-                if (MyComponent.path != null || MyComponent.filename != null)
+                if (MyComponent.path != null && MyComponent.filename != null)
                 {
                     Radical.Integration.csvWriter.CreateSamplingRecord(MyComponent.path, MyComponent.filename, design);
                 }
