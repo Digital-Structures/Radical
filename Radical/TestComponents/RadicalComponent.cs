@@ -139,9 +139,9 @@ namespace Radical.TestComponents
         {
             Design design = HelperFunctions.GenerateDesign(MyComponent);
             RadicalVM radicalVM = new RadicalVM(design);
-            Window w1 = new Radical.RadicalWindow(radicalVM);
+            //Window w1 = new Radical.RadicalWindow(radicalVM);
             //Window w2 = new Radical.RadicalWindow();
-            w1.Show();
+            //w1.Show();
             //w2.Show();
 
             Thread viewerThread = new Thread(delegate ()
