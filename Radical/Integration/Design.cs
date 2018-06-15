@@ -13,35 +13,7 @@ namespace Radical.Integration
 {
     public class Design : IDesign
     {
-        public Design() { }
-
-        public Design(List<IVariable> vars, IExplorationComponent component)
-        {
-            this.Variables = vars;
-            //this.CurrentScore = 0; //init objective function
-            this.Samples = new List<List<double>>();
-            this.Properties = new List<List<double>>();
-            this.ExpComponent = component;
-        }
-
-        public Design(List<IVariable> vars,  IOptimizationComponent component)
-        {
-            this.Variables = vars;
-            //this.CurrentScore = 0; //init objective function
-            this.ScoreEvolution = new List<double>();
-            this.OptComponent = component;
-        }
-
-        public Design(List<IVariable> vars, List<IDesignGeometry> geos, IOptimizationComponent component)
-        {
-            this.Variables = vars;
-            this.Geometries = geos;
-            if (Geometries.Any()) { this.Variables.AddRange(Geometries.Select(x => x.Variables).SelectMany(x => x).ToList()); } // not the cleanest way to do it, review code structure
-            //this.CurrentScore = 0; //init objective function
-            this.ScoreEvolution = new List<double>();
-            this.OptComponent = component;
-        }
-
+        //Radical Component
         public Design(List<IVariable> vars, RadicalComponent component)
         {
             this.Variables = vars;
@@ -63,16 +35,16 @@ namespace Radical.Integration
             this.Constraints = consts;
             this.Geometries = geos;
             if (Geometries.Any()) { this.Variables.AddRange(Geometries.Select(x => x.Variables).SelectMany(x => x).ToList()); } // not the cleanest way to do it, review code structure
-            //this.CurrentScore = 0; //init objective function
             this.ScoreEvolution = new List<double>();
             this.OptComponent = component;
         }
 
-        public double CurrentScore {
+        public double CurrentScore
+        {
             get
             {
                 return OptComponent.Objective;
-            }            
+            }
             set { }
         }
 
@@ -102,7 +74,7 @@ namespace Radical.Integration
             Optimizer opt = new Optimizer(this);
             opt.RunOptimization();
             this.OptComponent.Evolution = this.ScoreEvolution;
-            Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);            
+            Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
         }
 
         public void Optimize(RadicalWindow radicalWindow)
@@ -110,7 +82,6 @@ namespace Radical.Integration
             Optimizer opt = new Optimizer(this, radicalWindow);
             opt.RunOptimization();
             this.OptComponent.Evolution = this.ScoreEvolution;
-            //Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
         }
 
         public void Sample(int alg)
@@ -118,7 +89,7 @@ namespace Radical.Integration
 
             Sampler.ISamplingAlg samplingAlg;
             switch (alg)
-                {
+            {
                 case 0:
                     samplingAlg = new Sampler.GSampling();
                     break;
@@ -132,8 +103,37 @@ namespace Radical.Integration
                     samplingAlg = new Sampler.LHSampling();
                     break;
             }
-            Sampler sam = new Sampler(this,samplingAlg,ExpComponent.nSamples);
+            Sampler sam = new Sampler(this, samplingAlg, ExpComponent.nSamples);
             sam.RunSampling();
         }
+
+        #region obsolete_constructors
+        public Design(List<IVariable> vars, IExplorationComponent component)
+        {
+            this.Variables = vars;
+            //this.CurrentScore = 0; //init objective function
+            this.Samples = new List<List<double>>();
+            this.Properties = new List<List<double>>();
+            this.ExpComponent = component;
+        }
+
+        public Design(List<IVariable> vars, IOptimizationComponent component)
+        {
+            this.Variables = vars;
+            //this.CurrentScore = 0; //init objective function
+            this.ScoreEvolution = new List<double>();
+            this.OptComponent = component;
+        }
+
+        public Design(List<IVariable> vars, List<IDesignGeometry> geos, IOptimizationComponent component)
+        {
+            this.Variables = vars;
+            this.Geometries = geos;
+            if (Geometries.Any()) { this.Variables.AddRange(Geometries.Select(x => x.Variables).SelectMany(x => x).ToList()); } // not the cleanest way to do it, review code structure
+            //this.CurrentScore = 0; //init objective function
+            this.ScoreEvolution = new List<double>();
+            this.OptComponent = component;
+        }
+        #endregion
     }
 }

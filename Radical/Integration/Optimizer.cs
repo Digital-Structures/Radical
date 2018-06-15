@@ -39,7 +39,7 @@ namespace Radical.Integration
 
         public Optimizer(IDesign design, RadicalWindow radicalWindow)
         {
-            Design = design;
+            this.Design = design;
             this.MainAlg = radicalWindow.RadicalVM.PrimaryAlgorithm;
             //this.SecondaryAlg = NLoptAlgorithm.LN_COBYLA;
             this.RadicalWindow = radicalWindow;

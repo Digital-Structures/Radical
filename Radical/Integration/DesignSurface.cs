@@ -11,7 +11,6 @@ namespace Radical.Integration
 {
     public class DesignSurface : IDesignGeometry
     {
-        public DesignSurface() { }
 
         public DesignSurface(IGH_Param param, NurbsSurface surf, double min=-1.0, double max =1.0)
         {
@@ -22,6 +21,7 @@ namespace Radical.Integration
             BuildVariables(min, max);
         }
 
+        // obsolete or to be made obsolete
         public DesignSurface(IGH_Param param, List<Tuple<int, int>> fptsX, List<Tuple<int, int>> fptsY, List<Tuple<int, int>> fptsZ, double min, double max, NurbsSurface surf)
         {
             this.Parameter = param;
@@ -63,7 +63,7 @@ namespace Radical.Integration
 
         }
 
-
+        // obsolete or to be made obsolete
         public void BuildVariables(List<Tuple<int, int>> fptsX, List<Tuple<int, int>> fptsY, List<Tuple<int, int>> fptsZ, double min, double max)
         {
             Variables = new List<IGeoVariable>();

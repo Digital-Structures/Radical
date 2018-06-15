@@ -46,7 +46,6 @@ namespace Radical
                 {
                 }
             }
-
         }
 
         private NLoptAlgorithm _primaryalgorithm;
