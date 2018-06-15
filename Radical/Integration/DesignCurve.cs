@@ -11,6 +11,9 @@ namespace Radical.Integration
 {
     public class DesignCurve : IDesignGeometry
     {
+        //Legibily reference directions
+        public enum Direction { X, Y, Z }
+
         public DesignCurve(IGH_Param param, NurbsCurve crv, double min = -1.0, double max = 1.0)
         {
             this.Parameter = param;
@@ -55,8 +58,9 @@ namespace Radical.Integration
             Variables = new List<IGeoVariable>();
             for (int i = 0; i < Points.Count; i++)
             {
-                Variables.Add(new CurveVariable(min, max, i, 0, this));
-                Variables.Add(new CurveVariable(min, max, i, 1, this)); 
+                Variables.Add(new CurveVariable(min, max, i, (int)Direction.X, this));
+                Variables.Add(new CurveVariable(min, max, i, (int)Direction.Y, this));
+                Variables.Add(new CurveVariable(min, max, i, (int)Direction.Z, this));
             }
         }
 
@@ -70,8 +74,9 @@ namespace Radical.Integration
             Variables = new List<IGeoVariable>();
             for (int i = 0; i < Points.Count; i++)
             {
-                if (!fptsX.Contains(i)) { Variables.Add(new CurveVariable(min, max, i, 0, this)); }
-                if (!fptsY.Contains(i)) { Variables.Add(new CurveVariable(min, max, i, 1, this)); }
+                if (!fptsX.Contains(i)) { Variables.Add(new CurveVariable(min, max, i, (int)Direction.X, this)); }
+                if (!fptsX.Contains(i)) { Variables.Add(new CurveVariable(min, max, i, (int)Direction.Y, this)); }
+                if (!fptsX.Contains(i)) { Variables.Add(new CurveVariable(min, max, i, (int)Direction.Z, this)); }
             }
         }
 
@@ -90,14 +95,22 @@ namespace Radical.Integration
 
             switch (crvvar.dir)
             {
-                case 0:
+                case (int)Direction.X:
                     newpoint.X = newpoint.X + crvvar.CurrentValue;
                     newpoint.Y = Points[crvvar.u].Y;
-
+                    newpoint.Z = Points[crvvar.u].Z;
                     break;
-                case 1:
-                    newpoint.Y = newpoint.Y + crvvar.CurrentValue;
+
+                case (int)Direction.Y:
                     newpoint.X = Points[crvvar.u].X;
+                    newpoint.Y = newpoint.Y + crvvar.CurrentValue;
+                    newpoint.Z = Points[crvvar.u].Z;
+                    break;
+
+                case (int)Direction.Z:
+                    newpoint.X = Points[crvvar.u].X;
+                    newpoint.Y = Points[crvvar.u].Y;
+                    newpoint.Z = newpoint.Z + crvvar.CurrentValue;
                     break;
             }
 

@@ -10,9 +10,16 @@ using Grasshopper.Kernel.Types;
 
 namespace Radical.Integration
 {
+    //Represents a single control point degree of freedom on a NURBS Curve
+    //(***Curves can probably be abstracted to SurvaceVariable objects where v=0***)
     public class CurveVariable : IGeoVariable
     {
-        public CurveVariable() { }
+        //dir: The direction in which the point can move
+        //min,max: The positional bounds of the control point
+        //u, v: NURBS coordinates of the control point
+        public int u;
+        public int dir;
+
         public CurveVariable(double min, double max, int u, int dir, DesignCurve crv)
         {
             this.Min = min;
@@ -22,8 +29,8 @@ namespace Radical.Integration
             this.Geometry = crv;
         }
 
-        public int u;
-        public int dir; //0-x;1-y
+        public double Max { get; set; }
+        public double Min { get; set; }
 
         public double CurrentValue
         {
@@ -31,18 +38,6 @@ namespace Radical.Integration
         }
 
         public IDesignGeometry Geometry { get; set; }
-
-        public double Max
-        {
-            get;
-            set;
-        }
-
-        public double Min
-        {
-            get;
-            set;
-        }
 
         public IGH_Param Parameter
         {

@@ -10,22 +10,28 @@ using Grasshopper.Kernel.Types;
 
 namespace Radical.Integration
 {
+    //Represents a single control point degree of freedom on a NURBS Surface
     public class SurfaceVariable : IGeoVariable
     {
+        //dir: The direction in which the point can move
+        //min,max: The positional bounds of the control point
+        //u, v: NURBS coordinates of the control point
+        public int u;
+        public int v;
+        public int dir;
 
         public SurfaceVariable(double min, double max, int u, int v, int dir, DesignSurface surf)
         {
+            this.dir = dir;
             this.Min = min;
             this.Max = max;
             this.u = u;
             this.v = v;
-            this.dir = dir;
             this.Geometry = surf;
         }
 
-        public int u;
-        public int v;
-        public int dir; //0-x;1-y;2-z
+        public double Max { get; set; }
+        public double Min { get; set; }
 
         public double CurrentValue
         {
@@ -33,18 +39,6 @@ namespace Radical.Integration
         }
 
         public IDesignGeometry Geometry { get; set; }
-
-        public double Max
-        {
-            get;
-            set;
-        }
-
-        public double Min
-        {
-            get;
-            set;
-        }
 
         public IGH_Param Parameter
         {
@@ -59,6 +53,7 @@ namespace Radical.Integration
             }
         }
 
+        //For changing the private min and max bounds
         public void UpdateMin(double x)
         {
             this.Min = x;

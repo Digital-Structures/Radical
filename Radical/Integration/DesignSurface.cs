@@ -11,7 +11,9 @@ namespace Radical.Integration
 {
     public class DesignSurface : IDesignGeometry
     {
-
+        //Legibily reference directions
+        public enum Direction {X,Y,Z}
+        
         public DesignSurface(IGH_Param param, NurbsSurface surf, double min=-1.0, double max =1.0)
         {
             this.Parameter = param;
@@ -55,9 +57,9 @@ namespace Radical.Integration
             {
                 for (int j = 0; j < Surface.Points.CountV; j++)
                 {
-                    Variables.Add(new SurfaceVariable(min, max, i, j, 0, this));
-                    Variables.Add(new SurfaceVariable(min, max, i, j, 1, this));
-                    Variables.Add(new SurfaceVariable(min, max, i, j, 2, this));
+                    Variables.Add(new SurfaceVariable(min, max, i, j, (int)Direction.X, this));
+                    Variables.Add(new SurfaceVariable(min, max, i, j, (int)Direction.Y, this));
+                    Variables.Add(new SurfaceVariable(min, max, i, j, (int)Direction.Z, this));
                 }
             }
 
@@ -72,9 +74,9 @@ namespace Radical.Integration
                 for (int j=0;j<Surface.Points.CountV;j++)
                 {
                     Tuple<int, int> cp = new Tuple<int, int>(i, j);
-                    if (!fptsX.Contains(cp)) { Variables.Add(new SurfaceVariable(min, max, i, j, 0, this)); }
-                    if (!fptsY.Contains(cp)) { Variables.Add(new SurfaceVariable(min, max, i, j, 1, this)); }
-                    if (!fptsZ.Contains(cp)) { Variables.Add(new SurfaceVariable(min, max, i, j, 2, this)); }
+                    if (!fptsX.Contains(cp)) { Variables.Add(new SurfaceVariable(min, max, i, j, (int)Direction.X, this)); }
+                    if (!fptsY.Contains(cp)) { Variables.Add(new SurfaceVariable(min, max, i, j, (int)Direction.Y, this)); }
+                    if (!fptsZ.Contains(cp)) { Variables.Add(new SurfaceVariable(min, max, i, j, (int)Direction.Z, this)); }
                 }
             }
         }
@@ -91,13 +93,13 @@ namespace Radical.Integration
             Point3d newpoint = this.OriginalSurface.Points.GetControlPoint(srfvar.u, srfvar.v).Location;
             switch (srfvar.dir)
             {
-                case 0:
+                case (int)Direction.X:
                     newpoint.X = newpoint.X+srfvar.CurrentValue;
                     break;
-                case 1:
+                case (int)Direction.Y:
                     newpoint.Y = newpoint.Y+srfvar.CurrentValue;
                     break;
-                case 2:
+                case (int)Direction.Z:
                     newpoint.Z = newpoint.Z+ srfvar.CurrentValue;
                     break;
             }

@@ -58,7 +58,7 @@
       <HintPath>..\packages\Microsoft.Maps.MapControl.WPF.1.0.0.3\lib\net40-Client\Microsoft.Maps.MapControl.WPF.dll</HintPath>
     </Reference>
     <Reference Include="NLoptNet">
-      <HintPath>..\..\NLoptNet-master\NLoptNet-master\NLoptNet\bin\Debug\NLoptNet.dll</HintPath>
+      <HintPath>..\Libs\NLoptNet.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
