@@ -12,7 +12,7 @@ namespace Radical.Integration
 {
     public class SurfaceVariable : IGeoVariable
     {
-        public SurfaceVariable() { }
+
         public SurfaceVariable(double min, double max, int u, int v, int dir, DesignSurface surf)
         {
             this.Min = min;

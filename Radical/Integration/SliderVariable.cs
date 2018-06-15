@@ -10,8 +10,6 @@ namespace Radical.Integration
 {
     public class SliderVariable : IVariable
     {
-        public SliderVariable()
-        { }
 
         public SliderVariable(IGH_Param param)
         {
