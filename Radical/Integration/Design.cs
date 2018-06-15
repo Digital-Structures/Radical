@@ -57,6 +57,17 @@ namespace Radical.Integration
             this.OptComponent = component;
         }
 
+        public Design(List<IVariable> vars, List<IDesignGeometry> geos, List<IConstraint> consts, RadicalComponent component)
+        {
+            this.Variables = vars;
+            this.Constraints = consts;
+            this.Geometries = geos;
+            if (Geometries.Any()) { this.Variables.AddRange(Geometries.Select(x => x.Variables).SelectMany(x => x).ToList()); } // not the cleanest way to do it, review code structure
+            //this.CurrentScore = 0; //init objective function
+            this.ScoreEvolution = new List<double>();
+            this.OptComponent = component;
+        }
+
         public double CurrentScore {
             get
             {

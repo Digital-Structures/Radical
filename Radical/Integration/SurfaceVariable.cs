@@ -50,7 +50,7 @@ namespace Radical.Integration
         {
             get
             {
-                throw new NotImplementedException();
+                return ((DesignSurface)Geometry).Parameter;
             }
 
             set

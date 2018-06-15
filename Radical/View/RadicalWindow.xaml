@@ -123,36 +123,36 @@
                 </Button>
             </Grid>
             <ScrollViewer x:Name="VarTree" Width="0" Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <StackPanel>
+                <StackPanel>
                     <Border Background="{DynamicResource MaterialDesignDivider}"
                         Height="1"
                         HorizontalAlignment="Stretch"
                         SnapsToDevicePixels="True" />
                     <Expander  Header="Variables" FontSize="14">
-                    <StackPanel Name="Sliders">
-                    </StackPanel>
-                </Expander>
-                <Border Background="{DynamicResource MaterialDesignDivider}"
+                        <StackPanel Name="Sliders">
+                        </StackPanel>
+                    </Expander>
+                    <Border Background="{DynamicResource MaterialDesignDivider}"
                         Height="1"
                         HorizontalAlignment="Stretch"
                         SnapsToDevicePixels="True" />
-                <Expander  Header="Constraints" FontSize="14">
-                    <StackPanel Name="Constraints">
-                    </StackPanel>
-                </Expander>
-                <Border Background="{DynamicResource MaterialDesignDivider}"
+                    <Expander  Header="Constraints" FontSize="14">
+                        <StackPanel Name="Constraints">
+                        </StackPanel>
+                    </Expander>
+                    <Border Background="{DynamicResource MaterialDesignDivider}"
                         Height="1"
                         HorizontalAlignment="Stretch"
                         SnapsToDevicePixels="True" />
-                <Expander  Header="Properties" FontSize="14">
-                    <StackPanel Name="Properties">
-                    </StackPanel>
-                </Expander>
-                <Border Background="{DynamicResource MaterialDesignDivider}"
+                    <Expander  Header="Properties" FontSize="14">
+                        <StackPanel Name="Properties">
+                        </StackPanel>
+                    </Expander>
+                    <Border Background="{DynamicResource MaterialDesignDivider}"
                         Height="1"
                         HorizontalAlignment="Stretch"
                         SnapsToDevicePixels="True" />
-            </StackPanel>
+                </StackPanel>
             </ScrollViewer>
             <Border x:Name="TreeBorder" Grid.Row="1" BorderBrush="Black" BorderThickness="0,0,0.1,0" Background="{x:Null}" Visibility="Collapsed"/>
         </Grid>

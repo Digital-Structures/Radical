@@ -12,6 +12,17 @@ namespace Radical.Integration
     public class DesignCurve : IDesignGeometry
     {
         public DesignCurve() { }
+
+        public DesignCurve(IGH_Param param, NurbsCurve crv, double min = -1.0, double max = 1.0)
+        {
+            this.Parameter = param;
+            this.Parameter.RemoveAllSources();
+            this.Curve = crv;
+            this.OriginalCurve = new NurbsCurve(crv);
+            BuildVariables(min, max);
+        }
+
+
         public DesignCurve(IGH_Param param, List<int> fptsX, List<int> fptsY, double min, double max, NurbsCurve crv)
         {
             this.Parameter = param;
@@ -39,9 +50,23 @@ namespace Radical.Integration
         public List<IGeoVariable> Variables { get; set; }
 
 
+        public void BuildVariables(double min, double max)
+        {
+            Points = Curve.Points.Distinct().Select(x => x.Location).ToList();
+            OriginalPoints = OriginalCurve.Points.Distinct().Select(x => x.Location).ToList();
+            PointsIndices = Points.Select(x => Curve.Points.ToList().IndexOf(x)).ToList();
+            Variables = new List<IGeoVariable>();
+            for (int i = 0; i < Points.Count; i++)
+            {
+                Variables.Add(new CurveVariable(min, max, i, 0, this));
+                Variables.Add(new CurveVariable(min, max, i, 1, this)); 
+            }
+        }
+
+
         public void BuildVariables(List<int> fptsX, List<int> fptsY, double min, double max)
         {
-            Points = Curve.Points.Distinct().Select(x=>x.Location).ToList();
+            Points = Curve.Points.Distinct().Select(x => x.Location).ToList();
             OriginalPoints = OriginalCurve.Points.Distinct().Select(x => x.Location).ToList();
             PointsIndices = Points.Select(x => Curve.Points.ToList().IndexOf(x)).ToList();
             NurbsCurve crv = new NurbsCurve(Curve.Points.ControlPolygon().ToNurbsCurve());

@@ -43,12 +43,12 @@ namespace Radical.Integration
                 List<Tuple<int, int>> fpx = FixedPoints(component.FPtsX, component.Surface);
                 List<Tuple<int, int>> fpy = FixedPoints(component.FPtsY, component.Surface);
                 List<Tuple<int, int>> fpz = FixedPoints(component.FPtsZ, component.Surface);
-                geos.Add(new DesignSurface(param, fpx, fpy, fpz, component.Min, component.Max,component.Surface));
+                geos.Add(new DesignSurface(param, fpx, fpy, fpz, component.Min, component.Max, component.Surface));
             }
 
             return new Design(vars, geos, component);
         }
-        
+
         public static Design GenerateDesign(GuideTestSurfConstOptComponent component)
         {
             List<IVariable> vars = new List<IVariable>();
@@ -56,7 +56,7 @@ namespace Radical.Integration
             int i = 0;
             foreach (IGH_Param param in component.Params.Input[0].Sources)
             {
-                NurbsSurface surf = component.Surfaces[i]; 
+                NurbsSurface surf = component.Surfaces[i];
                 List<Tuple<int, int>> fpx = FixedPoints(component.FPtsX, surf);
                 List<Tuple<int, int>> fpy = FixedPoints(component.FPtsY, surf);
                 List<Tuple<int, int>> fpz = FixedPoints(component.FPtsZ, surf);
@@ -77,7 +77,7 @@ namespace Radical.Integration
                 NurbsCurve crv = component.Curves[i];
                 List<int> fpx = FixedPoints(component.FPtsX, crv);
                 List<int> fpy = FixedPoints(component.FPtsY, crv);
-                geos.Add(new DesignCurve(param, fpx, fpy,  component.Min[i], component.Max[i], crv));
+                geos.Add(new DesignCurve(param, fpx, fpy, component.Min[i], component.Max[i], crv));
                 i++;
             }
             return new Design(vars, geos, component);
@@ -86,27 +86,33 @@ namespace Radical.Integration
         public static Design GenerateDesign(RadicalComponent component)
         {
             List<IVariable> vars = new List<IVariable>();
+            List<IDesignGeometry> geos = new List<IDesignGeometry>();
             List<IConstraint> consts = new List<IConstraint>();
-            int i = 0;
+
             foreach (IGH_Param param in component.Params.Input[2].Sources)
             {
                 vars.Add(new SliderVariable(param));
             }
-            foreach (double c in component.Constraints)
+
+            for (int i = 0; i < component.Constraints.Count; i++)
             {
-                consts.Add(new Constraint(component,0,ConstraintType.lessthan,i));
-                i++;
+                consts.Add(new Constraint(component, 0, ConstraintType.lessthan, i));
             }
-            //foreach (IGH_Param param in component.Params.Input[3].Sources)
+            for (int i = 0; i < component.Params.Input[3].Sources.Count; i++)
+            {
+                IGH_Param param = component.Params.Input[3].Sources[i];
+                NurbsSurface surf = component.SrfVariables[i];
+                geos.Add(new DesignSurface(param, surf));
+            }
+
+            //for (int i = 0; i < component.Params.Input[3].Sources.Count; i++)
             //{
-            //    vars.Add(new DesignSurface(param));
-            //}
-            //foreach (IGH_Param param in component.Params.Input[4].Sources)
-            //{
-            //    vars.Add(new SliderVariable(param));
+            //    IGH_Param param = component.Params.Input[3].Sources[i];
+            //    NurbsSurface surf = component.SrfVariables[i];
+            //    geos.Add(new DesignSurface(param, surf));
             //}
 
-            return new Design(vars, consts, component);
+            return new Design(vars, geos, consts, component);
         }
 
         public static List<Tuple<int, int>> FixedPoints(List<Point3d> points, NurbsSurface srf)
@@ -133,7 +139,7 @@ namespace Radical.Integration
             if (!points.Any()) { return new List<int>(); }
 
             List<int> fpoints = new List<int>();
-            for (int i=0;i<crv.Points.Count;i++)
+            for (int i = 0; i < crv.Points.Count; i++)
             {
                 Point3d pt = crv.Points[i].Location;
                 List<double> distance = points.Select(x => x.DistanceTo(pt)).ToList();

@@ -27,7 +27,11 @@ namespace Radical
         public RadicalVM(IDesign design)
         {
             this.Design = design;
-            Constraints = this.Design.Constraints.Select(x => new ConstVM(x)).ToList();
+            if (Design.Constraints != null)
+            {
+                Constraints = this.Design.Constraints.Select(x => new ConstVM(x)).ToList();
+
+            }
             Variables = this.Design.Variables.Select(x => new VarVM(x)).ToList();
         }
 
