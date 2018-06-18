@@ -129,7 +129,15 @@
                         HorizontalAlignment="Stretch"
                         SnapsToDevicePixels="True" />
                     <Expander  Header="Variables" FontSize="14">
-                        <StackPanel Name="Sliders">
+                        <StackPanel>
+                            <Expander Header="Sliders" Name="SlidersExpander" Visibility="Collapsed">
+                                <StackPanel  Name="Sliders" >
+                                </StackPanel>
+                            </Expander>
+                            <Expander Header="Geometries" Name="GeometriesExpander"  Visibility="Collapsed">
+                                <StackPanel Name="Geometries">
+                                </StackPanel>
+                            </Expander>
                         </StackPanel>
                     </Expander>
                     <Border Background="{DynamicResource MaterialDesignDivider}"

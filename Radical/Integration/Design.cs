@@ -65,6 +65,8 @@ namespace Radical.Integration
 
         public List<IVariable> Variables { get; set; }
 
+        public List<IVariable> ActiveVariables { get { return Variables.Where(var => var.IsActive).ToList(); } }
+
         public List<IDesignGeometry> Geometries { get; set; }
 
         public List<IConstraint> Constraints { get; set; }

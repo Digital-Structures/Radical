@@ -27,6 +27,8 @@ namespace Radical
     /// </summary>
     public partial class RadicalWindow : Window
     {
+
+        // USELESS CONSTRUCTOR
         public RadicalWindow()
         {
             this.DataContext = RadicalVM;
@@ -56,7 +58,23 @@ namespace Radical
         {
             foreach (VarVM vvm in RadicalVM.Variables)
             {
-                this.Sliders.Children.Add(new VariableControl(vvm));
+                IVariable variable = vvm.DesignVar;
+                if (variable is SliderVariable)
+                {
+                    this.Sliders.Children.Add(new VariableControl(vvm));
+                    if (this.SlidersExpander.Visibility == Visibility.Collapsed)
+                    {
+                        this.SlidersExpander.Visibility = Visibility.Visible;
+                    }
+                }
+                else
+                {
+                    this.Geometries.Children.Add(new VariableControl(vvm));
+                    if (this.GeometriesExpander.Visibility == Visibility.Collapsed)
+                    {
+                        this.GeometriesExpander.Visibility = Visibility.Visible;
+                    }
+                }
             }
         }
 

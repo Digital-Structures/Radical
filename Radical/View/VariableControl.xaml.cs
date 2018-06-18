@@ -19,6 +19,8 @@ namespace Radical
     /// Interaction logic for DesignVariableControl.xaml
     /// </summary>
     /// 
+
+    // LOOK HERE FOR INPUT FORMAT CHANGES
     public static class Styles
     {
         public const System.Globalization.NumberStyles STYLEFLOAT = System.Globalization.NumberStyles.AllowDecimalPoint 

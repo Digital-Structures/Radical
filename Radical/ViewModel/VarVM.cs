@@ -99,6 +99,7 @@ namespace Radical
             {
                 if (CheckPropertyChanged<bool>("IsEnabled", ref _isenabled, ref value))
                 {
+                    DesignVar.IsActive = IsEnabled;
                 }
             }
         }

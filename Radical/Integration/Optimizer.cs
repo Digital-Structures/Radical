@@ -37,6 +37,8 @@ namespace Radical.Integration
             }
         }
 
+
+        // CONSTRUCTOR FOR RADICAL
         public Optimizer(IDesign design, RadicalWindow radicalWindow)
         {
             this.Design = design;
@@ -77,7 +79,7 @@ namespace Radical.Integration
         }
 
         public IDesign Design;
-        public uint nVars { get { return (uint)this.Design.Variables.Count; } }
+        public uint nVars { get { return (uint)this.Design.ActiveVariables.Count; } }
 
         public NLoptAlgorithm MainAlg;
         public NLoptAlgorithm SecondaryAlg; // Optional
@@ -112,11 +114,18 @@ namespace Radical.Integration
             {
                 //Grasshopper.Instances.ActiveCanvas.Enabled = false;
 
+
                 for (int i = 0; i < nVars; i++)
                 {
-                    IVariable var = Design.Variables[i];
+                    IVariable var = Design.ActiveVariables[i]; // ONLY INCL. VARS
                     var.UpdateValue(x[i]);
                 }
+                // Once all points have been updated, we can update the geometries
+                foreach(IDesignGeometry geo in this.Design.Geometries)
+                {
+                    geo.Update();
+                }
+
                 Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, refresh);
                 finished = true;
             };
@@ -180,7 +189,9 @@ namespace Radical.Integration
 
         public NloptResult RunOptimization()
         {
-            double[] x = Design.Variables.Select(t => t.CurrentValue).ToArray();
+
+            // Only take vars that are enabled
+            double[] x = Design.ActiveVariables.Select(t => t.CurrentValue).ToArray(); // ONLY INCL. VARS
             return Solver.Optimize(x, out MinValue);
         }
     }

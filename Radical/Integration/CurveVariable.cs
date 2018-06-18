@@ -39,6 +39,8 @@ namespace Radical.Integration
 
         public IDesignGeometry Geometry { get; set; }
 
+
+        // ARCHITECTURE FLAW
         public IGH_Param Parameter
         {
             get
@@ -50,6 +52,12 @@ namespace Radical.Integration
             {
                 throw new NotImplementedException();
             }
+        }
+
+
+        public bool IsActive
+        {
+            get; set;
         }
 
         public void UpdateMin(double x)

@@ -15,6 +15,7 @@ namespace Radical.Integration
         void UpdateMax(double x);
         void UpdateValue(double x);
         double Gradient();
+        bool IsActive { get; set; }
         IGH_Param Parameter { get; set; }       
     }
 

@@ -29,6 +29,12 @@ namespace Radical.Integration
             set;
         }
 
+        public bool IsActive
+        {
+            get; set;
+        }
+
+
         public double Max
         {
             get

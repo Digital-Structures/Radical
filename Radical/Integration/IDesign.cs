@@ -12,6 +12,7 @@ namespace Radical.Integration
         // Ok
         double CurrentScore { get; set; }
         List<IVariable> Variables { get; set; }
+        List<IVariable> ActiveVariables { get; }
         List<IDesignGeometry> Geometries { get; set; }
         List<IConstraint> Constraints { get; }
         void Optimize();
