@@ -23,9 +23,10 @@ namespace Radical
     // LOOK HERE FOR INPUT FORMAT CHANGES
     public static class Styles
     {
-        public const System.Globalization.NumberStyles STYLEFLOAT = System.Globalization.NumberStyles.AllowDecimalPoint 
-            | System.Globalization.NumberStyles.AllowLeadingSign;
-        public const System.Globalization.NumberStyles STYLEINT = System.Globalization.NumberStyles.Integer;
+        public const string FLOAT_CHARS = "-0123456789.";
+        public const string INT_CHARS = "-0123456789";
+        public const System.Globalization.NumberStyles STYLEFLOAT = System.Globalization.NumberStyles.AllowDecimalPoint | System.Globalization.NumberStyles.AllowLeadingSign;
+        //public const System.Globalization.NumberStyles STYLEINT = System.Globalization.NumberStyles.Integer;
     }
 
     public partial class VariableControl : UserControl
@@ -67,13 +68,13 @@ namespace Radical
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = !IsTextAllowed(e.Text);
+            //e.Text only ever contains the last character entered, not the entire string in the text box
+            e.Handled = !(IsTextAllowed(e.Text));
         }
 
         private static bool IsTextAllowed(string text)
         {
-            double val = 0;
-            return double.TryParse(text, Styles.STYLEFLOAT, System.Globalization.CultureInfo.InvariantCulture, out val);
+            return Styles.FLOAT_CHARS.Contains(text);
         }
     }
 }

@@ -175,13 +175,14 @@ namespace Radical
 
         private void TextBox_PreviewTextInput_Float(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = !IsTextAllowedFloat(e.Text);
+            e.Handled = !(IsTextAllowedFloat(e.Text));
         }
 
         private static bool IsTextAllowedFloat(string text)
         {
-            double val = 0;
-            return double.TryParse(text, Styles.STYLEFLOAT, System.Globalization.CultureInfo.CurrentCulture, out val);
+            return Styles.FLOAT_CHARS.Contains(text);
+            //double val = 0;
+            //return double.TryParse(text, Styles.STYLEFLOAT, System.Globalization.CultureInfo.CurrentCulture, out val);
         }
 
         private void TextBox_PreviewTextInput_Int(object sender, TextCompositionEventArgs e)
@@ -191,8 +192,9 @@ namespace Radical
 
         private static bool IsTextAllowedInt(string text)
         {
-            double val = 0;
-            return double.TryParse(text, Styles.STYLEINT, System.Globalization.CultureInfo.CurrentCulture, out val);
+            return Styles.INT_CHARS.Contains(text);
+            //double val = 0;
+            //return double.TryParse(text, Styles.STYLEINT, System.Globalization.CultureInfo.CurrentCulture, out val);
         }
 
     }

@@ -214,11 +214,11 @@
                     </DockPanel>
                     <DockPanel>
                         <materialDesign:PackIcon Kind="SortNumeric" Foreground="DarkGray" VerticalAlignment="Bottom"></materialDesign:PackIcon>
-                        <TextBox HorizontalAlignment="Right" materialDesign:HintAssist.Hint="Number of Iterations"   Text="{Binding Niterations, Mode=OneWayToSource, FallbackValue=1000 }" ></TextBox>
+                        <TextBox HorizontalAlignment="Right" materialDesign:HintAssist.Hint="Number of Iterations" PreviewTextInput="TextBox_PreviewTextInput_Int" Text="{Binding Niterations, Mode=OneWayToSource, FallbackValue=1000 }" ></TextBox>
                     </DockPanel>
                     <DockPanel>
                         <materialDesign:PackIcon Kind="ChartLine"  Foreground="DarkGray" VerticalAlignment="Bottom"></materialDesign:PackIcon>
-                        <TextBox HorizontalAlignment="Right" materialDesign:HintAssist.Hint="Relative Convergence Limit"  
+                        <TextBox HorizontalAlignment="Right" materialDesign:HintAssist.Hint="Relative Convergence Limit" PreviewTextInput="TextBox_PreviewTextInput_Float"
                                  Text="{Binding ConvCrit, Mode=OneWayToSource, FallbackValue=0.001 }" ></TextBox>
                     </DockPanel>
                     <DockPanel>
