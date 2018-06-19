@@ -181,8 +181,6 @@ namespace Radical
         private static bool IsTextAllowedFloat(string text)
         {
             return Styles.FLOAT_CHARS.Contains(text);
-            //double val = 0;
-            //return double.TryParse(text, Styles.STYLEFLOAT, System.Globalization.CultureInfo.CurrentCulture, out val);
         }
 
         private void TextBox_PreviewTextInput_Int(object sender, TextCompositionEventArgs e)
@@ -193,8 +191,6 @@ namespace Radical
         private static bool IsTextAllowedInt(string text)
         {
             return Styles.INT_CHARS.Contains(text);
-            //double val = 0;
-            //return double.TryParse(text, Styles.STYLEINT, System.Globalization.CultureInfo.CurrentCulture, out val);
         }
 
     }

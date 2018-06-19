@@ -51,8 +51,7 @@ namespace Radical
 
         private static bool IsTextAllowed(string text)
         {
-            double val = 0;
-            return double.TryParse(text, Styles.STYLEFLOAT, System.Globalization.CultureInfo.CurrentCulture, out val);
+            return Styles.FLOAT_CHARS.Contains(text);
         }
     }
 }

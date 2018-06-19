@@ -21,8 +21,8 @@ namespace Radical
             DesignVar = dvar;
             this.Name = DesignVar.Parameter.NickName;
             this.Value=DesignVar.CurrentValue;
-            this.Min = DesignVar.Min;
-            this.Max = DesignVar.Max;
+            this._min = DesignVar.Min;
+            this._max = DesignVar.Max;
             this.IsEnabled = true;
         }
 
@@ -65,9 +65,26 @@ namespace Radical
             { return _min; }
             set
             {
+                double old_min = _min;
                 if (CheckPropertyChanged<double>("Min", ref _min, ref value))
                 {
-                    DesignVar.UpdateMin(Min);
+                    if(value > this._max){ //Invalid Bounds, display an error
+                        System.Windows.MessageBox.Show(String.Format("Incompatible bounds!\n " +
+                                                                        "Min:{0} > Max:{1}\n" +
+                                                                        "Resetting min to {2}\n", value, this._max, old_min));
+                        this._min = old_min;
+                    }
+                    else
+                    {
+                        DesignVar.UpdateMin(_min);
+
+                        //Ensure the value of the slider is not outside the new min bound
+                        if (_min > DesignVar.CurrentValue)
+                        {
+                            DesignVar.UpdateValue(_min);
+                            //NEED SOME KIND OF REFRESH AFTER THIS UPDATE
+                        }
+                    }
                 }
             }
 
@@ -80,9 +97,25 @@ namespace Radical
             { return _max; }
             set
             {
+                double old_max = _max;
                 if (CheckPropertyChanged<double>("Max", ref _max, ref value))
                 {
-                    DesignVar.UpdateMax(Max);
+                    if (value < this._min){ //Invalid Bounds, display an error
+                        System.Windows.MessageBox.Show(String.Format("Incompatible bounds!\n " +
+                                                                        "Max:{0} < Min:{1}\n" +
+                                                                        "Resetting max to {2}\n", value, this._min, old_max));
+                        this._max = old_max; 
+                    }
+                    else{
+                        DesignVar.UpdateMax(_max);
+
+                        //Ensure the value of the slider is not outside the new max bound
+                        if (_max < DesignVar.CurrentValue)
+                        {
+                            DesignVar.UpdateValue(_max);
+                            //NEED SOME KIND OF REFRESH AFTER THIS UPDATE
+                        }
+                    }
                 }
             }
 
