@@ -20,12 +20,13 @@ namespace Radical
     /// </summary>
     /// 
 
-    // LOOK HERE FOR INPUT FORMAT CHANGES
+    // Should this be in a separate file?
+    //Somewhat strange to hide it in VariableControl when it's used by RadicalWindow and ConstraintControl as well
     public static class Styles
     {
         public const string FLOAT_CHARS = "-0123456789.";
         public const string INT_CHARS = "-0123456789";
-        public const System.Globalization.NumberStyles STYLEFLOAT = System.Globalization.NumberStyles.AllowDecimalPoint | System.Globalization.NumberStyles.AllowLeadingSign;
+        //public const System.Globalization.NumberStyles STYLEFLOAT = System.Globalization.NumberStyles.AllowDecimalPoint | System.Globalization.NumberStyles.AllowLeadingSign;
         //public const System.Globalization.NumberStyles STYLEINT = System.Globalization.NumberStyles.Integer;
     }
 
@@ -68,7 +69,7 @@ namespace Radical
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            //e.Text only ever contains the last character entered, not the entire string in the text box
+            //e.Text only ever contains the last character entered
             e.Handled = !(IsTextAllowed(e.Text));
         }
 
