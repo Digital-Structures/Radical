@@ -14,11 +14,11 @@ namespace Radical.Integration
     public class SurfaceVariable : IGeoVariable
     {
         //dir: The direction in which the point can move
-        //min,max: The positional bounds of the control point
+        //min, max: The positional bounds of the control point
         //u, v: NURBS coordinates of the control point
         public int u;
         public int v;
-        public int dir;
+        private int dir;
 
         public SurfaceVariable(double min, double max, int u, int v, int dir, DesignSurface surf)
         {
@@ -28,6 +28,12 @@ namespace Radical.Integration
             this.u = u;
             this.v = v;
             this.Geometry = surf;
+        }
+
+        public int Dir
+        {
+            get { return this.dir; }
+            set { this.dir = value; }
         }
 
         public double Max { get; set; }

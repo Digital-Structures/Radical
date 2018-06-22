@@ -15,6 +15,13 @@ namespace Radical
 {
     public class RadicalVM : BaseVM
     {
+        private RadicalComponent Component; //Probably unnecessary
+        public IDesign Design;
+        public List<ConstVM> Constraints;
+        public List<VarVM> NumVars;
+        public List<List<VarVM>> GeoVars;
+        public enum Direction { X, Y, Z };
+
         public RadicalVM()
         {
         }
@@ -24,15 +31,54 @@ namespace Radical
             this.Component = component;
         }
 
+        //CONSTRUCTOR
         public RadicalVM(IDesign design)
         {
             this.Design = design;
             if (Design.Constraints != null)
             {
                 Constraints = this.Design.Constraints.Select(x => new ConstVM(x)).ToList();
-
             }
-            Variables = this.Design.Variables.Select(x => new VarVM(x)).ToList();
+            this.NumVars = new List<VarVM> { };
+            this.GeoVars = new List<List<VarVM>> { };
+            SortVariables();
+        }
+
+        //Separate geometric and numeric variables
+        //Sorting helps with UI stack panel organization
+        private void SortVariables()
+        {
+            //GEOMETRIES
+            int geoIndex = 1;
+            foreach (IDesignGeometry geo in this.Design.Geometries)
+            {
+                List<VarVM> singleGeoVars = new List<VarVM> { };
+
+                //Add all the variables for that geometry to a sublist of varVMs
+                int varIndex = 0;
+                foreach (IGeoVariable var in geo.Variables)
+                {
+                    VarVM geoVar = new VarVM(var);
+                    int dir = var.Dir;
+
+                    //Logical default naming of variable
+                    //e.g. G1.P1.X
+                    geoVar.Name = String.Format("G{0}.P{1}.{2}", geoIndex, varIndex/3+1, ((Direction)dir).ToString());
+
+                    singleGeoVars.Add(new VarVM(var));
+                    varIndex++;
+                }
+
+                this.GeoVars.Add(singleGeoVars);
+                geoIndex++;
+            }
+
+            //SLIDERS
+            /***This is probably not the best way to do this as it involves looping over geometry variables already stored***/
+            foreach (var numVar in this.Design.Variables.Where(numVar => numVar is SliderVariable))
+            {
+                this.NumVars.Add(new VarVM(numVar));
+            }
         }
 
         private RefreshMode _mode;
@@ -118,13 +164,8 @@ namespace Radical
             }
         }
 
-        private RadicalComponent Component;
-        public IDesign Design;
-        public List<ConstVM> Constraints;
-        public List<VarVM> Variables;
-
         public IEnumerable<NLoptAlgorithm> DFreeAlgs = new[]
-{
+        {
             NLoptAlgorithm.AUGLAG, //Calls for secondary alg
             NLoptAlgorithm.AUGLAG_EQ, //Calls for secondary alg
             NLoptAlgorithm.GN_CRS2_LM,

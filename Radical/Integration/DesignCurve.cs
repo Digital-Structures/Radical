@@ -93,7 +93,7 @@ namespace Radical.Integration
             Point3d newpoint = OriginalPoints[crvvar.u];
             int n = Curve.Points.Distinct<ControlPoint>().Count();
 
-            switch (crvvar.dir)
+            switch (crvvar.Dir)
             {
                 case (int)Direction.X:
                     newpoint.X = newpoint.X + crvvar.CurrentValue;

@@ -22,5 +22,6 @@ namespace Radical.Integration
     public interface IGeoVariable:IVariable
     {
         IDesignGeometry Geometry { get; set; } //geometry to which the variable belongs
+        int Dir { get; set; }
     }
 }

@@ -28,13 +28,14 @@ namespace Radical
     public partial class RadicalWindow : Window
     {
 
-        // USELESS CONSTRUCTOR
+        //Probably Useless
         public RadicalWindow()
         {
             this.DataContext = RadicalVM;
             InitializeComponent();
         }
 
+        //CONSTRUCTOR
         public RadicalWindow(RadicalVM radicalVM)
         {
             this.RadicalVM = radicalVM;
@@ -42,38 +43,71 @@ namespace Radical
 
             InitializeComponent();
             AddConstraints();
-            AddVariables();
+            AddNumbers();
+            AddGeometries();
         }
         public RadicalVM RadicalVM;
 
+        //ADD CONSTRAINTS
+        //Adds a stack panel for constraints
         private void AddConstraints()
         {
+            //Collapse Constraints expander if no constraints are imposed
+            if (RadicalVM.Constraints.Count == 0)
+            {
+                this.ConstraintsExpander.Visibility = Visibility.Collapsed;
+                return;
+            }
+
             foreach (ConstVM cvm in RadicalVM.Constraints)
             {
                 this.Constraints.Children.Add(new ConstraintControl(cvm));
             }
         }
 
-        private void AddVariables()
+        //ADD NUMBERS
+        //Adds a stack panel for numeric sliders
+        private void AddNumbers()
         {
-            foreach (VarVM vvm in RadicalVM.Variables)
+            //Collapse Sliders expander if no sliders are connected
+            if (RadicalVM.NumVars.Count == 0)
             {
-                IVariable variable = vvm.DesignVar;
-                if (variable is SliderVariable)
+                this.SlidersExpander.Visibility = Visibility.Collapsed;
+                return;
+            }
+
+            foreach (VarVM var in RadicalVM.NumVars)
+            {
+                this.Sliders.Children.Add(new VariableControl(var));
+            }
+        }
+
+        //ADD GEOMETRIES
+        //Adds a nested stack panel for geometries and their control point variables
+        private void AddGeometries()
+        {
+            //Collapse Geometries expander if no geometries are connected
+            if (RadicalVM.GeoVars.Count==0)
+            {
+                this.GeometriesExpander.Visibility = Visibility.Collapsed;
+                return;
+            }
+
+            int geoIndex = 1;
+            foreach (List<VarVM> geometry in RadicalVM.GeoVars)
+            {
+                //Add an expander for each distinct geomtery
+                Expander singleGeo = new Expander { Header = String.Format("Geometry {0}", geoIndex), FontSize = 10}; geoIndex++;
+                    
+                StackPanel singleGeoVars = new StackPanel { Name = "SingleGeometryVariables" };
+                singleGeo.Content = singleGeoVars;
+
+                this.Geometries.Children.Add(singleGeo);
+
+                //Add all the variables for that geometry under its expander
+                foreach (VarVM var in geometry)
                 {
-                    this.Sliders.Children.Add(new VariableControl(vvm));
-                    if (this.SlidersExpander.Visibility == Visibility.Collapsed)
-                    {
-                        this.SlidersExpander.Visibility = Visibility.Visible;
-                    }
-                }
-                else
-                {
-                    this.Geometries.Children.Add(new VariableControl(vvm));
-                    if (this.GeometriesExpander.Visibility == Visibility.Collapsed)
-                    {
-                        this.GeometriesExpander.Visibility = Visibility.Visible;
-                    }
+                    singleGeoVars.Children.Add(new VariableControl(var));
                 }
             }
         }

@@ -130,11 +130,11 @@
                         SnapsToDevicePixels="True" />
                     <Expander  Header="Variables" FontSize="14">
                         <StackPanel>
-                            <Expander Header="Sliders" Name="SlidersExpander" Visibility="Collapsed">
+                            <Expander Header="\tSliders" Name="SlidersExpander" Visibility="Visible">
                                 <StackPanel  Name="Sliders" >
                                 </StackPanel>
                             </Expander>
-                            <Expander Header="Geometries" Name="GeometriesExpander"  Visibility="Collapsed">
+                            <Expander Header="\tGeometries" Name="GeometriesExpander"  Visibility="Visible">
                                 <StackPanel Name="Geometries">
                                 </StackPanel>
                             </Expander>
@@ -144,7 +144,7 @@
                         Height="1"
                         HorizontalAlignment="Stretch"
                         SnapsToDevicePixels="True" />
-                    <Expander  Header="Constraints" FontSize="14">
+                    <Expander Name="ConstraintsExpander" Header="Constraints" FontSize="14">
                         <StackPanel Name="Constraints">
                         </StackPanel>
                     </Expander>
