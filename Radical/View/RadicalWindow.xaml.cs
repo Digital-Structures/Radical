@@ -97,8 +97,9 @@ namespace Radical
             foreach (List<VarVM> geometry in RadicalVM.GeoVars)
             {
                 //Add an expander for each distinct geomtery
-                Expander singleGeo = new Expander { Header = String.Format("Geometry {0}", geoIndex), FontSize = 10}; geoIndex++;
-                    
+                Expander singleGeo = new Expander();
+                singleGeo.Header = HeaderFormatting(String.Format("Geometry {0}", geoIndex)); geoIndex++;
+
                 StackPanel singleGeoVars = new StackPanel { Name = "SingleGeometryVariables" };
                 singleGeo.Content = singleGeoVars;
 
@@ -110,6 +111,14 @@ namespace Radical
                     singleGeoVars.Children.Add(new VariableControl(var));
                 }
             }
+        }
+
+        private TextBlock HeaderFormatting(string text)
+        {
+            TextBlock header = new TextBlock(new Run(text));
+            header.FontSize = 14;
+
+            return header;
         }
 
         private void ButtonCloseMenu_Click(object sender, RoutedEventArgs e)

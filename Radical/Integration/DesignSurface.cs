@@ -94,13 +94,13 @@ namespace Radical.Integration
             switch (srfvar.Dir)
             {
                 case (int)Direction.X:
-                    newpoint.X = newpoint.X+srfvar.CurrentValue;
+                    newpoint.X = newpoint.X + srfvar.CurrentValue;
                     break;
                 case (int)Direction.Y:
-                    newpoint.Y = newpoint.Y+srfvar.CurrentValue;
+                    newpoint.Y = newpoint.Y + srfvar.CurrentValue;
                     break;
                 case (int)Direction.Z:
-                    newpoint.Z = newpoint.Z+ srfvar.CurrentValue;
+                    newpoint.Z = newpoint.Z + srfvar.CurrentValue;
                     break;
             }
             this.Surface.Points.SetControlPoint(srfvar.u, srfvar.v, newpoint);

@@ -128,13 +128,28 @@
                         Height="1"
                         HorizontalAlignment="Stretch"
                         SnapsToDevicePixels="True" />
-                    <Expander  Header="Variables" FontSize="14">
+                    <Expander Name ="VariablesExpander">
+                        <Expander.Header>
+                            <TextBlock FontSize="18">
+                                Variables
+                            </TextBlock>
+                        </Expander.Header>
                         <StackPanel>
-                            <Expander Header="\tSliders" Name="SlidersExpander" Visibility="Visible">
+                            <Expander Name="SlidersExpander" Margin="10" Visibility="Visible">
+                                <Expander.Header>
+                                    <TextBlock FontSize="18" Foreground="Gray">
+                                        Sliders                                      
+                                    </TextBlock>
+                                </Expander.Header>
                                 <StackPanel  Name="Sliders" >
                                 </StackPanel>
                             </Expander>
-                            <Expander Header="\tGeometries" Name="GeometriesExpander"  Visibility="Visible">
+                            <Expander Name="GeometriesExpander" Margin="10" Visibility="Visible">
+                                <Expander.Header>
+                                    <TextBlock FontSize="18" Foreground="Gray">
+                                        Geometries
+                                    </TextBlock>
+                                </Expander.Header>
                                 <StackPanel Name="Geometries">
                                 </StackPanel>
                             </Expander>
@@ -144,7 +159,12 @@
                         Height="1"
                         HorizontalAlignment="Stretch"
                         SnapsToDevicePixels="True" />
-                    <Expander Name="ConstraintsExpander" Header="Constraints" FontSize="14">
+                    <Expander Name="ConstraintsExpander" FontSize="18">
+                        <Expander.Header>
+                            <TextBlock FontSize="18">
+                                Constraints
+                            </TextBlock>
+                        </Expander.Header>
                         <StackPanel Name="Constraints">
                         </StackPanel>
                     </Expander>
@@ -152,7 +172,12 @@
                         Height="1"
                         HorizontalAlignment="Stretch"
                         SnapsToDevicePixels="True" />
-                    <Expander  Header="Properties" FontSize="14">
+                    <Expander Name="PropertiesExpander" FontSize="18">
+                        <Expander.Header>
+                            <TextBlock FontSize="18">
+                                Properties
+                            </TextBlock>
+                        </Expander.Header>
                         <StackPanel Name="Properties">
                         </StackPanel>
                     </Expander>
