@@ -15,7 +15,8 @@
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="12"
-        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto">
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+        Closing="RadicalWindow_Closing">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -28,11 +29,11 @@
             <Storyboard x:Key="MenuOpen">
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
                     <EasingDoubleKeyFrame KeyTime="0" Value="60"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="390"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="480"/>
                 </DoubleAnimationUsingKeyFrames>
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="VarTree">
                     <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="390"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="480"/>
                 </DoubleAnimationUsingKeyFrames>
                 <ObjectAnimationUsingKeyFrames BeginTime="0:0:0" Storyboard.TargetName="TreeBorder" Storyboard.TargetProperty="Visibility">
                     <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
@@ -41,11 +42,11 @@
             </Storyboard>
             <Storyboard x:Key="MenuClose">
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="390"/>
+                    <EasingDoubleKeyFrame KeyTime="0" Value="480"/>
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="60"/>
                 </DoubleAnimationUsingKeyFrames>
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="VarTree">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="390"/>
+                    <EasingDoubleKeyFrame KeyTime="0" Value="480"/>
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
                 </DoubleAnimationUsingKeyFrames>
                 <ObjectAnimationUsingKeyFrames BeginTime="0:0:0" Storyboard.TargetName="TreeBorder" Storyboard.TargetProperty="Visibility">
@@ -106,18 +107,18 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" x:Name="GridMenu" HorizontalAlignment="Right" Margin="0,0,0,-0.2" Width="60">
+        <Grid Grid.Column="0" x:Name="GridMenu" HorizontalAlignment="Right" Margin="0,0,0,-0.2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0"  >
-                <Button x:Name="ButtonCloseMenu"  Width="50" Height="50" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}" 
+                <Button x:Name="ButtonCloseMenu"  Width="Auto" Height="50" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}" 
                             Visibility="Collapsed" Click="ButtonCloseMenu_Click">
                     <materialDesign:PackIcon Kind="ArrowLeft" Foreground="LightGray" Width="30" Height="30"></materialDesign:PackIcon>
                 </Button>
-                <Button x:Name="ButtonOpenMenu" Width="50" Height="50" HorizontalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}"
+                <Button x:Name="ButtonOpenMenu" Width="Auto" Height="50" HorizontalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}"
                             Click="ButtonOpenMenu_Click">
                     <materialDesign:PackIcon Kind="Menu" Foreground="DarkGray" Width="30" Height="30" HorizontalAlignment="Center"></materialDesign:PackIcon>
                 </Button>
@@ -141,7 +142,7 @@
                                         Sliders                                      
                                     </TextBlock>
                                 </Expander.Header>
-                                <StackPanel  Name="Sliders" >
+                                <StackPanel  Name="Sliders" HorizontalAlignment="Stretch">
                                 </StackPanel>
                             </Expander>
                             <Expander Name="GeometriesExpander" Margin="10" Visibility="Visible">
@@ -150,7 +151,7 @@
                                         Geometries
                                     </TextBlock>
                                 </Expander.Header>
-                                <StackPanel Name="Geometries">
+                                <StackPanel Name="Geometries" HorizontalAlignment="Stretch">
                                 </StackPanel>
                             </Expander>
                         </StackPanel>

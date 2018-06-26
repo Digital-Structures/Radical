@@ -31,6 +31,7 @@ namespace Radical.TestComponents
             this.SrfVariables = new List<NurbsSurface>();
             this.CrvVariables = new List<Curve>();
             this.Constraints = new List<double>();
+            this.open = false;
         }
 
         public double Objective { get; set; }
@@ -38,6 +39,14 @@ namespace Radical.TestComponents
         public List<double> NumVariables { get; set; }
         public List<NurbsSurface> SrfVariables { get; set; }
         public List<Curve> CrvVariables { get; set; }
+
+        //Determine whether there is already a Radical window open
+        private bool open;
+        public bool IsWindowOpen
+        {
+            get { return this.open; }
+            set { this.open = value; }
+        }
 
 
         public List<double> Evolution { get; set; }
@@ -80,18 +89,22 @@ namespace Radical.TestComponents
             double obj = 0;
             if (!DA.GetData(0,ref obj)) { return; }
             this.Objective = obj;
+
             //assign constraints
             List<double> constraints = new List<double>();
             DA.GetDataList(1, constraints);
             this.Constraints = constraints;
+
             //assign numerical variables
             List<double> variables = new List<double>();
             if (!DA.GetDataList(2, variables)) { return; }
             this.NumVariables = variables;
+
             //assign surface variables
             List<Surface> surfaces= new List<Surface>();
             if (!DA.GetDataList(3, surfaces)) { return; }
             this.SrfVariables = surfaces.Select(x=>x.ToNurbsSurface()).ToList();
+
             //assign curve variables
             List<Curve> curves = new List<Curve>();
             if (!DA.GetDataList(4, curves)) { return; }
@@ -135,20 +148,26 @@ namespace Radical.TestComponents
         //[STAThread]
         public override Grasshopper.GUI.Canvas.GH_ObjectResponse RespondToMouseDoubleClick(Grasshopper.GUI.Canvas.GH_Canvas sender, Grasshopper.GUI.GH_CanvasMouseEvent e)
         {
-            Design design = HelperFunctions.GenerateDesign(MyComponent);
-            RadicalVM radicalVM = new RadicalVM(design);
-
-            Thread viewerThread = new Thread(delegate ()
+            //Prevent opening of multiple windows at once
+            if (!MyComponent.IsWindowOpen)
             {
-                Window viewer = new Radical.RadicalWindow(radicalVM);
-                viewer.Show();
-                //viewer.Topmost = true;
-                System.Windows.Threading.Dispatcher.Run();
-            });
+                Design design = HelperFunctions.GenerateDesign(MyComponent);
+                RadicalVM radicalVM = new RadicalVM(design, this.MyComponent);
 
-            viewerThread.SetApartmentState(ApartmentState.STA); // needs to be STA or throws exception
-            viewerThread.Start();
+                Thread viewerThread = new Thread(delegate ()
+                {
+                    Window viewer = new Radical.RadicalWindow(radicalVM);
+                    viewer.Show();
+                    MyComponent.IsWindowOpen = true;
+                    //viewer.Topmost = true;
+                    System.Windows.Threading.Dispatcher.Run();
+                });
+
+                viewerThread.SetApartmentState(ApartmentState.STA); // needs to be STA or throws exception
+                viewerThread.Start();
+            }
             return base.RespondToMouseDoubleClick(sender, e);
         }
+        
     }
 }

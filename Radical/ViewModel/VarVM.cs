@@ -54,6 +54,7 @@ namespace Radical
                 {
                     DesignVar.UpdateValue(this._value);
                 }
+                //Refresh grasshopper window?
             }
 
         }

@@ -91,6 +91,7 @@ namespace Radical.Integration
         {
             SurfaceVariable srfvar = (SurfaceVariable)geovar;
             Point3d newpoint = this.OriginalSurface.Points.GetControlPoint(srfvar.u, srfvar.v).Location;
+
             switch (srfvar.Dir)
             {
                 case (int)Direction.X:
@@ -103,6 +104,7 @@ namespace Radical.Integration
                     newpoint.Z = newpoint.Z + srfvar.CurrentValue;
                     break;
             }
+
             this.Surface.Points.SetControlPoint(srfvar.u, srfvar.v, newpoint);
         }
     }

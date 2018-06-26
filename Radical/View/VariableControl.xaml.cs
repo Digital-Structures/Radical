@@ -20,14 +20,12 @@ namespace Radical
     /// </summary>
     /// 
 
-    // Should this be in a separate file?
-    //Somewhat strange to hide it in VariableControl when it's used by RadicalWindow and ConstraintControl as well
+    //STYLES
+    //Int and Float inpute parsing styles
     public static class Styles
     {
-        public const string FLOAT_CHARS = "-0123456789.";
-        public const string INT_CHARS = "-0123456789";
-        //public const System.Globalization.NumberStyles STYLEFLOAT = System.Globalization.NumberStyles.AllowDecimalPoint | System.Globalization.NumberStyles.AllowLeadingSign;
-        //public const System.Globalization.NumberStyles STYLEINT = System.Globalization.NumberStyles.Integer;
+        public const System.Globalization.NumberStyles STYLEFLOAT = System.Globalization.NumberStyles.AllowDecimalPoint | System.Globalization.NumberStyles.AllowLeadingSign;
+        public const System.Globalization.NumberStyles STYLEINT = System.Globalization.NumberStyles.Integer;
     }
 
     public partial class VariableControl : UserControl
@@ -38,6 +36,7 @@ namespace Radical
             InitializeComponent();
         }
 
+        //CONSTRUCTOR
         public VariableControl(VarVM varvm)
         {
             this.ControlVM = varvm;
@@ -49,7 +48,27 @@ namespace Radical
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+        }
 
+        //MOUSE DOWN
+        //Clear box contents when clicked
+        private void TextBox_MouseDown(object sender, RoutedEventArgs e)
+        {
+            TextBox box = (TextBox)sender;
+
+            box.Clear();
+        }
+
+        //LOST FOCUS
+        //If TextBox is left empty, set value to 0
+        private void TextBox_LostFocus(object sender, EventArgs e)
+        {
+            TextBox box = (TextBox)sender;
+
+            if(box.Text=="")
+            {
+                box.Text = "0";
+            }
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -67,15 +86,24 @@ namespace Radical
 
         }
 
+        //PREVIVEW TEXT INPUT
+        //Only allow user to input parseable float text
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            //e.Text only ever contains the last character entered
-            e.Handled = !(IsTextAllowed(e.Text));
+            TextBox box = (TextBox)sender;
+
+            //Accept negative sign only as first character
+            if (box.Text=="" && e.Text=="-"){return;}
+
+            e.Handled = !(IsTextAllowed(box.Text + e.Text));
         }
 
+        //IS TEXT ALLOWED
+        //Determine if user input is parseable
         private static bool IsTextAllowed(string text)
         {
-            return Styles.FLOAT_CHARS.Contains(text);
+            double val = 0;
+            return double.TryParse(text, Styles.STYLEFLOAT, System.Globalization.CultureInfo.InvariantCulture, out val);
         }
     }
 }

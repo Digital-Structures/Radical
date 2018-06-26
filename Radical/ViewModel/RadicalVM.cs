@@ -15,7 +15,7 @@ namespace Radical
 {
     public class RadicalVM : BaseVM
     {
-        private RadicalComponent Component; //Probably unnecessary
+        private RadicalComponent Component;
         public IDesign Design;
         public List<ConstVM> Constraints;
         public List<VarVM> NumVars;
@@ -32,8 +32,9 @@ namespace Radical
         }
 
         //CONSTRUCTOR
-        public RadicalVM(IDesign design)
+        public RadicalVM(IDesign design, RadicalComponent component)
         {
+            this.Component = component;
             this.Design = design;
             if (Design.Constraints != null)
             {
@@ -79,6 +80,13 @@ namespace Radical
             {
                 this.NumVars.Add(new VarVM(numVar));
             }
+        }
+
+        //Alert the component that the window has been closed
+        //(and therefore a new window can open on double click)
+        public void OnWindowClosing()
+        {
+            this.Component.IsWindowOpen = false;
         }
 
         private RefreshMode _mode;

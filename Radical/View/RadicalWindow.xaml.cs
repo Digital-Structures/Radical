@@ -113,10 +113,13 @@ namespace Radical
             }
         }
 
+        //Formatting individual geometry headers
         private TextBlock HeaderFormatting(string text)
         {
             TextBlock header = new TextBlock(new Run(text));
+            header.Foreground = Brushes.Gray;
             header.FontSize = 14;
+            header.Margin = new Thickness(1, 0, 0, 0);
 
             return header;
         }
@@ -187,6 +190,13 @@ namespace Radical
 
         }
 
+        //Alert the component that the window has been closed
+        //(and therefore a new window can open on double click)
+        public void RadicalWindow_Closing(object sender, CancelEventArgs e)
+        {
+            this.RadicalVM.OnWindowClosing();
+        }
+
         private void ButtonPause_Click(object sender, RoutedEventArgs e)
         {
             source.Cancel();
@@ -218,22 +228,28 @@ namespace Radical
 
         private void TextBox_PreviewTextInput_Float(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = !(IsTextAllowedFloat(e.Text));
+            TextBox box = (TextBox)sender;
+
+            e.Handled = !(IsTextAllowedFloat(box.Text + e.Text));
         }
 
         private static bool IsTextAllowedFloat(string text)
         {
-            return Styles.FLOAT_CHARS.Contains(text);
+            double val = 0;
+            return double.TryParse(text, Styles.STYLEFLOAT, System.Globalization.CultureInfo.InvariantCulture, out val);
         }
 
         private void TextBox_PreviewTextInput_Int(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = !IsTextAllowedInt(e.Text);
+            TextBox box = (TextBox)sender;
+
+            e.Handled = !IsTextAllowedInt(box.Text + e.Text);
         }
 
         private static bool IsTextAllowedInt(string text)
         {
-            return Styles.INT_CHARS.Contains(text);
+            int val = 0;
+            return int.TryParse(text, Styles.STYLEINT, System.Globalization.CultureInfo.InvariantCulture, out val);
         }
 
     }

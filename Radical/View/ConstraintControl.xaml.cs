@@ -46,12 +46,15 @@ namespace Radical
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = !IsTextAllowed(e.Text);
+            TextBox box = (TextBox)sender;
+
+            e.Handled = !IsTextAllowed(box.Text + e.Text);
         }
 
         private static bool IsTextAllowed(string text)
         {
-            return Styles.FLOAT_CHARS.Contains(text);
+            double val = 0;
+            return double.TryParse(text, Styles.STYLEFLOAT, System.Globalization.CultureInfo.InvariantCulture, out val);
         }
     }
 }
