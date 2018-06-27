@@ -97,17 +97,17 @@ namespace Radical.TestComponents
 
             //assign numerical variables
             List<double> variables = new List<double>();
-            if (!DA.GetDataList(2, variables)) { return; }
+            DA.GetDataList(2, variables);
             this.NumVariables = variables;
 
             //assign surface variables
             List<Surface> surfaces= new List<Surface>();
-            if (!DA.GetDataList(3, surfaces)) { return; }
+            DA.GetDataList(3, surfaces);
             this.SrfVariables = surfaces.Select(x=>x.ToNurbsSurface()).ToList();
 
             //assign curve variables
             List<Curve> curves = new List<Curve>();
-            if (!DA.GetDataList(4, curves)) { return; }
+            DA.GetDataList(4, curves);
             this.CrvVariables = curves;
         }
 

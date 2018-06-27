@@ -66,7 +66,7 @@ namespace Radical
                     //e.g. G1.P1.X
                     geoVar.Name = String.Format("G{0}.P{1}.{2}", geoIndex, varIndex/3+1, ((Direction)dir).ToString());
 
-                    singleGeoVars.Add(new VarVM(var));
+                    singleGeoVars.Add(geoVar);
                     varIndex++;
                 }
 

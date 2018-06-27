@@ -28,6 +28,8 @@ namespace Radical
 
         public IVariable DesignVar;
 
+        //NAME
+        //The name of an individual variable
         private string _name;
         public string Name
         {
@@ -37,12 +39,18 @@ namespace Radical
             {
                 if (CheckPropertyChanged<string>("Name", ref _name, ref value))
                 {
-                    DesignVar.Parameter.NickName = this._name;
+                    //Prevent naming geometries after individual control points 
+                    if (!(DesignVar is IGeoVariable))
+                    {
+                        DesignVar.Parameter.NickName = this._name;
+                    }
                 }
             }
 
         }
 
+        //VALUE
+        //Current value of the individual variable
         private double _value;
         public double Value
         {
@@ -50,15 +58,21 @@ namespace Radical
             { return _value; }
             set
             {
-                if (CheckPropertyChanged<double>("Value", ref _value, ref value))
+                //Update value if change is in bounds
+                if (value<=this.Max && value>=this.Min &&
+                    CheckPropertyChanged<double>("Value", ref _value, ref value))
                 {
                     DesignVar.UpdateValue(this._value);
+
+                    //Refresh to change value on the grasshopper canvas
+                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
                 }
-                //Refresh grasshopper window?
             }
 
         }
 
+        //MIN
+        //Minimum value the variable should hold
         private double _min;
         public double Min
         {
@@ -70,8 +84,7 @@ namespace Radical
                 if (value > this._max)
                 {
                     System.Windows.MessageBox.Show(String.Format("Incompatible bounds!\n" +
-                                                                    "Min:{0} > Max:{1}\n" +
-                                                                    "Resetting Min to {2}\n", value, this._max, this._min));
+                                                                    "Min:{0} > Max:{1}\n", value, this._max));
                 }
 
                 else if (CheckPropertyChanged<double>("Min", ref _min, ref value))
@@ -83,13 +96,14 @@ namespace Radical
                     {
                         DesignVar.UpdateValue(this._min);
                         this.Value = this._min;
-                        //NEED SOME KIND OF REFRESH AFTER THIS UPDATE
                     }
                 }
             }
 
         }
 
+        //MAX
+        //Maximum value the variable should hold
         private double _max;
         public double Max
         {
@@ -113,14 +127,13 @@ namespace Radical
                     {
                         DesignVar.UpdateValue(_max);
                         this.Value = _max;
-                        //NEED SOME KIND OF REFRESH AFTER THIS UPDATE
                     }
                 }
             }
 
         }
 
-        //Bool IsEnabled
+        //IS ENABLED
         //determines whether variable will be considered in optimization
         private bool _isenabled;
         public bool IsEnabled
