@@ -240,12 +240,17 @@
                     </DockPanel>
                     <DockPanel>
                         <materialDesign:PackIcon Kind="SortNumeric" Foreground="DarkGray" VerticalAlignment="Bottom"></materialDesign:PackIcon>
-                        <TextBox HorizontalAlignment="Right" materialDesign:HintAssist.Hint="Number of Iterations" PreviewTextInput="TextBox_PreviewTextInput_Int" Text="{Binding Niterations, Mode=OneWayToSource, FallbackValue=1000 }" ></TextBox>
+                        <TextBox Text="{Binding Niterations, Mode=OneWayToSource, FallbackValue=1000 }" materialDesign:HintAssist.Hint="Number of Iterations"
+                                 HorizontalAlignment="Right"
+                                 PreviewTextInput="TextBox_PreviewTextInput_Int" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"
+                                 ></TextBox>
                     </DockPanel>
                     <DockPanel>
                         <materialDesign:PackIcon Kind="ChartLine"  Foreground="DarkGray" VerticalAlignment="Bottom"></materialDesign:PackIcon>
-                        <TextBox HorizontalAlignment="Right" materialDesign:HintAssist.Hint="Relative Convergence Limit" PreviewTextInput="TextBox_PreviewTextInput_Float"
-                                 Text="{Binding ConvCrit, Mode=OneWayToSource, FallbackValue=0.001 }" ></TextBox>
+                        <TextBox Name="ConvergeText" Text="{Binding ConvCrit, Mode=OneWayToSource, FallbackValue=0.001 }" materialDesign:HintAssist.Hint="Relative Convergence Limit"
+                                 HorizontalAlignment="Right"
+                                 PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"
+                                 ></TextBox>
                     </DockPanel>
                     <DockPanel>
                         <materialDesign:PackIcon Kind="Factory" Foreground="DarkGray" VerticalAlignment="Bottom"></materialDesign:PackIcon>
