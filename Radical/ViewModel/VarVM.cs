@@ -23,7 +23,9 @@ namespace Radical
             this._value = DesignVar.CurrentValue;
             this._min = DesignVar.Min;
             this._max = DesignVar.Max;
-            this.IsEnabled = true;
+            this.IsActive = true;
+
+            this.OptRunning = false;
         }
 
         public IVariable DesignVar;
@@ -133,20 +135,20 @@ namespace Radical
 
         }
 
-        //IS ENABLED
-        //determines whether variable will be considered in optimization
-        private bool _isenabled;
-        public bool IsEnabled
+        //IS ACTIVE
+        //Determines whether variable will be considered in optimization
+        private bool _isactive;
+        public bool IsActive
         {
             get
             {
-                return _isenabled;
+                return _isactive;
             }
             set
             {
-                if (CheckPropertyChanged<bool>("IsEnabled", ref _isenabled, ref value))
+                if (CheckPropertyChanged<bool>("IsEnabled", ref _isactive, ref value))
                 {
-                    DesignVar.IsActive = this._isenabled;
+                    DesignVar.IsActive = this._isactive;
                 }
             }
         }

@@ -19,6 +19,9 @@ namespace Radical
         {
             this.Constraint = constraint;
             this.Name = "C." + Constraint.ConstraintIndex.ToString();
+
+            this._isactive = true;
+            this.OptRunning = false;
         }
 
         public IConstraint Constraint;
@@ -64,16 +67,16 @@ namespace Radical
             }
         }
 
-        private bool _isenabled;
-        public bool IsEnabled
+        private bool _isactive;
+        public bool IsActive
         {
             get
             {
-                return _isenabled;
+                return _isactive;
             }
             set
             {
-                if (CheckPropertyChanged<bool>("IsEnabled", ref _isenabled, ref value))
+                if (CheckPropertyChanged<bool>("IsEnabled", ref _isactive, ref value))
                 {
                 }
             }

@@ -124,6 +124,18 @@ namespace Radical
             return header;
         }
 
+        //OPTIMIZATION STARTED
+        public void OptimizationStarted()
+        {
+            this.RadicalVM.OptimizationStarted();
+        }
+
+        //OPTIMIZATION FINISHED
+        public void OptimizationFinished()
+        {
+            this.RadicalVM.OptimizationFinished();
+        }
+
         private void ButtonCloseMenu_Click(object sender, RoutedEventArgs e)
         {
             ButtonOpenMenu.Visibility = Visibility.Visible;
@@ -151,27 +163,6 @@ namespace Radical
 
         }
 
-
-        private async void ButtonPlay_Click(object sender, RoutedEventArgs e) // make async
-        {
-            ButtonPause.Visibility = Visibility.Visible;
-            ButtonPlay.Visibility = Visibility.Collapsed;
-            source = new CancellationTokenSource();
-
-            try
-            {
-                await Task.Run(() => Optimize(), source.Token);
-
-            }
-            catch (OperationCanceledException)
-            {
-
-            }
-            UpdateWindow(this.RadicalVM.Design.ScoreEvolution);
-            ButtonPause.Visibility = Visibility.Collapsed;
-            ButtonPlay.Visibility = Visibility.Visible;
-        }
-
         public CancellationTokenSource source;
 
         void Optimize()
@@ -190,19 +181,12 @@ namespace Radical
 
         }
 
+        //WINDOW CLOSING
         //Alert the component that the window has been closed
         //(and therefore a new window can open on double click)
         public void RadicalWindow_Closing(object sender, CancelEventArgs e)
         {
             this.RadicalVM.OnWindowClosing();
-        }
-
-        private void ButtonPause_Click(object sender, RoutedEventArgs e)
-        {
-            source.Cancel();
-            UpdateWindow(this.RadicalVM.Design.ScoreEvolution);
-            ButtonPause.Visibility = Visibility.Collapsed;
-            ButtonPlay.Visibility = Visibility.Visible;
         }
 
         void worker_DoWork(object sender, DoWorkEventArgs e)
@@ -213,6 +197,42 @@ namespace Radical
         {
         }
 
+        //BUTTON PLAY CLICK
+        private async void ButtonPlay_Click(object sender, RoutedEventArgs e) // make async
+        {
+            if (this.RadicalVM.Design.ActiveVariables.Any())
+            {
+                ButtonPause.Visibility = Visibility.Visible;
+                ButtonPlay.Visibility = Visibility.Collapsed;
+                source = new CancellationTokenSource();
+
+                try
+                {
+                    await Task.Run(() => Optimize(), source.Token);
+
+                }
+                catch (OperationCanceledException)
+                {
+
+                }
+                UpdateWindow(this.RadicalVM.Design.ScoreEvolution);
+                ButtonPause.Visibility = Visibility.Collapsed;
+                ButtonPlay.Visibility = Visibility.Visible;
+            }
+            else
+                System.Windows.MessageBox.Show("No variables selected!");
+        }
+
+        //BUTTON PAUSE CLICK
+        private void ButtonPause_Click(object sender, RoutedEventArgs e)
+        {
+            source.Cancel();
+            UpdateWindow(this.RadicalVM.Design.ScoreEvolution);
+            ButtonPause.Visibility = Visibility.Collapsed;
+            ButtonPlay.Visibility = Visibility.Visible;
+        }
+
+        //BUTTON SETTINGS OPEN CLICK
         private void ButtonSettingsOpen_Click(object sender, RoutedEventArgs e)
         {
             ButtonSettingsOpen.Visibility = Visibility.Collapsed;
@@ -220,32 +240,99 @@ namespace Radical
 
         }
 
+        //BUTTON SETTINGS CLOSE CLICK
         private void ButtonSettingsClose_Click(object sender, RoutedEventArgs e)
         {
             ButtonSettingsOpen.Visibility = Visibility.Visible;
             SettingsClose.Visibility = Visibility.Collapsed;
         }
 
+        //PREVIEW MOUSE DOWN
+        //Disable changes during optimization
+        private void TextBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            TextBox box = (TextBox)sender;
+
+            if (this.RadicalVM.ChangesEnabled)
+                box.IsReadOnly = false;
+            else
+                box.IsReadOnly = true;
+        }
+
+        //GOT FOCUS
+        //Clear box contents when it's active
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            //Disable changes during optimization
+            if (this.RadicalVM.ChangesEnabled)
+            {
+                TextBox box = (TextBox)sender;
+                box.Clear();
+            }
+        }
+
+        //LOST FOCUS
+        //If TextBox is left empty, set value to 0
+        private void TextBox_LostFocus(object sender, EventArgs e)
+        {
+            TextBox box = (TextBox)sender;
+
+            if (box.Text == "")
+                box.Text = "0";
+        }
+
+        //PREVIEW KEY DOWN
+        //Allow pressing enter to save textbox content
+        private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                //Exit the Text Box
+                Keyboard.ClearFocus();
+                TextBox_LostFocus(sender, e);
+
+                //Update the value of the Text Box after exiting
+                TextBox box = (TextBox)sender;
+                DependencyProperty prop = TextBox.TextProperty;
+                BindingExpression binding = BindingOperations.GetBindingExpression(box, prop);
+                if (binding != null) { binding.UpdateSource(); }
+            }
+        }
+
+        //PREVIVEW FLOAT INPUT
+        //Only allow user to input parseable float text
         private void TextBox_PreviewTextInput_Float(object sender, TextCompositionEventArgs e)
         {
             TextBox box = (TextBox)sender;
 
+            //Accept negative sign only as first character
+            if (box.Text == "" && e.Text == "-") { return; }
+
             e.Handled = !(IsTextAllowedFloat(box.Text + e.Text));
         }
 
+        //IS TEXT ALLOWED FLOAT
+        //Determine if float input is parseable
         private static bool IsTextAllowedFloat(string text)
         {
             double val = 0;
             return double.TryParse(text, Styles.STYLEFLOAT, System.Globalization.CultureInfo.InvariantCulture, out val);
         }
 
+        //PREVIVEW FLOAT INPUT
+        //Only allow user to input parseable float text
         private void TextBox_PreviewTextInput_Int(object sender, TextCompositionEventArgs e)
         {
             TextBox box = (TextBox)sender;
 
-            e.Handled = !IsTextAllowedInt(box.Text + e.Text);
+            //Accept negative sign only as first character
+            if (box.Text == "" && e.Text == "-") { return; }
+
+            e.Handled = !(IsTextAllowedInt(box.Text + e.Text));
         }
 
+        //IS TEXT ALLOWED INT
+        //Determines if int input is parseable
         private static bool IsTextAllowedInt(string text)
         {
             int val = 0;

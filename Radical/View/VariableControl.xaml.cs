@@ -46,6 +46,18 @@ namespace Radical
 
         public VarVM ControlVM { get; set; }
 
+        //PREVIEW MOUSE DOWN
+        //Disable changes during optimization
+        private void TextBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            TextBox box = (TextBox)sender;
+
+            if (this.ControlVM.ChangesEnabled)
+                box.IsReadOnly = false;
+            else
+                box.IsReadOnly = true;
+        }
+
         //MEASURE STRING
         //Obtain the size of the current user input
         private Size MeasureString(string candidate, TextBox box)
@@ -67,8 +79,12 @@ namespace Radical
         //Clear box contents when it's active
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            TextBox box = (TextBox)sender;
-            box.Clear();
+            //Disable changes during optimization
+            if (this.ControlVM.ChangesEnabled)
+            {
+                TextBox box = (TextBox)sender;
+                box.Clear();
+            }
         }
 
         //LOST FOCUS
@@ -79,21 +95,6 @@ namespace Radical
 
             if(box.Text=="")
                 box.Text = "0";
-        }
-
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void StackPanel_MouseEnter(object sender, MouseEventArgs e)
-        {
-
         }
 
         //PREVIEW KEY DOWN
@@ -132,6 +133,18 @@ namespace Radical
         {
             double val = 0;
             return double.TryParse(text, Styles.STYLEFLOAT, System.Globalization.CultureInfo.InvariantCulture, out val);
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void StackPanel_MouseEnter(object sender, MouseEventArgs e)
+        {
         }
     }
 }

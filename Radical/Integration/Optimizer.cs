@@ -103,9 +103,8 @@ namespace Radical.Integration
 
         public double Objective(double[] x)
         {
-
-
             bool finished = false;
+
             Grasshopper.Kernel.GH_SolutionMode refresh = Grasshopper.Kernel.GH_SolutionMode.Silent;
 
             if (this.RadicalWindow.RadicalVM.Mode == RefreshMode.Live) { refresh = Grasshopper.Kernel.GH_SolutionMode.Default; }
@@ -183,16 +182,23 @@ namespace Radical.Integration
             {
                 vargeo.Update();
             }
-            Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
+            Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
             return Design.Constraints[num].CurrentValue;
         }
 
         public NloptResult RunOptimization()
         {
+            //STARTED
+            this.RadicalWindow.OptimizationStarted();
 
-            // Only take vars that are enabled
-            double[] x = Design.ActiveVariables.Select(t => t.CurrentValue).ToArray(); // ONLY INCL. VARS
-            return Solver.Optimize(x, out MinValue);
+            // Run optimization with only the activeVariables
+            double[] x = Design.ActiveVariables.Select(t => t.CurrentValue).ToArray();
+            NloptResult result = Solver.Optimize(x, out MinValue);
+            
+            //FINISHED
+            this.RadicalWindow.OptimizationFinished();
+
+            return result;
         }
     }
 

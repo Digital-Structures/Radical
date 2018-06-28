@@ -7,7 +7,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d">
 
-    <Border BorderThickness="0,0.3,0,0.3" BorderBrush="LightGray" Height="45" Width="480">
+    <Border BorderThickness="0,0.3,0,0.3" BorderBrush="LightGray" Height="45" Width="475">
 
 
         <Grid Style="{x:Null}">
@@ -26,26 +26,27 @@
                      ></TextBox>
 
             <TextBox Name="ValueText" Text="{Binding Value, Mode=TwoWay, StringFormat=N2}" FontSize="12" 
-                     Grid.Column="1" MinWidth="30" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0" BorderBrush="{x:Null}"
-                     TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput"  PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"
+                     Grid.Column="1" MinWidth="28" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0" BorderBrush="{x:Null}"
+                     TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"
                      ></TextBox>
 
             <CheckBox Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0"
-                      Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"  IsChecked="{Binding IsEnabled, Mode=TwoWay}"
+                      Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" IsChecked="{Binding IsActive, Mode=TwoWay}" IsEnabled="{Binding ChangesEnabled}"
                       ></CheckBox>
 
             <TextBox Name="MinText" Text="{Binding Min, Mode=TwoWay, StringFormat=N2}" FontSize="12"
-                     Grid.Column="3" MinWidth="30" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="10,0" BorderBrush="{x:Null}" 
-                     TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput"  PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"
+                     Grid.Column="3" MinWidth="28" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="10,0" BorderBrush="{x:Null}" 
+                     TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"
                      ></TextBox>
 
             <Slider Minimum="{Binding Min, Mode=TwoWay}" Maximum="{Binding Max, Mode=TwoWay}" Value="{Binding Value, Mode=TwoWay}" FontSize="8" Foreground="LawnGreen" 
                     Grid.Column="4" Width="150" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2"
+                    IsEnabled="{Binding ChangesEnabled}"
                     ></Slider>
 
             <TextBox Name="MaxText" Text="{Binding Max, Mode=TwoWay,StringFormat=N2}" FontSize="12" 
-                     Grid.Column="5" MinWidth="30" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0" BorderBrush="{x:Null}"
-                     TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput"  PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"
+                     Grid.Column="5" MinWidth="28" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0" BorderBrush="{x:Null}"
+                     TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"
                      ></TextBox>
         </Grid>
     </Border>

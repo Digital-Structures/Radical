@@ -43,6 +43,8 @@ namespace Radical
             this.NumVars = new List<VarVM> { };
             this.GeoVars = new List<List<VarVM>> { };
             SortVariables();
+
+            this.OptRunning = false;
         }
 
         //Separate geometric and numeric variables
@@ -80,6 +82,34 @@ namespace Radical
             {
                 this.NumVars.Add(new VarVM(numVar));
             }
+        }
+
+        //OPTIMIZATION STARTED
+        public void OptimizationStarted()
+        {
+            this.ChangesEnabled = false;
+
+            foreach (VarVM var in this.NumVars)
+                var.ChangesEnabled = false;
+            for (int i = 0; i < this.GeoVars.Count; i++)
+                foreach (VarVM var in this.GeoVars[i])
+                    var.ChangesEnabled = false;
+            foreach (ConstVM constraint in this.Constraints)
+                constraint.ChangesEnabled = false;
+        }
+
+        //OPTIMIZATION FINISHED
+        public void OptimizationFinished()
+        {
+            this.ChangesEnabled = true;
+
+            foreach (VarVM var in this.NumVars)
+                var.ChangesEnabled = true;
+            for (int i = 0; i < this.GeoVars.Count; i++)
+                foreach (VarVM var in this.GeoVars[i])
+                    var.ChangesEnabled = true;
+            foreach (ConstVM constraint in this.Constraints)
+                constraint.ChangesEnabled = true;
         }
 
         //Alert the component that the window has been closed
