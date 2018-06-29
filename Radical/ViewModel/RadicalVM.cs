@@ -143,7 +143,6 @@ namespace Radical
                 {
                 }
             }
-
         }
 
         private NLoptAlgorithm _secondaryalgorithm;
@@ -174,6 +173,8 @@ namespace Radical
                 }
             }
         }
+
+        
 
         private int _niterations;
         public int Niterations
@@ -245,7 +246,15 @@ namespace Radical
             NLoptAlgorithm.LN_COBYLA
         };
 
+
+        //Temp solution
+        //Algorithms that require a secondary algorithm 
+        public IEnumerable<NLoptAlgorithm> DFreeAlgs_ReqSec = new[]
+        {
+            NLoptAlgorithm.AUGLAG, //Calls for secondary alg
+            NLoptAlgorithm.AUGLAG_EQ, //Calls for secondary alg
+            NLoptAlgorithm.G_MLSL, //calls for secondary alg (local)
+            NLoptAlgorithm.G_MLSL_LDS, //calls for secondary alg (local)
+        };
     }
-
-
 }

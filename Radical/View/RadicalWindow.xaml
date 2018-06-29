@@ -82,7 +82,9 @@
                     <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
                 </ObjectAnimationUsingKeyFrames>
             </Storyboard>
+            <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
         </ResourceDictionary>
+       
     </Window.Resources>
 
     <Window.Triggers>
@@ -256,12 +258,13 @@
                         <materialDesign:PackIcon Kind="Factory" Foreground="DarkGray" VerticalAlignment="Bottom"></materialDesign:PackIcon>
                         <ComboBox HorizontalAlignment="Right"  materialDesign:HintAssist.Hint="Algorithm" IsEditable="True" IsReadOnly="True"
                                   ItemsSource="{Binding AvailableAlgs, Mode=OneWay}" 
-                                  SelectedItem="{Binding PrimaryAlgorithm, Mode=OneWayToSource, FallbackValue={x:Static nlopt:NLoptAlgorithm.LN_COBYLA}}">
+                                  SelectedItem="{Binding PrimaryAlgorithm, Mode=OneWayToSource, FallbackValue={x:Static nlopt:NLoptAlgorithm.LN_COBYLA}}"
+                                  SelectionChanged="ComboBox_SelectionChanged">
                         </ComboBox>
                     </DockPanel>
                     <DockPanel>
                         <materialDesign:PackIcon Kind="Calculator" Foreground="DarkGray" VerticalAlignment="Bottom"></materialDesign:PackIcon>
-                        <ComboBox HorizontalAlignment="Right" materialDesign:HintAssist.Hint="Secondary Algorithm" IsEditable="True" IsReadOnly="True">
+                        <ComboBox Name="SecondaryAlgorithm" Visibility="Visible"  HorizontalAlignment="Right" materialDesign:HintAssist.Hint="Secondary Algorithm" IsEditable="True" IsReadOnly="True">
                         </ComboBox>
                     </DockPanel>
                 </StackPanel>

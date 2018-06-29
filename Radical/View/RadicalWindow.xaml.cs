@@ -339,6 +339,24 @@ namespace Radical
             return int.TryParse(text, Styles.STYLEINT, System.Globalization.CultureInfo.InvariantCulture, out val);
         }
 
+        //SELECTION CHANGED
+        //Determines whether a secondary algorithm is required for new selected opt. alg.
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox box = sender as ComboBox;
+            List<NLoptAlgorithm> ReqSec = RadicalVM.DFreeAlgs_ReqSec.ToList();
+            if (this.SecondaryAlgorithm != null)
+            {
+                if (!ReqSec.Contains((NLoptAlgorithm)box.SelectedItem))
+                {
+                    this.SecondaryAlgorithm.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    this.SecondaryAlgorithm.Visibility = Visibility.Visible;
+                }
+            }
+        }
     }
 
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
