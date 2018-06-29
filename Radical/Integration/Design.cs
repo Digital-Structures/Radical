@@ -11,6 +11,8 @@ using Radical.TestComponents;
 
 namespace Radical.Integration
 {
+    //DESIGN
+    //Collection of problem variables, constraints, and objectives to be optimized by Radical
     public class Design : IDesign
     {
         //Radical Component
@@ -29,6 +31,7 @@ namespace Radical.Integration
             this.OptComponent = component;
         }
 
+        //CONSTRUCTOR
         public Design(List<IVariable> vars, List<IDesignGeometry> geos, List<IConstraint> consts, RadicalComponent component)
         {
             this.Variables = vars;
@@ -39,6 +42,26 @@ namespace Radical.Integration
             this.OptComponent = component;
         }
 
+        //EVALUATION PROPERTIES
+        public List<List<double>> Samples { get; set; }
+        public List<List<double>> Properties { get; set; }
+        public IOptimizationComponent OptComponent { get; set; }
+        public IExplorationComponent ExpComponent;
+        public List<double> ScoreEvolution { get; set; }
+        public IGH_Param ScoreParameter { get; set; }
+
+        //INPUT PROPERTIES
+        public List<IVariable> Variables { get; set; }
+        public List<IVariable> ActiveVariables { get { return Variables.Where(var => var.IsActive).ToList(); } }
+        public List<IDesignGeometry> Geometries { get; set; }
+        public List<IConstraint> Constraints { get; set; }
+        public List<double> ConstraintsNumber
+        {
+            get { return OptComponent.Constraints; }
+        }
+
+        //CURRENT SCORE
+        //The value of the objective with the current variable values
         public double CurrentScore
         {
             get
@@ -48,29 +71,6 @@ namespace Radical.Integration
             set { }
         }
 
-        public List<double> ConstraintsNumber
-        {
-            get { return OptComponent.Constraints; }
-        }
-        public List<List<double>> Samples { get; set; }
-        public List<List<double>> Properties { get; set; }
-
-        public IOptimizationComponent OptComponent { get; set; }
-
-        public IExplorationComponent ExpComponent;
-
-        public List<double> ScoreEvolution { get; set; }
-
-        public IGH_Param ScoreParameter { get; set; }
-
-        public List<IVariable> Variables { get; set; }
-
-        public List<IVariable> ActiveVariables { get { return Variables.Where(var => var.IsActive).ToList(); } }
-
-        public List<IDesignGeometry> Geometries { get; set; }
-
-        public List<IConstraint> Constraints { get; set; }
-
         public void Optimize()
         {
             Optimizer opt = new Optimizer(this);
@@ -79,6 +79,8 @@ namespace Radical.Integration
             Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
         }
 
+        //OPTIMIZE for Radical
+        //Runs the optimizer and stores the objective data
         public void Optimize(RadicalWindow radicalWindow)
         {
             Optimizer opt = new Optimizer(this, radicalWindow);
@@ -86,6 +88,7 @@ namespace Radical.Integration
             this.OptComponent.Evolution = this.ScoreEvolution;
         }
 
+        //SAMPLE
         public void Sample(int alg)
         {
 

@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace Radical
 {
-    public class BaseVM:INotifyPropertyChanged
+    public class BaseVM:IViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -20,7 +20,7 @@ namespace Radical
             set { OptRunning = !value; FirePropertyChanged("ChangesEnabled"); }
         }
 
-        protected bool CheckPropertyChanged<T>(string propertyName, ref T oldValue, ref T newValue)
+        public bool CheckPropertyChanged<T>(string propertyName, ref T oldValue, ref T newValue)
         {
             if (oldValue == null && newValue == null)
             {
@@ -37,7 +37,7 @@ namespace Radical
             return false;
         }
 
-        protected void FirePropertyChanged(string propertyName)
+        public void FirePropertyChanged(string propertyName)
         {
             if (this.PropertyChanged != null)
             {

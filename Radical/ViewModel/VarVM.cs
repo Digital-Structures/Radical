@@ -42,7 +42,7 @@ namespace Radical
                 if (CheckPropertyChanged<string>("Name", ref _name, ref value))
                 {
                     //Prevent naming geometries after individual control points 
-                    if (!(DesignVar is IGeoVariable))
+                    if (!(DesignVar is GeoVariable))
                     {
                         DesignVar.Parameter.NickName = this._name;
                     }
@@ -91,7 +91,7 @@ namespace Radical
 
                 else if (CheckPropertyChanged<double>("Min", ref _min, ref value))
                 {
-                    DesignVar.UpdateMin(this._min);
+                    DesignVar.Min = this._min;
 
                     //Ensure the value of the slider is not outside the new min bound
                     if (this._min > DesignVar.CurrentValue)
@@ -122,13 +122,13 @@ namespace Radical
                 }
                 else if (CheckPropertyChanged<double>("Max", ref _max, ref value))
                 {
-                    DesignVar.UpdateMax(_max);
+                    DesignVar.Max = this._max;
 
                     //Ensure the value of the slider is not outside the new max bound
                     if (_max < DesignVar.CurrentValue)
                     {
-                        DesignVar.UpdateValue(_max);
-                        this.Value = _max;
+                        DesignVar.UpdateValue(this._max);
+                        this.Value = this._max;
                     }
                 }
             }

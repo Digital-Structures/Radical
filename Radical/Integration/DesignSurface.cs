@@ -21,6 +21,7 @@ namespace Radical.Integration
             this.Surface = surf;
             this.OriginalSurface = new NurbsSurface(surf);
             BuildVariables(min, max);
+            List<GeoVariable> myVars = Variables;
         }
 
         // obsolete or to be made obsolete
@@ -48,11 +49,11 @@ namespace Radical.Integration
         }
         public GH_PersistentGeometryParam<GH_Surface> SrfParameter { get { return Parameter as GH_PersistentGeometryParam<GH_Surface>; } }
 
-        public List<IGeoVariable> Variables { get; set; }
+        public List<GeoVariable> Variables { get; set; }
 
         public void BuildVariables(double min, double max)
         {
-            Variables = new List<IGeoVariable>();
+            Variables = new List<GeoVariable>();
             for (int i = 0; i < Surface.Points.CountU; i++)
             {
                 for (int j = 0; j < Surface.Points.CountV; j++)
@@ -68,7 +69,7 @@ namespace Radical.Integration
         // obsolete or to be made obsolete
         public void BuildVariables(List<Tuple<int, int>> fptsX, List<Tuple<int, int>> fptsY, List<Tuple<int, int>> fptsZ, double min, double max)
         {
-            Variables = new List<IGeoVariable>();
+            Variables = new List<GeoVariable>();
             for (int i=0;i<Surface.Points.CountU;i++)
             {
                 for (int j=0;j<Surface.Points.CountV;j++)
@@ -87,7 +88,7 @@ namespace Radical.Integration
             SrfParameter.PersistentData.Append(new Grasshopper.Kernel.Types.GH_Surface(this.Surface));
         }
 
-        public void VarUpdate(IGeoVariable geovar)
+        public void VarUpdate(GeoVariable geovar)
         {
             SurfaceVariable srfvar = (SurfaceVariable)geovar;
             Point3d newpoint = this.OriginalSurface.Points.GetControlPoint(srfvar.u, srfvar.v).Location;

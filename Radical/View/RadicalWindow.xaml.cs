@@ -26,9 +26,7 @@ namespace Radical
     /// Interaction logic for MaiWindow.xaml
     /// </summary>
     public partial class RadicalWindow : Window
-    {
-
-        //Probably Useless
+    { 
         public RadicalWindow()
         {
             this.DataContext = RadicalVM;
@@ -38,6 +36,7 @@ namespace Radical
         //CONSTRUCTOR
         public RadicalWindow(RadicalVM radicalVM)
         {
+            //this.control = new BaseControl(radicalVM);
             this.RadicalVM = radicalVM;
             this.DataContext = this.RadicalVM;
 
@@ -47,13 +46,15 @@ namespace Radical
             AddGeometries();
         }
         public RadicalVM RadicalVM;
+        //public BaseControl control;
+        public CancellationTokenSource source;
 
         //ADD CONSTRAINTS
         //Adds a stack panel for constraints
         private void AddConstraints()
         {
             //Collapse Constraints expander if no constraints are imposed
-            if (RadicalVM.Constraints.Count == 0)
+            if (!RadicalVM.Constraints.Any())
             {
                 this.ConstraintsExpander.Visibility = Visibility.Collapsed;
                 return;
@@ -70,7 +71,7 @@ namespace Radical
         private void AddNumbers()
         {
             //Collapse Sliders expander if no sliders are connected
-            if (RadicalVM.NumVars.Count == 0)
+            if (!RadicalVM.NumVars.Any())
             {
                 this.SlidersExpander.Visibility = Visibility.Collapsed;
                 return;
@@ -87,7 +88,7 @@ namespace Radical
         private void AddGeometries()
         {
             //Collapse Geometries expander if no geometries are connected
-            if (RadicalVM.GeoVars.Count==0)
+            if (!RadicalVM.GeoVars.Any())
             {
                 this.GeometriesExpander.Visibility = Visibility.Collapsed;
                 return;
@@ -136,40 +137,13 @@ namespace Radical
             this.RadicalVM.OptimizationFinished();
         }
 
-        private void ButtonCloseMenu_Click(object sender, RoutedEventArgs e)
-        {
-            ButtonOpenMenu.Visibility = Visibility.Visible;
-            ButtonCloseMenu.Visibility = Visibility.Collapsed;
-        }
-
-        private void ButtonOpenMenu_Click(object sender, RoutedEventArgs e)
-        {
-            ButtonOpenMenu.Visibility = Visibility.Collapsed;
-            ButtonCloseMenu.Visibility = Visibility.Visible;
-        }
-
-        private void OpenOptSettings(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Export_SVG(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Export_CSV(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        public CancellationTokenSource source;
-
+        //OPTIMIZE
         void Optimize()
         {
             this.RadicalVM.Design.Optimize(this);
         }
 
+        //UPDATE WINDOW
         public void UpdateWindow(IEnumerable<double> y)
         {
             var x = Enumerable.Range(0, y.Count()).ToArray();
@@ -178,7 +152,6 @@ namespace Radical
             {
                 Plotter.Plot(x, y);
             });
-
         }
 
         //WINDOW CLOSING
@@ -189,12 +162,18 @@ namespace Radical
             this.RadicalVM.OnWindowClosing();
         }
 
-        void worker_DoWork(object sender, DoWorkEventArgs e)
+        //CLOSE MENU CLICK
+        private void ButtonCloseMenu_Click(object sender, RoutedEventArgs e)
         {
+            ButtonOpenMenu.Visibility = Visibility.Visible;
+            ButtonCloseMenu.Visibility = Visibility.Collapsed;
         }
 
-        void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        //OPEN MENU CLICK
+        private void ButtonOpenMenu_Click(object sender, RoutedEventArgs e)
         {
+            ButtonOpenMenu.Visibility = Visibility.Collapsed;
+            ButtonCloseMenu.Visibility = Visibility.Visible;
         }
 
         //BUTTON PLAY CLICK
@@ -301,7 +280,7 @@ namespace Radical
 
         //PREVIVEW FLOAT INPUT
         //Only allow user to input parseable float text
-        private void TextBox_PreviewTextInput_Float(object sender, TextCompositionEventArgs e)
+        protected void TextBox_PreviewTextInput_Float(object sender, TextCompositionEventArgs e)
         {
             TextBox box = (TextBox)sender;
 
@@ -313,7 +292,7 @@ namespace Radical
 
         //IS TEXT ALLOWED FLOAT
         //Determine if float input is parseable
-        private static bool IsTextAllowedFloat(string text)
+        protected static bool IsTextAllowedFloat(string text)
         {
             double val = 0;
             return double.TryParse(text, Styles.STYLEFLOAT, System.Globalization.CultureInfo.InvariantCulture, out val);
@@ -321,7 +300,7 @@ namespace Radical
 
         //PREVIVEW FLOAT INPUT
         //Only allow user to input parseable float text
-        private void TextBox_PreviewTextInput_Int(object sender, TextCompositionEventArgs e)
+        protected void TextBox_PreviewTextInput_Int(object sender, TextCompositionEventArgs e)
         {
             TextBox box = (TextBox)sender;
 
@@ -333,12 +312,34 @@ namespace Radical
 
         //IS TEXT ALLOWED INT
         //Determines if int input is parseable
-        private static bool IsTextAllowedInt(string text)
+        protected static bool IsTextAllowedInt(string text)
         {
             int val = 0;
             return int.TryParse(text, Styles.STYLEINT, System.Globalization.CultureInfo.InvariantCulture, out val);
         }
 
+        private void OpenOptSettings(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Export_SVG(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Export_CSV(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        void worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+        }
+
+        void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+        }
     }
 
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]

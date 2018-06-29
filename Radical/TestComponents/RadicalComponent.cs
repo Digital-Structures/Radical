@@ -65,7 +65,7 @@ namespace Radical.TestComponents
             pManager.AddNumberParameter("Constraints", "C", "Optimization Constraints", GH_ParamAccess.list);
             pManager.AddNumberParameter("Numerical Variables", "numVar", "Numerical Optimization Variables", GH_ParamAccess.list);
             pManager.AddSurfaceParameter("Variable Surfaces", "srfVar", "Geometrical Optimization Variables (Surfaces)", GH_ParamAccess.list);
-            pManager.AddSurfaceParameter("Variable Curves", "crvVar", "Geometrical Optimization Variables (Curves)", GH_ParamAccess.list);
+            pManager.AddCurveParameter("Variable Curves", "crvVar", "Geometrical Optimization Variables (Curves)", GH_ParamAccess.list);
             pManager[1].Optional = true;
             pManager[2].Optional = true;
             pManager[3].Optional = true;

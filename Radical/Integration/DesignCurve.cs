@@ -47,7 +47,7 @@ namespace Radical.Integration
 
         public GH_PersistentGeometryParam<GH_Curve> CrvParameter { get { return Parameter as GH_PersistentGeometryParam<GH_Curve>; } }
 
-        public List<IGeoVariable> Variables { get; set; }
+        public List<GeoVariable> Variables { get; set; }
 
 
         public void BuildVariables(double min, double max)
@@ -55,7 +55,7 @@ namespace Radical.Integration
             Points = Curve.Points.Distinct().Select(x => x.Location).ToList();
             OriginalPoints = OriginalCurve.Points.Distinct().Select(x => x.Location).ToList();
             //PointsIndices = Points.Select(x => Curve.Points.ToList().IndexOf(x)).ToList();
-            Variables = new List<IGeoVariable>();
+            Variables = new List<GeoVariable>();
             for (int i = 0; i < Points.Count; i++)
             {
                 Variables.Add(new CurveVariable(min, max, i, (int)Direction.X, this));
@@ -71,7 +71,7 @@ namespace Radical.Integration
             OriginalPoints = OriginalCurve.Points.Distinct().Select(x => x.Location).ToList();
             //PointsIndices = Points.Select(x => Curve.Points.ToList().IndexOf(x)).ToList();
             NurbsCurve crv = new NurbsCurve(Curve.Points.ControlPolygon().ToNurbsCurve());
-            Variables = new List<IGeoVariable>();
+            Variables = new List<GeoVariable>();
             for (int i = 0; i < Points.Count; i++)
             {
                 if (!fptsX.Contains(i)) { Variables.Add(new CurveVariable(min, max, i, (int)Direction.X, this)); }
@@ -87,7 +87,7 @@ namespace Radical.Integration
             CrvParameter.PersistentData.Append(new Grasshopper.Kernel.Types.GH_Curve(this.Curve));
         }
 
-        public void VarUpdate(IGeoVariable geovar)
+        public void VarUpdate(GeoVariable geovar)
         {
             CurveVariable crvvar = (CurveVariable)geovar;
             Point3d newpoint = OriginalPoints[crvvar.u];

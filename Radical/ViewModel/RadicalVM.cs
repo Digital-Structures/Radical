@@ -36,10 +36,12 @@ namespace Radical
         {
             this.Component = component;
             this.Design = design;
+
             if (Design.Constraints != null)
             {
                 Constraints = this.Design.Constraints.Select(x => new ConstVM(x)).ToList();
             }
+
             this.NumVars = new List<VarVM> { };
             this.GeoVars = new List<List<VarVM>> { };
             SortVariables();
@@ -47,6 +49,7 @@ namespace Radical
             this.OptRunning = false;
         }
 
+        //SORT VARIABLES
         //Separate geometric and numeric variables
         //Sorting helps with UI stack panel organization
         private void SortVariables()
@@ -59,7 +62,7 @@ namespace Radical
 
                 //Add all the variables for that geometry to a sublist of varVMs
                 int varIndex = 0;
-                foreach (IGeoVariable var in geo.Variables)
+                foreach (GeoVariable var in geo.Variables)
                 {
                     VarVM geoVar = new VarVM(var);
                     int dir = var.Dir;
@@ -85,6 +88,7 @@ namespace Radical
         }
 
         //OPTIMIZATION STARTED
+        //Disable changes to all optimization variables and constraints
         public void OptimizationStarted()
         {
             this.ChangesEnabled = false;
@@ -99,6 +103,7 @@ namespace Radical
         }
 
         //OPTIMIZATION FINISHED
+        //Enable changes to all optimization variables and constraints
         public void OptimizationFinished()
         {
             this.ChangesEnabled = true;
@@ -112,6 +117,7 @@ namespace Radical
                 constraint.ChangesEnabled = true;
         }
 
+        //ON WINDOW CLOSING
         //Alert the component that the window has been closed
         //(and therefore a new window can open on double click)
         public void OnWindowClosing()
@@ -119,6 +125,7 @@ namespace Radical
             this.Component.IsWindowOpen = false;
         }
 
+        //REFRESH MODE
         private RefreshMode _mode;
         public RefreshMode Mode
         {
@@ -132,6 +139,7 @@ namespace Radical
             }
         }
 
+        //PRIMMARY ALGORITHM
         private NLoptAlgorithm _primaryalgorithm;
         public NLoptAlgorithm PrimaryAlgorithm
         {
@@ -146,6 +154,7 @@ namespace Radical
 
         }
 
+        //SECONDARY ALGORITHM
         private NLoptAlgorithm _secondaryalgorithm;
         public NLoptAlgorithm SecondaryAlgorithm
         {
@@ -160,6 +169,7 @@ namespace Radical
 
         }
 
+        //AVAILABLE ALGORITHMS
         public List<NLoptAlgorithm> AvailableAlgs
         {
             get
@@ -175,6 +185,7 @@ namespace Radical
             }
         }
 
+        //NUMBER OF ITERATIONS
         private int _niterations;
         public int Niterations
         {
@@ -189,6 +200,7 @@ namespace Radical
 
         }
 
+        //CONVERGENCE
         private double _convcrit;
         public double ConvCrit
         {
