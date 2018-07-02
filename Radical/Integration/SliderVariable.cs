@@ -45,6 +45,14 @@ namespace Radical.Integration
 
         //CURRENT VALUE
         //Position of the control point relative to its starting position
+        public double ReferenceValue
+        {
+            get;
+            set;
+        }
+
+        //CURRENT VALUE
+        //Position of the control point relative to its starting position
         public double CurrentValue
         {
             get { return (double)Slider.CurrentValue; }

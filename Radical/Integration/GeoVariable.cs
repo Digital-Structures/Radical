@@ -34,6 +34,15 @@ namespace Radical.Integration
 
         //CURRENT VALUE
         //Position of the control point relative to its starting position
+        private double reference;
+        public double ReferenceValue
+        {
+            get { return this.reference; }
+            set { this.reference = value; }
+        }
+
+        //CURRENT VALUE
+        //Position of the control point relative to its starting position
         private double value;
         public double CurrentValue
         {

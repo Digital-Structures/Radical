@@ -91,22 +91,27 @@ namespace Radical.Integration
         public void VarUpdate(GeoVariable geovar)
         {
             SurfaceVariable srfvar = (SurfaceVariable)geovar;
-            Point3d newpoint = this.OriginalSurface.Points.GetControlPoint(srfvar.u, srfvar.v).Location;
+            // the current surface point (newPoint) tracks the previous changes applied in the iteration at other coordinates
+            Point3d newPoint = this.Surface.Points.GetControlPoint(srfvar.u, srfvar.v).Location;
+            // we need to grab the originalPoint because coordinate updates have to be applied with respect
+            // to the original config (otherwise, the bounds are updated at every iteration and the alg. blows up)
+            Point3d originalPoint = this.OriginalSurface.Points.GetControlPoint(srfvar.u, srfvar.v).Location;
 
+            // update newPoint with respect to originalPoint
             switch (srfvar.Dir)
             {
                 case (int)Direction.X:
-                    newpoint.X = newpoint.X + srfvar.CurrentValue;
+                    newPoint.X = originalPoint.X + srfvar.CurrentValue;
                     break;
                 case (int)Direction.Y:
-                    newpoint.Y = newpoint.Y + srfvar.CurrentValue;
+                    newPoint.Y = originalPoint.Y + srfvar.CurrentValue;
                     break;
                 case (int)Direction.Z:
-                    newpoint.Z = newpoint.Z + srfvar.CurrentValue;
+                    newPoint.Z = originalPoint.Z + srfvar.CurrentValue;
                     break;
             }
 
-            this.Surface.Points.SetControlPoint(srfvar.u, srfvar.v, newpoint);
+            this.Surface.Points.SetControlPoint(srfvar.u, srfvar.v, newPoint);
         }
     }
 }
