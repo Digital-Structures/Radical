@@ -91,26 +91,21 @@ namespace Radical.Integration
         {
             CurveVariable crvvar = (CurveVariable)geovar;
             Point3d newpoint = OriginalPoints[crvvar.u];
-            int n = Curve.Points.Distinct<ControlPoint>().Count();
+            Point3d originalPoint = OriginalPoints[crvvar.u];
+          
+            //Not used?
+            //int n = Curve.Points.Distinct<ControlPoint>().Count();
 
             switch (crvvar.Dir)
             {
                 case (int)Direction.X:
-                    newpoint.X = newpoint.X + crvvar.CurrentValue;
-                    newpoint.Y = Points[crvvar.u].Y;
-                    newpoint.Z = Points[crvvar.u].Z;
+                    newpoint.X = originalPoint.X + crvvar.CurrentValue;
                     break;
-
                 case (int)Direction.Y:
-                    newpoint.X = Points[crvvar.u].X;
-                    newpoint.Y = newpoint.Y + crvvar.CurrentValue;
-                    newpoint.Z = Points[crvvar.u].Z;
+                    newpoint.Y = originalPoint.Y + crvvar.CurrentValue;
                     break;
-
                 case (int)Direction.Z:
-                    newpoint.X = Points[crvvar.u].X;
-                    newpoint.Y = Points[crvvar.u].Y;
-                    newpoint.Z = newpoint.Z + crvvar.CurrentValue;
+                    newpoint.Z = originalPoint.Z + crvvar.CurrentValue;
                     break;
             }
 
