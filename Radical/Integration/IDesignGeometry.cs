@@ -11,5 +11,6 @@ namespace Radical.Integration
         List<GeoVariable> Variables { get; set; }
         void VarUpdate(GeoVariable geovar);
         void Update();
+        IGH_Param Parameter { get; set;}
     }
 }

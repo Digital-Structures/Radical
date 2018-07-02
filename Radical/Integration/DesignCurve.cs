@@ -82,7 +82,7 @@ namespace Radical.Integration
 
         public void Update()
         {
-            Curve = NurbsCurve.Create(true, OriginalCurve.Degree, Points);
+            Curve = NurbsCurve.Create(this.Curve.IsClosed, OriginalCurve.Degree, Points);
             CrvParameter.PersistentData.Clear();
             CrvParameter.PersistentData.Append(new Grasshopper.Kernel.Types.GH_Curve(this.Curve));
         }
@@ -115,7 +115,6 @@ namespace Radical.Integration
             }
 
             Points[crvvar.u] = newpoint;
-            bool closed = this.Curve.IsClosed;
         }
 
     }

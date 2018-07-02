@@ -81,7 +81,7 @@ namespace Radical.Integration
         //Determines to what type of grasshopper object the 
         public IGH_Param Parameter
         {
-            get{return ((DesignSurface)Geometry).Parameter;}
+            get{return Geometry.Parameter;}
         }
 
         //UPDATE VALUE

@@ -29,7 +29,7 @@ namespace Radical.TestComponents
             Objective = 0;
             this.NumVariables = new List<double>();
             this.SrfVariables = new List<NurbsSurface>();
-            this.CrvVariables = new List<Curve>();
+            this.CrvVariables = new List<NurbsCurve>();
             this.Constraints = new List<double>();
             this.open = false;
         }
@@ -38,7 +38,7 @@ namespace Radical.TestComponents
         public List<double> Constraints { get; set; }
         public List<double> NumVariables { get; set; }
         public List<NurbsSurface> SrfVariables { get; set; }
-        public List<Curve> CrvVariables { get; set; }
+        public List<NurbsCurve> CrvVariables { get; set; }
 
         //Determine whether there is already a Radical window open
         private bool open;
@@ -108,7 +108,7 @@ namespace Radical.TestComponents
             //assign curve variables
             List<Curve> curves = new List<Curve>();
             DA.GetDataList(4, curves);
-            this.CrvVariables = curves;
+            this.CrvVariables = curves.Select(x => x.ToNurbsCurve()).ToList();
         }
 
         /// <summary>

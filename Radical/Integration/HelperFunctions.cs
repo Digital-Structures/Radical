@@ -89,14 +89,17 @@ namespace Radical.Integration
             List<IDesignGeometry> geos = new List<IDesignGeometry>();
             List<IConstraint> consts = new List<IConstraint>();
 
+
+            // Add all variables
             foreach (IGH_Param param in component.Params.Input[2].Sources)
             {
                 vars.Add(new SliderVariable(param));
             }
-
-            for (int i = 0; i < component.Constraints.Count; i++)
+            for (int i = 0; i < component.Params.Input[4].Sources.Count; i++)
             {
-                consts.Add(new Constraint(component, 0, ConstraintType.lessthan, i));
+                IGH_Param param = component.Params.Input[4].Sources[i];
+                NurbsCurve surf = component.CrvVariables[i];
+                geos.Add(new DesignCurve(param, surf));
             }
             for (int i = 0; i < component.Params.Input[3].Sources.Count; i++)
             {
@@ -105,12 +108,13 @@ namespace Radical.Integration
                 geos.Add(new DesignSurface(param, surf));
             }
 
-            //for (int i = 0; i < component.Params.Input[3].Sources.Count; i++)
-            //{
-            //    IGH_Param param = component.Params.Input[3].Sources[i];
-            //    NurbsSurface surf = component.SrfVariables[i];
-            //    geos.Add(new DesignSurface(param, surf));
-            //}
+            // Add Constraints
+            for (int i = 0; i < component.Constraints.Count; i++)
+            {
+                consts.Add(new Constraint(component, 0, ConstraintType.lessthan, i));
+            }
+
+
 
             return new Design(vars, geos, consts, component);
         }
