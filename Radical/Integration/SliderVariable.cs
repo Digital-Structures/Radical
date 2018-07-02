@@ -8,59 +8,67 @@ using Grasshopper.GUI;
 
 namespace Radical.Integration
 {
+    //SLIDER VARIABLE
+    //Class for manipulation of numeric slider variables
     public class SliderVariable : IVariable
     {
-
+        //CONSTRUCTOR
         public SliderVariable(IGH_Param param)
         {
-            this.Parameter = param;
+            this.param = param;
             this.Slider = this.Parameter as GH_NumberSlider;
         }
+        public GH_NumberSlider Slider;
 
-        public double CurrentValue
-        {
-            get {return (double)Slider.CurrentValue; }
-            set { }
-        }
-
-        public IGH_Param Parameter
-        {
-            get;
-            set;
-        }
-
+        //IS ACTIVE
+        //Determines whether variable should be considered in optimization
         public bool IsActive
         {
             get; set;
         }
 
-
-        public double Max
-        {
-            get
-            {
-                return (double)Slider.Slider.Maximum;
-            }
-            set { }
-        }
-
+        //MAX
+        //Maximum displacement of the control point from its original state
         public double Min
         {
-            get
-            {
-                return (double)Slider.Slider.Minimum;
-            }
-            set { }
+            get { return (double)Slider.Slider.Minimum; }
+            set { this.Slider.Slider.Minimum = (decimal)value; }
         }
 
-
-        public GH_NumberSlider Slider;
-
-        public double Gradient()
+        //MIN
+        //Minimum displacement of the control point from its original state
+        public double Max
         {
-            throw new NotImplementedException();
+            get { return (double)Slider.Slider.Maximum; }
+            set { this.Slider.Slider.Maximum = (decimal)value; }
         }
 
+        //CURRENT VALUE
+        //Position of the control point relative to its starting position
+        public double ReferenceValue
+        {
+            get;
+            set;
+        }
+
+        //CURRENT VALUE
+        //Position of the control point relative to its starting position
+        public double CurrentValue
+        {
+            get { return (double)Slider.CurrentValue; }
+            set { this.UpdateValue(value); }
+        }
+
+        //PARAMETER
+        //Determines to what type of grasshopper object the variable belongs
+        private IGH_Param param;
+        public IGH_Param Parameter
+        {
+            get { return this.param; }
+        }
+
+        //UPDATE VALUE
+        //Change variable's value and update its corresponding slider
         public void UpdateValue(double x)
         {
             try
@@ -70,17 +78,11 @@ namespace Radical.Integration
             catch
             {
             }
-
         }
 
-        public void UpdateMin(double x)
+        public double Gradient()
         {
-            this.Slider.Slider.Minimum = (decimal)x;
-        }
-
-        public void UpdateMax(double x)
-        {
-            this.Slider.Slider.Maximum = (decimal)x;
+            throw new NotImplementedException();
         }
     }
 }

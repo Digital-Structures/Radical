@@ -193,6 +193,8 @@ namespace Radical.Integration
 
             // Run optimization with only the activeVariables
             double[] x = Design.ActiveVariables.Select(t => t.CurrentValue).ToArray();
+            double[] query = x;
+            double startingObjective = Design.CurrentScore;
             NloptResult result = Solver.Optimize(x, out MinValue);
             
             //FINISHED

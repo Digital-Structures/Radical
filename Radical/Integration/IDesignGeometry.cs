@@ -8,8 +8,9 @@ namespace Radical.Integration
 {
     public interface IDesignGeometry
     {
-        List<IGeoVariable> Variables { get; set; }
-        void VarUpdate(IGeoVariable geovar);
+        List<GeoVariable> Variables { get; set; }
+        void VarUpdate(GeoVariable geovar);
         void Update();
+        IGH_Param Parameter { get; set;}
     }
 }

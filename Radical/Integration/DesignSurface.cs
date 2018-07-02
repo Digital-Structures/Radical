@@ -21,6 +21,7 @@ namespace Radical.Integration
             this.Surface = surf;
             this.OriginalSurface = new NurbsSurface(surf);
             BuildVariables(min, max);
+            List<GeoVariable> myVars = Variables;
         }
 
         // obsolete or to be made obsolete
@@ -48,11 +49,11 @@ namespace Radical.Integration
         }
         public GH_PersistentGeometryParam<GH_Surface> SrfParameter { get { return Parameter as GH_PersistentGeometryParam<GH_Surface>; } }
 
-        public List<IGeoVariable> Variables { get; set; }
+        public List<GeoVariable> Variables { get; set; }
 
         public void BuildVariables(double min, double max)
         {
-            Variables = new List<IGeoVariable>();
+            Variables = new List<GeoVariable>();
             for (int i = 0; i < Surface.Points.CountU; i++)
             {
                 for (int j = 0; j < Surface.Points.CountV; j++)
@@ -68,7 +69,7 @@ namespace Radical.Integration
         // obsolete or to be made obsolete
         public void BuildVariables(List<Tuple<int, int>> fptsX, List<Tuple<int, int>> fptsY, List<Tuple<int, int>> fptsZ, double min, double max)
         {
-            Variables = new List<IGeoVariable>();
+            Variables = new List<GeoVariable>();
             for (int i=0;i<Surface.Points.CountU;i++)
             {
                 for (int j=0;j<Surface.Points.CountV;j++)
@@ -87,25 +88,30 @@ namespace Radical.Integration
             SrfParameter.PersistentData.Append(new Grasshopper.Kernel.Types.GH_Surface(this.Surface));
         }
 
-        public void VarUpdate(IGeoVariable geovar)
+        public void VarUpdate(GeoVariable geovar)
         {
             SurfaceVariable srfvar = (SurfaceVariable)geovar;
-            Point3d newpoint = this.OriginalSurface.Points.GetControlPoint(srfvar.u, srfvar.v).Location;
+            // the current surface point (newPoint) tracks the previous changes applied in the iteration at other coordinates
+            Point3d newPoint = this.Surface.Points.GetControlPoint(srfvar.u, srfvar.v).Location;
+            // we need to grab the originalPoint because coordinate updates have to be applied with respect
+            // to the original config (otherwise, the bounds are updated at every iteration and the alg. blows up)
+            Point3d originalPoint = this.OriginalSurface.Points.GetControlPoint(srfvar.u, srfvar.v).Location;
 
+            // update newPoint with respect to originalPoint
             switch (srfvar.Dir)
             {
                 case (int)Direction.X:
-                    newpoint.X = newpoint.X + srfvar.CurrentValue;
+                    newPoint.X = originalPoint.X + srfvar.CurrentValue;
                     break;
                 case (int)Direction.Y:
-                    newpoint.Y = newpoint.Y + srfvar.CurrentValue;
+                    newPoint.Y = originalPoint.Y + srfvar.CurrentValue;
                     break;
                 case (int)Direction.Z:
-                    newpoint.Z = newpoint.Z + srfvar.CurrentValue;
+                    newPoint.Z = originalPoint.Z + srfvar.CurrentValue;
                     break;
             }
 
-            this.Surface.Points.SetControlPoint(srfvar.u, srfvar.v, newpoint);
+            this.Surface.Points.SetControlPoint(srfvar.u, srfvar.v, newPoint);
         }
     }
 }

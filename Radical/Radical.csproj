@@ -97,6 +97,7 @@
   <ItemGroup>
     <Compile Include="Components\IExplorationComponent.cs" />
     <Compile Include="Components\IOptimizationComponent.cs" />
+    <Compile Include="Integration\GeoVariable.cs" />
     <Compile Include="Integration\csvWriter.cs" />
     <Compile Include="Integration\CurveVariable.cs" />
     <Compile Include="Integration\IConstraint.cs" />
@@ -122,9 +123,11 @@
     <Compile Include="TestComponents\IncrementComponent.cs" />
     <Compile Include="TestComponents\RadicalComponent.cs" />
     <Compile Include="ViewModel\BaseVM.cs" />
+    <Compile Include="ViewModel\IViewModel.cs" />
     <Compile Include="ViewModel\ConstVM.cs" />
     <Compile Include="ViewModel\RadicalVM.cs" />
     <Compile Include="ViewModel\VarVM.cs" />
+    <Compile Include="View\BaseControl.cs" />
     <Compile Include="View\ConstraintControl.xaml.cs">
       <DependentUpon>ConstraintControl.xaml</DependentUpon>
     </Compile>
