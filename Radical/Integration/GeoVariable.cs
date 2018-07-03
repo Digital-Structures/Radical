@@ -23,7 +23,17 @@ namespace Radical.Integration
             this.max = max;
             this.Geometry = geo;
         }
+        public enum Direction { X, Y, Z };
         public IDesignGeometry Geometry { get; set; }
+        private string pointname;
+
+        //POINT NAME
+        //System for naming points in a design
+        public string PointName
+        {
+            get { return pointname; }
+            set { pointname = value; }
+        }
 
         //IS ACTIVE
         //Determines whether variable should be considered in optimization

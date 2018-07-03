@@ -19,8 +19,11 @@ namespace Radical.Integration
         {
             this.u = u;
             this.v = v;
+
+            this.PointName = String.Format("u{0}v{1}.{2}", this.u+1, this.v+1, ((Direction)this.Dir).ToString());
         }
         public int u;
         public int v;
+
     }
-}
+} 

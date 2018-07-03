@@ -24,7 +24,6 @@ namespace Radical
             this._currentvalue = Constraint.CurrentValue;
             this._isactive = constraint.IsActive;
 
-            //this._isactive = true;
             this.OptRunning = false;
         }
 
@@ -35,12 +34,12 @@ namespace Radical
         {
             get
             { return _currentvalue; }
-            //set
-            //{
-            //    if (CheckPropertyChanged<double>("CurrentValue", ref _currentvalue, ref value))
-            //    {
-            //    }
-            //}
+            set
+            {
+                if (CheckPropertyChanged<double>("CurrentValue", ref _currentvalue, ref value))
+                {
+                }
+            }
         }
 
         //OPTIMIZATION FINISHED
@@ -48,7 +47,7 @@ namespace Radical
         public void OptimizationFinished()
         {
             this.ChangesEnabled = true;
-            this._currentvalue = Constraint.CurrentValue;
+            this.CurrentValue = Constraint.CurrentValue;
         }
 
         private double _constraintlimit;

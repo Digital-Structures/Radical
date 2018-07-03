@@ -175,7 +175,7 @@
                         Height="1"
                         HorizontalAlignment="Stretch"
                         SnapsToDevicePixels="True" />
-                    <Expander Name="PropertiesExpander" FontSize="18">
+                    <Expander Name="PropertiesExpander" Visibility="Collapsed" FontSize="18">
                         <Expander.Header>
                             <TextBlock FontSize="18">
                                 Properties

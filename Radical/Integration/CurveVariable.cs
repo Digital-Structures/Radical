@@ -18,6 +18,8 @@ namespace Radical.Integration
         public CurveVariable(double min, double max, int u, int dir, DesignCurve crv):base(min,max,dir,crv)
         {
             this.u = u;
+
+            this.PointName = String.Format("u{0}.{1}", this.u+1, ((Direction)this.Dir).ToString());
         }
         public int u;
     }

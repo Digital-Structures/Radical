@@ -68,8 +68,8 @@ namespace Radical
                     int dir = var.Dir;
 
                     //Logical default naming of variable
-                    //e.g. G1.P1.X
-                    geoVar.Name = String.Format("G{0}.P{1}.{2}", geoIndex, varIndex/3+1, ((Direction)dir).ToString());
+                    //e.g. G1.u1v1.X
+                    geoVar.Name = String.Format("G{0}.", geoIndex) + ((GeoVariable)geoVar.DesignVar).PointName;
 
                     singleGeoVars.Add(geoVar);
                     varIndex++;
