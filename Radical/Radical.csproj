@@ -100,7 +100,7 @@
     <Compile Include="Integration\GeoVariable.cs" />
     <Compile Include="Integration\csvWriter.cs" />
     <Compile Include="Integration\CurveVariable.cs" />
-    <Compile Include="Integration\IConstraint.cs" />
+    <Compile Include="Integration\Constraint.cs" />
     <Compile Include="Integration\Sampler.cs" />
     <Compile Include="Integration\DesignCurve.cs" />
     <Compile Include="TestComponents\ExploreComponent.cs" />

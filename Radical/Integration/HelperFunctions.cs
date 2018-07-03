@@ -111,7 +111,7 @@ namespace Radical.Integration
             // Add Constraints
             for (int i = 0; i < component.Constraints.Count; i++)
             {
-                consts.Add(new Constraint(component, ConstraintType.lessthan, i));
+                consts.Add(new Constraint(component, ConstraintType.morethan, i));
             }
 
             return new Design(vars, geos, consts, component);

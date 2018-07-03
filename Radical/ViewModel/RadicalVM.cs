@@ -114,7 +114,7 @@ namespace Radical
                 foreach (VarVM var in this.GeoVars[i])
                     var.OptimizationFinished();
             foreach (ConstVM constraint in this.Constraints)
-                constraint.ChangesEnabled = true;
+                constraint.OptimizationFinished();
         }
 
         //ON WINDOW CLOSING

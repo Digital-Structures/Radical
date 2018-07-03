@@ -18,9 +18,13 @@ namespace Radical
         public ConstVM(Constraint constraint)
         {
             this.Constraint = constraint;
-            this.Name = "C." + Constraint.ConstraintIndex.ToString();
+            this._name = "C." + (Constraint.ConstraintIndex + 1).ToString();
+            this._constraintlimit = constraint.LimitValue;
+            this._constrainttype = (int)constraint.ConstraintType;
+            this._currentvalue = Constraint.CurrentValue;
+            this._isactive = constraint.IsActive;
 
-            this._isactive = true;
+            //this._isactive = true;
             this.OptRunning = false;
         }
 
@@ -31,13 +35,20 @@ namespace Radical
         {
             get
             { return _currentvalue; }
-            set
-            {
-                if (CheckPropertyChanged<double>("CurrentValue", ref _currentvalue, ref value))
-                {
-                }
-            }
+            //set
+            //{
+            //    if (CheckPropertyChanged<double>("CurrentValue", ref _currentvalue, ref value))
+            //    {
+            //    }
+            //}
+        }
 
+        //OPTIMIZATION FINISHED
+        //Update UI sliders to reflect optimized values
+        public void OptimizationFinished()
+        {
+            this.ChangesEnabled = true;
+            this._currentvalue = Constraint.CurrentValue;
         }
 
         private double _constraintlimit;
@@ -84,16 +95,16 @@ namespace Radical
             }
         }
         
-        private ConstraintType _constraintType;
-        public ConstraintType ConstraintType
+        private int _constrainttype;
+        public int ConstraintType
         {
             get
-            { return _constraintType; }
+            { return (int)_constrainttype; }
             set
             {
-                if (CheckPropertyChanged("ConstraintType", ref _constraintType, ref value))
+                if (CheckPropertyChanged("ConstraintType", ref _constrainttype, ref value))
                 {
-                    Constraint.ConstraintType = ConstraintType;
+                    Constraint.ConstraintType = (ConstraintType)ConstraintType;
                 }
             }
         }
