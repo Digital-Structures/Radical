@@ -263,8 +263,8 @@
                         </ComboBox>
                     </DockPanel>
                     <DockPanel>
-                        <materialDesign:PackIcon Kind="Calculator" Foreground="DarkGray" VerticalAlignment="Bottom"></materialDesign:PackIcon>
-                        <ComboBox Name="SecondaryAlgorithm" Visibility="Visible"  HorizontalAlignment="Right" materialDesign:HintAssist.Hint="Secondary Algorithm" IsEditable="True" IsReadOnly="True">
+                        <materialDesign:PackIcon Name="SecAlgIcon" Kind="Calculator" Foreground="DarkGray" VerticalAlignment="Bottom" Visibility="Collapsed"></materialDesign:PackIcon>
+                        <ComboBox Name="SecondaryAlgorithm" Visibility="Collapsed"  HorizontalAlignment="Right" materialDesign:HintAssist.Hint="Secondary Algorithm" IsEditable="True" IsReadOnly="True">
                         </ComboBox>
                     </DockPanel>
                 </StackPanel>

@@ -320,6 +320,7 @@ namespace Radical
             return int.TryParse(text, Styles.STYLEINT, System.Globalization.CultureInfo.InvariantCulture, out val);
         }
 
+        //secondary algorithm option w/ icon disappears
         //SELECTION CHANGED
         //Determines whether a secondary algorithm is required for new selected opt. alg.
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -331,10 +332,12 @@ namespace Radical
                 if (!ReqSec.Contains((NLoptAlgorithm)box.SelectedItem))
                 {
                     this.SecondaryAlgorithm.Visibility = Visibility.Collapsed;
+                    this.SecAlgIcon.Visibility = Visibility.Collapsed;
                 }
                 else
                 {
                     this.SecondaryAlgorithm.Visibility = Visibility.Visible;
+                    this.SecAlgIcon.Visibility = Visibility.Visible;
                 }
             }
         }
