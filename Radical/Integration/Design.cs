@@ -23,7 +23,7 @@ namespace Radical.Integration
             this.OptComponent = component;
         }
 
-        public Design(List<IVariable> vars, List<IConstraint> consts, RadicalComponent component)
+        public Design(List<IVariable> vars, List<Constraint> consts, RadicalComponent component)
         {
             this.Variables = vars;
             this.Constraints = consts;
@@ -32,7 +32,7 @@ namespace Radical.Integration
         }
 
         //CONSTRUCTOR
-        public Design(List<IVariable> vars, List<IDesignGeometry> geos, List<IConstraint> consts, RadicalComponent component)
+        public Design(List<IVariable> vars, List<IDesignGeometry> geos, List<Constraint> consts, RadicalComponent component)
         {
             this.Variables = vars;
             this.Constraints = consts;
@@ -54,7 +54,7 @@ namespace Radical.Integration
         public List<IVariable> Variables { get; set; }
         public List<IVariable> ActiveVariables { get { return Variables.Where(var => var.IsActive).ToList(); } }
         public List<IDesignGeometry> Geometries { get; set; }
-        public List<IConstraint> Constraints { get; set; }
+        public List<Constraint> Constraints { get; set; }
         public List<double> ConstraintsNumber
         {
             get { return OptComponent.Constraints; }

@@ -109,12 +109,12 @@ namespace Radical
             this.ChangesEnabled = true;
 
             foreach (VarVM var in this.NumVars)
-                var.ChangesEnabled = true;
+                var.OptimizationFinished();
             for (int i = 0; i < this.GeoVars.Count; i++)
                 foreach (VarVM var in this.GeoVars[i])
-                    var.ChangesEnabled = true;
+                    var.OptimizationFinished();
             foreach (ConstVM constraint in this.Constraints)
-                constraint.ChangesEnabled = true;
+                constraint.OptimizationFinished();
         }
 
         //ON WINDOW CLOSING

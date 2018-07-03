@@ -32,8 +32,8 @@ namespace Radical.Integration
             get; set;
         }
 
-        //CURRENT VALUE
-        //Position of the control point relative to its starting position
+        //REFERENCE VALUE
+        //Original osition of the control point
         private double reference;
         public double ReferenceValue
         {
@@ -59,8 +59,8 @@ namespace Radical.Integration
             set { this.dir = value; }
         }
 
-        //MAX
-        //Maximum displacement of the control point from its original state
+        //MIN
+        //Maximum negative displacement of the control point from its original state
         private double min;
         public double Min
         {
@@ -68,8 +68,8 @@ namespace Radical.Integration
             set { this.min = value; }
         }
 
-        //MIN
-        //Minimum displacement of the control point from its original state
+        //MAX
+        //Maximum positive displacement of the control point from its original state
         private double max;
         public double Max
         {

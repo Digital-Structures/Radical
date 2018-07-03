@@ -16,28 +16,6 @@ namespace Radical.Integration
         //static bool verbose = true;
         public double? MinValue; //init objective
 
-        public Optimizer(IDesign design)
-        {
-            Design = design;
-            this.MainAlg = NLoptAlgorithm.LD_LBFGS;
-            BuildWrapper();
-            SetBounds();
-            Solver.SetMinObjective((x) => Objective(x));
-            if (Design.Constraints != null)
-            {
-                List<ConstraintNumber> consts = new List<ConstraintNumber>();
-                for (int i = 0; i < Design.Constraints.Count; i++)
-                {
-                    consts.Add(new ConstraintNumber(i));
-                }
-                foreach (ConstraintNumber c in consts)
-                {
-                    Solver.AddLessOrEqualZeroConstraint((x) => Constraint(x, c));
-                }
-            }
-        }
-
-
         // CONSTRUCTOR FOR RADICAL
         public Optimizer(IDesign design, RadicalWindow radicalWindow)
         {
@@ -50,30 +28,20 @@ namespace Radical.Integration
             Solver.SetMinObjective((x) => Objective(x));
             if (Design.Constraints != null)
             {
-                List<ConstraintNumber> consts = new List<ConstraintNumber>();
-                for (int i = 0; i < Design.Constraints.Count; i++)
+                foreach (Constraint c in Design.Constraints)
                 {
-                    consts.Add(new ConstraintNumber(i));
-                }
-                foreach (ConstraintNumber c in consts)
-                {
-                    Solver.AddLessOrEqualZeroConstraint((x) => Constraint(x, c));
-                }
-            }
-        }
-
-        public Optimizer(IDesign design, double relStopTol, int niter)
-        {
-            Design = design;
-            this.MainAlg = NLoptAlgorithm.LN_COBYLA;
-            BuildWrapper(relStopTol, niter);
-            SetBounds();
-            Solver.SetMinObjective((x) => Objective(x));
-            if (Design.Constraints != null)
-            {
-                for (int i = 0; i < Design.Constraints.Count; i++)
-                {
-                    Solver.AddLessOrEqualZeroConstraint((x) => Constraint(x, i));
+                    if (c.ConstraintType == ConstraintType.lessthan)
+                    {
+                        Solver.AddLessOrEqualZeroConstraint((x) => Constraint(x, c));
+                    }
+                    else if (c.ConstraintType == ConstraintType.morethan)
+                    {
+                        Solver.AddLessOrEqualZeroConstraint((x) => -Constraint(x, c));
+                    }
+                    else
+                    {
+                        Solver.AddEqualZeroConstraint((x) => Constraint(x, c));
+                    }
                 }
             }
         }
@@ -120,7 +88,7 @@ namespace Radical.Integration
                     var.UpdateValue(x[i]);
                 }
                 // Once all points have been updated, we can update the geometries
-                foreach(IDesignGeometry geo in this.Design.Geometries)
+                foreach (IDesignGeometry geo in this.Design.Geometries)
                 {
                     geo.Update();
                 }
@@ -169,10 +137,8 @@ namespace Radical.Integration
             return objective;
         } //UNIMPLEMENTED
 
-        public double Constraint(double[] x, Object data)
+        public double Constraint(double[] x, Constraint c)
         {
-            ConstraintNumber d = (ConstraintNumber)data;
-            int num = d.i;
             for (int i = 0; i < nVars; i++)
             {
                 IVariable var = Design.Variables[i];
@@ -183,7 +149,7 @@ namespace Radical.Integration
                 vargeo.Update();
             }
             Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
-            return Design.Constraints[num].CurrentValue;
+            return c.CurrentValue - c.LimitValue;
         }
 
         public NloptResult RunOptimization()
@@ -196,23 +162,45 @@ namespace Radical.Integration
             double[] query = x;
             double startingObjective = Design.CurrentScore;
             NloptResult result = Solver.Optimize(x, out MinValue);
-            
+
             //FINISHED
             this.RadicalWindow.OptimizationFinished();
 
             return result;
         }
-    }
 
-    public struct ConstraintNumber
-    {
-        public int i;
-        public ConstraintNumber(int i)
+        #region obsolete_constructors
+        public Optimizer(IDesign design)
         {
-            this.i = i;
+            Design = design;
+            this.MainAlg = NLoptAlgorithm.LD_LBFGS;
+            BuildWrapper();
+            SetBounds();
+            Solver.SetMinObjective((x) => Objective(x));
+            if (Design.Constraints != null)
+            {
+                foreach (Constraint c in Design.Constraints)
+                {
+                    Solver.AddLessOrEqualZeroConstraint((x) => Constraint(x, c));
+                }
+            }
         }
+
+        public Optimizer(IDesign design, double relStopTol, int niter)
+        {
+            Design = design;
+            this.MainAlg = NLoptAlgorithm.LN_COBYLA;
+            BuildWrapper(relStopTol, niter);
+            SetBounds();
+            Solver.SetMinObjective((x) => Objective(x));
+            if (Design.Constraints != null)
+            {
+                for (int i = 0; i < Design.Constraints.Count; i++)
+                {
+                    Solver.AddLessOrEqualZeroConstraint((x) => Constraint(x, Design.Constraints[i]));
+                }
+            }
+        }
+        #endregion
     }
-
-
-
 }
