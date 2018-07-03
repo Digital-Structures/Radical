@@ -17,7 +17,7 @@ namespace Radical
         public bool ChangesEnabled
         {
             get { return !OptRunning; }
-            set { OptRunning = !value; FirePropertyChanged("ChangesEnabled"); }
+            set{ OptRunning = !value; FirePropertyChanged("ChangesEnabled"); }
         }
 
         public bool CheckPropertyChanged<T>(string propertyName, ref T oldValue, ref T newValue)

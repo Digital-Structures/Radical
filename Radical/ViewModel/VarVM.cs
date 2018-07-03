@@ -73,6 +73,14 @@ namespace Radical
 
         }
 
+        //OPTIMIZATION FINISHED
+        //Update UI sliders to reflect optimized values
+        public void OptimizationFinished()
+        {
+            this.ChangesEnabled = true;
+            this.Value = DesignVar.CurrentValue;
+        }
+
         //MIN
         //Minimum value the variable should hold
         private double _min;
