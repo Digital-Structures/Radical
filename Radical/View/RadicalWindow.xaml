@@ -264,7 +264,10 @@
                     </DockPanel>
                     <DockPanel>
                         <materialDesign:PackIcon Name="SecAlgIcon" Kind="Calculator" Foreground="DarkGray" VerticalAlignment="Bottom" Visibility="Collapsed"></materialDesign:PackIcon>
-                        <ComboBox Name="SecondaryAlgorithm" Visibility="Collapsed"  HorizontalAlignment="Right" materialDesign:HintAssist.Hint="Secondary Algorithm" IsEditable="True" IsReadOnly="True">
+                        <ComboBox Name="SecondaryAlgorithm" Visibility="Collapsed"  HorizontalAlignment="Right" 
+                                  ItemsSource="{Binding AvailableSecondaryAlgs, Mode=OneWay}" 
+                                  SelectedItem="{Binding SecondaryAlgorithm, Mode=OneWayToSource, FallbackValue={x:Static nlopt:NLoptAlgorithm.LN_BOBYQA}}"
+                                  materialDesign:HintAssist.Hint="Secondary Algorithm" IsEditable="True" IsReadOnly="True">
                         </ComboBox>
                     </DockPanel>
                 </StackPanel>

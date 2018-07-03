@@ -184,6 +184,15 @@ namespace Radical
             }
         }
 
+        //AVAILABLE SECONDARY ALGORITHMS
+        public List<NLoptAlgorithm> AvailableSecondaryAlgs
+        {
+            get
+            {
+                return DFreeAlgs_Secondary.ToList();
+            }
+        }
+
         //NUMBER OF ITERATIONS
         private int _niterations;
         public int Niterations
@@ -257,7 +266,6 @@ namespace Radical
         };
 
 
-        //Temp solution
         //Algorithms that require a secondary algorithm 
         public IEnumerable<NLoptAlgorithm> DFreeAlgs_ReqSec = new[]
         {
@@ -265,6 +273,12 @@ namespace Radical
             NLoptAlgorithm.AUGLAG_EQ, //Calls for secondary alg
             NLoptAlgorithm.G_MLSL, //calls for secondary alg (local)
             NLoptAlgorithm.G_MLSL_LDS, //calls for secondary alg (local)
+        };
+
+        public IEnumerable<NLoptAlgorithm> DFreeAlgs_Secondary = new[]
+        {
+            NLoptAlgorithm.LN_BOBYQA,
+            NLoptAlgorithm.LN_COBYLA,
         };
     }
 }
