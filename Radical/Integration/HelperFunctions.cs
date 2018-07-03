@@ -87,7 +87,7 @@ namespace Radical.Integration
         {
             List<IVariable> vars = new List<IVariable>();
             List<IDesignGeometry> geos = new List<IDesignGeometry>();
-            List<IConstraint> consts = new List<IConstraint>();
+            List<Constraint> consts = new List<Constraint>();
 
 
             // Add all variables
@@ -111,10 +111,8 @@ namespace Radical.Integration
             // Add Constraints
             for (int i = 0; i < component.Constraints.Count; i++)
             {
-                consts.Add(new Constraint(component, 0, ConstraintType.lessthan, i));
+                consts.Add(new Constraint(component, ConstraintType.lessthan, i));
             }
-
-
 
             return new Design(vars, geos, consts, component);
         }

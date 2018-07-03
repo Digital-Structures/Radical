@@ -15,7 +15,7 @@ namespace Radical
         {
         }
 
-        public ConstVM(IConstraint constraint)
+        public ConstVM(Constraint constraint)
         {
             this.Constraint = constraint;
             this.Name = "C." + Constraint.ConstraintIndex.ToString();
@@ -24,7 +24,7 @@ namespace Radical
             this.OptRunning = false;
         }
 
-        public IConstraint Constraint;
+        public Constraint Constraint;
 
         private double _currentvalue;
         public double CurrentValue
@@ -49,6 +49,7 @@ namespace Radical
             {
                 if (CheckPropertyChanged<double>("ConstraintLimit", ref _constraintlimit, ref value))
                 {
+                    Constraint.LimitValue = ConstraintLimit;
                 }
             }
 
@@ -78,6 +79,7 @@ namespace Radical
             {
                 if (CheckPropertyChanged<bool>("IsEnabled", ref _isactive, ref value))
                 {
+                    Constraint.IsActive = IsActive;           
                 }
             }
         }

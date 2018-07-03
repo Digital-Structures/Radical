@@ -90,7 +90,7 @@ namespace Radical.Integration
         public void VarUpdate(GeoVariable geovar)
         {
             CurveVariable crvvar = (CurveVariable)geovar;
-            Point3d newpoint = OriginalPoints[crvvar.u];
+            Point3d newpoint = Points[crvvar.u];
             Point3d originalPoint = OriginalPoints[crvvar.u];
           
             //Not used?

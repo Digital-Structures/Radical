@@ -14,7 +14,7 @@ namespace Radical.Integration
         List<IVariable> Variables { get; set; }
         List<IVariable> ActiveVariables { get; }
         List<IDesignGeometry> Geometries { get; set; }
-        List<IConstraint> Constraints { get; }
+        List<Constraint> Constraints { get; }
         void Optimize();
         void Sample(int alg);
 

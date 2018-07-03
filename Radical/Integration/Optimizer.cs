@@ -57,7 +57,19 @@ namespace Radical.Integration
                 }
                 foreach (ConstraintNumber c in consts)
                 {
-                    Solver.AddLessOrEqualZeroConstraint((x) => Constraint(x, c));
+                    Constraint constraint = Design.Constraints[c.i];
+                    if (constraint.ConstraintType == ConstraintType.lessthan)
+                    {
+                        Solver.AddLessOrEqualZeroConstraint((x) => Constraint(x, c) - constraint.LimitValue);
+                    }
+                    else if (constraint.ConstraintType == ConstraintType.morethan)
+                    {
+                        Solver.AddLessOrEqualZeroConstraint((x) => constraint.LimitValue - Constraint(x, c));
+                    }
+                    else
+                    {
+                        Solver.AddEqualZeroConstraint((x) => Constraint(x, c) - constraint.LimitValue);
+                    }
                 }
             }
         }
@@ -120,7 +132,7 @@ namespace Radical.Integration
                     var.UpdateValue(x[i]);
                 }
                 // Once all points have been updated, we can update the geometries
-                foreach(IDesignGeometry geo in this.Design.Geometries)
+                foreach (IDesignGeometry geo in this.Design.Geometries)
                 {
                     geo.Update();
                 }
@@ -196,7 +208,7 @@ namespace Radical.Integration
             double[] query = x;
             double startingObjective = Design.CurrentScore;
             NloptResult result = Solver.Optimize(x, out MinValue);
-            
+
             //FINISHED
             this.RadicalWindow.OptimizationFinished();
 
