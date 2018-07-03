@@ -36,9 +36,9 @@ namespace Radical
         //CONSTRUCTOR
         public RadicalWindow(RadicalVM radicalVM)
         {
-            //this.control = new BaseControl(radicalVM);
             this.RadicalVM = radicalVM;
             this.DataContext = this.RadicalVM;
+            this.PreviousText = "";
 
             InitializeComponent();
             AddConstraints();
@@ -46,8 +46,8 @@ namespace Radical
             AddGeometries();
         }
         public RadicalVM RadicalVM;
-        //public BaseControl control;
         public CancellationTokenSource source;
+        private string PreviousText;
 
         //ADD CONSTRAINTS
         //Adds a stack panel for constraints
@@ -205,6 +205,7 @@ namespace Radical
         //BUTTON PAUSE CLICK
         private void ButtonPause_Click(object sender, RoutedEventArgs e)
         {
+            this.OptimizationFinished(); //Enable variable changes when paused
             source.Cancel();
             UpdateWindow(this.RadicalVM.Design.ScoreEvolution);
             ButtonPause.Visibility = Visibility.Collapsed;
@@ -246,6 +247,7 @@ namespace Radical
             if (this.RadicalVM.ChangesEnabled)
             {
                 TextBox box = (TextBox)sender;
+                this.PreviousText = box.Text;
                 box.Clear();
             }
         }
@@ -257,7 +259,7 @@ namespace Radical
             TextBox box = (TextBox)sender;
 
             if (box.Text == "")
-                box.Text = "0";
+                box.Text = this.PreviousText;
         }
 
         //PREVIEW KEY DOWN
@@ -318,7 +320,6 @@ namespace Radical
             return int.TryParse(text, Styles.STYLEINT, System.Globalization.CultureInfo.InvariantCulture, out val);
         }
 
-<<<<<<< HEAD
         //SELECTION CHANGED
         //Determines whether a secondary algorithm is required for new selected opt. alg.
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -336,7 +337,8 @@ namespace Radical
                     this.SecondaryAlgorithm.Visibility = Visibility.Visible;
                 }
             }
-=======
+        }
+
         private void OpenOptSettings(object sender, RoutedEventArgs e)
         {
 
@@ -358,7 +360,6 @@ namespace Radical
 
         void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
->>>>>>> a/wip
         }
     }
 

@@ -41,8 +41,10 @@ namespace Radical
         {
             this.MyVM = VM;
             this.DataContext = MyVM;
+            this.PreviousText = "";
         }
         public IViewModel MyVM { get; set; }
+        private string PreviousText;
 
         //PREVIEW MOUSE DOWN
         //Disable changes during optimization
@@ -81,6 +83,7 @@ namespace Radical
             if (this.MyVM.ChangesEnabled)
             {
                 TextBox box = (TextBox)sender;
+                PreviousText = box.Text;
                 box.Clear();
             }
         }
@@ -92,7 +95,7 @@ namespace Radical
             TextBox box = (TextBox)sender;
 
             if (box.Text == "")
-                box.Text = "0";
+                box.Text = PreviousText; //Should default to previous value
         }
 
         //PREVIEW KEY DOWN

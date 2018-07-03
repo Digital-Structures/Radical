@@ -184,12 +184,7 @@ namespace Radical
             }
         }
 
-<<<<<<< HEAD
-        
-
-=======
         //NUMBER OF ITERATIONS
->>>>>>> a/wip
         private int _niterations;
         public int Niterations
         {

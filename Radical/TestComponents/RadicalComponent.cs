@@ -151,6 +151,7 @@ namespace Radical.TestComponents
             //Prevent opening of multiple windows at once
             if (!MyComponent.IsWindowOpen)
             {
+                MyComponent.IsWindowOpen = true;
                 Design design = HelperFunctions.GenerateDesign(MyComponent);
                 RadicalVM radicalVM = new RadicalVM(design, this.MyComponent);
 
@@ -158,7 +159,6 @@ namespace Radical.TestComponents
                 {
                     Window viewer = new Radical.RadicalWindow(radicalVM);
                     viewer.Show();
-                    MyComponent.IsWindowOpen = true;
                     //viewer.Topmost = true;
                     System.Windows.Threading.Dispatcher.Run();
                 });
