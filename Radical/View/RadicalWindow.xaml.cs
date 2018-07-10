@@ -357,6 +357,11 @@ namespace Radical
         {
             ComboBox box = sender as ComboBox;
             List<NLoptAlgorithm> ReqSec = RadicalVM.DFreeAlgs_ReqSec.ToList();
+            if (!RadicalVM.AvailableAlgs.Contains(RadicalVM.PrimaryAlgorithm))
+            {
+                this.PrimaryAlgorithm.SelectedItem = RadicalVM.AvailableAlgs.ElementAt(0);
+            }
+
             if (this.SecondaryAlgorithm != null)
             {
                 if (!ReqSec.Contains((NLoptAlgorithm)box.SelectedItem))
@@ -402,10 +407,6 @@ namespace Radical
 
         private void CheckBox_UnChecked(object sender, RoutedEventArgs e)
         {
-            if (!RadicalVM.AvailableAlgs.Contains(RadicalVM.PrimaryAlgorithm))
-            {
-                this.PrimaryAlgorithm.SelectedItem = RadicalVM.AvailableAlgs.ElementAt(0);
-            }
         }
     }
 
