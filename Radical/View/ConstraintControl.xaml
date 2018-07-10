@@ -14,7 +14,7 @@
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="175"></ColumnDefinition>
+                    <ColumnDefinition Width="143"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
             
                 <TextBox Name="ConstName" Text="{Binding Name, Mode=TwoWay}"  FontFamily="Roboto" FontSize="12" 
@@ -33,7 +33,7 @@
                 <ComboBox Name="EqualityChoice" FontSize="12" SelectedIndex="{Binding ConstraintType, Mode=TwoWay}" IsEnabled="{Binding ChangesEnabled}"
                           Grid.Column="3" Width="90" HorizontalContentAlignment="Right">
                     <ComboBoxItem Content="Less Than" HorizontalAlignment="Right"></ComboBoxItem>
-                    <ComboBoxItem Content="More Than" HorizontalAlignment="Right"></ComboBoxItem>
+                    <ComboBoxItem Content="Greater Than" HorizontalAlignment="Right"></ComboBoxItem>
                     <ComboBoxItem Content="Equal To" HorizontalAlignment="Right"></ComboBoxItem>
                 </ComboBox>
             

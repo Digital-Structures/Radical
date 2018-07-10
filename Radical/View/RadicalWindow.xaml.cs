@@ -49,6 +49,13 @@ namespace Radical
         public CancellationTokenSource source;
         private string PreviousText;
 
+        //Display value on graph when you hover over a point with your mouse
+        public void DisplayGraphValue()
+        {
+
+        }
+
+
         //ADD CONSTRAINTS
         //Adds a stack panel for constraints
         private void AddConstraints()
@@ -77,6 +84,8 @@ namespace Radical
                 return;
             }
 
+            this.Sliders.Children.Add(new VariableHeaderControl());
+
             foreach (VarVM var in RadicalVM.NumVars)
             {
                 this.Sliders.Children.Add(new VariableControl(var));
@@ -97,7 +106,7 @@ namespace Radical
             int geoIndex = 1;
             foreach (List<VarVM> geometry in RadicalVM.GeoVars)
             {
-                //Add an expander for each distinct geomtery
+                //Add an expander for each distinct geometry
                 Expander singleGeo = new Expander();
                 singleGeo.Header = HeaderFormatting(String.Format("Geometry {0}", geoIndex)); geoIndex++;
 
@@ -113,6 +122,27 @@ namespace Radical
                 }
             }
         }
+
+
+        //CREATE GRID
+        //Creates a grid within the program
+        //Helper method for creating a header within a stackpanel
+        private Grid CreateGrid(int rows, int cols)
+        {
+            Grid g = new Grid();
+            for (int i = 0; i < rows; i++)
+            {
+                RowDefinition r = new RowDefinition();
+                g.RowDefinitions.Add(r);
+            }
+            for (int i = 0; i < cols; i++)
+            {
+                ColumnDefinition c = new ColumnDefinition();
+                g.ColumnDefinitions.Add(c);
+            }
+            return g;
+        }
+
 
         //Formatting individual geometry headers
         private TextBlock HeaderFormatting(string text)
@@ -363,6 +393,19 @@ namespace Radical
 
         void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CheckBox_UnChecked(object sender, RoutedEventArgs e)
+        {
+            if (!RadicalVM.AvailableAlgs.Contains(RadicalVM.PrimaryAlgorithm))
+            {
+                this.PrimaryAlgorithm.SelectedItem = RadicalVM.AvailableAlgs.ElementAt(0);
+            }
         }
     }
 

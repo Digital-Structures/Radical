@@ -22,31 +22,31 @@
 
             <TextBox Name="VarName" Text="{Binding Name, Mode=TwoWay}" FontFamily="Roboto" FontSize="12"
                      Grid.Column="0" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,10,0"
-                     PreviewKeyDown="TextBox_PreviewKeyDown"
+                     PreviewKeyDown="TextBox_PreviewKeyDown" Visibility="Visible"
                      ></TextBox>
-
+            
             <TextBox Name="ValueText" Text="{Binding Value, Mode=TwoWay, StringFormat=N2}" FontSize="12" 
                      Grid.Column="1" MinWidth="28" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0" BorderBrush="{x:Null}"
-                     TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"
+                     TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus" Visibility="Visible"
                      ></TextBox>
 
-            <CheckBox Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0"
+            <CheckBox Name ="Checkbox" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0"
                       Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" IsChecked="{Binding IsActive, Mode=TwoWay}" IsEnabled="{Binding ChangesEnabled}"
                       ></CheckBox>
 
             <TextBox Name="MinText" Text="{Binding Min, Mode=TwoWay, StringFormat=N2}" FontSize="12"
-                     Grid.Column="3" MinWidth="28" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="10,0" BorderBrush="{x:Null}" 
-                     TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"
+                     Grid.Column="3" MinWidth="28" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="5,0" BorderBrush="{x:Null}" 
+                     TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus" Visibility="Visible"
                      ></TextBox>
 
-            <Slider Minimum="{Binding Min, Mode=TwoWay}" Maximum="{Binding Max, Mode=TwoWay}" Value="{Binding Value, Mode=TwoWay}" FontSize="8" Foreground="LawnGreen" 
-                    Grid.Column="4" Width="150" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2"
+            <Slider Name ="Slider" Minimum="{Binding Min, Mode=TwoWay}" Maximum="{Binding Max, Mode=TwoWay}" Value="{Binding Value, Mode=TwoWay}" FontSize="8" Foreground="LawnGreen" 
+                    Grid.Column="4" Width="150" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2" Visibility="Visible"
                     IsEnabled="{Binding ChangesEnabled}"
                     ></Slider>
 
             <TextBox Name="MaxText" Text="{Binding Max, Mode=TwoWay,StringFormat=N2}" FontSize="12" 
-                     Grid.Column="5" MinWidth="28" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0" BorderBrush="{x:Null}"
-                     TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"
+                     Grid.Column="5" MinWidth="28" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0" BorderBrush="{x:Null}"
+                     TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus" Visibility="Visible"
                      ></TextBox>
         </Grid>
     </Border>

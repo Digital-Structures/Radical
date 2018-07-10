@@ -22,6 +22,19 @@ namespace Radical
         public List<List<VarVM>> GeoVars;
         public enum Direction { X, Y, Z };
 
+        private bool _advancedOptions;
+        public bool AdvancedOptions
+        {
+            get { return _advancedOptions; }
+            set
+            {
+                if (CheckPropertyChanged<bool>("AdvancedOptions", ref _advancedOptions, ref value))
+                {
+                    FirePropertyChanged("AvailableAlgs");
+                }
+            }
+        }
+
         public RadicalVM()
         {
         }
@@ -47,6 +60,8 @@ namespace Radical
             SortVariables();
 
             this.OptRunning = false;
+            this.OptRunning = false;
+            this._advancedOptions = false;
         }
 
         //SORT VARIABLES
@@ -139,7 +154,7 @@ namespace Radical
             }
         }
 
-        //PRIMMARY ALGORITHM
+        //PRIMARY ALGORITHM
         private NLoptAlgorithm _primaryalgorithm;
         public NLoptAlgorithm PrimaryAlgorithm
         {
@@ -173,14 +188,29 @@ namespace Radical
         {
             get
             {
-                if (this.Constraints.Any())
+                if (AdvancedOptions)
                 {
-                    return DFreeAlgs_INEQ.ToList();
+                    if (this.Constraints.Any())
+                    {
+                        return DFreeAlgs_INEQ.ToList();
+                    }
+                    else
+                    {
+                        return DFreeAlgs.ToList();
+                    }
                 }
                 else
                 {
-                    return DFreeAlgs.ToList();
+                    if (this.Constraints.Any())
+                    {
+                        return BasicAlgs_INEQ.ToList();
+                    }
+                    else
+                    {
+                        return BasicAlgs.ToList();
+                    }
                 }
+                
             }
         }
 
@@ -221,6 +251,26 @@ namespace Radical
                 }
             }
         }
+
+        public IEnumerable<NLoptAlgorithm> BasicAlgs = new[]
+        {
+            NLoptAlgorithm.AUGLAG, //Calls for secondary alg
+            NLoptAlgorithm.LN_COBYLA,
+        };
+
+        public IEnumerable<NLoptAlgorithm> BasicAlgs_EQ = new[]
+        {
+            NLoptAlgorithm.LN_COBYLA
+        };
+
+        public IEnumerable<NLoptAlgorithm> BasicAlgs_INEQ = new[]
+        {
+            NLoptAlgorithm.LN_COBYLA
+        };
+
+        //List of those that require secondary and the secondary options remain the same. 
+
+
 
         public IEnumerable<NLoptAlgorithm> DFreeAlgs = new[]
         {

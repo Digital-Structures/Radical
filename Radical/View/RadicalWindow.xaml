@@ -194,9 +194,25 @@
         </Grid>
 
         <Grid HorizontalAlignment="Center" Grid.Column="1" Margin="25,40">
-            <d3:Chart Background="{x:Null}">
-                <d3:LineGraph Name="Plotter" Description="History" Stroke="LimeGreen" StrokeThickness="1.5"></d3:LineGraph>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition Height="12"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text ="Optimization Focus?" Grid.Column="0" FontSize="12" Foreground="Black" FontFamily="Roboto" TextAlignment="Right" Grid.Row="0">
+                <TextBlock.LayoutTransform>
+                    <RotateTransform Angle="270" />
+                </TextBlock.LayoutTransform>
+            </TextBlock>
+            <d3:Chart Background="{x:Null}" Grid.Row="0" Grid.Column="1">
+                <d3:LineGraph Name="Plotter" Description="History" Stroke="LimeGreen" StrokeThickness="1.5" Padding="0,10,10,0" ToolTip="{Binding DisplayGraphValue, Mode=OneWayToSource}"></d3:LineGraph>
             </d3:Chart>
+            <TextBlock FontSize="12" Foreground="Black" FontFamily="Roboto" TextAlignment="Right" Grid.Row="1" Grid.Column="1">
+                Iterations
+            </TextBlock>
         </Grid>
 
         <Grid Grid.Column="3"  HorizontalAlignment="Right" Margin="0,0,0,-0.2">
@@ -256,7 +272,7 @@
                     </DockPanel>
                     <DockPanel>
                         <materialDesign:PackIcon Kind="Factory" Foreground="DarkGray" VerticalAlignment="Bottom"></materialDesign:PackIcon>
-                        <ComboBox HorizontalAlignment="Right"  materialDesign:HintAssist.Hint="Algorithm" IsEditable="True" IsReadOnly="True"
+                        <ComboBox Name="PrimaryAlgorithm" HorizontalAlignment="Right"  materialDesign:HintAssist.Hint="Algorithm" IsEditable="True" IsReadOnly="True"
                                   ItemsSource="{Binding AvailableAlgs, Mode=OneWay}" 
                                   SelectedItem="{Binding PrimaryAlgorithm, Mode=OneWayToSource, FallbackValue={x:Static nlopt:NLoptAlgorithm.LN_COBYLA}}"
                                   SelectionChanged="ComboBox_SelectionChanged">
@@ -269,6 +285,13 @@
                                   SelectedItem="{Binding SecondaryAlgorithm, Mode=OneWayToSource, FallbackValue={x:Static nlopt:NLoptAlgorithm.LN_BOBYQA}}"
                                   materialDesign:HintAssist.Hint="Secondary Algorithm" IsEditable="True" IsReadOnly="True">
                         </ComboBox>
+                    </DockPanel>
+                    <DockPanel>
+                        <TextBlock>
+                            Show Advanced Algorithms
+                        </TextBlock>
+                        <CheckBox Checked="CheckBox_Checked" Unchecked="CheckBox_UnChecked" IsChecked="{Binding AdvancedOptions, Mode=TwoWay}">
+                        </CheckBox>
                     </DockPanel>
                 </StackPanel>
             </Grid>
