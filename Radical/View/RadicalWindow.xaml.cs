@@ -45,6 +45,7 @@ namespace Radical
             AddGeometries();
             this.SettingsMenu.Children.Add(new SettingsControl(this.RadicalVM));
         }
+        public enum Direction { X, Y, Z, None };
         public RadicalVM RadicalVM;
         public CancellationTokenSource source;
 
@@ -71,6 +72,7 @@ namespace Radical
         //Adds a stack panel for numeric sliders
         private void AddNumbers()
         {
+            //COLLAPSE SLIDERS
             //Collapse Sliders expander if no sliders are connected
             if (!RadicalVM.NumVars.Any())
             {
@@ -78,18 +80,45 @@ namespace Radical
                 return;
             }
 
-            this.Sliders.Children.Add(new VariableHeaderControl());
+            //GROUP VARIABLE CONTROL
+            //Stack Panel
+            StackPanel groupControls = new StackPanel();
+            //Expander
+            Expander groupControlMenu = new Expander();
+            groupControlMenu.Header = Header2Formatting("Group Variable Control");
+            groupControlMenu.Content = groupControls;
+            this.Sliders.Children.Add(groupControlMenu);
 
+            //Add descriptive control labels
+            groupControls.Children.Add(new VariableHeaderControl());
+
+            //Add group controls for X, Y, and Z directions
+            GroupVariableControl groupControl = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.None)));
+            groupControl.GroupControlName.Text = "All Variables";
+            groupControls.Children.Add(groupControl);
+
+            //INDIVIDUAL VARIBALE CONTROL
+            //Stack Panel
+            StackPanel individualControls = new StackPanel();
+            //Expander
+            Expander individualControlMenu = new Expander();
+            individualControlMenu.Header = Header2Formatting("Single Variable Control");
+            individualControlMenu.Content = individualControls;
+            this.Sliders.Children.Add(individualControlMenu);
+
+            //Add descriptive control labels
+            individualControls.Children.Add(new VariableHeaderControl());
+
+            //Add individual slider controls
             foreach (VarVM var in RadicalVM.NumVars)
-            {
-                this.Sliders.Children.Add(new VariableControl(var));
-            }
+                individualControls.Children.Add(new VariableControl(var));
         }
 
         //ADD GEOMETRIES
         //Adds a nested stack panel for geometries and their control point variables
         private void AddGeometries()
         {
+            //COLLAPSE GEOMETRIES
             //Collapse Geometries expander if no geometries are connected
             if (!RadicalVM.GeoVars.Any())
             {
@@ -97,34 +126,79 @@ namespace Radical
                 return;
             }
 
-            this.Geometries.Children.Add(new VariableHeaderControl());
-
-            int geoIndex = 1;
+            int geoIndex = 0;
             foreach (List<VarVM> geometry in RadicalVM.GeoVars)
             {
-                //Add an expander for each distinct geomtery
+                geoIndex++;
+
+                //SINGLE GEOMETRY
+                //Stack Panel
+                StackPanel variableMenus = new StackPanel();
+                //Expander
                 Expander singleGeo = new Expander();
-                singleGeo.Header = HeaderFormatting(String.Format("Geometry {0}", geoIndex)); geoIndex++;
-
-                StackPanel singleGeoVars = new StackPanel { Name = "SingleGeometryVariables" };
-                singleGeo.Content = singleGeoVars;
-
+                singleGeo.Header = Header1Formatting(String.Format("Geometry {0}", geoIndex));
+                singleGeo.Content = variableMenus;
                 this.Geometries.Children.Add(singleGeo);
 
-                //Add all the variables for that geometry under its expander
+
+                //GROUP VARIABLE CONTROL
+                //Stack Panel
+                StackPanel groupControls = new StackPanel();
+                //Expander
+                Expander groupControlMenu = new Expander();
+                groupControlMenu.Header = Header2Formatting("Group Variable Control");
+                groupControlMenu.Content = groupControls;
+                variableMenus.Children.Add(groupControlMenu);
+
+                //Add descriptive control labels
+                groupControls.Children.Add(new VariableHeaderControl());
+
+                //Add group controls for X, Y, and Z directions
+                GroupVariableControl groupControlX = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.X), geoIndex-1));
+                GroupVariableControl groupControlY = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.Y), geoIndex-1));
+                GroupVariableControl groupControlZ = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.Z), geoIndex-1));
+                groupControlX.GroupControlName.Text = "X Variables";
+                groupControlY.GroupControlName.Text = "Y Variables";
+                groupControlZ.GroupControlName.Text = "Z Variables";
+                groupControls.Children.Add(groupControlX);
+                groupControls.Children.Add(groupControlY);
+                groupControls.Children.Add(groupControlZ);
+
+                //INDIVIDUAL VARIBALE CONTROL
+                //Stack Panel
+                StackPanel individualControls = new StackPanel();
+                //Expander
+                Expander individualControlMenu = new Expander();
+                individualControlMenu.Header = Header2Formatting("Single Variable Control");
+                individualControlMenu.Content = individualControls;
+                variableMenus.Children.Add(individualControlMenu);
+
+                //Add descriptive control labels
+                individualControls.Children.Add(new VariableHeaderControl());
+
+                //Add individual point controls in all directions
                 foreach (VarVM var in geometry)
-                {
-                    singleGeoVars.Children.Add(new VariableControl(var));
-                }
+                    individualControls.Children.Add(new VariableControl(var));
             }
         }
 
         //Formatting individual geometry headers
-        private TextBlock HeaderFormatting(string text)
+        private TextBlock Header1Formatting(string text)
         {
             TextBlock header = new TextBlock(new Run(text));
             header.Foreground = Brushes.Gray;
-            header.FontSize = 14;
+            header.FontSize = 16;
+            header.Margin = new Thickness(1, 0, 0, 0);
+
+            return header;
+        }
+
+        //Formatting control group headers
+        private TextBlock Header2Formatting(string text)
+        {
+            TextBlock header = new TextBlock(new Run(text));
+            header.Foreground = Brushes.DarkGray;
+            header.FontSize = 16;
             header.Margin = new Thickness(1, 0, 0, 0);
 
             return header;

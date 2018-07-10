@@ -22,19 +22,6 @@ namespace Radical
         public List<List<VarVM>> GeoVars;
         public enum Direction { X, Y, Z };
 
-        private bool _advancedOptions;
-        public bool AdvancedOptions
-        {
-            get { return _advancedOptions; }
-            set
-            {
-                if (CheckPropertyChanged<bool>("AdvancedOptions", ref _advancedOptions, ref value))
-                {
-                    FirePropertyChanged("AvailableAlgs");
-                }
-            }
-        }
-
         public RadicalVM()
         {
         }
@@ -150,6 +137,20 @@ namespace Radical
             {
                 if (CheckPropertyChanged<RefreshMode>("Mode", ref _mode, ref value))
                 {
+                }
+            }
+        }
+
+        //ADVANCED OPTIONS
+        private bool _advancedOptions;
+        public bool AdvancedOptions
+        {
+            get { return _advancedOptions; }
+            set
+            {
+                if (CheckPropertyChanged<bool>("AdvancedOptions", ref _advancedOptions, ref value))
+                {
+                    FirePropertyChanged("AvailableAlgs");
                 }
             }
         }

@@ -12,11 +12,14 @@ namespace Radical.Integration
     //Class for manipulation of numeric slider variables
     public class SliderVariable : IVariable
     {
+        public enum Direction { X, Y, Z, None };
+
         //CONSTRUCTOR
         public SliderVariable(IGH_Param param)
         {
             this.param = param;
             this.Slider = this.Parameter as GH_NumberSlider;
+            this._dir = Direction.None;
         }
         public GH_NumberSlider Slider;
 
@@ -25,6 +28,14 @@ namespace Radical.Integration
         public bool IsActive
         {
             get; set;
+        }
+
+        //DIRECTION
+        private Direction _dir;
+        public int Dir
+        {
+            get { return (int)this._dir; }
+            set { this._dir = (Direction)value; }
         }
 
         //MAX
