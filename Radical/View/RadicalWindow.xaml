@@ -215,7 +215,7 @@
             </TextBlock>
         </Grid>
 
-        <Grid Grid.Column="3"  HorizontalAlignment="Right" Margin="0,0,0,-0.2">
+        <Grid Grid.Column="2"  HorizontalAlignment="Right" Margin="0,0,0,-0.2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -238,7 +238,7 @@
             </Grid>
 
             <Grid  Width="0" Grid.Row="1" x:Name="Settings">
-                <StackPanel>
+                <StackPanel Name="SettingsMenu">
                     <StackPanel.Resources>
                         <Style TargetType="{x:Type DockPanel}">
                             <Setter Property="Margin" Value="10,5"/>
@@ -250,69 +250,26 @@
                             <Setter Property="HorizontalContentAlignment"   Value="Right"></Setter>
                         </Style>
                     </StackPanel.Resources>
-                    <DockPanel>
-                        <materialDesign:PackIcon Kind="Refresh" Foreground="DarkGray" VerticalAlignment="Bottom"></materialDesign:PackIcon>
-                        <ComboBox materialDesign:HintAssist.Hint="Refresh Mode" HorizontalAlignment="Right" SelectedIndex="0" ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:RefreshMode}}}"
-                                  SelectedValue="{Binding Mode, Mode=OneWayToSource}">
-                        </ComboBox>
-                    </DockPanel>
-                    <DockPanel>
-                        <materialDesign:PackIcon Kind="SortNumeric" Foreground="DarkGray" VerticalAlignment="Bottom"></materialDesign:PackIcon>
-                        <TextBox Text="{Binding Niterations, Mode=OneWayToSource, FallbackValue=1000 }" materialDesign:HintAssist.Hint="Number of Iterations"
-                                 HorizontalAlignment="Right"
-                                 PreviewTextInput="TextBox_PreviewTextInput_Int" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"
-                                 ></TextBox>
-                    </DockPanel>
-                    <DockPanel>
-                        <materialDesign:PackIcon Kind="ChartLine"  Foreground="DarkGray" VerticalAlignment="Bottom"></materialDesign:PackIcon>
-                        <TextBox Name="ConvergeText" Text="{Binding ConvCrit, Mode=OneWayToSource, FallbackValue=0.001 }" materialDesign:HintAssist.Hint="Relative Convergence Limit"
-                                 HorizontalAlignment="Right"
-                                 PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"
-                                 ></TextBox>
-                    </DockPanel>
-                    <DockPanel>
-                        <materialDesign:PackIcon Kind="Factory" Foreground="DarkGray" VerticalAlignment="Bottom"></materialDesign:PackIcon>
-                        <ComboBox Name="PrimaryAlgorithm" HorizontalAlignment="Right"  materialDesign:HintAssist.Hint="Algorithm" IsEditable="True" IsReadOnly="True"
-                                  ItemsSource="{Binding AvailableAlgs, Mode=OneWay}" 
-                                  SelectedItem="{Binding PrimaryAlgorithm, Mode=OneWayToSource, FallbackValue={x:Static nlopt:NLoptAlgorithm.LN_COBYLA}}"
-                                  SelectionChanged="ComboBox_SelectionChanged">
-                        </ComboBox>
-                    </DockPanel>
-                    <DockPanel>
-                        <materialDesign:PackIcon Name="SecAlgIcon" Kind="Calculator" Foreground="DarkGray" VerticalAlignment="Bottom" Visibility="Collapsed"></materialDesign:PackIcon>
-                        <ComboBox Name="SecondaryAlgorithm" Visibility="Collapsed"  HorizontalAlignment="Right" 
-                                  ItemsSource="{Binding AvailableSecondaryAlgs, Mode=OneWay}" 
-                                  SelectedItem="{Binding SecondaryAlgorithm, Mode=OneWayToSource, FallbackValue={x:Static nlopt:NLoptAlgorithm.LN_BOBYQA}}"
-                                  materialDesign:HintAssist.Hint="Secondary Algorithm" IsEditable="True" IsReadOnly="True">
-                        </ComboBox>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock>
-                            Show Advanced Algorithms
-                        </TextBlock>
-                        <CheckBox Checked="CheckBox_Checked" Unchecked="CheckBox_UnChecked" IsChecked="{Binding AdvancedOptions, Mode=TwoWay}">
-                        </CheckBox>
-                    </DockPanel>
+
                 </StackPanel>
             </Grid>
             <Border x:Name="SettingsBorder" Grid.Row="1" BorderBrush="Black" BorderThickness="0.1,0,0,0" Background="{x:Null}" Visibility="Collapsed"/>
-        </Grid>
 
-        <Grid Grid.Column="3" HorizontalAlignment="Right" Background="{x:Null}">
-            <Grid VerticalAlignment="Bottom" HorizontalAlignment="Center">
-                <Button x:Name="ButtonPlay" Click="ButtonPlay_Click" Width="30" Height="30" Margin="15"
+            <Grid Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20" Background="{x:Null}" >
+                <Button x:Name="ButtonPlay" Click="ButtonPlay_Click" Width="50" Height="50" Margin="15"
                         Style="{StaticResource MaterialDesignFloatingActionButton}" 
-                        materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                        Content="{materialDesign:PackIcon Play}" />
-                <Button x:Name="ButtonPause" Click="ButtonPause_Click"  Visibility="Collapsed" Width="30" Height="30" Margin="15"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth2">
+                    <materialDesign:PackIcon Kind="Play" Height="40" Width="40"/>
+                </Button>
+                <Button x:Name="ButtonPause" Click="ButtonPause_Click"  Visibility="Collapsed" Width="50" Height="50" Margin="15"
                         Style="{StaticResource MaterialDesignFloatingActionLightButton}"
                         materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
                         materialDesign:ButtonProgressAssist.Value="-1"
-                        materialDesign:ButtonProgressAssist.IsIndeterminate="True"
-                        Content="{materialDesign:PackIcon Pause}" />
+                        materialDesign:ButtonProgressAssist.IsIndeterminate="True">
+                    <materialDesign:PackIcon Kind="Pause" Height="40" Width="40"/>
+                </Button>
             </Grid>
         </Grid>
-
     </Grid>
 
 </Window>

@@ -26,7 +26,7 @@ namespace Radical
     /// Interaction logic for MaiWindow.xaml
     /// </summary>
     public partial class RadicalWindow : Window
-    { 
+    {
         public RadicalWindow()
         {
             this.DataContext = RadicalVM;
@@ -38,23 +38,15 @@ namespace Radical
         {
             this.RadicalVM = radicalVM;
             this.DataContext = this.RadicalVM;
-            this.PreviousText = "";
 
             InitializeComponent();
             AddConstraints();
             AddNumbers();
             AddGeometries();
+            this.SettingsMenu.Children.Add(new SettingsControl(this.RadicalVM));
         }
         public RadicalVM RadicalVM;
         public CancellationTokenSource source;
-        private string PreviousText;
-
-        //Display value on graph when you hover over a point with your mouse
-        public void DisplayGraphValue()
-        {
-
-        }
-
 
         //ADD CONSTRAINTS
         //Adds a stack panel for constraints
@@ -66,6 +58,8 @@ namespace Radical
                 this.ConstraintsExpander.Visibility = Visibility.Collapsed;
                 return;
             }
+
+            this.Constraints.Children.Add(new VariableHeaderControl());
 
             foreach (ConstVM cvm in RadicalVM.Constraints)
             {
@@ -103,10 +97,12 @@ namespace Radical
                 return;
             }
 
+            this.Geometries.Children.Add(new VariableHeaderControl());
+
             int geoIndex = 1;
             foreach (List<VarVM> geometry in RadicalVM.GeoVars)
             {
-                //Add an expander for each distinct geometry
+                //Add an expander for each distinct geomtery
                 Expander singleGeo = new Expander();
                 singleGeo.Header = HeaderFormatting(String.Format("Geometry {0}", geoIndex)); geoIndex++;
 
@@ -122,27 +118,6 @@ namespace Radical
                 }
             }
         }
-
-
-        //CREATE GRID
-        //Creates a grid within the program
-        //Helper method for creating a header within a stackpanel
-        private Grid CreateGrid(int rows, int cols)
-        {
-            Grid g = new Grid();
-            for (int i = 0; i < rows; i++)
-            {
-                RowDefinition r = new RowDefinition();
-                g.RowDefinitions.Add(r);
-            }
-            for (int i = 0; i < cols; i++)
-            {
-                ColumnDefinition c = new ColumnDefinition();
-                g.ColumnDefinitions.Add(c);
-            }
-            return g;
-        }
-
 
         //Formatting individual geometry headers
         private TextBlock HeaderFormatting(string text)
@@ -257,126 +232,6 @@ namespace Radical
             SettingsClose.Visibility = Visibility.Collapsed;
         }
 
-        //PREVIEW MOUSE DOWN
-        //Disable changes during optimization
-        private void TextBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            TextBox box = (TextBox)sender;
-
-            if (this.RadicalVM.ChangesEnabled)
-                box.IsReadOnly = false;
-            else
-                box.IsReadOnly = true;
-        }
-
-        //GOT FOCUS
-        //Clear box contents when it's active
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            //Disable changes during optimization
-            if (this.RadicalVM.ChangesEnabled)
-            {
-                TextBox box = (TextBox)sender;
-                this.PreviousText = box.Text;
-                box.Clear();
-            }
-        }
-
-        //LOST FOCUS
-        //If TextBox is left empty, set value to 0
-        private void TextBox_LostFocus(object sender, EventArgs e)
-        {
-            TextBox box = (TextBox)sender;
-
-            if (box.Text == "")
-                box.Text = this.PreviousText;
-        }
-
-        //PREVIEW KEY DOWN
-        //Allow pressing enter to save textbox content
-        private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                //Exit the Text Box
-                Keyboard.ClearFocus();
-                TextBox_LostFocus(sender, e);
-
-                //Update the value of the Text Box after exiting
-                TextBox box = (TextBox)sender;
-                DependencyProperty prop = TextBox.TextProperty;
-                BindingExpression binding = BindingOperations.GetBindingExpression(box, prop);
-                if (binding != null) { binding.UpdateSource(); }
-            }
-        }
-
-        //PREVIVEW FLOAT INPUT
-        //Only allow user to input parseable float text
-        protected void TextBox_PreviewTextInput_Float(object sender, TextCompositionEventArgs e)
-        {
-            TextBox box = (TextBox)sender;
-
-            //Accept negative sign only as first character
-            if (box.Text == "" && e.Text == "-") { return; }
-
-            e.Handled = !(IsTextAllowedFloat(box.Text + e.Text));
-        }
-
-        //IS TEXT ALLOWED FLOAT
-        //Determine if float input is parseable
-        protected static bool IsTextAllowedFloat(string text)
-        {
-            double val = 0;
-            return double.TryParse(text, Styles.STYLEFLOAT, System.Globalization.CultureInfo.InvariantCulture, out val);
-        }
-
-        //PREVIVEW FLOAT INPUT
-        //Only allow user to input parseable float text
-        protected void TextBox_PreviewTextInput_Int(object sender, TextCompositionEventArgs e)
-        {
-            TextBox box = (TextBox)sender;
-
-            //Accept negative sign only as first character
-            if (box.Text == "" && e.Text == "-") { return; }
-
-            e.Handled = !(IsTextAllowedInt(box.Text + e.Text));
-        }
-
-        //IS TEXT ALLOWED INT
-        //Determines if int input is parseable
-        protected static bool IsTextAllowedInt(string text)
-        {
-            int val = 0;
-            return int.TryParse(text, Styles.STYLEINT, System.Globalization.CultureInfo.InvariantCulture, out val);
-        }
-
-        //secondary algorithm option w/ icon disappears
-        //SELECTION CHANGED
-        //Determines whether a secondary algorithm is required for new selected opt. alg.
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ComboBox box = sender as ComboBox;
-            List<NLoptAlgorithm> ReqSec = RadicalVM.DFreeAlgs_ReqSec.ToList();
-            if (!RadicalVM.AvailableAlgs.Contains(RadicalVM.PrimaryAlgorithm))
-            {
-                this.PrimaryAlgorithm.SelectedItem = RadicalVM.AvailableAlgs.ElementAt(0);
-            }
-
-            if (this.SecondaryAlgorithm != null)
-            {
-                if (!ReqSec.Contains((NLoptAlgorithm)box.SelectedItem))
-                {
-                    this.SecondaryAlgorithm.Visibility = Visibility.Collapsed;
-                    this.SecAlgIcon.Visibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    this.SecondaryAlgorithm.Visibility = Visibility.Visible;
-                    this.SecAlgIcon.Visibility = Visibility.Visible;
-                }
-            }
-        }
-
         private void OpenOptSettings(object sender, RoutedEventArgs e)
         {
 
@@ -397,15 +252,6 @@ namespace Radical
         }
 
         void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-        }
-
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void CheckBox_UnChecked(object sender, RoutedEventArgs e)
         {
         }
     }
@@ -507,4 +353,3 @@ namespace Radical
     }
     #endregion
 }
-
