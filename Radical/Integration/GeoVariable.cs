@@ -18,12 +18,12 @@ namespace Radical.Integration
         //CONSTRUCTOR
         public GeoVariable(double min, double max, int dir, IDesignGeometry geo)
         {
-            this.dir = dir;
-            this.min = min;
-            this.max = max;
+            this._dir = (Direction)dir;
+            this._min = min;
+            this._max = max;
             this.Geometry = geo;
         }
-        public enum Direction { X, Y, Z };
+        public enum Direction { X, Y, Z, None };
         public IDesignGeometry Geometry { get; set; }
         private string pointname;
 
@@ -61,30 +61,29 @@ namespace Radical.Integration
         }
 
         //DIRECTION
-        //The direction (x,y,z) in which this point can move
-        private int dir;
+        private Direction _dir;
         public int Dir
         {
-            get { return this.dir; }
-            set { this.dir = value; }
+            get { return (int)this._dir; }
+            set { this._dir = (Direction)value; }
         }
 
         //MIN
         //Maximum negative displacement of the control point from its original state
-        private double min;
+        private double _min;
         public double Min
         {
-            get { return this.min; }
-            set { this.min = value; }
+            get { return this._min; }
+            set { this._min = value; }
         }
 
         //MAX
         //Maximum positive displacement of the control point from its original state
-        private double max;
+        private double _max;
         public double Max
         {
-            get { return this.max; }
-            set { this.max = value; }
+            get { return this._max; }
+            set { this._max = value; }
         }
 
         //PARAMETER

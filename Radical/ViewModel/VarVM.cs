@@ -14,6 +14,8 @@ namespace Radical
     //Manages the bounds and values of input variables to be optimized
     public class VarVM : BaseVM
     {
+        public enum Direction { X, Y, Z, None };
+
         //CONSTRUCTOR
         //default values obtained from original Grasshopper component variables
         public VarVM(IVariable dvar)
@@ -26,6 +28,20 @@ namespace Radical
             this.IsActive = true;
 
             this.OptRunning = false;
+        }
+
+        //DIRECTION
+        private Direction _dir;
+        public int Dir
+        {
+            get
+            {
+                return this.DesignVar.Dir;
+            }
+            set 
+            {
+                this._dir = (Direction)value;
+            }
         }
 
         public IVariable DesignVar;
@@ -140,7 +156,6 @@ namespace Radical
                     }
                 }
             }
-
         }
 
         //IS ACTIVE
@@ -154,7 +169,7 @@ namespace Radical
             }
             set
             {
-                if (CheckPropertyChanged<bool>("IsEnabled", ref _isactive, ref value))
+                if (CheckPropertyChanged<bool>("IsActive", ref _isactive, ref value))
                 {
                     DesignVar.IsActive = this._isactive;
                 }

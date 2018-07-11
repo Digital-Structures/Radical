@@ -156,12 +156,5 @@ namespace Radical
             return int.TryParse(text, Styles.STYLEINT, System.Globalization.CultureInfo.InvariantCulture, out val);
         }
 
-        protected void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-        }
-
-        protected void CheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-        }
     }
 }

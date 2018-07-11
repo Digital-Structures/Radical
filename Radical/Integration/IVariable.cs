@@ -16,6 +16,7 @@ namespace Radical.Integration
         double CurrentValue { get; set; }
         double Max { get; set; }
         double Min { get; set; }
+        int Dir { get; set; }
         void UpdateValue(double x);
         double Gradient();
         bool IsActive { get; set; }

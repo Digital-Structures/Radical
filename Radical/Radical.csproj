@@ -123,6 +123,7 @@
     <Compile Include="TestComponents\IncrementComponent.cs" />
     <Compile Include="TestComponents\RadicalComponent.cs" />
     <Compile Include="ViewModel\BaseVM.cs" />
+    <Compile Include="ViewModel\GlobalVarVM.cs" />
     <Compile Include="ViewModel\IViewModel.cs" />
     <Compile Include="ViewModel\ConstVM.cs" />
     <Compile Include="ViewModel\RadicalVM.cs" />
@@ -136,6 +137,9 @@
     </Compile>
     <Compile Include="View\SettingsControl.xaml.cs">
       <DependentUpon>SettingsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\GroupVariableControl.xaml.cs">
+      <DependentUpon>GroupVariableControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\VariableHeaderControl.xaml.cs">
       <DependentUpon>VariableHeaderControl.xaml</DependentUpon>
@@ -167,6 +171,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\SettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\GroupVariableControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
