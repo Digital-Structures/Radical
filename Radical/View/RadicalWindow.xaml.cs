@@ -20,6 +20,8 @@ using NLoptNet;
 using System.Globalization;
 using System.Reflection;
 
+using InteractiveDataDisplay.WPF;
+
 namespace Radical
 {
     /// <summary>
@@ -97,8 +99,6 @@ namespace Radical
                 return;
             }
 
-            this.Geometries.Children.Add(new VariableHeaderControl());
-
             int geoIndex = 1;
             foreach (List<VarVM> geometry in RadicalVM.GeoVars)
             {
@@ -110,6 +110,7 @@ namespace Radical
                 singleGeo.Content = singleGeoVars;
 
                 this.Geometries.Children.Add(singleGeo);
+                singleGeoVars.Children.Add(new VariableHeaderControl());
 
                 //Add all the variables for that geometry under its expander
                 foreach (VarVM var in geometry)
@@ -231,6 +232,50 @@ namespace Radical
             ButtonSettingsOpen.Visibility = Visibility.Visible;
             SettingsClose.Visibility = Visibility.Collapsed;
         }
+
+        //CHART MOUSE DOWN
+        //Currently returns graph x value of where the mouse clicks down 
+        private void Chart_MouseMove(object sender, MouseEventArgs e)
+        {
+            List<double> scores = this.RadicalVM.Design.ScoreEvolution;
+
+            double mouseX = e.GetPosition(this.Plotter).X + Plotter.OffsetX;
+            double ScaleX = Plotter.ScaleX;
+
+            int actualX = (int)(Math.Truncate(mouseX / ScaleX));
+
+            if (actualX < 0)
+            {
+                actualX = 0;
+            }
+            else if (actualX >= scores.Count)
+            {
+                actualX = scores.Count - 1;
+            }
+
+            this.RadicalVM.MouseObjectiveValueDisplay = actualX;
+
+            if (scores.Any())
+            {
+                double yValue = scores.ElementAt(actualX);
+                this.RadicalVM.MouseObjectiveValueDisplayY = yValue;
+
+                //actualX * ScaleX scales the graph value to appropriate mouse position
+                //+35 is a hardcoded value because the position is off due to the side of the graph
+                //Plotter.OffsetX takes into account if the graph has been moved 
+                double newXPosition = actualX * ScaleX + 45 - Plotter.OffsetX;
+                if (newXPosition - 45 < 0)
+                {
+                    this.ChartLine.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    this.RadicalVM.ChartLineX = newXPosition;
+                    this.ChartLine.Visibility = Visibility.Visible;
+                }
+            }
+        }
+
 
         private void OpenOptSettings(object sender, RoutedEventArgs e)
         {

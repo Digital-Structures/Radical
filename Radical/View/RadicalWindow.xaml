@@ -195,24 +195,30 @@
 
         <Grid HorizontalAlignment="Center" Grid.Column="1" Margin="25,40">
             <Grid.RowDefinitions>
+                <RowDefinition Height="25"></RowDefinition>
                 <RowDefinition></RowDefinition>
-                <RowDefinition Height="12"></RowDefinition>
+                <RowDefinition Height="22"></RowDefinition>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20"></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text ="Optimization Focus?" Grid.Column="0" FontSize="12" Foreground="Black" FontFamily="Roboto" TextAlignment="Right" Grid.Row="0">
-                <TextBlock.LayoutTransform>
-                    <RotateTransform Angle="270" />
-                </TextBlock.LayoutTransform>
+            <TextBlock VerticalAlignment="Center"
+                HorizontalAlignment="Left" Text="Objective" FontSize="14" Foreground="Black" FontFamily="Roboto" TextAlignment="Right" Grid.Row="0">
             </TextBlock>
-            <d3:Chart Background="{x:Null}" Grid.Row="0" Grid.Column="1">
-                <d3:LineGraph Name="Plotter" Description="History" Stroke="LimeGreen" StrokeThickness="1.5" Padding="0,10,10,0" ToolTip="{Binding DisplayGraphValue, Mode=OneWayToSource}"></d3:LineGraph>
+            <d3:Chart Name ="Chart" Background="{x:Null}" Grid.Row="1" PreviewMouseMove="Chart_MouseMove" Margin="10,0,0,0">
+                <d3:LineGraph Name="Plotter" Description="Optimization History" Stroke="LimeGreen" StrokeThickness="1.5" Padding="0,10,10,0" ToolTip="{Binding DisplayGraphValue, Mode=OneWayToSource}"></d3:LineGraph>
             </d3:Chart>
-            <TextBlock FontSize="12" Foreground="Black" FontFamily="Roboto" TextAlignment="Right" Grid.Row="1" Grid.Column="1">
+            <Line Name ="ChartLine" Grid.Row="1" Stroke="Green" StrokeThickness="1.5" 
+                  Visibility="Collapsed"
+                  X1="{Binding ChartLineX, Mode=TwoWay}" X2="{Binding ChartLineX, Mode=TwoWay}" Y1="1" Y2="{Binding ElementName=Plotter, Path=ActualHeight}"></Line>
+            <TextBlock VerticalAlignment="Top" FontSize="14" Foreground="Black" FontFamily="Roboto" TextAlignment="Right" Grid.Row="2">
                 Iterations
             </TextBlock>
+            <!--Temporary!!-->
+                <TextBlock TextAlignment="Left" Foreground="Purple" Grid.Row="2" Text="{Binding MouseObjectiveValueDisplay, Mode=TwoWay}">
+                
+                </TextBlock>
+                <TextBlock TextAlignment="Center" Foreground="Purple" Grid.Row="2" Text="{Binding MouseObjectiveValueDisplayY, Mode=TwoWay}">
+
+                </TextBlock>
+
         </Grid>
 
         <Grid Grid.Column="2"  HorizontalAlignment="Right" Margin="0,0,0,-0.2">

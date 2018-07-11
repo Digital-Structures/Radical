@@ -252,6 +252,51 @@ namespace Radical
             }
         }
 
+        private int _mouseobjectivevaluedisplay;
+        public int MouseObjectiveValueDisplay
+        {
+            get
+            {
+                return _mouseobjectivevaluedisplay;
+            }
+            set
+            {
+                if(CheckPropertyChanged<int>("MouseObjectiveValueDisplay", ref _mouseobjectivevaluedisplay, ref value))
+                {
+                }
+            }
+        }
+
+        private double _mouseobjectivevaluedisplayy;
+        public double MouseObjectiveValueDisplayY
+        {
+            get
+            {
+                return _mouseobjectivevaluedisplayy;
+            }
+            set
+            {
+                if (CheckPropertyChanged<double>("MouseObjectiveValueDisplayY", ref _mouseobjectivevaluedisplayy, ref value))
+                {
+                }
+            }
+        }
+
+        private double _chartlinex;
+        public double ChartLineX
+        {
+            get
+            {
+                return _chartlinex;
+            }
+            set
+            {
+                if (CheckPropertyChanged<double>("ChartLineX", ref _chartlinex, ref value))
+                {
+                }
+            }
+        }
+
         public IEnumerable<NLoptAlgorithm> BasicAlgs = new[]
         {
             NLoptAlgorithm.AUGLAG, //Calls for secondary alg
