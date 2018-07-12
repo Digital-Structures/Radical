@@ -49,6 +49,8 @@ namespace Radical
             this.OptRunning = false;
             this.OptRunning = false;
             this._advancedOptions = false;
+
+            
         }
 
         //SORT VARIABLES

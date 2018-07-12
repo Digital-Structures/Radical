@@ -25,6 +25,7 @@ namespace Radical.Integration
         List<List<double>> Samples {get;set;}
         List<List<double>> Properties { get; set; }
         List<double> ScoreEvolution { get; set; }
+        List<List<double>> ConstraintEvolution { get; set; }
 
         void Optimize(RadicalWindow radicalWindow);
         

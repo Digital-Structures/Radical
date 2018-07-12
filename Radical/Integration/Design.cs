@@ -39,6 +39,11 @@ namespace Radical.Integration
             this.Geometries = geos;
             if (Geometries.Any()) { this.Variables.AddRange(Geometries.Select(x => x.Variables).SelectMany(x => x).ToList()); } // not the cleanest way to do it, review code structure
             this.ScoreEvolution = new List<double>();
+            this.ConstraintEvolution = new List<List<double>>();
+            foreach (Constraint c in this.Constraints)
+            {
+                this.ConstraintEvolution.Add(new List<double>());
+            }
             this.OptComponent = component;
         }
 
@@ -48,6 +53,7 @@ namespace Radical.Integration
         public IOptimizationComponent OptComponent { get; set; }
         public IExplorationComponent ExpComponent;
         public List<double> ScoreEvolution { get; set; }
+        public List<List<double>> ConstraintEvolution { get; set; }
         public IGH_Param ScoreParameter { get; set; }
 
         //INPUT PROPERTIES

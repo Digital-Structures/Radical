@@ -46,6 +46,16 @@ namespace Radical.Integration
             }
         }
 
+        //SET UP CONSTRAINT_EVOLUTION LIST
+        //This method creates sublists in the ConstraintEvolution that will correspond to constraints 
+        public void SetUpConstraintEvolution()
+        {
+            foreach (Constraint c in Design.Constraints)
+            {
+                Design.ConstraintEvolution.Add(new List<double>());
+            }
+        }
+
         public IDesign Design;
         public uint nVars { get { return (uint)this.Design.ActiveVariables.Count; } }
 
@@ -81,7 +91,6 @@ namespace Radical.Integration
             {
                 //Grasshopper.Instances.ActiveCanvas.Enabled = false;
 
-
                 for (int i = 0; i < nVars; i++)
                 {
                     IVariable var = Design.ActiveVariables[i]; // ONLY INCL. VARS
@@ -105,11 +114,25 @@ namespace Radical.Integration
                 Thread.Sleep(1);
             }
 
+            //Adds main objective values to list and draws
             double objective = Design.CurrentScore;
             Design.ScoreEvolution.Add(objective);
             ((Design)Design).OptComponent.Evolution = Design.ScoreEvolution;
-            if (this.RadicalWindow.RadicalVM.Mode != RefreshMode.Silent) { this.RadicalWindow.UpdateWindow(Design.ScoreEvolution); }
+            if (this.RadicalWindow.RadicalVM.Mode != RefreshMode.Silent)
+            {
+                this.RadicalWindow.UpdateWindow(Design.ScoreEvolution);
+            }
 
+            //Adds all recorded constraint values to list and draws
+            for (int i = 0; i < Design.Constraints.Count; i++)
+            {
+                double c_objective = Design.Constraints.ElementAt(i).CurrentValue;
+                Design.ConstraintEvolution.ElementAt(i).Add(c_objective);
+                if (this.RadicalWindow.RadicalVM.Mode != RefreshMode.Silent)
+                {
+                    this.RadicalWindow.GraphControlList.ElementAt(i).UpdateWindowGeneral(Design.ConstraintEvolution.ElementAt(i));
+                }
+            }
             try
             {
                 this.RadicalWindow.source.Token.ThrowIfCancellationRequested();

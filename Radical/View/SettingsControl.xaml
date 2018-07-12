@@ -54,7 +54,7 @@
             </ComboBox>
         </DockPanel>
         <DockPanel Grid.Row="5">
-            <TextBlock HorizontalAlignment="Center">
+            <TextBlock TextAlignment="Right" Foreground="Gray" FontWeight="Light" >
                 Show Advanced Algorithms
             </TextBlock>
             <CheckBox IsChecked="{Binding AdvancedOptions, Mode=TwoWay}" HorizontalAlignment="Right">

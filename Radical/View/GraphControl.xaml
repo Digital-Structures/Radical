@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="Radical.GraphControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Radical"
+             xmlns:d3="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid HorizontalAlignment="Center" Margin="25,40">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="300"></RowDefinition>
+            <RowDefinition Height="22"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock VerticalAlignment="Center" 
+                HorizontalAlignment="Left" Text="Objective" FontSize="14" Foreground="Black" FontFamily="Roboto" TextAlignment="Right" Grid.Row="0">
+        </TextBlock>
+        <d3:Chart Name ="Chart"  BorderThickness="1,0,0,1" Background="{x:Null}" Grid.Row="1" Margin="10,0,0,0" Width="Auto">
+            <d3:LineGraph Name="Plotter" Stroke="LimeGreen" StrokeThickness="1.5" Padding="0,10,10,0" ToolTip="{Binding DisplayGraphValue, Mode=OneWayToSource}"></d3:LineGraph>
+        </d3:Chart>
+        <Line Name ="ChartLine" Grid.Row="1" Stroke="Green" StrokeThickness="1.5" 
+                  Visibility="Collapsed"
+                  X1="{Binding ChartLineX, Mode=TwoWay}" X2="{Binding ChartLineX, Mode=TwoWay}" Y1="1" ></Line>
+        <TextBlock VerticalAlignment="Top" FontSize="14" Foreground="Black" FontFamily="Roboto" TextAlignment="Right" Grid.Row="2">
+                Iterations
+        </TextBlock>
+        <!--Temporary!!-->
+        <TextBlock TextAlignment="Left" Foreground="Purple" Grid.Row="2" Text="{Binding MouseObjectiveValueDisplay, Mode=TwoWay}">
+
+        </TextBlock>
+        <TextBlock TextAlignment="Center" Foreground="Purple" Grid.Row="2" Text="{Binding MouseObjectiveValueDisplayY, Mode=TwoWay}">
+
+        </TextBlock>
+
+    </Grid>
+
+</UserControl>

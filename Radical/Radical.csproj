@@ -124,6 +124,7 @@
     <Compile Include="TestComponents\RadicalComponent.cs" />
     <Compile Include="ViewModel\BaseVM.cs" />
     <Compile Include="ViewModel\GlobalVarVM.cs" />
+    <Compile Include="ViewModel\GraphVM.cs" />
     <Compile Include="ViewModel\IViewModel.cs" />
     <Compile Include="ViewModel\ConstVM.cs" />
     <Compile Include="ViewModel\RadicalVM.cs" />
@@ -131,6 +132,9 @@
     <Compile Include="View\BaseControl.cs" />
     <Compile Include="View\ConstraintControl.xaml.cs">
       <DependentUpon>ConstraintControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\GraphControl.xaml.cs">
+      <DependentUpon>GraphControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\RadicalWindow.xaml.cs">
       <DependentUpon>RadicalWindow.xaml</DependentUpon>
@@ -165,6 +169,10 @@
     <Page Include="View\ConstraintControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\GraphControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\RadicalWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

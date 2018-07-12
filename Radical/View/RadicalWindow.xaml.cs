@@ -45,11 +45,42 @@ namespace Radical
             AddConstraints();
             AddNumbers();
             AddGeometries();
+
+            AddGraphs();
+
             this.SettingsMenu.Children.Add(new SettingsControl(this.RadicalVM));
+
+            
         }
         public enum Direction { X, Y, Z, None };
         public RadicalVM RadicalVM;
         public CancellationTokenSource source;
+
+        //public List<LineGraph> lgList;
+
+
+        private List<GraphControl> _graphcontrollist;
+        public List<GraphControl> GraphControlList
+        {
+            get { return _graphcontrollist; }
+            set
+            {
+                _graphcontrollist = value;
+            }
+        }
+
+        //ADD GRAPHS
+        //Temporarily only gives a constraint value graph
+        private void AddGraphs()
+        {
+            GraphControlList = new List<GraphControl>();
+            foreach (ConstVM cvm in RadicalVM.Constraints)
+            {
+                GraphControl g = new GraphControl();
+                this.Graphs.Children.Add(g);
+                GraphControlList.Add(g);
+            }
+        }
 
         //ADD CONSTRAINTS
         //Adds a stack panel for constraints
@@ -208,16 +239,20 @@ namespace Radical
             return header;
         }
 
+        private bool optimizing;
+
         //OPTIMIZATION STARTED
         public void OptimizationStarted()
         {
             this.RadicalVM.OptimizationStarted();
+            optimizing = true;
         }
 
         //OPTIMIZATION FINISHED
         public void OptimizationFinished()
         {
             this.RadicalVM.OptimizationFinished();
+            optimizing = false; 
         }
 
         //OPTIMIZE
@@ -314,45 +349,49 @@ namespace Radical
         //Currently returns graph x value of where the mouse clicks down 
         private void Chart_MouseMove(object sender, MouseEventArgs e)
         {
-            List<double> scores = this.RadicalVM.Design.ScoreEvolution;
-
-            double mouseX = e.GetPosition(this.Plotter).X + Plotter.OffsetX;
-            double ScaleX = Plotter.ScaleX;
-
-            int actualX = (int)(Math.Truncate(mouseX / ScaleX));
-
-            if (actualX < 0)
+            if (!optimizing)
             {
-                actualX = 0;
-            }
-            else if (actualX >= scores.Count)
-            {
-                actualX = scores.Count - 1;
-            }
+                List<double> scores = this.RadicalVM.Design.ScoreEvolution;
 
-            this.RadicalVM.MouseObjectiveValueDisplay = actualX;
+                double mouseX = e.GetPosition(this.Plotter).X + Plotter.OffsetX;
+                double ScaleX = Plotter.ScaleX;
 
-            if (scores.Any())
-            {
-                double yValue = scores.ElementAt(actualX);
-                this.RadicalVM.MouseObjectiveValueDisplayY = yValue;
+                int actualX = (int)(Math.Truncate(mouseX / ScaleX));
 
-                //actualX * ScaleX scales the graph value to appropriate mouse position
-                //+35 is a hardcoded value because the position is off due to the side of the graph
-                //Plotter.OffsetX takes into account if the graph has been moved 
-                double newXPosition = actualX * ScaleX + 45 - Plotter.OffsetX;
-                if (newXPosition - 45 < 0)
+                if (actualX < 0)
                 {
-                    this.ChartLine.Visibility = Visibility.Collapsed;
+                    actualX = 0;
                 }
-                else
+                else if (actualX >= scores.Count)
                 {
+                    actualX = scores.Count - 1;
+                }
+
+                this.RadicalVM.MouseObjectiveValueDisplay = actualX;
+
+                if (scores.Any())
+                {
+                    double yValue = scores.ElementAt(actualX);
+                    this.RadicalVM.MouseObjectiveValueDisplayY = yValue;
+
+                    //actualX * ScaleX scales the graph value to appropriate mouse position
+                    //+35 is a hardcoded value because the position is off due to the side of the graph
+                    //Plotter.OffsetX takes into account if the graph has been moved 
+                    double newXPosition = actualX * ScaleX + 45 - Plotter.OffsetX;
+                    while (newXPosition - 45 < 0)
+                    {
+                        actualX++;
+                        newXPosition = actualX * ScaleX + 45 - Plotter.OffsetX;
+                    }
                     this.RadicalVM.ChartLineX = newXPosition;
                     this.ChartLine.Visibility = Visibility.Visible;
                 }
             }
+            else
+            {
+                this.ChartLine.Visibility = Visibility.Collapsed;
+            }
         }
-
 
         private void OpenOptSettings(object sender, RoutedEventArgs e)
         {

@@ -184,6 +184,15 @@
                         <StackPanel Name="Properties">
                         </StackPanel>
                     </Expander>
+                    <Expander Name="GraphsExpander" FontSize="18" Visibility="Visible">
+                        <Expander.Header>
+                            <TextBlock FontSize="18">
+                                Graphs
+                            </TextBlock>
+                        </Expander.Header>
+                        <StackPanel Name="Graphs" Width="Auto">
+                        </StackPanel>
+                    </Expander>
                     <Border Background="{DynamicResource MaterialDesignDivider}"
                         Height="1"
                         HorizontalAlignment="Stretch"
@@ -199,10 +208,10 @@
                 <RowDefinition></RowDefinition>
                 <RowDefinition Height="22"></RowDefinition>
             </Grid.RowDefinitions>
-            <TextBlock VerticalAlignment="Center"
+            <TextBlock VerticalAlignment="Center" 
                 HorizontalAlignment="Left" Text="Objective" FontSize="14" Foreground="Black" FontFamily="Roboto" TextAlignment="Right" Grid.Row="0">
             </TextBlock>
-            <d3:Chart Name ="Chart" Background="{x:Null}" Grid.Row="1" PreviewMouseMove="Chart_MouseMove" Margin="10,0,0,0">
+            <d3:Chart Name ="Chart"  BorderThickness="1,0,0,1" Background="{x:Null}" Grid.Row="1" PreviewMouseMove="Chart_MouseMove" Margin="10,0,0,0">
                 <d3:LineGraph Name="Plotter" Description="Optimization History" Stroke="LimeGreen" StrokeThickness="1.5" Padding="0,10,10,0" ToolTip="{Binding DisplayGraphValue, Mode=OneWayToSource}"></d3:LineGraph>
             </d3:Chart>
             <Line Name ="ChartLine" Grid.Row="1" Stroke="Green" StrokeThickness="1.5" 
