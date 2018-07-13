@@ -14,27 +14,29 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"></RowDefinition>
-            <RowDefinition Height="300"></RowDefinition>
+            <RowDefinition></RowDefinition>
             <RowDefinition Height="22"></RowDefinition>
         </Grid.RowDefinitions>
         <TextBlock VerticalAlignment="Center" 
                 HorizontalAlignment="Left" Text="Objective" FontSize="14" Foreground="Black" FontFamily="Roboto" TextAlignment="Right" Grid.Row="0">
         </TextBlock>
-        <d3:Chart Name ="Chart"  BorderThickness="1,0,0,1" Background="{x:Null}" Grid.Row="1" Margin="10,0,0,0" Width="Auto">
-            <d3:LineGraph Name="Plotter" Stroke="LimeGreen" StrokeThickness="1.5" Padding="0,10,10,0" ToolTip="{Binding DisplayGraphValue, Mode=OneWayToSource}"></d3:LineGraph>
+        <d3:Chart Name ="Chart"  BorderThickness="1,0,0,1" PreviewMouseMove="Chart_MouseMove" Background="{x:Null}" Grid.Row="1" Margin="10,0,0,0" Width="Auto">
+            <d3:LineGraph Name="Plotter" Stroke="LimeGreen" StrokeThickness="1.5" Padding="0,10,10,0" 
+                          ToolTip="{Binding DisplayGraphValue, Mode=OneWayToSource}">
+                
+            </d3:LineGraph>
         </d3:Chart>
+        <!-- Should the mode be two way or one way -->
         <Line Name ="ChartLine" Grid.Row="1" Stroke="Green" StrokeThickness="1.5" 
-                  Visibility="Collapsed"
-                  X1="{Binding ChartLineX, Mode=TwoWay}" X2="{Binding ChartLineX, Mode=TwoWay}" Y1="1" ></Line>
+                  Visibility="{Binding ChartLineVisibility, Mode = TwoWay}"
+                  X1="{Binding ChartLineX, Mode=TwoWay}" X2="{Binding ChartLineX, Mode=TwoWay}" Y1="1" Y2="{Binding ElementName=Plotter, Path=ActualHeight}"></Line>
         <TextBlock VerticalAlignment="Top" FontSize="14" Foreground="Black" FontFamily="Roboto" TextAlignment="Right" Grid.Row="2">
                 Iterations
         </TextBlock>
         <!--Temporary!!-->
-        <TextBlock TextAlignment="Left" Foreground="Purple" Grid.Row="2" Text="{Binding MouseObjectiveValueDisplay, Mode=TwoWay}">
-
+        <TextBlock FontSize="14" TextAlignment="Left" Foreground="Purple" Grid.Row="2" Text="{Binding MouseObjectiveValueDisplay, Mode=TwoWay}">
         </TextBlock>
-        <TextBlock TextAlignment="Center" Foreground="Purple" Grid.Row="2" Text="{Binding MouseObjectiveValueDisplayY, Mode=TwoWay}">
-
+        <TextBlock FontSize="14" TextAlignment="Center" Foreground="Purple" Grid.Row="2" Text="{Binding MouseObjectiveValueDisplayY, Mode=TwoWay}">
         </TextBlock>
 
     </Grid>

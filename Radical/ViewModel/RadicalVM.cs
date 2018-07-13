@@ -20,6 +20,7 @@ namespace Radical
         public List<ConstVM> Constraints;
         public List<VarVM> NumVars;
         public List<List<VarVM>> GeoVars;
+        public List<GraphVM> Graphs;
         public enum Direction { X, Y, Z };
 
         public RadicalVM()
@@ -42,6 +43,9 @@ namespace Radical
                 Constraints = this.Design.Constraints.Select(x => new ConstVM(x)).ToList();
             }
 
+            this.Graphs = new List<GraphVM> { };
+            SetUpGraphs();
+
             this.NumVars = new List<VarVM> { };
             this.GeoVars = new List<List<VarVM>> { };
             SortVariables();
@@ -49,9 +53,31 @@ namespace Radical
             this.OptRunning = false;
             this.OptRunning = false;
             this._advancedOptions = false;
-
+            this._optimizing = false; 
             
         }
+
+        public void SetUpGraphs()
+        {
+            GraphVM main = new GraphVM(Design.ScoreEvolution);
+            this.Graphs.Add(main);
+            for(int i = 0; i < this.Constraints.Count; i++)
+            {
+                GraphVM gvm = new GraphVM(Design.ConstraintEvolution.ElementAt(i));
+                this.Graphs.Add(gvm);
+            }
+        }
+
+        public void UpdateGraphLines(int iteration)
+        {
+            foreach (GraphVM gvm in this.Graphs)
+            {
+                gvm.UpdateLine(iteration);
+            }
+        }
+
+        private bool _optimizing;
+        public bool Optimizing { get { return _optimizing; } }
 
         //SORT VARIABLES
         //Separate geometric and numeric variables
@@ -96,6 +122,7 @@ namespace Radical
         public void OptimizationStarted()
         {
             this.ChangesEnabled = false;
+            this._optimizing = true;
 
             foreach (VarVM var in this.NumVars)
                 var.ChangesEnabled = false;
@@ -111,6 +138,7 @@ namespace Radical
         public void OptimizationFinished()
         {
             this.ChangesEnabled = true;
+            this._optimizing = false; 
 
             foreach (VarVM var in this.NumVars)
                 var.OptimizationFinished();
@@ -255,50 +283,22 @@ namespace Radical
             }
         }
 
-        private int _mouseobjectivevaluedisplay;
-        public int MouseObjectiveValueDisplay
+        //Keeps track of which iteration the user's mouse is currently at so that all graphs can move their
+        //focus to that iteration
+        private int _mouseiteration;
+        public int MouseIteration
         {
             get
-            {
-                return _mouseobjectivevaluedisplay;
-            }
+            { return _mouseiteration; }
             set
             {
-                if(CheckPropertyChanged<int>("MouseObjectiveValueDisplay", ref _mouseobjectivevaluedisplay, ref value))
+                if (CheckPropertyChanged<int>("MouseIteration", ref _mouseiteration, ref value))
                 {
+                     
                 }
             }
-        }
 
-        private double _mouseobjectivevaluedisplayy;
-        public double MouseObjectiveValueDisplayY
-        {
-            get
-            {
-                return _mouseobjectivevaluedisplayy;
-            }
-            set
-            {
-                if (CheckPropertyChanged<double>("MouseObjectiveValueDisplayY", ref _mouseobjectivevaluedisplayy, ref value))
-                {
-                }
-            }
-        }
-
-        private double _chartlinex;
-        public double ChartLineX
-        {
-            get
-            {
-                return _chartlinex;
-            }
-            set
-            {
-                if (CheckPropertyChanged<double>("ChartLineX", ref _chartlinex, ref value))
-                {
-                }
-            }
-        }
+        } 
 
         public IEnumerable<NLoptAlgorithm> BasicAlgs = new[]
         {

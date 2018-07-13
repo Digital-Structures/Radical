@@ -49,9 +49,8 @@ namespace Radical
             AddGraphs();
 
             this.SettingsMenu.Children.Add(new SettingsControl(this.RadicalVM));
-
-            
         }
+
         public enum Direction { X, Y, Z, None };
         public RadicalVM RadicalVM;
         public CancellationTokenSource source;
@@ -59,8 +58,8 @@ namespace Radical
         //public List<LineGraph> lgList;
 
 
-        private List<GraphControl> _graphcontrollist;
-        public List<GraphControl> GraphControlList
+        private List<List<GraphControl>> _graphcontrollist;
+        public List<List<GraphControl>> GraphControlList
         {
             get { return _graphcontrollist; }
             set
@@ -70,15 +69,89 @@ namespace Radical
         }
 
         //ADD GRAPHS
-        //Temporarily only gives a constraint value graph
+        //Creates a graph for the main objective and for all of the constraints
+        //Made a list of lists to easily be able to tell apart the main graph from the constraints and the constraints from 
+            //any other graphs that may be one day implemented
         private void AddGraphs()
         {
-            GraphControlList = new List<GraphControl>();
-            foreach (ConstVM cvm in RadicalVM.Constraints)
+            GraphControlList = new List<List<GraphControl>>();
+
+            GraphControl main = new GraphControl(this.RadicalVM.Graphs.ElementAt(0), this.RadicalVM);
+            List<GraphControl> first_item = new List<GraphControl>() { main };
+            GraphControlList.Add(first_item);
+            //GraphsContainer.Children.Add(main);
+
+            if (RadicalVM.Constraints.Any())
             {
-                GraphControl g = new GraphControl();
-                this.Graphs.Children.Add(g);
-                GraphControlList.Add(g);
+                GraphControlList.Add(new List<GraphControl>());
+            }
+            for (int i = 0; i < RadicalVM.Constraints.Count; i++)
+            {
+                GraphControl g = new GraphControl(this.RadicalVM.Graphs.ElementAt(i+1), this.RadicalVM);
+                GraphControlList.ElementAt(1).Add(g);
+            }
+            SetUpGraphsDisplay();
+        }
+
+        public void SetUpGraphsDisplay()
+        {
+            if (GraphControlList.Count == 1)
+            {
+                GraphsContainer.Children.Add(GraphControlList.ElementAt(0).ElementAt(0));
+            }
+            else
+            {
+                WrapPanel MainBlock = new WrapPanel();
+                MainBlock.Height = 400;
+                
+                MainBlock.Children.Add(GraphControlList.ElementAt(0).ElementAt(0));
+                GraphsContainer.Children.Add(MainBlock);
+                WrapPanel SecondaryBlock = new WrapPanel();
+                SecondaryBlock.Height = 400;
+                foreach (GraphControl g in GraphControlList.ElementAt(1))
+                {
+                    SecondaryBlock.Children.Add(g);
+                }
+                GraphsContainer.Children.Add(SecondaryBlock);
+
+            }
+        }
+
+        //Maybe should be made public idk
+        public void UpdateAllGraphs()
+        {
+            for (int i = 0; i < GraphControlList.Count; i++)
+            {
+                for(int j = 0; j < GraphControlList.ElementAt(i).Count; j++)
+                {
+                    GraphControl g = GraphControlList.ElementAt(i).ElementAt(j);
+                    if (i == 0)
+                    {
+                        g.UpdateWindowGeneral(this.RadicalVM.Design.ScoreEvolution);
+                    }
+                    else
+                    {
+                        g.UpdateWindowGeneral(this.RadicalVM.Design.ConstraintEvolution.ElementAt(j));
+                    }
+                }
+            }
+        }
+
+        public void GraphsShowLine()
+        {
+            foreach (GraphVM gvm in this.RadicalVM.Graphs)
+            {
+                gvm.ChartLineVisibility = Visibility.Visible;
+                gvm.ShowLine = true;
+            }
+        }
+
+        public void GraphsHideLine()
+        {
+            foreach (GraphVM gvm in this.RadicalVM.Graphs)
+            {
+                gvm.ChartLineVisibility = Visibility.Collapsed;
+                gvm.ShowLine = false; 
             }
         }
 
@@ -239,37 +312,24 @@ namespace Radical
             return header;
         }
 
-        private bool optimizing;
-
         //OPTIMIZATION STARTED
         public void OptimizationStarted()
         {
             this.RadicalVM.OptimizationStarted();
-            optimizing = true;
+            GraphsHideLine();
         }
 
         //OPTIMIZATION FINISHED
         public void OptimizationFinished()
         {
             this.RadicalVM.OptimizationFinished();
-            optimizing = false; 
+            GraphsShowLine();
         }
 
         //OPTIMIZE
         void Optimize()
         {
             this.RadicalVM.Design.Optimize(this);
-        }
-
-        //UPDATE WINDOW
-        public void UpdateWindow(IEnumerable<double> y)
-        {
-            var x = Enumerable.Range(0, y.Count()).ToArray();
-
-            Dispatcher.Invoke(() =>
-            {
-                Plotter.Plot(x, y);
-            });
         }
 
         //WINDOW CLOSING
@@ -312,7 +372,7 @@ namespace Radical
                 {
 
                 }
-                UpdateWindow(this.RadicalVM.Design.ScoreEvolution);
+                UpdateAllGraphs();
                 ButtonPause.Visibility = Visibility.Collapsed;
                 ButtonPlay.Visibility = Visibility.Visible;
             }
@@ -325,7 +385,7 @@ namespace Radical
         {
             this.OptimizationFinished(); //Enable variable changes when paused
             source.Cancel();
-            UpdateWindow(this.RadicalVM.Design.ScoreEvolution);
+            UpdateAllGraphs();
             ButtonPause.Visibility = Visibility.Collapsed;
             ButtonPlay.Visibility = Visibility.Visible;
         }
@@ -343,54 +403,6 @@ namespace Radical
         {
             ButtonSettingsOpen.Visibility = Visibility.Visible;
             SettingsClose.Visibility = Visibility.Collapsed;
-        }
-
-        //CHART MOUSE DOWN
-        //Currently returns graph x value of where the mouse clicks down 
-        private void Chart_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (!optimizing)
-            {
-                List<double> scores = this.RadicalVM.Design.ScoreEvolution;
-
-                double mouseX = e.GetPosition(this.Plotter).X + Plotter.OffsetX;
-                double ScaleX = Plotter.ScaleX;
-
-                int actualX = (int)(Math.Truncate(mouseX / ScaleX));
-
-                if (actualX < 0)
-                {
-                    actualX = 0;
-                }
-                else if (actualX >= scores.Count)
-                {
-                    actualX = scores.Count - 1;
-                }
-
-                this.RadicalVM.MouseObjectiveValueDisplay = actualX;
-
-                if (scores.Any())
-                {
-                    double yValue = scores.ElementAt(actualX);
-                    this.RadicalVM.MouseObjectiveValueDisplayY = yValue;
-
-                    //actualX * ScaleX scales the graph value to appropriate mouse position
-                    //+35 is a hardcoded value because the position is off due to the side of the graph
-                    //Plotter.OffsetX takes into account if the graph has been moved 
-                    double newXPosition = actualX * ScaleX + 45 - Plotter.OffsetX;
-                    while (newXPosition - 45 < 0)
-                    {
-                        actualX++;
-                        newXPosition = actualX * ScaleX + 45 - Plotter.OffsetX;
-                    }
-                    this.RadicalVM.ChartLineX = newXPosition;
-                    this.ChartLine.Visibility = Visibility.Visible;
-                }
-            }
-            else
-            {
-                this.ChartLine.Visibility = Visibility.Collapsed;
-            }
         }
 
         private void OpenOptSettings(object sender, RoutedEventArgs e)

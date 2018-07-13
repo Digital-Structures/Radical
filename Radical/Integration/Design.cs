@@ -19,7 +19,7 @@ namespace Radical.Integration
         public Design(List<IVariable> vars, RadicalComponent component)
         {
             this.Variables = vars;
-            this.ScoreEvolution = new List<double>();
+           // this.ScoreEvolution = new List<double>();
             this.OptComponent = component;
         }
 
@@ -27,7 +27,7 @@ namespace Radical.Integration
         {
             this.Variables = vars;
             this.Constraints = consts;
-            this.ScoreEvolution = new List<double>();
+          //  this.ScoreEvolution = new List<double>();
             this.OptComponent = component;
         }
 
@@ -44,6 +44,8 @@ namespace Radical.Integration
             {
                 this.ConstraintEvolution.Add(new List<double>());
             }
+
+
             this.OptComponent = component;
         }
 
@@ -65,6 +67,7 @@ namespace Radical.Integration
         {
             get { return OptComponent.Constraints; }
         }
+
 
         //CURRENT SCORE
         //The value of the objective with the current variable values

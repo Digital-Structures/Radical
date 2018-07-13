@@ -118,20 +118,16 @@ namespace Radical.Integration
             double objective = Design.CurrentScore;
             Design.ScoreEvolution.Add(objective);
             ((Design)Design).OptComponent.Evolution = Design.ScoreEvolution;
-            if (this.RadicalWindow.RadicalVM.Mode != RefreshMode.Silent)
+
+            for (int i = 0; i < Design.ConstraintEvolution.Count; i++)
             {
-                this.RadicalWindow.UpdateWindow(Design.ScoreEvolution);
+                double score = Design.Constraints.ElementAt(i).CurrentValue;
+                Design.ConstraintEvolution.ElementAt(i).Add(score);
             }
 
-            //Adds all recorded constraint values to list and draws
-            for (int i = 0; i < Design.Constraints.Count; i++)
+            if (this.RadicalWindow.RadicalVM.Mode != RefreshMode.Silent)
             {
-                double c_objective = Design.Constraints.ElementAt(i).CurrentValue;
-                Design.ConstraintEvolution.ElementAt(i).Add(c_objective);
-                if (this.RadicalWindow.RadicalVM.Mode != RefreshMode.Silent)
-                {
-                    this.RadicalWindow.GraphControlList.ElementAt(i).UpdateWindowGeneral(Design.ConstraintEvolution.ElementAt(i));
-                }
+                this.RadicalWindow.UpdateAllGraphs();
             }
             try
             {

@@ -22,8 +22,24 @@ namespace Radical
     {
         public GraphControl()
         {
+            this.DataContext = GraphVM;
             InitializeComponent();
         }
+
+        public GraphControl(GraphVM graphVM, RadicalVM radicalVM)
+        {
+            this.RadicalVM = radicalVM;
+            this.GraphVM = graphVM;
+            this.DataContext = graphVM;
+            InitializeComponent();
+
+            this.GraphVM.Plotter = Plotter;
+            this.GraphVM.ChartLine = ChartLine;
+            this.GraphVM.ChartLineVisibility = Visibility.Collapsed;
+        }
+
+        GraphVM GraphVM;
+        RadicalVM RadicalVM;
 
         //UPDATE CONSTRAINTS WINDOW 
         public void UpdateWindowGeneral(IEnumerable<double> y)
@@ -34,6 +50,34 @@ namespace Radical
             {
                 Plotter.Plot(x, y);
             });
+        }
+
+        //CHART MOUSE DOWN
+        //Currently returns graph x value of where the mouse clicks down 
+        private void Chart_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (this.GraphVM.GraphScores.Any())
+            {
+                double mouseX = e.GetPosition(this.Plotter).X + Plotter.OffsetX;
+                double ScaleX = Plotter.ScaleX;
+
+                int actualX = (int)(Math.Truncate(mouseX / ScaleX));
+                if (actualX < 0)
+                {
+                    actualX = 0;
+                }
+                else if (actualX >= this.GraphVM.GraphScores.Count)
+                {
+                    actualX = this.GraphVM.GraphScores.Count - 1;
+                }
+
+                this.GraphVM.UpdateLine(actualX);
+                this.RadicalVM.UpdateGraphLines(actualX);
+            }
+            else
+            {
+                this.GraphVM.ChartLineVisibility = Visibility.Collapsed;
+            }
         }
     }
 }

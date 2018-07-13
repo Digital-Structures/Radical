@@ -36,11 +36,11 @@
                     <ComboBoxItem Content="Greater Than" HorizontalAlignment="Right"></ComboBoxItem>
                     <ComboBoxItem Content="Equal To" HorizontalAlignment="Right"></ComboBoxItem>
                 </ComboBox>
-            
+
                 <TextBox Name="ConstraintLimit" Text="{Binding ConstraintLimit, Mode=TwoWay, StringFormat=N2}"
                          Grid.Column="4" MinWidth="28" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="12" Margin="10,0" BorderBrush="{x:Null}" HorizontalContentAlignment="Left"
-                         TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"
-                         ></TextBox>
+                         TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus">
+                </TextBox>
             </Grid>
 
         </Grid>

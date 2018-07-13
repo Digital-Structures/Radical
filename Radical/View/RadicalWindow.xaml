@@ -202,34 +202,15 @@
             <Border x:Name="TreeBorder" Grid.Row="1" BorderBrush="Black" BorderThickness="0,0,0.1,0" Background="{x:Null}" Visibility="Collapsed"/>
         </Grid>
 
-        <Grid HorizontalAlignment="Center" Grid.Column="1" Margin="25,40">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="25"></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition Height="22"></RowDefinition>
-            </Grid.RowDefinitions>
-            <TextBlock VerticalAlignment="Center" 
-                HorizontalAlignment="Left" Text="Objective" FontSize="14" Foreground="Black" FontFamily="Roboto" TextAlignment="Right" Grid.Row="0">
-            </TextBlock>
-            <d3:Chart Name ="Chart"  BorderThickness="1,0,0,1" Background="{x:Null}" Grid.Row="1" PreviewMouseMove="Chart_MouseMove" Margin="10,0,0,0">
-                <d3:LineGraph Name="Plotter" Description="Optimization History" Stroke="LimeGreen" StrokeThickness="1.5" Padding="0,10,10,0" ToolTip="{Binding DisplayGraphValue, Mode=OneWayToSource}"></d3:LineGraph>
-            </d3:Chart>
-            <Line Name ="ChartLine" Grid.Row="1" Stroke="Green" StrokeThickness="1.5" 
-                  Visibility="Collapsed"
-                  X1="{Binding ChartLineX, Mode=TwoWay}" X2="{Binding ChartLineX, Mode=TwoWay}" Y1="1" Y2="{Binding ElementName=Plotter, Path=ActualHeight}"></Line>
-            <TextBlock VerticalAlignment="Top" FontSize="14" Foreground="Black" FontFamily="Roboto" TextAlignment="Right" Grid.Row="2">
-                Iterations
-            </TextBlock>
-            <!--Temporary!!-->
-                <TextBlock TextAlignment="Left" Foreground="Purple" Grid.Row="2" Text="{Binding MouseObjectiveValueDisplay, Mode=TwoWay}">
+        <!--I eventually want to make this main container a stack panel, honestly I don't really know why but I do
+        but for the sake of setting things up initially it will be a wrappanel -->
+        <ScrollViewer Grid.Column="1" Width="Auto">
+            <StackPanel Name="GraphsContainer">
                 
-                </TextBlock>
-                <TextBlock TextAlignment="Center" Foreground="Purple" Grid.Row="2" Text="{Binding MouseObjectiveValueDisplayY, Mode=TwoWay}">
-
-                </TextBlock>
-
-        </Grid>
-
+            </StackPanel>
+        </ScrollViewer>
+        
+        
         <Grid Grid.Column="2"  HorizontalAlignment="Right" Margin="0,0,0,-0.2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"></RowDefinition>
