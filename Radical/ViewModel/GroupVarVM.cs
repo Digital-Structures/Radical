@@ -16,6 +16,7 @@ namespace Radical
     {
         public enum Direction { X, Y, Z, None };
 
+        //CONSTRUCTOR
         public GroupVarVM(RadicalVM radvm, int dir, int geoIndex=0)
         {
             this._dir = (Direction)dir;
@@ -184,6 +185,24 @@ namespace Radical
                         var.Max *= value;
                 }
             }
+        }
+
+        //OPTIMIZATION STARTED
+        public void OptimizationStarted()
+        {
+            this.ChangesEnabled = false;
+
+            foreach (VarVM var in this.MyVars)
+                var.ChangesEnabled = false;
+        }
+
+        //OPTIMIZATION FINISHED
+        public void OptimizationFinished()
+        {
+            this.ChangesEnabled = true;
+
+            foreach (VarVM var in this.MyVars)
+                var.OptimizationFinished();
         }
     }
 }

@@ -42,6 +42,8 @@ namespace Radical
             this.DataContext = this.RadicalVM;
 
             InitializeComponent();
+            this.GroupVars = new List<GroupVariableControl> { };
+
             AddConstraints();
             AddNumbers();
             AddGeometries();
@@ -50,7 +52,7 @@ namespace Radical
 
             this.SettingsMenu.Children.Add(new SettingsControl(this.RadicalVM));
         }
-
+        private List<GroupVariableControl> GroupVars;
         public enum Direction { X, Y, Z, None };
         public RadicalVM RadicalVM;
         public CancellationTokenSource source;
@@ -199,7 +201,7 @@ namespace Radical
             groupControls.Children.Add(new VariableHeaderControl());
 
             //Add group controls for X, Y, and Z directions
-            GroupVariableControl groupControl = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.None)));
+            GroupVariableControl groupControl = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.None))); this.GroupVars.Add(groupControl);
             groupControl.GroupControlName.Text = "All Variables";
             groupControls.Children.Add(groupControl);
 
@@ -236,14 +238,13 @@ namespace Radical
 
             foreach (List<VarVM> geometry in RadicalVM.GeoVars)
             {
-                geoIndex++;
 
                 //SINGLE GEOMETRY
                 //Stack Panel
                 StackPanel variableMenus = new StackPanel();
                 //Expander
                 Expander singleGeo = new Expander();
-                singleGeo.Header = Header1Formatting(String.Format("Geometry {0}", geoIndex));
+                singleGeo.Header = Header1Formatting(geometry[geoIndex].Name.Split('.')[0]); geoIndex++;
                 singleGeo.Content = variableMenus;
                 this.Geometries.Children.Add(singleGeo);
                 //singleGeoVars.Children.Add(new VariableHeaderControl());
@@ -262,9 +263,9 @@ namespace Radical
                 groupControls.Children.Add(new VariableHeaderControl());
 
                 //Add group controls for X, Y, and Z directions
-                GroupVariableControl groupControlX = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.X), geoIndex-1));
-                GroupVariableControl groupControlY = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.Y), geoIndex-1));
-                GroupVariableControl groupControlZ = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.Z), geoIndex-1));
+                GroupVariableControl groupControlX = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.X), geoIndex-1)); this.GroupVars.Add(groupControlX);
+                GroupVariableControl groupControlY = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.Y), geoIndex-1)); this.GroupVars.Add(groupControlY);
+                GroupVariableControl groupControlZ = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.Z), geoIndex-1)); this.GroupVars.Add(groupControlZ);
                 groupControlX.GroupControlName.Text = "X Variables";
                 groupControlY.GroupControlName.Text = "Y Variables";
                 groupControlZ.GroupControlName.Text = "Z Variables";
@@ -315,6 +316,8 @@ namespace Radical
         //OPTIMIZATION STARTED
         public void OptimizationStarted()
         {
+            foreach (GroupVariableControl group in this.GroupVars)
+                group.OptimizationStarted();
             this.RadicalVM.OptimizationStarted();
             GraphsHideLine();
         }
@@ -322,6 +325,8 @@ namespace Radical
         //OPTIMIZATION FINISHED
         public void OptimizationFinished()
         {
+            foreach (GroupVariableControl group in this.GroupVars)
+                group.OptimizationFinished();
             this.RadicalVM.OptimizationFinished();
             GraphsShowLine();
         }

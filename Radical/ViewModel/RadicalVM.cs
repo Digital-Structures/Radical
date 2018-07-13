@@ -15,14 +15,6 @@ namespace Radical
 {
     public class RadicalVM : BaseVM
     {
-        private RadicalComponent Component;
-        public IDesign Design;
-        public List<ConstVM> Constraints;
-        public List<VarVM> NumVars;
-        public List<List<VarVM>> GeoVars;
-        public List<GraphVM> Graphs;
-        public enum Direction { X, Y, Z };
-
         public RadicalVM()
         {
         }
@@ -48,14 +40,22 @@ namespace Radical
 
             this.NumVars = new List<VarVM> { };
             this.GeoVars = new List<List<VarVM>> { };
+            this.GroupVars = new List<GroupVarVM> { };
             SortVariables();
 
             this.OptRunning = false;
             this.OptRunning = false;
             this._advancedOptions = false;
-            this._optimizing = false; 
             
         }
+        private List<GroupVarVM> GroupVars;
+        private RadicalComponent Component;
+        public IDesign Design;
+        public List<ConstVM> Constraints;
+        public List<VarVM> NumVars;
+        public List<List<VarVM>> GeoVars;
+        public List<GraphVM> Graphs;
+        public enum Direction { X, Y, Z };
 
         public void SetUpGraphs()
         {
@@ -75,9 +75,6 @@ namespace Radical
                 gvm.UpdateLine(iteration);
             }
         }
-
-        private bool _optimizing;
-        public bool Optimizing { get { return _optimizing; } }
 
         //SORT VARIABLES
         //Separate geometric and numeric variables
@@ -99,7 +96,7 @@ namespace Radical
 
                     //Logical default naming of variable
                     //e.g. G1.u1v1.X
-                    geoVar.Name = String.Format("G{0}.", geoIndex) + ((GeoVariable)geoVar.DesignVar).PointName;
+                    geoVar.Name += ((GeoVariable)geoVar.DesignVar).PointName;
 
                     singleGeoVars.Add(geoVar);
                     varIndex++;
@@ -122,13 +119,7 @@ namespace Radical
         public void OptimizationStarted()
         {
             this.ChangesEnabled = false;
-            this._optimizing = true;
 
-            foreach (VarVM var in this.NumVars)
-                var.ChangesEnabled = false;
-            for (int i = 0; i < this.GeoVars.Count; i++)
-                foreach (VarVM var in this.GeoVars[i])
-                    var.ChangesEnabled = false;
             foreach (ConstVM constraint in this.Constraints)
                 constraint.ChangesEnabled = false;
         }
@@ -138,13 +129,7 @@ namespace Radical
         public void OptimizationFinished()
         {
             this.ChangesEnabled = true;
-            this._optimizing = false; 
 
-            foreach (VarVM var in this.NumVars)
-                var.OptimizationFinished();
-            for (int i = 0; i < this.GeoVars.Count; i++)
-                foreach (VarVM var in this.GeoVars[i])
-                    var.OptimizationFinished();
             foreach (ConstVM constraint in this.Constraints)
                 constraint.OptimizationFinished();
         }

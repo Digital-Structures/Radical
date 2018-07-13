@@ -47,5 +47,17 @@ namespace Radical
             foreach (VarVM var in ((GroupVarVM)this.MyVM).MyVars)
                 var.IsActive = false;
         }
+
+        //OPTIMIZATION STARTED
+        public void OptimizationStarted()
+        {
+            ((GroupVarVM)this.MyVM).OptimizationStarted();
+        }
+
+        //OPTIMIZATION STARTED
+        public void OptimizationFinished()
+        {
+            ((GroupVarVM)this.MyVM).OptimizationFinished();
+        }
     }
 }

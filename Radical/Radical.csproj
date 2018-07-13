@@ -123,7 +123,7 @@
     <Compile Include="TestComponents\IncrementComponent.cs" />
     <Compile Include="TestComponents\RadicalComponent.cs" />
     <Compile Include="ViewModel\BaseVM.cs" />
-    <Compile Include="ViewModel\GlobalVarVM.cs" />
+    <Compile Include="ViewModel\GroupVarVM.cs" />
     <Compile Include="ViewModel\GraphVM.cs" />
     <Compile Include="ViewModel\IViewModel.cs" />
     <Compile Include="ViewModel\ConstVM.cs" />

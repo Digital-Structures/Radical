@@ -36,7 +36,7 @@
 
                 <CheckBox Name ="Checkbox" IsChecked="True"
                           Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0" 
-                          Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"
+                          IsEnabled="{Binding ChangesEnabled}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"
                           ></CheckBox>
 
                 <TextBox Name="MinText" Text="{Binding Min, Mode=TwoWay, StringFormat=N2}" FontSize="12"
