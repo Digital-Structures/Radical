@@ -26,18 +26,19 @@ namespace Radical
             InitializeComponent();
         }
 
-        public GraphControl(GraphVM graphVM, RadicalVM radicalVM)
+        public GraphControl(GraphVM graphVM, RadicalVM radicalVM, RadicalWindow window)
         {
             this.RadicalVM = radicalVM;
             this.GraphVM = graphVM;
             this.DataContext = graphVM;
+            this.MyWindow = window;
             InitializeComponent();
 
             this.GraphVM.Plotter = Plotter;
             this.GraphVM.ChartLine = ChartLine;
             this.GraphVM.ChartLineVisibility = Visibility.Collapsed;
         }
-
+        RadicalWindow MyWindow;
         GraphVM GraphVM;
         RadicalVM RadicalVM;
 
@@ -78,6 +79,18 @@ namespace Radical
             {
                 this.GraphVM.ChartLineVisibility = Visibility.Collapsed;
             }
+        }
+
+        //PREVIEW MOUSE WHEEL
+        //Disable scrolling to pan and zoom the chart window
+        //This enables the mouse wheel for actually scrolling through the scroll viewer
+        private void Graph_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            e.Handled = true;
+
+            var e2 = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta);
+            e2.RoutedEvent = UIElement.MouseWheelEvent;
+            MyWindow.GraphsScroller.RaiseEvent(e2);
         }
     }
 }

@@ -29,6 +29,12 @@ namespace Radical.Integration
         public ConstraintType ConstraintType { get; set; }
         public int ConstraintIndex { get; set; }
         public double Gradient { get; set; }
-        public bool IsActive;
+
+        //IS ACTIVE
+        //Determines whether variable should be considered in optimization
+        public bool IsActive
+        {
+            get; set;
+        }
     }
 }

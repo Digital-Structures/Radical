@@ -31,5 +31,17 @@ namespace Radical
         {
             InitializeComponent();
         }
+
+        //CHECK BOX CHECKED
+        protected void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            ((ConstVM)this.MyVM).GraphVM.GraphVisibility = Visibility.Visible;
+        }
+
+        //CHECK BOX UNCHECKED
+        protected void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ((ConstVM)this.MyVM).GraphVM.GraphVisibility = Visibility.Collapsed;
+        }
     }
 }

@@ -3,42 +3,65 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:Radical"
+             xmlns:Converters="clr-namespace:MaterialDesignThemes.Wpf.Converters;assembly=MaterialDesignThemes.Wpf" 
              xmlns:d3="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <Grid HorizontalAlignment="Center" Margin="25,40">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="25"></RowDefinition>
-            <RowDefinition Height="400"></RowDefinition>
-            <RowDefinition Height="22"></RowDefinition>
-        </Grid.RowDefinitions>
-        <TextBlock VerticalAlignment="Center" 
-                HorizontalAlignment="Left" Text="Objective" FontSize="14" Foreground="Black" FontFamily="Roboto" TextAlignment="Right" Grid.Row="0">
-        </TextBlock>
-        <d3:Chart Name ="Chart"  BorderThickness="1,0,0,1" PreviewMouseMove="Chart_MouseMove" Background="{x:Null}" Grid.Row="1" Margin="10,0,0,0" Width="Auto">
-            <d3:LineGraph Name="Plotter" Stroke="LimeGreen" StrokeThickness="1.5" Padding="0,10,10,0" 
+    <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="{DynamicResource MaterialDesignPaper}" Margin="5" Visibility="{Binding GraphVisibility}">
+        <Grid HorizontalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="300"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            
+            <Grid Grid.Row="0" Margin="25,15,25,0">
+                <TextBlock Text="Value" FontSize="14" Foreground="Black"
+                           VerticalAlignment="Bottom" HorizontalAlignment="Left" TextAlignment="Right">
+                </TextBlock>
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="25,0">
+                <d3:Chart Name ="Chart"  BorderThickness="1,0,0,1" PreviewMouseMove="Chart_MouseMove" Background="{x:Null}" Margin="10,0,0,0" Width="Auto" PreviewMouseWheel="Graph_PreviewMouseWheel">
+                    <d3:LineGraph Name="Plotter" Stroke="LimeGreen" StrokeThickness="1.5" Padding="0,10,10,0" 
                           ToolTip="{Binding DisplayGraphValue, Mode=OneWayToSource}">
-                
-            </d3:LineGraph>
-        </d3:Chart>
-        <!-- Should the mode be two way or one way -->
-        <Line Name ="ChartLine" Grid.Row="1" Stroke="Green" StrokeThickness="1.5" 
+                    </d3:LineGraph>
+                </d3:Chart>
+                <!-- Should the mode be two way or one way -->
+                <Line Name ="ChartLine" Stroke="Green" StrokeThickness="1.5" 
                   Visibility="{Binding ChartLineVisibility, Mode = TwoWay}"
                   X1="{Binding ChartLineX, Mode=TwoWay}" X2="{Binding ChartLineX, Mode=TwoWay}" Y1="1" Y2="{Binding ElementName=Plotter, Path=ActualHeight}"></Line>
-        <TextBlock VerticalAlignment="Top" FontSize="14" Foreground="Black" FontFamily="Roboto" TextAlignment="Right" Grid.Row="2">
-                Iterations
-        </TextBlock>
-        <!--Temporary!!-->
-        <TextBlock FontSize="14" TextAlignment="Left" Foreground="Purple" Grid.Row="2" Text="{Binding MouseObjectiveValueDisplay, Mode=TwoWay}">
-        </TextBlock>
-        <TextBlock FontSize="14" TextAlignment="Center" Foreground="Purple" Grid.Row="2" Text="{Binding MouseObjectiveValueDisplayY, Mode=TwoWay}">
-        </TextBlock>
+            </Grid>
 
-    </Grid>
+            <Grid  Grid.Row="2" Margin="25,0,25,10">
+                <TextBlock VerticalAlignment="Top" FontSize="14" Foreground="Black" TextAlignment="Right">
+                Iterations
+                </TextBlock>
+            </Grid>
+
+            <Grid Grid.Row="3" Background="{DynamicResource PrimaryHueMidBrush}">
+                <StackPanel>
+                    <TextBlock Text="{Binding LineGraphName}" FontSize="28" Foreground="White"
+                           TextAlignment="Left" Margin="15,15,0,10">
+                    </TextBlock>
+                    <TextBlock Text="{Binding DisplayX}" FontSize="16" Foreground="White" Visibility="{Binding ChartLineVisibility}"
+                           TextAlignment="Left" Margin="40,0,0,10">
+                    </TextBlock>
+                    <TextBlock Text="{Binding DisplayY}" FontSize="16" Foreground="White" Visibility="{Binding ChartLineVisibility}"
+                           TextAlignment="Left" Margin="40,0,0,10">
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+            <!--Temporary!!-->
+
+        </Grid>
+    </materialDesign:Card>
 
 </UserControl>

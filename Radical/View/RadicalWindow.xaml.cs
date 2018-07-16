@@ -40,70 +40,90 @@ namespace Radical
         {
             this.RadicalVM = radicalVM;
             this.DataContext = this.RadicalVM;
-
             InitializeComponent();
-            this.GroupVars = new List<GroupVariableControl> { };
 
-            //Set up graph dictionary
-            this._graphcontrols = new Dictionary<string, List<GraphControl>>();
-            this._graphcontrols.Add("Main", new List<GraphControl>());
-            this._graphcontrols.Add("Constraints", new List<GraphControl>());
+            this.GroupVars = new List<GroupVariableControl>();
+
+            //GRAPH CONTROLS
+            //Dictionary containing lists of GraphControls to be displayed, with string keys specifying graph data types.
+            this.GraphControls = new Dictionary<string, List<GraphControl>>();
+            this.GraphControls.Add("Main", new List<GraphControl>());
+            this.GraphControls.Add("Constraints", new List<GraphControl>());
 
             AddConstraints();
             AddNumbers();
             AddGeometries();
-
             AddGraphs();
 
             this.SettingsMenu.Children.Add(new SettingsControl(this.RadicalVM));
         }
+        private Dictionary<string, List<GraphControl>> GraphControls;
         private List<GroupVariableControl> GroupVars;
         public enum Direction { X, Y, Z, None };
         public RadicalVM RadicalVM;
         public CancellationTokenSource source;
-
-        //public List<LineGraph> lgList;
-
-        //GRAPH CONTROLS
-        //Dictionary containing lists of GraphControls to be displayed, with string keys specifying graph data types.
-        private Dictionary<string, List<GraphControl>> _graphcontrols;
-        public Dictionary<string, List<GraphControl>> GraphControls
-        {
-            get { return _graphcontrols; }
-            set
-            {
-                _graphcontrols = value;
-            }
-        }
-
+        
         //ADD GRAPHS
         //Creates a graph for the main objective and for all of the constraints
         private void AddGraphs()
         {
-            GraphControls["Main"].Add(new GraphControl(this.RadicalVM.Graphs[0], this.RadicalVM));
+            GraphControls["Main"].Add(new GraphControl(this.RadicalVM.Graphs["Main"][0], this.RadicalVM, this));
 
-            for (int i = 1; i < RadicalVM.Graphs.Count; i++)
+            foreach (GraphVM gvm in this.RadicalVM.Graphs["Constraints"])
             {
-                GraphControl g = new GraphControl(this.RadicalVM.Graphs[i], this.RadicalVM);
+                GraphControl g = new GraphControl(gvm, this.RadicalVM, this);
                 GraphControls["Constraints"].Add(g);
             }
             SetUpGraphsDisplay();
         }
 
-        public void SetUpGraphsDisplay()
+        //SET UP GRAPHS DISPLAY
+        //Display objective graph on its own row and all others in a wrap panel
+        private void SetUpGraphsDisplay()
         {
-            WrapPanel MainBlock = new WrapPanel();
-                
+            //Number of constraint graphs per row to be displayed
+            int graphsPerRow = 2;
+
+            //Main objective window gets its own row
+            StackPanel MainBlock = new StackPanel();           
             MainBlock.Children.Add(GraphControls["Main"][0]);
-            GraphsContainer.Children.Add(MainBlock);
-            if(this.GraphControls["Constraints"].Any())
+            GraphsContainer.Children.Add(MainBlock);       
+
+            //Constraint graphs displayed smaller than objective, in a grid layout
+            if (this.GraphControls["Constraints"].Any())
             {
-                WrapPanel SecondaryBlock = new WrapPanel();
-                foreach (GraphControl g in GraphControls["Constraints"])
+                Grid graphRow = MakeGraphRow();
+                GraphsContainer.Children.Add(graphRow);
+
+                for (int i=0; i<this.GraphControls["Constraints"].Count; i++)
                 {
-                    SecondaryBlock.Children.Add(g);
+                    ColumnDefinition col = new ColumnDefinition();
+                    graphRow.ColumnDefinitions.Add(col);
+
+                    GraphControl graph = this.GraphControls["Constraints"][i];
+
+                    Grid.SetRow(graph, 0);
+                    Grid.SetColumn(graph, i % graphsPerRow);
+                    graphRow.Children.Add(graph);
+
+                    //Go on to the next line of graphs
+                    if ((i+1) % graphsPerRow == 0)
+                    {
+                        graphRow = MakeGraphRow();
+                        GraphsContainer.Children.Add(graphRow);
+                    }
                 }
-                GraphsContainer.Children.Add(SecondaryBlock);
+            }
+
+            //Helper Method for creating rows of graphs
+            Grid MakeGraphRow()
+            {
+                Grid graphRow = new Grid();
+                RowDefinition row = new RowDefinition();
+                row.Height = GridLength.Auto;
+                graphRow.RowDefinitions.Add(row);
+
+                return graphRow;
             }
         }
 
@@ -129,19 +149,25 @@ namespace Radical
 
         public void GraphsShowLine()
         {
-            foreach (GraphVM gvm in this.RadicalVM.Graphs)
+            foreach (KeyValuePair<string, List<GraphVM>> pair in this.RadicalVM.Graphs)
             {
-                gvm.ChartLineVisibility = Visibility.Visible;
-                gvm.ShowLine = true;
+                foreach (GraphVM graph in pair.Value)
+                {
+                    graph.ChartLineVisibility = Visibility.Visible;
+                    graph.ShowLine = true;
+                }
             }
         }
 
         public void GraphsHideLine()
         {
-            foreach (GraphVM gvm in this.RadicalVM.Graphs)
+            foreach (KeyValuePair<string, List<GraphVM>> pair in this.RadicalVM.Graphs)
             {
-                gvm.ChartLineVisibility = Visibility.Collapsed;
-                gvm.ShowLine = false; 
+                foreach (GraphVM graph in pair.Value)
+                {
+                    graph.ChartLineVisibility = Visibility.Collapsed;
+                    graph.ShowLine = false;
+                }
             }
         }
 
@@ -304,18 +330,18 @@ namespace Radical
         //OPTIMIZATION STARTED
         public void OptimizationStarted()
         {
-            foreach (GroupVariableControl group in this.GroupVars)
-                group.OptimizationStarted();
             this.RadicalVM.OptimizationStarted();
+            foreach (GroupVariableControl group in this.GroupVars)
+                group.OptimizationStarted();         
             GraphsHideLine();
         }
 
         //OPTIMIZATION FINISHED
         public void OptimizationFinished()
         {
-            foreach (GroupVariableControl group in this.GroupVars)
-                group.OptimizationFinished();
             this.RadicalVM.OptimizationFinished();
+            foreach (GroupVariableControl group in this.GroupVars)
+                group.OptimizationFinished();         
             GraphsShowLine();
         }
 

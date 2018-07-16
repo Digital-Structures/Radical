@@ -30,12 +30,11 @@ namespace Radical
             this.Component = component;
             this.Design = design;
 
-            if (Design.Constraints != null)
-            {
-                Constraints = this.Design.Constraints.Select(x => new ConstVM(x)).ToList();
-            }
+            this.Constraints = new List<ConstVM>();
 
-            this.Graphs = new List<GraphVM> { };
+            this.Graphs = new Dictionary<string,List<GraphVM>>();
+            this.Graphs.Add("Main", new List<GraphVM>());
+            this.Graphs.Add("Constraints", new List<GraphVM>());
             SetUpGraphs();
 
             this.NumVars = new List<VarVM> { };
@@ -54,25 +53,28 @@ namespace Radical
         public List<ConstVM> Constraints;
         public List<VarVM> NumVars;
         public List<List<VarVM>> GeoVars;
-        public List<GraphVM> Graphs;
+        public Dictionary<string, List<GraphVM>> Graphs;
         public enum Direction { X, Y, Z };
 
         public void SetUpGraphs()
         {
-            GraphVM main = new GraphVM(Design.ScoreEvolution);
-            this.Graphs.Add(main);
-            for(int i = 0; i < this.Constraints.Count; i++)
+            GraphVM main = new GraphVM(Design.ScoreEvolution, "Objective");
+            this.Graphs["Main"].Add(main);
+
+            for(int i = 0; i < Design.Constraints.Count; i++)
             {
-                GraphVM gvm = new GraphVM(Design.ConstraintEvolution.ElementAt(i));
-                this.Graphs.Add(gvm);
+                GraphVM gvm = new GraphVM(Design.ConstraintEvolution[i], String.Format("C{0}",i));
+                this.Graphs["Constraints"].Add(gvm);
+                this.Constraints.Add(new ConstVM(Design.Constraints[i], gvm));
             }
         }
 
         public void UpdateGraphLines(int iteration)
         {
-            foreach (GraphVM gvm in this.Graphs)
+            foreach (KeyValuePair<string, List<GraphVM>> pair in this.Graphs)
             {
-                gvm.UpdateLine(iteration);
+                foreach (GraphVM graph in pair.Value)
+                    graph.UpdateLine(iteration);
             }
         }
 

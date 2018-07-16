@@ -22,13 +22,14 @@ namespace Radical
 {
     public class GraphVM : BaseVM
     {
-        public GraphVM(List<double> scores)
+        public GraphVM(List<double> scores, string name)
         {
             _graphscores = scores; 
-            _linegraph_name = "temp";
+            _linegraph_name = name;
             _chartlinex = 0;
-            _mouseobjectivevaluedisplay = 1;
-            _mouseobjectivevaluedisplayy = 0;
+            _x = "0";
+            _y = "0";
+            _graphVisibility = Visibility.Visible;
         }
 
         private List<double> _graphscores;
@@ -83,19 +84,23 @@ namespace Radical
             }
         }
 
-        private double _mouseobjectivevaluedisplay;
-        public double MouseObjectiveValueDisplay
+        private string _x;
+        public string DisplayX
         {
-            get
-            {
-                return _mouseobjectivevaluedisplay;
-            }
+            get { return String.Format("Iteration: {0}", _x); }
             set
             {
-                if (CheckPropertyChanged<double>("MouseObjectiveValueDisplay", ref _mouseobjectivevaluedisplay, ref value))
-                {
-                    //CalculateActualXPosition();
-                }
+                CheckPropertyChanged<string>("DisplayX", ref _x, ref value);
+            }
+        }
+
+        private string _y;
+        public string DisplayY
+        {
+            get { return String.Format("Value: {0}", _y); }
+            set
+            {
+                CheckPropertyChanged<string>("DisplayY", ref _y, ref value);
             }
         }
 
@@ -116,21 +121,6 @@ namespace Radical
             set { _chartline = value; }
         }
 
-        //public double 
-
-        private double _mouseobjectivevaluedisplayy;
-        public double MouseObjectiveValueDisplayY
-        {
-            get
-            { return _mouseobjectivevaluedisplayy; }
-            set
-            {
-                if (CheckPropertyChanged<double>("MouseObjectiveValueDisplayY", ref _mouseobjectivevaluedisplayy, ref value))
-                {
-                }
-            }
-        }
-
         private bool _showline;
         public bool ShowLine
         {
@@ -140,13 +130,13 @@ namespace Radical
 
         public void UpdateLine(int iteration)
         {
-            this.MouseObjectiveValueDisplay = iteration;
+            this.DisplayX = iteration.ToString();
 
             if (GraphScores.Any() && ShowLine)
             {
                 ChartLineVisibility = Visibility.Visible;
                 double yValue = GraphScores.ElementAt(iteration);
-                this.MouseObjectiveValueDisplayY = yValue;
+                this.DisplayY = String.Format("{0:0.00}",yValue);
 
                 double ScaleX = Plotter.ScaleX;
 
@@ -164,6 +154,21 @@ namespace Radical
                     ChartLineVisibility = Visibility.Collapsed;
                 }
                 this.ChartLineX = newXPosition;
+            }
+        }
+
+        //GRAPH VISIBILITY
+        //Disables graph visibility during
+        private Visibility _graphVisibility;
+        public Visibility GraphVisibility
+        {
+            get
+            {
+                return _graphVisibility;
+            }
+            set
+            {
+                CheckPropertyChanged<Visibility>("GraphVisibility", ref _graphVisibility, ref value);
             }
         }
 

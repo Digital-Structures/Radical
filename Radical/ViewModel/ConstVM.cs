@@ -15,7 +15,7 @@ namespace Radical
         {
         }
 
-        public ConstVM(Constraint constraint)
+        public ConstVM(Constraint constraint, GraphVM graph_vm)
         {
             this.Constraint = constraint;
             this._name = "C." + (Constraint.ConstraintIndex + 1).ToString();
@@ -23,10 +23,10 @@ namespace Radical
             this._constrainttype = (int)constraint.ConstraintType;
             this._currentvalue = Constraint.CurrentValue;
             this._isactive = constraint.IsActive;
-
+            this.GraphVM = graph_vm;
             this.OptRunning = false;
         }
-
+        public GraphVM GraphVM;
         public Constraint Constraint;
 
         private double _currentvalue;
