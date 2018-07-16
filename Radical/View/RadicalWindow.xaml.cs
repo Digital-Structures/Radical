@@ -44,6 +44,11 @@ namespace Radical
             InitializeComponent();
             this.GroupVars = new List<GroupVariableControl> { };
 
+            //Set up graph dictionary
+            this._graphcontrols = new Dictionary<string, List<GraphControl>>();
+            this._graphcontrols.Add("Main", new List<GraphControl>());
+            this._graphcontrols.Add("Constraints", new List<GraphControl>());
+
             AddConstraints();
             AddNumbers();
             AddGeometries();
@@ -59,81 +64,64 @@ namespace Radical
 
         //public List<LineGraph> lgList;
 
-
-        private List<List<GraphControl>> _graphcontrollist;
-        public List<List<GraphControl>> GraphControlList
+        //GRAPH CONTROLS
+        //Dictionary containing lists of GraphControls to be displayed, with string keys specifying graph data types.
+        private Dictionary<string, List<GraphControl>> _graphcontrols;
+        public Dictionary<string, List<GraphControl>> GraphControls
         {
-            get { return _graphcontrollist; }
+            get { return _graphcontrols; }
             set
             {
-                _graphcontrollist = value;
+                _graphcontrols = value;
             }
         }
 
         //ADD GRAPHS
         //Creates a graph for the main objective and for all of the constraints
-        //Made a list of lists to easily be able to tell apart the main graph from the constraints and the constraints from 
-            //any other graphs that may be one day implemented
         private void AddGraphs()
         {
-            GraphControlList = new List<List<GraphControl>>();
+            GraphControls["Main"].Add(new GraphControl(this.RadicalVM.Graphs[0], this.RadicalVM));
 
-            GraphControl main = new GraphControl(this.RadicalVM.Graphs.ElementAt(0), this.RadicalVM);
-            List<GraphControl> first_item = new List<GraphControl>() { main };
-            GraphControlList.Add(first_item);
-            //GraphsContainer.Children.Add(main);
-
-            if (RadicalVM.Constraints.Any())
+            for (int i = 1; i < RadicalVM.Graphs.Count; i++)
             {
-                GraphControlList.Add(new List<GraphControl>());
-            }
-            for (int i = 0; i < RadicalVM.Constraints.Count; i++)
-            {
-                GraphControl g = new GraphControl(this.RadicalVM.Graphs.ElementAt(i+1), this.RadicalVM);
-                GraphControlList.ElementAt(1).Add(g);
+                GraphControl g = new GraphControl(this.RadicalVM.Graphs[i], this.RadicalVM);
+                GraphControls["Constraints"].Add(g);
             }
             SetUpGraphsDisplay();
         }
 
         public void SetUpGraphsDisplay()
         {
-            if (GraphControlList.Count == 1)
-            {
-                GraphsContainer.Children.Add(GraphControlList.ElementAt(0).ElementAt(0));
-            }
-            else
-            {
-                WrapPanel MainBlock = new WrapPanel();
-                MainBlock.Height = 400;
+            WrapPanel MainBlock = new WrapPanel();
                 
-                MainBlock.Children.Add(GraphControlList.ElementAt(0).ElementAt(0));
-                GraphsContainer.Children.Add(MainBlock);
+            MainBlock.Children.Add(GraphControls["Main"][0]);
+            GraphsContainer.Children.Add(MainBlock);
+            if(this.GraphControls["Constraints"].Any())
+            {
                 WrapPanel SecondaryBlock = new WrapPanel();
-                SecondaryBlock.Height = 400;
-                foreach (GraphControl g in GraphControlList.ElementAt(1))
+                foreach (GraphControl g in GraphControls["Constraints"])
                 {
                     SecondaryBlock.Children.Add(g);
                 }
                 GraphsContainer.Children.Add(SecondaryBlock);
-
             }
         }
 
         //Maybe should be made public idk
         public void UpdateAllGraphs()
         {
-            for (int i = 0; i < GraphControlList.Count; i++)
+            foreach (KeyValuePair<string, List<GraphControl>> pair in this.GraphControls)
             {
-                for(int j = 0; j < GraphControlList.ElementAt(i).Count; j++)
+                for (int i=0; i<pair.Value.Count; i++)
                 {
-                    GraphControl g = GraphControlList.ElementAt(i).ElementAt(j);
-                    if (i == 0)
+                    GraphControl g = pair.Value[i];
+                    if (pair.Key=="Main")
                     {
                         g.UpdateWindowGeneral(this.RadicalVM.Design.ScoreEvolution);
                     }
                     else
                     {
-                        g.UpdateWindowGeneral(this.RadicalVM.Design.ConstraintEvolution.ElementAt(j));
+                        g.UpdateWindowGeneral(this.RadicalVM.Design.ConstraintEvolution[i]);
                     }
                 }
             }
