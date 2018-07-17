@@ -36,6 +36,7 @@ namespace Radical
             InitializeComponent();
 
             this.GraphVM.Plotter = Plotter;
+            this.Axis.Ticks = new List<double>{ 20 };
             this.GraphVM.ChartLine = ChartLine;
             this.GraphVM.ChartLineVisibility(Visibility.Collapsed);  
         }

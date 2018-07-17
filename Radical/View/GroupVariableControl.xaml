@@ -35,7 +35,7 @@
                          ></TextBox>
 
                 <CheckBox Name ="Checkbox" IsChecked="True"
-                          Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0" 
+                          Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0" Background="{DynamicResource SecondaryAccentBrush}"
                           IsEnabled="{Binding ChangesEnabled}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"
                           ></CheckBox>
 
@@ -44,7 +44,7 @@
                          TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus" Visibility="Visible"
                          ></TextBox>
 
-                <Slider Name ="Slider" Minimum="{Binding Min, Mode=TwoWay}" Maximum="{Binding Max, Mode=TwoWay}" Value="{Binding Value, Mode=TwoWay}" FontSize="8" Foreground="LawnGreen" 
+                <Slider Name ="Slider" Minimum="{Binding Min, Mode=TwoWay}" Maximum="{Binding Max, Mode=TwoWay}" Value="{Binding Value, Mode=TwoWay}" FontSize="8" Foreground="{DynamicResource PrimaryHueDarkBrush}"
                         Grid.Column="4" Width="150" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2" Visibility="Visible"
                         IsEnabled="{Binding ChangesEnabled}"
                         ></Slider>
