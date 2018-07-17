@@ -105,7 +105,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*" Name="GraphsColumn"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
@@ -205,8 +205,18 @@
         <!--I eventually want to make this main container a stack panel, honestly I don't really know why but I do
         but for the sake of setting things up initially it will be a wrappanel -->
         <ScrollViewer Grid.Column="1" Name="GraphsScroller" Width="Auto" VerticalScrollBarVisibility="Auto">
-            <StackPanel Name="GraphsContainer">
-                
+            <StackPanel Name="GraphsContainer" HorizontalAlignment="Stretch">
+                <StackPanel Name="MainBlock">
+                    <!-- Panel for the Main Objective graph -->
+                </StackPanel>
+                <ItemsControl Name="ConstraintsGraphs">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="2" />
+                            <!-- Grid for the constraint graphs -->
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
             </StackPanel>
         </ScrollViewer>
         

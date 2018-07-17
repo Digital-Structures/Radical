@@ -42,18 +42,16 @@ namespace Radical
             this.DataContext = this.RadicalVM;
             InitializeComponent();
 
-            this.GroupVars = new List<GroupVariableControl>();
-
             //GRAPH CONTROLS
             //Dictionary containing lists of GraphControls to be displayed, with string keys specifying graph data types.
             this.GraphControls = new Dictionary<string, List<GraphControl>>();
             this.GraphControls.Add("Main", new List<GraphControl>());
             this.GraphControls.Add("Constraints", new List<GraphControl>());
 
-            AddConstraints();
+            this.GroupVars = new List<GroupVariableControl>();
             AddNumbers();
             AddGeometries();
-            AddGraphs();
+            AddGraphs(); //Also adds constraints
 
             this.SettingsMenu.Children.Add(new SettingsControl(this.RadicalVM));
         }
@@ -62,119 +60,32 @@ namespace Radical
         public enum Direction { X, Y, Z, None };
         public RadicalVM RadicalVM;
         public CancellationTokenSource source;
-        
+
+        //ACTIVE GRAPHS
+        //A list of active constraint graphs to populate the window graph grid
+        public List<GraphControl> ActiveGraphs
+        {
+            get
+            {
+                List<GraphControl> list = new List<GraphControl>();
+                list.Add(this.GraphControls["Main"][0]);
+
+                foreach (GraphControl graph in GraphControls["Constraints"].Where(g => g.GraphVM.GraphVisibility == Visibility.Visible))
+                    list.Add(graph);
+
+                return list;         
+            }
+        }
+
         //ADD GRAPHS
         //Creates a graph for the main objective and for all of the constraints
         private void AddGraphs()
         {
-            GraphControls["Main"].Add(new GraphControl(this.RadicalVM.Graphs["Main"][0], this.RadicalVM, this));
+            //MAIN OBJECTIVE GRAPHS
+            var g = new GraphControl(this.RadicalVM.Graphs["Main"][0], this.RadicalVM, this);
+            GraphControls["Main"].Add(g);
 
-            foreach (GraphVM gvm in this.RadicalVM.Graphs["Constraints"])
-            {
-                GraphControl g = new GraphControl(gvm, this.RadicalVM, this);
-                GraphControls["Constraints"].Add(g);
-            }
-            SetUpGraphsDisplay();
-        }
-
-        //SET UP GRAPHS DISPLAY
-        //Display objective graph on its own row and all others in a wrap panel
-        private void SetUpGraphsDisplay()
-        {
-            //Number of constraint graphs per row to be displayed
-            int graphsPerRow = 2;
-
-            //Main objective window gets its own row
-            StackPanel MainBlock = new StackPanel();           
-            MainBlock.Children.Add(GraphControls["Main"][0]);
-            GraphsContainer.Children.Add(MainBlock);       
-
-            //Constraint graphs displayed smaller than objective, in a grid layout
-            if (this.GraphControls["Constraints"].Any())
-            {
-                Grid graphRow = MakeGraphRow();
-                GraphsContainer.Children.Add(graphRow);
-
-                for (int i=0; i<this.GraphControls["Constraints"].Count; i++)
-                {
-                    ColumnDefinition col = new ColumnDefinition();
-                    graphRow.ColumnDefinitions.Add(col);
-
-                    GraphControl graph = this.GraphControls["Constraints"][i];
-
-                    Grid.SetRow(graph, 0);
-                    Grid.SetColumn(graph, i % graphsPerRow);
-                    graphRow.Children.Add(graph);
-
-                    //Go on to the next line of graphs
-                    if ((i+1) % graphsPerRow == 0)
-                    {
-                        graphRow = MakeGraphRow();
-                        GraphsContainer.Children.Add(graphRow);
-                    }
-                }
-            }
-
-            //Helper Method for creating rows of graphs
-            Grid MakeGraphRow()
-            {
-                Grid graphRow = new Grid();
-                RowDefinition row = new RowDefinition();
-                row.Height = GridLength.Auto;
-                graphRow.RowDefinitions.Add(row);
-
-                return graphRow;
-            }
-        }
-
-        //Maybe should be made public idk
-        public void UpdateAllGraphs()
-        {
-            foreach (KeyValuePair<string, List<GraphControl>> pair in this.GraphControls)
-            {
-                for (int i=0; i<pair.Value.Count; i++)
-                {
-                    GraphControl g = pair.Value[i];
-                    if (pair.Key=="Main")
-                    {
-                        g.UpdateWindowGeneral(this.RadicalVM.Design.ScoreEvolution);
-                    }
-                    else
-                    {
-                        g.UpdateWindowGeneral(this.RadicalVM.Design.ConstraintEvolution[i]);
-                    }
-                }
-            }
-        }
-
-        public void GraphsShowLine()
-        {
-            foreach (KeyValuePair<string, List<GraphVM>> pair in this.RadicalVM.Graphs)
-            {
-                foreach (GraphVM graph in pair.Value)
-                {
-                    graph.ChartLineVisibility = Visibility.Visible;
-                    graph.ShowLine = true;
-                }
-            }
-        }
-
-        public void GraphsHideLine()
-        {
-            foreach (KeyValuePair<string, List<GraphVM>> pair in this.RadicalVM.Graphs)
-            {
-                foreach (GraphVM graph in pair.Value)
-                {
-                    graph.ChartLineVisibility = Visibility.Collapsed;
-                    graph.ShowLine = false;
-                }
-            }
-        }
-
-        //ADD CONSTRAINTS
-        //Adds a stack panel for constraints
-        private void AddConstraints()
-        {
+            //CONSTRAINTS GRAPHS
             //Collapse Constraints expander if no constraints are imposed
             if (!RadicalVM.Constraints.Any())
             {
@@ -184,9 +95,58 @@ namespace Radical
 
             this.Constraints.Children.Add(new VariableHeaderControl());
 
-            foreach (ConstVM cvm in RadicalVM.Constraints)
+            for (int i = 0; i < RadicalVM.Constraints.Count; i++)
             {
-                this.Constraints.Children.Add(new ConstraintControl(cvm));
+                GraphVM gvm = RadicalVM.Graphs["Constraints"][i];
+                g = new GraphControl(gvm, this.RadicalVM, this);
+                GraphControls["Constraints"].Add(g);
+
+                ConstVM c = RadicalVM.Constraints[i];
+                this.Constraints.Children.Add(new ConstraintControl(c, this));
+            }
+            SetUpGraphsDisplay();
+        }
+
+        //SET UP GRAPHS DISPLAY
+        //Display objective graph on its own row and all others in a wrap panel
+        public void SetUpGraphsDisplay()
+        {
+            //Main objective window gets its own row         
+            MainBlock.Children.Add(GraphControls["Main"][0]);
+        }
+
+        //Maybe should be made public idk
+        public void UpdateAllGraphs()
+        {
+            for (int i = 0; i<this.ActiveGraphs.Count; i++)
+            {
+                GraphControl g = this.ActiveGraphs[i];
+                if (i==0)
+                {
+                    g.UpdateWindowGeneral(this.RadicalVM.Design.ScoreEvolution);
+                }
+                else
+                {
+                    g.UpdateWindowGeneral(this.RadicalVM.Design.ConstraintEvolution[i-1]);
+                }
+            }
+        }
+
+        public void GraphsShowLine()
+        {
+            foreach (GraphVM graph in this.RadicalVM.ActiveGraphs)
+            {
+                graph.ChartLineVisibility = Visibility.Visible;
+                graph.ShowLine = true;
+            }
+        }
+
+        public void GraphsHideLine()
+        {
+            foreach (GraphVM graph in this.RadicalVM.ActiveGraphs)
+            {
+                graph.ChartLineVisibility = Visibility.Collapsed;
+                graph.ShowLine = false;
             }
         }
 
@@ -325,6 +285,12 @@ namespace Radical
             header.Margin = new Thickness(1, 0, 0, 0);
 
             return header;
+        }
+
+        //UpdatedGraphVisibility
+        public void UpdatedGraphVisibility()
+        {
+            ConstraintsGraphs.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = this.ActiveGraphs.Where(g => ActiveGraphs.IndexOf(g) != 0) }) ;
         }
 
         //OPTIMIZATION STARTED

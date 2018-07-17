@@ -56,6 +56,22 @@ namespace Radical
         public Dictionary<string, List<GraphVM>> Graphs;
         public enum Direction { X, Y, Z };
 
+        //ACTIVE GRAPHS
+        //A list of active constraint graphs to populate the window graph grid
+        public List<GraphVM> ActiveGraphs
+        {
+            get
+            {
+                List<GraphVM> list = new List<GraphVM>();
+                list.Add(this.Graphs["Main"][0]);
+
+                foreach (ConstVM c in Constraints.Where(c => c.IsActive))
+                    list.Add(c.GraphVM);
+
+                return list;
+            }
+        }
+
         public void SetUpGraphs()
         {
             GraphVM main = new GraphVM(Design.ScoreEvolution, "Objective");
@@ -71,10 +87,9 @@ namespace Radical
 
         public void UpdateGraphLines(int iteration)
         {
-            foreach (KeyValuePair<string, List<GraphVM>> pair in this.Graphs)
+            foreach (GraphVM graph in this.ActiveGraphs)
             {
-                foreach (GraphVM graph in pair.Value)
-                    graph.UpdateLine(iteration);
+                graph.UpdateLine(iteration);
             }
         }
 

@@ -29,7 +29,7 @@
             </Grid>
 
             <Grid Grid.Row="1" Margin="25,0">
-                <d3:Chart Name ="Chart"  BorderThickness="1,0,0,1" PreviewMouseMove="Chart_MouseMove" Background="{x:Null}" Margin="10,0,0,0" Width="Auto" PreviewMouseWheel="Graph_PreviewMouseWheel">
+                <d3:Chart Name ="Chart" BorderThickness="1,0,0,1" PreviewMouseMove="Chart_MouseMove" Background="{x:Null}" Margin="10,0,0,0" Width="Auto" PreviewMouseWheel="Graph_PreviewMouseWheel">
                     <d3:LineGraph Name="Plotter" Stroke="LimeGreen" StrokeThickness="1.5" Padding="0,10,10,0" 
                           ToolTip="{Binding DisplayGraphValue, Mode=OneWayToSource}">
                     </d3:LineGraph>

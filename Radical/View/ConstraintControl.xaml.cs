@@ -27,21 +27,26 @@ namespace Radical
         }
 
         //CONSTRUCTOR
-        public ConstraintControl(ConstVM const_vm):base(const_vm)
+        public ConstraintControl(ConstVM const_vm, RadicalWindow window):base(const_vm)
         {
+            MyWindow = window;
             InitializeComponent();
+            
         }
+        private RadicalWindow MyWindow;
 
         //CHECK BOX CHECKED
         protected void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             ((ConstVM)this.MyVM).GraphVM.GraphVisibility = Visibility.Visible;
+            this.MyWindow.UpdatedGraphVisibility();
         }
 
         //CHECK BOX UNCHECKED
         protected void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             ((ConstVM)this.MyVM).GraphVM.GraphVisibility = Visibility.Collapsed;
+            this.MyWindow.UpdatedGraphVisibility();
         }
     }
 }

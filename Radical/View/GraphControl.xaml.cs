@@ -32,17 +32,18 @@ namespace Radical
             this.GraphVM = graphVM;
             this.DataContext = graphVM;
             this.MyWindow = window;
+
             InitializeComponent();
 
             this.GraphVM.Plotter = Plotter;
             this.GraphVM.ChartLine = ChartLine;
-            this.GraphVM.ChartLineVisibility = Visibility.Collapsed;
+            this.GraphVM.ChartLineVisibility = Visibility.Collapsed;  
         }
-        RadicalWindow MyWindow;
-        GraphVM GraphVM;
+        public GraphVM GraphVM;
+        RadicalWindow MyWindow;       
         RadicalVM RadicalVM;
 
-        //UPDATE CONSTRAINTS WINDOW 
+        //UPDATE WINDOW 
         public void UpdateWindowGeneral(IEnumerable<double> y)
         {
             var x = Enumerable.Range(0, y.Count()).ToArray();
