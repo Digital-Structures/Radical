@@ -212,6 +212,15 @@ namespace Radical
         {
             ChartLineVisibilityX = v;
             ChartLineVisibilityY = v;
+            
+            if (ChartLineX - 45 < 0 || ChartLineX > this.Plotter.ActualWidth)
+            {
+                ChartLineVisibilityX = Visibility.Collapsed;
+            }
+            if (ChartLineY < 0 || ChartLineY > this.Plotter.ActualHeight)
+            {
+                ChartLineVisibilityY = Visibility.Collapsed;
+            }
         }
 
         private double _chartlinewidth;
