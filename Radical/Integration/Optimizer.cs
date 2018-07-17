@@ -30,17 +30,14 @@ namespace Radical.Integration
             {
                 foreach (Constraint c in Design.Constraints)
                 {
-                    if (c.ConstraintType == ConstraintType.lessthan)
+                    if (c.IsActive)
                     {
-                        Solver.AddLessOrEqualZeroConstraint((x) => Constraint(x, c));
-                    }
-                    else if (c.ConstraintType == ConstraintType.morethan)
-                    {
-                        Solver.AddLessOrEqualZeroConstraint((x) => -Constraint(x, c));
-                    }
-                    else
-                    {
-                        Solver.AddEqualZeroConstraint((x) => Constraint(x, c));
+                        if (c.ConstraintType == ConstraintType.lessthan)
+                            Solver.AddLessOrEqualZeroConstraint((x) => Constraint(x, c));
+                        else if (c.ConstraintType == ConstraintType.morethan)
+                            Solver.AddLessOrEqualZeroConstraint((x) => -Constraint(x, c));
+                        else
+                            Solver.AddEqualZeroConstraint((x) => Constraint(x, c));
                     }
                 }
             }
@@ -121,8 +118,8 @@ namespace Radical.Integration
 
             for (int i = 0; i < Design.ConstraintEvolution.Count; i++)
             {
-                double score = Design.Constraints.ElementAt(i).CurrentValue;
-                Design.ConstraintEvolution.ElementAt(i).Add(score);
+                double score = Design.Constraints[i].CurrentValue;
+                Design.ConstraintEvolution[i].Add(score);
             }
 
             if (this.RadicalWindow.RadicalVM.Mode != RefreshMode.Silent)

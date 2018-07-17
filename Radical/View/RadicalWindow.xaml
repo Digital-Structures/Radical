@@ -102,7 +102,7 @@
         </EventTrigger>
     </Window.Triggers>
 
-    <Grid>
+    <Grid Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="*" Name="GraphsColumn"></ColumnDefinition>
@@ -212,8 +212,9 @@
                 <ItemsControl Name="ConstraintsGraphs">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <UniformGrid Columns="2" />
-                            <!-- Grid for the constraint graphs -->
+                            <UniformGrid Columns="{Binding Cols}">
+                                <!-- Grid for the constraint graphs -->
+                            </UniformGrid>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>

@@ -11,13 +11,13 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="{DynamicResource MaterialDesignPaper}" Margin="5" Visibility="{Binding GraphVisibility}">
-        <Grid HorizontalAlignment="Center">
+        <Grid Name="GraphGrid" HorizontalAlignment="Center" Height="450">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="300"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
@@ -64,8 +64,6 @@
                     </TextBlock>
                 </StackPanel>
             </Grid>
-            <!--Temporary!!-->
-
         </Grid>
     </materialDesign:Card>
 

@@ -110,36 +110,50 @@ namespace Radical
 
         public void UpdateAllGraphs()
         {
-            for (int i = 0; i<this.ActiveGraphs.Count; i++)
+            foreach (KeyValuePair<string,List<GraphControl>> pair in this.GraphControls)
             {
-                GraphControl g = this.ActiveGraphs[i];
-                if (i==0)
-                {
-                    g.UpdateWindowGeneral(this.RadicalVM.Design.ScoreEvolution);
-                }
+                if(pair.Key=="Main")
+                    pair.Value[0].UpdateWindowGeneral(this.RadicalVM.Design.ScoreEvolution);
                 else
                 {
-                    g.UpdateWindowGeneral(this.RadicalVM.Design.ConstraintEvolution[i-1]);
-                }
+                    for (int i=0; i<this.GraphControls[pair.Key].Count; i++)
+                        pair.Value[i].UpdateWindowGeneral(this.RadicalVM.Design.ConstraintEvolution[i]);
+                }                   
             }
         }
 
         public void GraphsShowLine()
         {
-            foreach (GraphVM graph in this.RadicalVM.ActiveGraphs)
+            foreach (KeyValuePair<string,List<GraphVM>> pair in this.RadicalVM.Graphs)
             {
+<<<<<<< HEAD
                 graph.ChartLineVisibility(Visibility.Visible);
                 graph.ShowLine = true;
+=======
+                foreach (GraphVM graph in pair.Value)
+                {
+                    graph.ChartLineVisibility = Visibility.Visible;
+                    graph.ShowLine = true;
+                }
+>>>>>>> Main objective resizes when constraints are disabled'
             }
             SetUpGraphLineWidth();
         }
 
         public void GraphsHideLine()
         {
-            foreach (GraphVM graph in this.RadicalVM.ActiveGraphs)
+            foreach (KeyValuePair<string, List<GraphVM>> pair in this.RadicalVM.Graphs)
             {
+<<<<<<< HEAD
                 graph.ChartLineVisibility(Visibility.Collapsed);
                 graph.ShowLine = false;
+=======
+                foreach (GraphVM graph in pair.Value)
+                {
+                    graph.ChartLineVisibility = Visibility.Collapsed;
+                    graph.ShowLine = false;
+                }
+>>>>>>> Main objective resizes when constraints are disabled'
             }
         }
 
@@ -283,7 +297,11 @@ namespace Radical
         //UpdatedGraphVisibility
         public void UpdatedGraphVisibility()
         {
-            ConstraintsGraphs.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = this.ActiveGraphs.Where(g => ActiveGraphs.IndexOf(g) != 0) }) ;
+            ConstraintsGraphs.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = this.ActiveGraphs.Where(g => ActiveGraphs.IndexOf(g) != 0) });
+            if (this.ActiveGraphs.Count == 1)
+                this.ActiveGraphs[0].GraphGrid.Height = this.MainGrid.ActualHeight-20;
+            else
+                this.ActiveGraphs[0].GraphGrid.Height = 500;
         }
 
         //OPTIMIZATION STARTED
