@@ -72,13 +72,22 @@ namespace Radical
         private double _chartlinex;
         public double ChartLineX
         {
-            get
-            {
-                return _chartlinex;
-            }
+            get { return _chartlinex; }
             set
             {
                 if (CheckPropertyChanged<double>("ChartLineX", ref _chartlinex, ref value))
+                {
+                }
+            }
+        }
+
+        private double _chartliney;
+        public double ChartLineY
+        {
+            get { return _chartliney; }
+            set
+            {
+                if (CheckPropertyChanged<double>("ChartLineY", ref _chartliney, ref value))
                 {
                 }
             }
@@ -134,26 +143,29 @@ namespace Radical
 
             if (GraphScores.Any() && ShowLine)
             {
-                ChartLineVisibility = Visibility.Visible;
+                ChartLineVisibility(Visibility.Visible);
                 double yValue = GraphScores.ElementAt(iteration);
                 this.DisplayY = String.Format("{0:0.00}",yValue);
 
-                double ScaleX = Plotter.ScaleX;
-
+                //Calculations for the horizontal line
                 //actualX * ScaleX scales the graph value to appropriate mouse position
-                //+35 is a hardcoded value because the position is off due to the side of the graph
+                //+45 is a hardcoded value because the position is off due to the side of the graph
                 //Plotter.OffsetX takes into account if the graph has been moved 
-                double newXPosition = iteration * ScaleX + 45 - Plotter.OffsetX;
-                //while (newXPosition - 45 < 0)
-                //{
-                //    iteration++;
-                //    newXPosition = iteration * ScaleX + 45 - Plotter.OffsetX;
-                //}
+                double newXPosition = iteration * Plotter.ScaleX + 45 - Plotter.OffsetX;
+                
                 if (newXPosition - 45 < 0 || newXPosition > Plotter.Width)
                 {
-                    ChartLineVisibility = Visibility.Collapsed;
+                    ChartLineVisibilityX = Visibility.Collapsed;
                 }
                 this.ChartLineX = newXPosition;
+
+                //Calculatoins for the vertical line
+                double newYPosition = -1 * (yValue * Plotter.ScaleY - Plotter.OffsetY);
+                if (newYPosition < 0 || newYPosition > Plotter.ActualHeight)
+                {
+                    ChartLineVisibilityY = Visibility.Collapsed;
+                }
+                this.ChartLineY = newYPosition;
             }
         }
 
@@ -172,16 +184,51 @@ namespace Radical
             }
         }
 
-        private Visibility _chartlinevisiblity;
-        public Visibility ChartLineVisibility
+        private Visibility _chartlinevisiblityx;
+        public Visibility ChartLineVisibilityX
         {
-            get { return _chartlinevisiblity; }
+            get { return _chartlinevisiblityx; }
             set
             {
-                if (CheckPropertyChanged<Visibility>("ChartLineVisibility", ref _chartlinevisiblity, ref value))
+                if (CheckPropertyChanged<Visibility>("ChartLineVisibilityX", ref _chartlinevisiblityx, ref value))
                 {
                 }
             }
+        }
+
+        private Visibility _chartlinevisibilityy;
+        public Visibility ChartLineVisibilityY
+        {
+            get { return _chartlinevisibilityy; }
+            set
+            {
+                if (CheckPropertyChanged<Visibility>("ChartLineVisibilityY", ref _chartlinevisibilityy, ref value))
+                {
+                }
+            }
+        }
+
+        public void ChartLineVisibility(Visibility v)
+        {
+            ChartLineVisibilityX = v;
+            ChartLineVisibilityY = v;
+        }
+
+        private double _chartlinewidth;
+        public double ChartLineWidth
+        {
+            get { return _chartlinewidth; }
+            set
+            {
+                if (CheckPropertyChanged<double>("ChartLineWidth", ref _chartlinewidth, ref value))
+                {
+                }
+            }
+        }
+
+        public void SetLineWidth()
+        {
+            this.ChartLineWidth = this.Plotter.ActualWidth + 45;
         }
 
     }

@@ -34,10 +34,15 @@
                           ToolTip="{Binding DisplayGraphValue, Mode=OneWayToSource}">
                     </d3:LineGraph>
                 </d3:Chart>
-                <!-- Should the mode be two way or one way -->
                 <Line Name ="ChartLine" Stroke="Green" StrokeThickness="1.5" 
-                  Visibility="{Binding ChartLineVisibility, Mode = TwoWay}"
-                  X1="{Binding ChartLineX, Mode=TwoWay}" X2="{Binding ChartLineX, Mode=TwoWay}" Y1="1" Y2="{Binding ElementName=Plotter, Path=ActualHeight}"></Line>
+                  Visibility="{Binding ChartLineVisibilityX, Mode = TwoWay}"
+                  X1="{Binding ChartLineX, Mode=TwoWay}" X2="{Binding ChartLineX, Mode=TwoWay}" 
+                  Y1="1" Y2="{Binding ElementName=Plotter, Path=ActualHeight}"></Line>
+                <Line Name="ChartLineVertical" Stroke="Green" StrokeThickness="1.5" 
+                  Visibility="{Binding ChartLineVisibilityY, Mode = TwoWay}"
+                  X1="45" X2="{Binding ChartLineWidth, Mode = TwoWay}" 
+                  Y1="{Binding ChartLineY, Mode=TwoWay}" Y2="{Binding ChartLineY, Mode=TwoWay}">
+                </Line>
             </Grid>
 
             <Grid  Grid.Row="2" Margin="25,0,25,10">

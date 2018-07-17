@@ -37,7 +37,7 @@ namespace Radical
 
             this.GraphVM.Plotter = Plotter;
             this.GraphVM.ChartLine = ChartLine;
-            this.GraphVM.ChartLineVisibility = Visibility.Collapsed;  
+            this.GraphVM.ChartLineVisibility(Visibility.Collapsed);  
         }
         public GraphVM GraphVM;
         RadicalWindow MyWindow;       
@@ -78,7 +78,7 @@ namespace Radical
             }
             else
             {
-                this.GraphVM.ChartLineVisibility = Visibility.Collapsed;
+                this.GraphVM.ChartLineVisibility(Visibility.Collapsed);
             }
         }
 

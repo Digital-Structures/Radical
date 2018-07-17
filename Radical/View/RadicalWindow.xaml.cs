@@ -104,18 +104,10 @@ namespace Radical
                 ConstVM c = RadicalVM.Constraints[i];
                 this.Constraints.Children.Add(new ConstraintControl(c, this));
             }
-            SetUpGraphsDisplay();
-        }
 
-        //SET UP GRAPHS DISPLAY
-        //Display objective graph on its own row and all others in a wrap panel
-        public void SetUpGraphsDisplay()
-        {
-            //Main objective window gets its own row         
             MainBlock.Children.Add(GraphControls["Main"][0]);
         }
 
-        //Maybe should be made public idk
         public void UpdateAllGraphs()
         {
             for (int i = 0; i<this.ActiveGraphs.Count; i++)
@@ -136,16 +128,17 @@ namespace Radical
         {
             foreach (GraphVM graph in this.RadicalVM.ActiveGraphs)
             {
-                graph.ChartLineVisibility = Visibility.Visible;
+                graph.ChartLineVisibility(Visibility.Visible);
                 graph.ShowLine = true;
             }
+            SetUpGraphLineWidth();
         }
 
         public void GraphsHideLine()
         {
             foreach (GraphVM graph in this.RadicalVM.ActiveGraphs)
             {
-                graph.ChartLineVisibility = Visibility.Collapsed;
+                graph.ChartLineVisibility(Visibility.Collapsed);
                 graph.ShowLine = false;
             }
         }
@@ -330,6 +323,7 @@ namespace Radical
         {
             ButtonOpenMenu.Visibility = Visibility.Visible;
             ButtonCloseMenu.Visibility = Visibility.Collapsed;
+            SetUpGraphLineWidth();
         }
 
         //OPEN MENU CLICK
@@ -337,6 +331,7 @@ namespace Radical
         {
             ButtonOpenMenu.Visibility = Visibility.Collapsed;
             ButtonCloseMenu.Visibility = Visibility.Visible;
+            SetUpGraphLineWidth();
         }
 
         //BUTTON PLAY CLICK
@@ -380,7 +375,7 @@ namespace Radical
         {
             ButtonSettingsOpen.Visibility = Visibility.Collapsed;
             SettingsClose.Visibility = Visibility.Visible;
-
+            SetUpGraphLineWidth();
         }
 
         //BUTTON SETTINGS CLOSE CLICK
@@ -388,6 +383,18 @@ namespace Radical
         {
             ButtonSettingsOpen.Visibility = Visibility.Visible;
             SettingsClose.Visibility = Visibility.Collapsed;
+            SetUpGraphLineWidth();
+        }
+
+        private void SetUpGraphLineWidth()
+        {
+            foreach (KeyValuePair<string, List<GraphVM>> kvp in this.RadicalVM.Graphs)
+            {
+                for (int i = 0; i < kvp.Value.Count; i++)
+                {
+                    this.RadicalVM.Graphs[kvp.Key][i].SetLineWidth();
+                }
+            }
         }
 
         private void OpenOptSettings(object sender, RoutedEventArgs e)
