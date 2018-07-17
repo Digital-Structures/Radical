@@ -54,6 +54,12 @@ namespace Radical
             });
         }
 
+        //SIZE CHANGED
+        public void Plotter_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            this.GraphVM.SetLineWidth();
+        }
+
         //CHART MOUSE DOWN
         //Currently returns graph x value of where the mouse clicks down 
         private void Chart_MouseMove(object sender, MouseEventArgs e)
@@ -92,6 +98,11 @@ namespace Radical
             var e2 = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta);
             e2.RoutedEvent = UIElement.MouseWheelEvent;
             MyWindow.GraphsScroller.RaiseEvent(e2);
+        }
+
+        private void Plotter_SizeChanged_1(object sender, SizeChangedEventArgs e)
+        {
+
         }
     }
 }

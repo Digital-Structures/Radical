@@ -9,7 +9,6 @@
 
     <Border BorderThickness="0,0.3,0,0.3" BorderBrush="LightGray" Height="45" Width="475">
 
-
         <Grid Style="{x:Null}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
