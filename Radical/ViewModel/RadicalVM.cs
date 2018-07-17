@@ -159,6 +159,20 @@ namespace Radical
             this.Component.IsWindowOpen = false;
         }
 
+        //GRAPH COLUMNS
+        private int _cols;
+        public int Cols
+        {
+            get
+            {
+                return _cols;
+            }
+            set
+            {
+                CheckPropertyChanged<int>("Cols", ref _cols, ref value);
+            }
+        }
+
         //REFRESH MODE
         private RefreshMode _mode;
         public RefreshMode Mode

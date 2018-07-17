@@ -57,11 +57,11 @@
             <Storyboard x:Key="SettingsOpen">
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="SettingsHeader">
                     <EasingDoubleKeyFrame KeyTime="0" Value="60"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="200"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="200"/>
                 </DoubleAnimationUsingKeyFrames>
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="Settings">
                     <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="200"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="200"/>
                 </DoubleAnimationUsingKeyFrames>
                 <ObjectAnimationUsingKeyFrames BeginTime="0:0:0" Storyboard.TargetName="SettingsBorder" Storyboard.TargetProperty="Visibility">
                     <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
@@ -71,11 +71,11 @@
             <Storyboard x:Key="SettingsClose">
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="SettingsHeader">
                     <EasingDoubleKeyFrame KeyTime="0" Value="200"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="60"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="60"/>
                 </DoubleAnimationUsingKeyFrames>
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="Settings">
                     <EasingDoubleKeyFrame KeyTime="0" Value="200"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="0"/>
                 </DoubleAnimationUsingKeyFrames>
                 <ObjectAnimationUsingKeyFrames BeginTime="0:0:0" Storyboard.TargetName="SettingsBorder" Storyboard.TargetProperty="Visibility">
                     <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
@@ -102,7 +102,7 @@
         </EventTrigger>
     </Window.Triggers>
 
-    <Grid>
+    <Grid Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="*" Name="GraphsColumn"></ColumnDefinition>
@@ -199,7 +199,7 @@
                         SnapsToDevicePixels="True" />
                 </StackPanel>
             </ScrollViewer>
-            <Border x:Name="TreeBorder" Grid.Row="1" BorderBrush="Black" BorderThickness="0,0,0.1,0" Background="{x:Null}" Visibility="Collapsed"/>
+            <Border x:Name="TreeBorder" Grid.Row="1" BorderBrush="Black" BorderThickness="0,0,0,0" Background="{x:Null}" Visibility="Collapsed"/>
         </Grid>
 
         <!--I eventually want to make this main container a stack panel, honestly I don't really know why but I do
@@ -212,8 +212,9 @@
                 <ItemsControl Name="ConstraintsGraphs">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <UniformGrid Columns="2" />
-                            <!-- Grid for the constraint graphs -->
+                            <UniformGrid Columns="{Binding Cols}">
+                                <!-- Grid for the constraint graphs -->
+                            </UniformGrid>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>

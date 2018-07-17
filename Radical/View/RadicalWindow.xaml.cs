@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -110,36 +111,40 @@ namespace Radical
 
         public void UpdateAllGraphs()
         {
-            for (int i = 0; i<this.ActiveGraphs.Count; i++)
+            foreach (KeyValuePair<string,List<GraphControl>> pair in this.GraphControls)
             {
-                GraphControl g = this.ActiveGraphs[i];
-                if (i==0)
-                {
-                    g.UpdateWindowGeneral(this.RadicalVM.Design.ScoreEvolution);
-                }
+                if(pair.Key=="Main")
+                    pair.Value[0].UpdateWindowGeneral(this.RadicalVM.Design.ScoreEvolution);
                 else
                 {
-                    g.UpdateWindowGeneral(this.RadicalVM.Design.ConstraintEvolution[i-1]);
-                }
+                    for (int i=0; i<this.GraphControls[pair.Key].Count; i++)
+                        pair.Value[i].UpdateWindowGeneral(this.RadicalVM.Design.ConstraintEvolution[i]);
+                }                   
             }
         }
 
         public void GraphsShowLine()
         {
-            foreach (GraphVM graph in this.RadicalVM.ActiveGraphs)
+            foreach (KeyValuePair<string,List<GraphVM>> pair in this.RadicalVM.Graphs)
             {
-                graph.ChartLineVisibility(Visibility.Visible);
-                graph.ShowLine = true;
+                foreach (GraphVM graph in pair.Value)
+                {
+                    graph.ChartLineVisibility(Visibility.Visible);
+                    graph.ShowLine = true;
+                }
             }
             SetUpGraphLineWidth();
         }
 
         public void GraphsHideLine()
         {
-            foreach (GraphVM graph in this.RadicalVM.ActiveGraphs)
+            foreach (KeyValuePair<string, List<GraphVM>> pair in this.RadicalVM.Graphs)
             {
-                graph.ChartLineVisibility(Visibility.Collapsed);
-                graph.ShowLine = false;
+                foreach (GraphVM graph in pair.Value)
+                {
+                    graph.ChartLineVisibility(Visibility.Collapsed);
+                    graph.ShowLine = false;
+                }
             }
         }
 
@@ -283,7 +288,20 @@ namespace Radical
         //UpdatedGraphVisibility
         public void UpdatedGraphVisibility()
         {
-            ConstraintsGraphs.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = this.ActiveGraphs.Where(g => ActiveGraphs.IndexOf(g) != 0) }) ;
+            ConstraintsGraphs.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = this.ActiveGraphs.Where(g => ActiveGraphs.IndexOf(g) != 0) });
+
+            if (this.ActiveGraphs.Count == 1)
+                this.ActiveGraphs[0].GraphGrid.Height = this.MainGrid.ActualHeight-20;
+            else
+            {
+                this.ActiveGraphs[0].GraphGrid.Height = 500;
+
+                if (this.ActiveGraphs.Count == 2)
+                    this.RadicalVM.Cols = 1;
+                else
+                    this.RadicalVM.Cols = 2;
+            }
+                
         }
 
         //OPTIMIZATION STARTED
@@ -323,7 +341,6 @@ namespace Radical
         {
             ButtonOpenMenu.Visibility = Visibility.Visible;
             ButtonCloseMenu.Visibility = Visibility.Collapsed;
-            SetUpGraphLineWidth();
         }
 
         //OPEN MENU CLICK
@@ -331,7 +348,6 @@ namespace Radical
         {
             ButtonOpenMenu.Visibility = Visibility.Collapsed;
             ButtonCloseMenu.Visibility = Visibility.Visible;
-            SetUpGraphLineWidth();
         }
 
         //BUTTON PLAY CLICK
@@ -375,7 +391,6 @@ namespace Radical
         {
             ButtonSettingsOpen.Visibility = Visibility.Collapsed;
             SettingsClose.Visibility = Visibility.Visible;
-            SetUpGraphLineWidth();
         }
 
         //BUTTON SETTINGS CLOSE CLICK
@@ -383,7 +398,6 @@ namespace Radical
         {
             ButtonSettingsOpen.Visibility = Visibility.Visible;
             SettingsClose.Visibility = Visibility.Collapsed;
-            SetUpGraphLineWidth();
         }
 
         private void SetUpGraphLineWidth()
