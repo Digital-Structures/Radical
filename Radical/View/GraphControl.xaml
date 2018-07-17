@@ -30,15 +30,16 @@
 
             <Grid Grid.Row="1" Margin="25,0">
                 <d3:Chart Name ="Chart" BorderThickness="1,0,0,1" PreviewMouseMove="Chart_MouseMove" Background="{x:Null}" Margin="10,0,0,0" Width="Auto" PreviewMouseWheel="Graph_PreviewMouseWheel">
-                    <d3:LineGraph Name="Plotter" Stroke="LimeGreen" StrokeThickness="1.5" Padding="0,10,10,0" 
+                    <d3:LineGraph Name="Plotter" Stroke="{DynamicResource SecondaryAccentBrush}" StrokeThickness="3" Padding="0,10,10,0" d3:Legend.IsVisible="False"
                           ToolTip="{Binding DisplayGraphValue, Mode=OneWayToSource}" SizeChanged="Plotter_SizeChanged">
+                        <d3:PlotAxis Name="Axis"></d3:PlotAxis>
                     </d3:LineGraph>
                 </d3:Chart>
-                <Line Name ="ChartLine" Stroke="Green" StrokeThickness="1.5" 
+                <Line Name ="ChartLine" Stroke="{DynamicResource SecondaryAccentBrush}" StrokeThickness="1.5"
                   Visibility="{Binding ChartLineVisibilityX, Mode = TwoWay}"
                   X1="{Binding ChartLineX, Mode=TwoWay}" X2="{Binding ChartLineX, Mode=TwoWay}" 
                   Y1="1" Y2="{Binding ElementName=Plotter, Path=ActualHeight}"></Line>
-                <Line Name="ChartLineVertical" Stroke="Green" StrokeThickness="1.5" 
+                <Line Name="ChartLineVertical" Stroke="{DynamicResource SecondaryAccentBrush}" StrokeThickness="1.5" 
                   Visibility="{Binding ChartLineVisibilityY, Mode = TwoWay}"
                   X1="45" X2="{Binding ChartLineWidth, Mode = TwoWay}" 
                   Y1="{Binding ChartLineY, Mode=TwoWay}" Y2="{Binding ChartLineY, Mode=TwoWay}">
@@ -51,15 +52,15 @@
                 </TextBlock>
             </Grid>
 
-            <Grid Grid.Row="3" Background="{DynamicResource PrimaryHueMidBrush}">
+            <Grid Grid.Row="3" Background="{DynamicResource PrimaryHueDarkBrush}">
                 <StackPanel>
-                    <TextBlock Text="{Binding LineGraphName}" FontSize="28" Foreground="White"
+                    <TextBlock Text="{Binding LineGraphName}" FontSize="28" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                            TextAlignment="Left" Margin="15,15,0,10">
                     </TextBlock>
-                    <TextBlock Text="{Binding DisplayX}" FontSize="16" Foreground="White" Visibility="{Binding ChartLineVisibilityX}"
+                    <TextBlock Text="{Binding DisplayX}" FontSize="16" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Visibility="{Binding ChartLineVisibilityX}"
                            TextAlignment="Left" Margin="40,0,0,10">
                     </TextBlock>
-                    <TextBlock Text="{Binding DisplayY}" FontSize="16" Foreground="White" Visibility="{Binding ChartLineVisibilityY}"
+                    <TextBlock Text="{Binding DisplayY}" FontSize="16" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Visibility="{Binding ChartLineVisibilityY}"
                            TextAlignment="Left" Margin="40,0,0,10">
                     </TextBlock>
                 </StackPanel>

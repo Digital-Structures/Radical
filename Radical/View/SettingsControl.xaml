@@ -57,7 +57,8 @@
             <TextBlock TextAlignment="Right" Foreground="Gray" FontWeight="Light" >
                 Show Advanced Algorithms
             </TextBlock>
-            <CheckBox IsChecked="{Binding AdvancedOptions, Mode=TwoWay}" HorizontalAlignment="Right">
+            <CheckBox IsChecked="{Binding AdvancedOptions, Mode=TwoWay}" HorizontalAlignment="Right"
+                      Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource SecondaryAccentForegroundBrush}">
             </CheckBox>
         </DockPanel>
     </Grid>
