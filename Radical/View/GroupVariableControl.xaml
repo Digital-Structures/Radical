@@ -35,7 +35,8 @@
                          ></TextBox>
 
                 <CheckBox Name ="Checkbox" IsChecked="True"
-                          Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0" Background="{DynamicResource SecondaryAccentBrush}"
+                          Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0"
+                          Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource SecondaryAccentForegroundBrush}"
                           IsEnabled="{Binding ChangesEnabled}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"
                           ></CheckBox>
 

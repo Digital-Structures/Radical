@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using InteractiveDataDisplay.WPF;
 
 namespace Radical
 {
@@ -99,10 +100,12 @@ namespace Radical
             e2.RoutedEvent = UIElement.MouseWheelEvent;
             MyWindow.GraphsScroller.RaiseEvent(e2);
         }
+    }
 
-        private void Plotter_SizeChanged_1(object sender, SizeChangedEventArgs e)
+    public class CustomAxis : Axis
+    {
+        public CustomAxis() : base(new LabelProvider(), new TicksProvider())
         {
-
         }
     }
 }

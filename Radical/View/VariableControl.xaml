@@ -29,7 +29,8 @@
                      TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus" Visibility="Visible"
                      ></TextBox>
 
-            <CheckBox Name ="Checkbox" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0" Background="{DynamicResource SecondaryAccentBrush}"
+            <CheckBox Name ="Checkbox" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0"
+                      Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource SecondaryAccentForegroundBrush}"
                       IsChecked="{Binding IsActive, Mode=TwoWay}" IsEnabled="{Binding ChangesEnabled}"
                       ></CheckBox>
 

@@ -3,11 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -17,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using InteractiveDataDisplay.WPF;
 
 namespace Radical
 {
@@ -108,7 +104,7 @@ namespace Radical
         private string _y;
         public string DisplayY
         {
-            get { return String.Format("Value: {0}", _y); }
+            get { return String.Format("{0}: {1}", this.LineGraphName, _y); }
             set
             {
                 CheckPropertyChanged<string>("DisplayY", ref _y, ref value);

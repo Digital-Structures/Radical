@@ -24,6 +24,12 @@
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
 
+            <Grid Grid.Row="0" Background="{DynamicResource PrimaryHueDarkBrush}">
+                <TextBlock Text="{Binding LineGraphName}" FontSize="32" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                           TextAlignment="Center" Margin="10">
+                </TextBlock>
+            </Grid>
+
             <Grid Grid.Row="1" Margin="25,15,25,0">
                 <TextBlock Text="Value" FontSize="14" Foreground="Black"
                            VerticalAlignment="Bottom" HorizontalAlignment="Left" TextAlignment="Right">
@@ -36,14 +42,15 @@
                           ToolTip="{Binding DisplayGraphValue, Mode=OneWayToSource}" SizeChanged="Plotter_SizeChanged">
                     </d3:LineGraph>
                 </d3:Chart>
-                <Line Name ="ChartLine" Stroke="#FFAB91" StrokeThickness="1.5"
+
+                <Line Name ="ChartLine" Stroke="{DynamicResource SecondaryAccentBrush}" StrokeThickness="1.5"
                   Visibility="{Binding ChartLineVisibilityX, Mode = TwoWay}"
                   X1="{Binding ChartLineX, Mode=TwoWay}" X2="{Binding ChartLineX, Mode=TwoWay}" 
-                  Y1="1" Y2="{Binding ElementName=Plotter, Path=ActualHeight}"></Line>
-                <Line Name="ChartLineVertical" Stroke="#FFAB91" StrokeThickness="1.5" 
-                  Visibility="{Binding ChartLineVisibilityY, Mode = TwoWay}"
+                  Y1="1" Y2="{Binding ElementName=Plotter, Path=ActualHeight}" StrokeDashArray="5"></Line>
+                <Line Name="ChartLineVertical" Stroke="{DynamicResource SecondaryAccentBrush}" StrokeThickness="1.5" 
+                  Visibility="{Binding ChartLineVisibilityX, Mode = TwoWay}"
                   X1="45" X2="{Binding ChartLineWidth, Mode = TwoWay}" 
-                  Y1="{Binding ChartLineY, Mode=TwoWay}" Y2="{Binding ChartLineY, Mode=TwoWay}">
+                  Y1="{Binding ChartLineY, Mode=TwoWay}" Y2="{Binding ChartLineY, Mode=TwoWay}" StrokeDashArray="5">
                 </Line>
             </Grid>
 
@@ -53,24 +60,20 @@
                 </TextBlock>
             </Grid>
 
-            <Grid Grid.Row="0" Background="{DynamicResource PrimaryHueLightBrush}">
-                <StackPanel>
-                    <TextBlock Text="{Binding LineGraphName}" FontSize="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
-                           TextAlignment="Center" Margin="0,5,0,5">
-                    </TextBlock>
-                </StackPanel>
-            </Grid>
-
-            <Grid Grid.Row="4" Background="{DynamicResource PrimaryHueLightBrush}">
-                <StackPanel>
-                    <!--<TextBlock Text="{Binding DisplayX}" FontSize="16" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
-                           TextAlignment="Left" Margin="40,0,0,10" Visibility="{Binding ChartLineVisibilityX}">
-                    </TextBlock>-->
-
-                    <TextBlock Text="{Binding DisplayY}" FontSize="16" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" 
-                           TextAlignment="Left" Margin="0,10,0,10" Visibility="{Binding ChartLineVisibilityX}">
-                    </TextBlock>
-                </StackPanel>
+            <Grid Grid.Row="4" Background="{DynamicResource MaterialDesignPaper}" Visibility="{Binding ChartLineVisibilityX}">
+                <Border BorderThickness="0,2,0,0" BorderBrush="LightGray" VerticalAlignment="Top">
+                    <StackPanel Margin="45,10">
+                        <TextBlock Text="Value Tracking" FontSize="20" Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                                   TextAlignment="Left" VerticalAlignment="Bottom">
+                        </TextBlock>
+                        <TextBlock Text="{Binding DisplayX}" FontFamily="Arial" FontSize="16" Foreground="Gray"
+                                   TextAlignment="Left" Margin="50,5">
+                        </TextBlock>
+                        <TextBlock Text="{Binding DisplayY}" FontFamily="Arial" FontSize="16" Foreground="Gray"
+                                   TextAlignment="Left" Margin="50,0">
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
             </Grid>
         </Grid>
     </materialDesign:Card>

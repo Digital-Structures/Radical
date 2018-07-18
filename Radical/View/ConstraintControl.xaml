@@ -27,7 +27,8 @@
                      ></TextBox>
 
                 <CheckBox IsChecked="{Binding IsActive, Mode=TwoWay }" IsEnabled="{Binding ChangesEnabled}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"
-                          Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0"
+                          Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0" 
+                          Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource SecondaryAccentForegroundBrush}"
                           ></CheckBox>
 
                 <ComboBox Name="EqualityChoice" FontSize="12" SelectedIndex="{Binding ConstraintType, Mode=TwoWay}" IsEnabled="{Binding ChangesEnabled}"

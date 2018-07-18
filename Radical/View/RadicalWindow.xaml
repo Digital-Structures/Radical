@@ -58,10 +58,6 @@
                     <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="505"/>
                 </DoubleAnimationUsingKeyFrames>
-                <ObjectAnimationUsingKeyFrames BeginTime="0:0:0" Storyboard.TargetName="TreeBorder" Storyboard.TargetProperty="Visibility">
-                    <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
-                    <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Visible}"/>
-                </ObjectAnimationUsingKeyFrames>
             </Storyboard>
             <Storyboard x:Key="MenuClose">
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
@@ -72,10 +68,6 @@
                     <EasingDoubleKeyFrame KeyTime="0" Value="505"/>
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
                 </DoubleAnimationUsingKeyFrames>
-                <ObjectAnimationUsingKeyFrames BeginTime="0:0:0" Storyboard.TargetName="TreeBorder" Storyboard.TargetProperty="Visibility">
-                    <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
-                    <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
-                </ObjectAnimationUsingKeyFrames>
             </Storyboard>
             <Storyboard x:Key="SettingsOpen">
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="SettingsHeader">
@@ -86,10 +78,6 @@
                     <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="200"/>
                 </DoubleAnimationUsingKeyFrames>
-                <ObjectAnimationUsingKeyFrames BeginTime="0:0:0" Storyboard.TargetName="SettingsBorder" Storyboard.TargetProperty="Visibility">
-                    <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
-                    <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Visible}"/>
-                </ObjectAnimationUsingKeyFrames>
             </Storyboard>
             <Storyboard x:Key="SettingsClose">
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="SettingsHeader">
@@ -100,10 +88,6 @@
                     <EasingDoubleKeyFrame KeyTime="0" Value="200"/>
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
                 </DoubleAnimationUsingKeyFrames>
-                <ObjectAnimationUsingKeyFrames BeginTime="0:0:0" Storyboard.TargetName="SettingsBorder" Storyboard.TargetProperty="Visibility">
-                    <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
-                    <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
-                </ObjectAnimationUsingKeyFrames>
             </Storyboard>
             <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
         </ResourceDictionary>
@@ -164,7 +148,7 @@
                             <Expander Name="SlidersExpander" Margin="10" Visibility="Visible">
                                 <Expander.Header>
                                     <TextBlock FontSize="18" Foreground="Gray">
-                                        Sliders                                      
+                                        Sliders
                                     </TextBlock>
                                 </Expander.Header>
                                 <StackPanel  Name="Sliders" HorizontalAlignment="Stretch">
@@ -213,7 +197,6 @@
                         SnapsToDevicePixels="True" />
                 </StackPanel>
             </ScrollViewer>
-            <Border x:Name="TreeBorder" Grid.Row="1" BorderBrush="Black" BorderThickness="0,0,0,0" Background="{x:Null}" Visibility="Collapsed"/>
         </Grid>
 
         <!--I eventually want to make this main container a stack panel, honestly I don't really know why but I do
@@ -227,6 +210,15 @@
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <UniformGrid Columns="{Binding Cols}">
+                                <!-- Grid for the constraint graphs -->
+                            </UniformGrid>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+                <ItemsControl Name="ConstraintsGraphs2">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="3">
                                 <!-- Grid for the constraint graphs -->
                             </UniformGrid>
                         </ItemsPanelTemplate>
@@ -274,7 +266,6 @@
 
                 </StackPanel>
             </Grid>
-            <Border x:Name="SettingsBorder" Grid.Row="1" BorderBrush="Black" BorderThickness="0.1,0,0,0" Background="{x:Null}" Visibility="Collapsed"/>
 
             <Grid Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20" Background="{x:Null}" >
                 <Button x:Name="ButtonPlay" Click="ButtonPlay_Click" Width="40" Height="40"
@@ -285,7 +276,7 @@
                 <Button x:Name="ButtonPause" Click="ButtonPause_Click"  Visibility="Collapsed" Width="40" Height="40"
                         Style="{StaticResource MaterialDesignFloatingActionLightButton}"
                         materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
-                        materialDesign:ButtonProgressAssist.IndicatorForeground="{DynamicResource SecondaryAccentForegroundBrush}"
+                        materialDesign:ButtonProgressAssist.IndicatorForeground="{DynamicResource PrimaryHueLightBrush}"
                         materialDesign:ButtonProgressAssist.Value="-1"
                         materialDesign:ButtonProgressAssist.IsIndeterminate="True"
                         Background="{DynamicResource SecondaryAccentBrush}" BorderBrush="{DynamicResource SecondaryAccentBrush}">

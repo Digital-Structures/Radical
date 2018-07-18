@@ -45,7 +45,6 @@ namespace Radical
             this.OptRunning = false;
             this.OptRunning = false;
             this._advancedOptions = false;
-            
         }
         private List<GroupVarVM> GroupVars;
         private RadicalComponent Component;

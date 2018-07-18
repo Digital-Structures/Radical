@@ -78,6 +78,27 @@ namespace Radical
             }
         }
 
+        //GRAPH DISPLAY LISTS
+        //A list of active constraint graphs to populate the window graph grid
+        public List<List<GraphControl>> GraphDisplayLists
+        {
+            get
+            {
+                //Count all graphs but the main objective
+                int numGraphs = this.ActiveGraphs.Count;
+
+                List<GraphControl> grid = new List<GraphControl>();
+                List<GraphControl> lastRow = new List<GraphControl>();
+
+                for (int i = 1; i < numGraphs - 3; i++)
+                    grid.Add(this.ActiveGraphs[i]);
+                for (int i = numGraphs - 3; i < numGraphs; i++)
+                    lastRow.Add(this.ActiveGraphs[i]);
+
+                return new List<List<GraphControl>> { grid, lastRow };
+            }
+        }
+
         //ADD GRAPHS
         //Creates a graph for the main objective and for all of the constraints
         private void AddGraphs()
@@ -290,10 +311,12 @@ namespace Radical
         //UpdatedGraphVisibility
         public void UpdatedGraphVisibility()
         {
+
             ConstraintsGraphs.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = this.ActiveGraphs.Where(g => ActiveGraphs.IndexOf(g) != 0) });
 
             if (this.ActiveGraphs.Count == 1)
-                this.ActiveGraphs[0].GraphGrid.Height = this.MainGrid.ActualHeight-20;
+                this.ActiveGraphs[0].GraphGrid.Height = this.MainGrid.ActualHeight - 20;
+
             else
             {
                 this.ActiveGraphs[0].GraphGrid.Height = 500;
@@ -303,7 +326,6 @@ namespace Radical
                 else
                     this.RadicalVM.Cols = 2;
             }
-                
         }
 
         //OPTIMIZATION STARTED
