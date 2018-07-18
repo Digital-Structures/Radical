@@ -24,6 +24,7 @@ namespace Radical
             this._currentvalue = Constraint.CurrentValue;
             this._isactive = constraint.IsActive;
             this.GraphVM = graph_vm;
+            this.GraphVM.LineGraphName = this.Name;
             this.OptRunning = false;
         }
         public GraphVM GraphVM;
@@ -74,6 +75,7 @@ namespace Radical
             {
                 if (CheckPropertyChanged<string>("Name", ref _name, ref value))
                 {
+                    this.GraphVM.LineGraphName = value;
                 }
             }
         }

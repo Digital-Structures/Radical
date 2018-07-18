@@ -165,6 +165,7 @@ namespace Radical
             StackPanel groupControls = new StackPanel();
             //Expander
             Expander groupControlMenu = new Expander();
+            groupControlMenu.IsExpanded = true;
             groupControlMenu.Header = Header2Formatting("Group Variable Control");
             groupControlMenu.Content = groupControls;
             this.Sliders.Children.Add(groupControlMenu);
@@ -227,6 +228,7 @@ namespace Radical
                 StackPanel groupControls = new StackPanel();
                 //Expander
                 Expander groupControlMenu = new Expander();
+                groupControlMenu.IsExpanded = true;
                 groupControlMenu.Header = Header2Formatting("Group Variable Control");
                 groupControlMenu.Content = groupControls;
                 variableMenus.Children.Add(groupControlMenu);

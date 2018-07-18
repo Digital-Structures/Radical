@@ -30,6 +30,8 @@ namespace Radical
             _x = "0";
             _y = "0";
             _graphVisibility = Visibility.Visible;
+            DisplayX = null;
+            DisplayY = null;
         }
 
         private List<double> _graphscores;
@@ -213,13 +215,16 @@ namespace Radical
             ChartLineVisibilityX = v;
             ChartLineVisibilityY = v;
             
-            if (ChartLineX - 45 < 0 || ChartLineX > this.Plotter.ActualWidth)
+            if (ChartLineX - 45 < 0 || ChartLineX > this.Plotter.ActualWidth + 45)
             {
                 ChartLineVisibilityX = Visibility.Collapsed;
+                DisplayX = null;
+                DisplayY = null;
             }
             if (ChartLineY < 0 || ChartLineY > this.Plotter.ActualHeight)
             {
                 ChartLineVisibilityY = Visibility.Collapsed;
+                DisplayY = null;
             }
         }
 
