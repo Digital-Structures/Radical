@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using LiveCharts;
 using LiveCharts.Wpf;
 
+
 namespace Radical
 {
     public class GraphVM : BaseVM
@@ -109,7 +110,7 @@ namespace Radical
         private string _y;
         public string DisplayY
         {
-            get { return String.Format("Value: {0}", _y); }
+            get { return String.Format("{0}: {1}", this.LineGraphName, _y); }
             set
             {
                 CheckPropertyChanged<string>("DisplayY", ref _y, ref value);

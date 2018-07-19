@@ -5,44 +5,43 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Radical"
              mc:Ignorable="d" >
-    
-    <Border BorderThickness="0,0.3,0,0.3" BorderBrush="LightGray" Height="45" Width="475">
-        <Grid>
-            <Grid Style="{x:Null}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="143"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-            
-                <TextBox Name="ConstName" Text="{Binding Name, Mode=TwoWay}"  FontFamily="Roboto" FontSize="12" 
-                         Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,10,0"
+
+    <Grid Margin="25,5,0,5">
+        <Grid Style="{x:Null}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="150"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <TextBox Name="ConstName" Text="{Binding Name, Mode=TwoWay}"  FontFamily="Roboto" FontSize="12" 
+                         Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="25,0,0,0"
                          TextChanged="TextBox_TextChanged" PreviewKeyDown="TextBox_PreviewKeyDown"
                          ></TextBox>
 
-                <TextBox Name="ValueText" Text="{Binding CurrentValue, Mode=OneWay, StringFormat=N2}" FontSize="12" IsReadOnly="True"
-                     Grid.Column="1" Width="Auto" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0" BorderBrush="{x:Null}"
+            <TextBox Name="ValueText" Text="{Binding CurrentValue, Mode=OneWay, StringFormat=N2}" FontSize="12" IsReadOnly="True"
+                     Grid.Column="1" Width="Auto" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0" BorderBrush="{x:Null}"
                      ></TextBox>
 
-                <CheckBox IsChecked="{Binding IsActive, Mode=TwoWay }" IsEnabled="{Binding ChangesEnabled}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"
-                          Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0"
+            <CheckBox Name="MyCheckBox" IsChecked="{Binding IsActive, Mode=OneWayToSource }" IsEnabled="{Binding ChangesEnabled}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"
+                          Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0" 
+                          Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource SecondaryAccentForegroundBrush}"
                           ></CheckBox>
 
-                <ComboBox Name="EqualityChoice" FontSize="12" SelectedIndex="{Binding ConstraintType, Mode=TwoWay}" IsEnabled="{Binding ChangesEnabled}"
-                          Grid.Column="3" Width="90" HorizontalContentAlignment="Right">
-                    <ComboBoxItem Content="Less Than" HorizontalAlignment="Right"></ComboBoxItem>
-                    <ComboBoxItem Content="Greater Than" HorizontalAlignment="Right"></ComboBoxItem>
-                    <ComboBoxItem Content="Equal To" HorizontalAlignment="Right"></ComboBoxItem>
-                </ComboBox>
+            <ComboBox Name="EqualityChoice" FontSize="12" SelectedIndex="{Binding ConstraintType, Mode=TwoWay}" IsEnabled="{Binding ChangesEnabled}"
+                          Grid.Column="3" Width="90" HorizontalContentAlignment="Right" Margin="0,0,10,0">
+                <ComboBoxItem Content="Less Than" HorizontalAlignment="Right"></ComboBoxItem>
+                <ComboBoxItem Content="Greater Than" HorizontalAlignment="Right"></ComboBoxItem>
+                <ComboBoxItem Content="Equal To" HorizontalAlignment="Right"></ComboBoxItem>
+            </ComboBox>
 
-                <TextBox Name="ConstraintLimit" Text="{Binding ConstraintLimit, Mode=TwoWay, StringFormat=N2}"
-                         Grid.Column="4" MinWidth="28" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="12" Margin="10,0" BorderBrush="{x:Null}" HorizontalContentAlignment="Left"
+            <TextBox Name="ConstraintLimit" Text="{Binding ConstraintLimit, Mode=TwoWay, StringFormat=N2}"
+                         Grid.Column="4" MinWidth="50" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Padding="5,0,0,0" FontSize="12" BorderBrush="{x:Null}"
                          TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus">
-                </TextBox>
-            </Grid>
-
+            </TextBox>
         </Grid>
-    </Border>
+
+    </Grid>
 </local:BaseControl>

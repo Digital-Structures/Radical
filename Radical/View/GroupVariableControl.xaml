@@ -6,86 +6,82 @@
              xmlns:local="clr-namespace:Radical"
              mc:Ignorable="d">
     
-    <Border BorderThickness="0,0.5,0,0.5" BorderBrush="LightGray" Height="60" Width="475">
+    <Grid Style="{x:Null}" Margin="0,5" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
 
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
 
-        <Grid Style="{x:Null}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
-
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Name="GroupControlName" FontSize="12" Foreground="Gray" 
-                         Grid.Column="0" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,10,0"
+            <TextBlock Name="GroupControlName" FontSize="12" Foreground="Gray" 
+                         Grid.Column="0" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="25,0,0,0"
                          ></TextBlock>
 
-                <TextBox Name="ValueText" Text="{Binding Value, Mode=TwoWay, StringFormat=N2}" FontSize="12" 
-                         Grid.Column="1" MinWidth="28" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0" BorderBrush="{x:Null}"
+            <TextBox Name="ValueText" Text="{Binding Value, Mode=TwoWay, StringFormat=N2}" FontSize="12" 
+                         Grid.Column="1" MinWidth="28" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0" BorderBrush="{x:Null}"
                          TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus" Visibility="Visible"
                          ></TextBox>
 
-                <CheckBox Name ="Checkbox" IsChecked="True"
-                          Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0" Background="{DynamicResource SecondaryAccentBrush}"
+            <CheckBox Name ="Checkbox" IsChecked="True"
+                          Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"
+                          Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource SecondaryAccentForegroundBrush}"
                           IsEnabled="{Binding ChangesEnabled}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"
                           ></CheckBox>
 
-                <TextBox Name="MinText" Text="{Binding Min, Mode=TwoWay, StringFormat=N2}" FontSize="12"
-                         Grid.Column="3" MinWidth="28" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="5,0" BorderBrush="{x:Null}" 
+            <TextBox Name="MinText" Text="{Binding Min, Mode=TwoWay, StringFormat=N2}" FontSize="12"
+                         Grid.Column="3" MinWidth="50" VerticalAlignment="Center" HorizontalContentAlignment="Right" Margin="0,0,10,0" BorderBrush="{x:Null}" 
                          TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus" Visibility="Visible"
                          ></TextBox>
 
-                <Slider Name ="Slider" Minimum="{Binding Min, Mode=TwoWay}" Maximum="{Binding Max, Mode=TwoWay}" Value="{Binding Value, Mode=TwoWay}" FontSize="8" Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                        Grid.Column="4" Width="150" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2" Visibility="Visible"
+            <Slider Name ="Slider" Minimum="{Binding Min, Mode=TwoWay}" Maximum="{Binding Max, Mode=TwoWay}" Value="{Binding Value, Mode=TwoWay}" FontSize="8" Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                        Grid.Column="4" Width="125" VerticalAlignment="Center" HorizontalAlignment="Center" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2" Visibility="Visible"
                         IsEnabled="{Binding ChangesEnabled}"
                         ></Slider>
 
-                <TextBox Name="MaxText" Text="{Binding Max, Mode=TwoWay, StringFormat=N2}" FontSize="12" 
-                         Grid.Column="5" MinWidth="28" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0" BorderBrush="{x:Null}"
+            <TextBox Name="MaxText" Text="{Binding Max, Mode=TwoWay, StringFormat=N2}" FontSize="12" 
+                         Grid.Column="5" MinWidth="50" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="10,0,5,0" BorderBrush="{x:Null}"
                          TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus" Visibility="Visible"
                          ></TextBox>
-            </Grid>
+        </Grid>
 
-            <Grid Grid.Row="1" VerticalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="40"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="160"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
+        <Grid Grid.Row="1" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="30"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="125"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Scaling Factors:" Foreground="Gray" FontWeight="Light" FontSize="12"
+            <TextBlock Text="Scaling Factors:" Foreground="Gray" FontWeight="Light" FontSize="12"
                          Grid.Column="0" Width="Auto" HorizontalAlignment="Right" VerticalAlignment="Center"
                          ></TextBlock>
 
-                <TextBox Name="ValueFactor" Text="{Binding ValueScale, Mode=TwoWay, StringFormat=N2}" FontSize="12" 
+            <TextBox Name="ValueFactor" Text="{Binding ValueScale, Mode=TwoWay, StringFormat=N2}" FontSize="12" 
                          Grid.Column="1" MinWidth="28" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0" BorderBrush="{x:Null}"
                          TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus" Visibility="Visible"
                          ></TextBox>
 
-                <TextBox Name="MinFactor" Text="{Binding MinScale, Mode=TwoWay, StringFormat=N2}" FontSize="12" 
-                         Grid.Column="3" MinWidth="28" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0" BorderBrush="{x:Null}"
+            <TextBox Name="MinFactor" Text="{Binding MinScale, Mode=TwoWay, StringFormat=N2}" FontSize="12" 
+                         Grid.Column="3" MinWidth="50" VerticalAlignment="Center" HorizontalContentAlignment="Right" Margin="0,0,10,0" BorderBrush="{x:Null}"
                          TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus" Visibility="Visible"
                          ></TextBox>
 
-                <TextBox Name="MaxFactor" Text="{Binding MaxScale, Mode=TwoWay, StringFormat=N2}" FontSize="12" 
-                         Grid.Column="5" MinWidth="28" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0" BorderBrush="{x:Null}"
+            <TextBox Name="MaxFactor" Text="{Binding MaxScale, Mode=TwoWay, StringFormat=N2}" FontSize="12" 
+                         Grid.Column="5" MinWidth="50" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="10,0,5,0" BorderBrush="{x:Null}"
                          TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus" Visibility="Visible"
                          ></TextBox>
 
-            </Grid>
         </Grid>
-        
-    </Border>
+    </Grid>
 </local:BaseControl>

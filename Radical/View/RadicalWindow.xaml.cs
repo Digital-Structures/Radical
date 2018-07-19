@@ -23,6 +23,8 @@ using System.Reflection;
 using LiveCharts;
 using LiveCharts.Helpers;
 using LiveCharts.Wpf;
+using MaterialDesignThemes;
+
 
 namespace Radical
 {
@@ -56,12 +58,21 @@ namespace Radical
             AddGraphs(); //Also adds constraints
 
             this.SettingsMenu.Children.Add(new SettingsControl(this.RadicalVM));
+
+            this.Loaded += new RoutedEventHandler(MainWindow_Loaded);
         }
         private Dictionary<string, List<GraphControl>> GraphControls;
         private List<GroupVariableControl> GroupVars;
         public enum Direction { X, Y, Z, None };
         public RadicalVM RadicalVM;
         public CancellationTokenSource source;
+
+        //MAIN WINDOW LOADED
+        //Ensures main graph height is correct on loading
+        void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.UpdatedGraphVisibility();
+        }
 
         //ACTIVE GRAPHS
         //A list of active constraint graphs to populate the window graph grid
@@ -79,35 +90,62 @@ namespace Radical
             }
         }
 
+        //GRAPH DISPLAY LISTS
+        //Divides graphs into appropriate sub-lists for data display
+        public List<List<GraphControl>> GraphDisplayLists
+        {
+            get
+            {
+                //Count all graphs but the main objective
+                int numGraphs = this.ActiveGraphs.Count-1;
+
+                List<GraphControl> grid = new List<GraphControl>();
+                List<GraphControl> lastRow = new List<GraphControl>();
+
+                if((numGraphs%2) == 1 && numGraphs>=3)
+                {
+                    for (int i = 0; i < numGraphs - 3; i++)
+                        grid.Add(this.ActiveGraphs[i+1]);
+                    for (int i = numGraphs - 3; i < numGraphs; i++)
+                        lastRow.Add(this.ActiveGraphs[i+1]);
+                }
+                else
+                    for (int i = 0; i < numGraphs; i++)
+                        grid.Add(this.ActiveGraphs[i+1]);
+
+                return new List<List<GraphControl>> { grid, lastRow };
+            }
+        }
+
         //ADD GRAPHS
         //Creates a graph for the main objective and for all of the constraints
         private void AddGraphs()
         {
-            //MAIN OBJECTIVE GRAPHS
+            //MAIN OBJECTIVE GRAPH
             var g = new GraphControl(this.RadicalVM.Graphs["Main"][0], this.RadicalVM, this);
             GraphControls["Main"].Add(g);
+            MainBlock.Children.Add(GraphControls["Main"][0]);
 
             //CONSTRAINTS GRAPHS
             //Collapse Constraints expander if no constraints are imposed
-            if (!RadicalVM.Constraints.Any())
+            if (RadicalVM.Constraints.Any())
             {
+                VariableHeaderControl labels = new VariableHeaderControl();
+                labels.HeaderGrid.Margin = new Thickness(25, 0, 0, 0);
+                this.Constraints.Children.Add(labels);
+
+                for (int i = 0; i < RadicalVM.Constraints.Count; i++)
+                {
+                    GraphVM gvm = RadicalVM.Graphs["Constraints"][i];
+                    g = new GraphControl(gvm, this.RadicalVM, this);
+                    GraphControls["Constraints"].Add(g);
+
+                    ConstVM c = RadicalVM.Constraints[i];
+                    this.Constraints.Children.Add(new ConstraintControl(c, this));
+                }
+            }
+            else
                 this.ConstraintsExpander.Visibility = Visibility.Collapsed;
-                return;
-            }
-
-            this.Constraints.Children.Add(new VariableHeaderControl());
-
-            for (int i = 0; i < RadicalVM.Constraints.Count; i++)
-            {
-                GraphVM gvm = RadicalVM.Graphs["Constraints"][i];
-                g = new GraphControl(gvm, this.RadicalVM, this);
-                GraphControls["Constraints"].Add(g);
-
-                ConstVM c = RadicalVM.Constraints[i];
-                this.Constraints.Children.Add(new ConstraintControl(c, this));
-            }
-
-            MainBlock.Children.Add(GraphControls["Main"][0]);
         }
 
         public void UpdateAllGraphs()
@@ -179,6 +217,9 @@ namespace Radical
             groupControl.GroupControlName.Text = "All Variables";
             groupControls.Children.Add(groupControl);
 
+            //Border separator
+            this.Sliders.Children.Add(this.Separator());
+
             //INDIVIDUAL VARIBALE CONTROL
             //Stack Panel
             StackPanel individualControls = new StackPanel();
@@ -221,7 +262,9 @@ namespace Radical
                 singleGeo.Header = Header1Formatting(geometry[geoIndex].Name.Split('.')[0]); geoIndex++;
                 singleGeo.Content = variableMenus;
                 this.Geometries.Children.Add(singleGeo);
-                //singleGeoVars.Children.Add(new VariableHeaderControl());
+
+                //Border
+                variableMenus.Children.Add(this.Separator());
 
 
                 //GROUP VARIABLE CONTROL
@@ -248,6 +291,9 @@ namespace Radical
                 groupControls.Children.Add(groupControlY);
                 groupControls.Children.Add(groupControlZ);
 
+                //Border separator
+                variableMenus.Children.Add(this.Separator());
+
                 //INDIVIDUAL VARIBALE CONTROL
                 //Stack Panel
                 StackPanel individualControls = new StackPanel();
@@ -272,7 +318,6 @@ namespace Radical
             TextBlock header = new TextBlock(new Run(text));
             header.Foreground = Brushes.Gray;
             header.FontSize = 16;
-            header.Margin = new Thickness(1, 0, 0, 0);
 
             return header;
         }
@@ -283,28 +328,41 @@ namespace Radical
             TextBlock header = new TextBlock(new Run(text));
             header.Foreground = Brushes.DarkGray;
             header.FontSize = 16;
-            header.Margin = new Thickness(1, 0, 0, 0);
 
             return header;
+        }
+
+        //Formatting border separators
+        private Border Separator()
+        {
+            Border b = new Border();
+            b.Height = 1;
+            b.HorizontalAlignment = HorizontalAlignment.Stretch;
+            b.SnapsToDevicePixels = true;
+            b.BorderThickness = new Thickness(0, 0, 0, 2);
+            b.BorderBrush = Brushes.DarkGray;
+            return b;
         }
 
         //UpdatedGraphVisibility
         public void UpdatedGraphVisibility()
         {
-            ConstraintsGraphs.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = this.ActiveGraphs.Where(g => ActiveGraphs.IndexOf(g) != 0) });
+            List<List<GraphControl>> displayData = this.GraphDisplayLists;
+            ConstraintsGraphs.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = displayData[0]});
+            ConstraintsGraphs2.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = displayData[1]});
 
             if (this.ActiveGraphs.Count == 1)
-                this.ActiveGraphs[0].GraphGrid.Height = this.MainGrid.ActualHeight-20;
+                this.ActiveGraphs[0].GraphGrid.Height = this.MainGrid.ActualHeight - 20;
+
             else
             {
-                this.ActiveGraphs[0].GraphGrid.Height = 500;
+                this.ActiveGraphs[0].GraphGrid.Height = 0.45*this.MainGrid.ActualHeight;
 
                 if (this.ActiveGraphs.Count == 2)
                     this.RadicalVM.Cols = 1;
                 else
                     this.RadicalVM.Cols = 2;
             }
-                
         }
 
         //OPTIMIZATION STARTED
@@ -339,11 +397,35 @@ namespace Radical
             this.RadicalVM.OnWindowClosing();
         }
 
+        //ANIMATION BEGAN
+        private void AnimationBegan()
+        {
+            foreach (GraphControl g in this.ActiveGraphs)
+                g.ChartRow.Visibility = Visibility.Collapsed;
+
+            //this.GraphsScroller.Visibility = Visibility.Collapsed;
+            //this.LoadingPopup.Visibility = Visibility.Visible;
+            
+        }
+
+        //ANIMATION COMPLETED
+        private void Animation_Completed(object sender, EventArgs e)
+        {
+            foreach (GraphControl g in this.ActiveGraphs)
+                g.ChartRow.Visibility = Visibility.Visible;
+
+            //this.GraphsScroller.Visibility = Visibility.Visible;
+            //this.LoadingPopup.Visibility = Visibility.Collapsed;
+        }
+
+        //
+
         //CLOSE MENU CLICK
         private void ButtonCloseMenu_Click(object sender, RoutedEventArgs e)
         {
             ButtonOpenMenu.Visibility = Visibility.Visible;
             ButtonCloseMenu.Visibility = Visibility.Collapsed;
+            this.AnimationBegan();
         }
 
         //OPEN MENU CLICK
@@ -351,6 +433,7 @@ namespace Radical
         {
             ButtonOpenMenu.Visibility = Visibility.Collapsed;
             ButtonCloseMenu.Visibility = Visibility.Visible;
+            this.AnimationBegan();
         }
 
         //BUTTON PLAY CLICK
@@ -386,7 +469,7 @@ namespace Radical
             source.Cancel();
             UpdateAllGraphs();
             ButtonPause.Visibility = Visibility.Collapsed;
-            ButtonPlay.Visibility = Visibility.Visible;
+            ButtonPlay.Visibility = Visibility.Visible;           
         }
 
         //BUTTON SETTINGS OPEN CLICK
@@ -394,6 +477,7 @@ namespace Radical
         {
             ButtonSettingsOpen.Visibility = Visibility.Collapsed;
             SettingsClose.Visibility = Visibility.Visible;
+            this.AnimationBegan();
         }
 
         //BUTTON SETTINGS CLOSE CLICK
@@ -401,6 +485,27 @@ namespace Radical
         {
             ButtonSettingsOpen.Visibility = Visibility.Visible;
             SettingsClose.Visibility = Visibility.Collapsed;
+            this.AnimationBegan();
+        }
+
+        //EXPADNED
+        private void Expander_Expanded(object sender, RoutedEventArgs e)
+        {
+            if(sender == e.OriginalSource)
+            {
+                Expander menu = (Expander)sender;
+                menu.Background = (SolidColorBrush)this.FindResource("PrimaryHueLightBrush");
+            }
+        }
+
+        //COLLAPSED
+        private void Expander_Collapsed(object sender, RoutedEventArgs e)
+        {
+            if (sender == e.OriginalSource)
+            {
+                Expander menu = (Expander)sender;
+                menu.Background = Brushes.Transparent;
+            }
         }
 
         private void SetUpGraphLineWidth()
