@@ -101,11 +101,4 @@ namespace Radical
             MyWindow.GraphsScroller.RaiseEvent(e2);
         }
     }
-
-    public class CustomAxis : Axis
-    {
-        public CustomAxis() : base(new LabelProvider(), new TicksProvider())
-        {
-        }
-    }
 }

@@ -11,8 +11,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="{DynamicResource MaterialDesignPaper}" Margin="5" Visibility="{Binding GraphVisibility}">
-        <Grid Name="GraphGrid" HorizontalAlignment="Center" Height="450">
+    <materialDesign:Card Name="GraphCard" materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="{DynamicResource MaterialDesignPaper}" Margin="5" Visibility="{Binding GraphVisibility}">
+        <Grid Name="GraphGrid" HorizontalAlignment="Center" Height="500">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
@@ -25,7 +25,7 @@
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0" Background="{DynamicResource PrimaryHueDarkBrush}">
-                <TextBlock Text="{Binding LineGraphName}" FontSize="32" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                <TextBlock Text="{Binding LineGraphName}" Width="{Binding ActualWidth, ElementName=GraphCard}" FontSize="32" FontFamily="Global User Interface" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                            TextAlignment="Center" Margin="10">
                 </TextBlock>
             </Grid>
@@ -36,7 +36,7 @@
                 </TextBlock>
             </Grid>
 
-            <Grid Grid.Row="2" Margin="25,0">
+            <Grid Grid.Row="2" Name="ChartRow" Margin="25,0">
                 <d3:Chart Name ="Chart" BorderThickness="1,0,0,1" PreviewMouseMove="Chart_MouseMove" Background="{x:Null}" Margin="10,0,0,0" Width="Auto" PreviewMouseWheel="Graph_PreviewMouseWheel">
                     <d3:LineGraph Name="Plotter" Stroke="{DynamicResource SecondaryAccentBrush}" StrokeThickness="2" Padding="0,10,10,0" d3:Legend.IsVisible="False"
                           ToolTip="{Binding DisplayGraphValue, Mode=OneWayToSource}" SizeChanged="Plotter_SizeChanged">

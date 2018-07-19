@@ -31,6 +31,7 @@ namespace Radical
         {
             MyWindow = window;
             InitializeComponent();
+            this.MyCheckBox.IsChecked = true;
             
         }
         private RadicalWindow MyWindow;
