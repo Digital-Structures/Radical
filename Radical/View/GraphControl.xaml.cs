@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using LiveCharts;
+using LiveCharts.Helpers;
+using LiveCharts.Wpf;
 
 namespace Radical
 {
@@ -35,27 +38,37 @@ namespace Radical
 
             InitializeComponent();
 
-            this.GraphVM.Plotter = Plotter;
+            this.GraphVM.Chart = Chart;
+            this.GraphVM.ChartAxisX = ChartAxisX;
+            this.GraphVM.ChartAxisY = ChartAxisY;
+
             this.GraphVM.ChartLine = ChartLine;
-            this.GraphVM.ChartLineVisibility(Visibility.Collapsed);  
+            this.GraphVM.ChartLineVisibility(Visibility.Collapsed);
+
+            //Not sure if this is correct at all
+            Chart.DataContext = this.GraphVM;
+
         }
+
         public GraphVM GraphVM;
         RadicalWindow MyWindow;       
         RadicalVM RadicalVM;
 
         //UPDATE WINDOW 
-        public void UpdateWindowGeneral(IEnumerable<double> y)
+        public void UpdateWindowGeneral(ChartValues<double> y)
         {
-            var x = Enumerable.Range(0, y.Count()).ToArray();
+            //if (y.Count > 30)
+            //{
+            //    this.GraphVM.ChartAnimationsDisabled = true;
+            //}
 
             Dispatcher.Invoke(() =>
             {
-                Plotter.Plot(x, y);
+                this.GraphVM.ChartValues = y;
             });
         }
 
-        //SIZE CHANGED
-        public void Plotter_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void Plotter_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             this.GraphVM.SetLineWidth();
         }
@@ -64,19 +77,24 @@ namespace Radical
         //Currently returns graph x value of where the mouse clicks down 
         private void Chart_MouseMove(object sender, MouseEventArgs e)
         {
-            if (this.GraphVM.GraphScores.Any())
+            if (this.GraphVM.ChartValues.Any())
             {
-                double mouseX = e.GetPosition(this.Plotter).X + Plotter.OffsetX;
-                double ScaleX = Plotter.ScaleX;
+                var mouseCoordinate = e.GetPosition(Chart);
 
-                int actualX = (int)(Math.Truncate(mouseX / ScaleX));
+                double mouseX = mouseCoordinate.X;
+                // double ScaleX = Plotter.ScalesXAt;
+                double minx = ChartAxisX.ActualMinValue;
+
+                double ScaleX = (Chart.ActualWidth) / (ChartAxisX.ActualMaxValue - minx);
+
+                int actualX = (int)(Math.Truncate(mouseX / ScaleX - minx));
                 if (actualX < 0)
                 {
                     actualX = 0;
                 }
-                else if (actualX >= this.GraphVM.GraphScores.Count)
+                else if (actualX >= this.GraphVM.ChartValues.Count)
                 {
-                    actualX = this.GraphVM.GraphScores.Count - 1;
+                    actualX = this.GraphVM.ChartValues.Count - 1;
                 }
 
                 this.GraphVM.UpdateLine(actualX);
@@ -98,11 +116,6 @@ namespace Radical
             var e2 = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta);
             e2.RoutedEvent = UIElement.MouseWheelEvent;
             MyWindow.GraphsScroller.RaiseEvent(e2);
-        }
-
-        private void Plotter_SizeChanged_1(object sender, SizeChangedEventArgs e)
-        {
-
         }
     }
 }

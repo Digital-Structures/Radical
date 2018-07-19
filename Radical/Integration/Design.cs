@@ -7,6 +7,9 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Radical.Components;
 using Radical.TestComponents;
+using LiveCharts;
+using LiveCharts.Helpers;
+using LiveCharts.Wpf;
 
 
 namespace Radical.Integration
@@ -19,7 +22,6 @@ namespace Radical.Integration
         public Design(List<IVariable> vars, RadicalComponent component)
         {
             this.Variables = vars;
-           // this.ScoreEvolution = new List<double>();
             this.OptComponent = component;
         }
 
@@ -27,7 +29,6 @@ namespace Radical.Integration
         {
             this.Variables = vars;
             this.Constraints = consts;
-          //  this.ScoreEvolution = new List<double>();
             this.OptComponent = component;
         }
 
@@ -38,11 +39,11 @@ namespace Radical.Integration
             this.Constraints = consts;
             this.Geometries = geos;
             if (Geometries.Any()) { this.Variables.AddRange(Geometries.Select(x => x.Variables).SelectMany(x => x).ToList()); } // not the cleanest way to do it, review code structure
-            this.ScoreEvolution = new List<double>();
-            this.ConstraintEvolution = new List<List<double>>();
+            this.ScoreEvolution = new ChartValues<double>();
+            this.ConstraintEvolution = new ChartValues<ChartValues<double>>();
             foreach (Constraint c in this.Constraints)
             {
-                this.ConstraintEvolution.Add(new List<double>());
+                this.ConstraintEvolution.Add(new ChartValues<double>());
             }
 
 
@@ -54,8 +55,8 @@ namespace Radical.Integration
         public List<List<double>> Properties { get; set; }
         public IOptimizationComponent OptComponent { get; set; }
         public IExplorationComponent ExpComponent;
-        public List<double> ScoreEvolution { get; set; }
-        public List<List<double>> ConstraintEvolution { get; set; }
+        public ChartValues<double> ScoreEvolution { get; set; }
+        public ChartValues<ChartValues<double>> ConstraintEvolution { get; set; }
         public IGH_Param ScoreParameter { get; set; }
 
         //INPUT PROPERTIES
@@ -84,7 +85,7 @@ namespace Radical.Integration
         {
             Optimizer opt = new Optimizer(this);
             opt.RunOptimization();
-            this.OptComponent.Evolution = this.ScoreEvolution;
+            this.OptComponent.Evolution = this.ScoreEvolution.ToList();
             Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
         }
 
@@ -94,7 +95,7 @@ namespace Radical.Integration
         {
             Optimizer opt = new Optimizer(this, radicalWindow);
             opt.RunOptimization();
-            this.OptComponent.Evolution = this.ScoreEvolution;
+            this.OptComponent.Evolution = this.ScoreEvolution.ToList();
         }
 
         //SAMPLE
@@ -135,7 +136,7 @@ namespace Radical.Integration
         {
             this.Variables = vars;
             //this.CurrentScore = 0; //init objective function
-            this.ScoreEvolution = new List<double>();
+            this.ScoreEvolution = new ChartValues<double>();
             this.OptComponent = component;
         }
 
@@ -145,7 +146,7 @@ namespace Radical.Integration
             this.Geometries = geos;
             if (Geometries.Any()) { this.Variables.AddRange(Geometries.Select(x => x.Variables).SelectMany(x => x).ToList()); } // not the cleanest way to do it, review code structure
             //this.CurrentScore = 0; //init objective function
-            this.ScoreEvolution = new List<double>();
+            this.ScoreEvolution = new ChartValues<double>();
             this.OptComponent = component;
         }
         #endregion

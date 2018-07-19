@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using Grasshopper.Kernel;
 using Radical.Components;
+using LiveCharts;
+using LiveCharts.Helpers;
+using LiveCharts.Wpf;
 
 namespace Radical.Integration
 {
@@ -24,8 +27,8 @@ namespace Radical.Integration
         // Bad
         List<List<double>> Samples {get;set;}
         List<List<double>> Properties { get; set; }
-        List<double> ScoreEvolution { get; set; }
-        List<List<double>> ConstraintEvolution { get; set; }
+        ChartValues<double> ScoreEvolution { get; set; }
+        ChartValues<ChartValues<double>> ConstraintEvolution { get; set; }
 
         void Optimize(RadicalWindow radicalWindow);
         

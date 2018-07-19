@@ -7,6 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Radical.TestComponents;
 using System.Windows.Forms;
+using LiveCharts;
+using LiveCharts.Helpers;
+using LiveCharts.Wpf;
 
 namespace Radical.Integration
 {
@@ -40,16 +43,6 @@ namespace Radical.Integration
                             Solver.AddEqualZeroConstraint((x) => Constraint(x, c));
                     }
                 }
-            }
-        }
-
-        //SET UP CONSTRAINT_EVOLUTION LIST
-        //This method creates sublists in the ConstraintEvolution that will correspond to constraints 
-        public void SetUpConstraintEvolution()
-        {
-            foreach (Constraint c in Design.Constraints)
-            {
-                Design.ConstraintEvolution.Add(new List<double>());
             }
         }
 
@@ -114,7 +107,8 @@ namespace Radical.Integration
             //Adds main objective values to list and draws
             double objective = Design.CurrentScore;
             Design.ScoreEvolution.Add(objective);
-            ((Design)Design).OptComponent.Evolution = Design.ScoreEvolution;
+
+            ((Design)Design).OptComponent.Evolution = Design.ScoreEvolution.ToList();
 
             for (int i = 0; i < Design.ConstraintEvolution.Count; i++)
             {

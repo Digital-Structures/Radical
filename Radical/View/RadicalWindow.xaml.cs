@@ -20,8 +20,9 @@ using System.Windows.Markup;
 using NLoptNet;
 using System.Globalization;
 using System.Reflection;
-
-using InteractiveDataDisplay.WPF;
+using LiveCharts;
+using LiveCharts.Helpers;
+using LiveCharts.Wpf;
 
 namespace Radical
 {

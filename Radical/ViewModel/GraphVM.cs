@@ -3,11 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -17,14 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using LiveCharts;
+using LiveCharts.Wpf;
 
 namespace Radical
 {
     public class GraphVM : BaseVM
     {
-        public GraphVM(List<double> scores, string name)
+        public GraphVM(ChartValues<double> scores, string name)
         {
-            _graphscores = scores; 
+            _chartvalues = scores; 
             _linegraph_name = name;
             _chartlinex = 0;
             _x = "0";
@@ -32,16 +29,20 @@ namespace Radical
             _graphVisibility = Visibility.Visible;
             DisplayX = null;
             DisplayY = null;
+            _chartvalues = new ChartValues<double>();
+            _chartanimationsdisabled = false;
         }
 
-        private List<double> _graphscores;
-        public List<double> GraphScores
+        //This is the specific Chart Values array, it seems that you cannot pass in an ordinary list 
+        private ChartValues<double> _chartvalues;
+        public ChartValues<double> ChartValues
         {
-            get
-            { return _graphscores; }
+            get { return _chartvalues; }
             set
             {
-                _graphscores = value;
+                if (CheckPropertyChanged<ChartValues<double>>("ChartValues", ref _chartvalues, ref value))
+                {
+                }
             }
         }
 
@@ -115,13 +116,33 @@ namespace Radical
             }
         }
 
-        private InteractiveDataDisplay.WPF.LineGraph _plotter;
-        public InteractiveDataDisplay.WPF.LineGraph Plotter
+        public LiveCharts.Wpf.CartesianChart _chart;
+        public LiveCharts.Wpf.CartesianChart Chart
         {
-            get { return _plotter; }
+            get { return _chart; }
             set
             {
-                _plotter = value;
+                _chart = value;
+            }
+        }
+
+        public LiveCharts.Wpf.Axis _chartaxisx;
+        public LiveCharts.Wpf.Axis ChartAxisX
+        {
+            get { return _chartaxisx; }
+            set
+            {
+                _chartaxisx = value;
+            }
+        }
+
+        public LiveCharts.Wpf.Axis _chartaxisy;
+        public LiveCharts.Wpf.Axis ChartAxisY
+        {
+            get { return _chartaxisy; }
+            set
+            {
+                _chartaxisy = value;
             }
         }
 
@@ -143,27 +164,32 @@ namespace Radical
         {
             this.DisplayX = iteration.ToString();
 
-            if (GraphScores.Any() && ShowLine)
+            if (ChartValues.Any() && ShowLine)
             {
                 ChartLineVisibility(Visibility.Visible);
-                double yValue = GraphScores.ElementAt(iteration);
+                double yValue = ChartValues.ElementAt(iteration);
                 this.DisplayY = String.Format("{0:0.00}",yValue);
+
+                double minX = ChartAxisX.ActualMinValue;
+                double ScaleX = (Chart.ActualWidth) / (ChartAxisX.ActualMaxValue - minX);
 
                 //Calculations for the horizontal line
                 //actualX * ScaleX scales the graph value to appropriate mouse position
                 //+45 is a hardcoded value because the position is off due to the side of the graph
-                //Plotter.OffsetX takes into account if the graph has been moved 
-                double newXPosition = iteration * Plotter.ScaleX + 45 - Plotter.OffsetX;
+                //minx takes into account if the graph has been moved 
+                double newXPosition = iteration * ScaleX - minX + 25;
                 
-                if (newXPosition - 45 < 0 || newXPosition > Plotter.Width)
+                if (newXPosition - 25 < 0 || newXPosition > Chart.ActualWidth)
                 {
                     ChartLineVisibilityX = Visibility.Collapsed;
                 }
                 this.ChartLineX = newXPosition;
 
                 //Calculatoins for the vertical line
-                double newYPosition = -1 * (yValue * Plotter.ScaleY - Plotter.OffsetY);
-                if (newYPosition < 0 || newYPosition > Plotter.ActualHeight)
+                double minY = ChartAxisY.ActualMinValue;
+                double ScaleY = (Chart.ActualHeight) / (ChartAxisY.ActualMaxValue - minY);
+                double newYPosition = Chart.ActualHeight - (yValue * ScaleY + minY);
+                if (newYPosition < 0 || newYPosition > Chart.ActualHeight)
                 {
                     ChartLineVisibilityY = Visibility.Collapsed;
                 }
@@ -172,7 +198,7 @@ namespace Radical
         }
 
         //GRAPH VISIBILITY
-        //Disables graph visibility during
+        //Disables graph visibility when you don't want to see it (checkbox option)
         private Visibility _graphVisibility;
         public Visibility GraphVisibility
         {
@@ -215,13 +241,13 @@ namespace Radical
             ChartLineVisibilityX = v;
             ChartLineVisibilityY = v;
             
-            if (ChartLineX - 45 < 0 || ChartLineX > this.Plotter.ActualWidth + 45)
+            if (ChartLineX - 25 < 0 || ChartLineX > this.Chart.ActualWidth + 25)
             {
                 ChartLineVisibilityX = Visibility.Collapsed;
                 DisplayX = null;
                 DisplayY = null;
             }
-            if (ChartLineY < 0 || ChartLineY > this.Plotter.ActualHeight)
+            if (ChartLineY < 0 || ChartLineY > this.Chart.ActualHeight)
             {
                 ChartLineVisibilityY = Visibility.Collapsed;
                 DisplayY = null;
@@ -242,7 +268,19 @@ namespace Radical
 
         public void SetLineWidth()
         {
-            this.ChartLineWidth = this.Plotter.ActualWidth + 45;
+            this.ChartLineWidth = this.Chart.ActualWidth + 25;
+        }
+
+        private bool _chartanimationsdisabled;
+        public bool ChartAnimationsDisabled
+        {
+            get { return _chartanimationsdisabled; }
+            set
+            {
+                if (CheckPropertyChanged<bool>("ChartAnimationsDisabled", ref _chartanimationsdisabled, ref value))
+                {
+                }
+            }
         }
 
     }
