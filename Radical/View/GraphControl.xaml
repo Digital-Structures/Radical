@@ -11,7 +11,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="{DynamicResource MaterialDesignPaper}" Margin="5" Name="Card">
-        <Grid Name="GraphGrid" HorizontalAlignment="Center" Height="472" Width="790" Margin="0,0,-10,0">
+        <Grid Name="GraphGrid" HorizontalAlignment="Center" Margin="0,0,-10,0" Width="{Binding ElementName=Card, Path=ActualWidth}" Height="500">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
@@ -50,14 +50,6 @@
                   Visibility="{Binding ChartLineVisibilityX, Mode = TwoWay}"
                   X1="{Binding ChartLineX, Mode=TwoWay}" X2="{Binding ChartLineX, Mode=TwoWay}" 
                   Y1="15" Y2="{Binding ElementName=Chart, Path=ActualHeight}"></Line>
-                
-                
-                
-                
-                
-                
-                
-                
                 
                 <Line Name="ChartLineVertical" Stroke="#FFAB91" StrokeThickness="1.5" 
                   Visibility="{Binding ChartLineVisibilityY, Mode = TwoWay}"
