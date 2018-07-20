@@ -356,8 +356,12 @@ namespace Radical
 
             else
             {
-                this.ActiveGraphs[0].GraphGrid.Height = 0.45*this.MainGrid.ActualHeight;
+                foreach(GraphControl g in this.ActiveGraphs)
+                {
+                    g.GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
+                }
 
+                //What does this do? Is it actually used
                 if (this.ActiveGraphs.Count == 2)
                     this.RadicalVM.Cols = 1;
                 else
@@ -454,7 +458,7 @@ namespace Radical
                 {
 
                 }
-                UpdateAllGraphs();
+               // UpdateAllGraphs();
                 ButtonPause.Visibility = Visibility.Collapsed;
                 ButtonPlay.Visibility = Visibility.Visible;
             }
@@ -467,7 +471,7 @@ namespace Radical
         {
             this.OptimizationFinished(); //Enable variable changes when paused
             source.Cancel();
-            UpdateAllGraphs();
+            //UpdateAllGraphs();
             ButtonPause.Visibility = Visibility.Collapsed;
             ButtonPlay.Visibility = Visibility.Visible;           
         }

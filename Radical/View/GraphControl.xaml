@@ -39,7 +39,7 @@
             <Grid Grid.Row="2" Name="ChartRow" Margin="25,0">
                 <lvc:CartesianChart Name="Chart" BorderThickness="1,0,0,1"
                     PreviewMouseMove="Chart_MouseMove" Background="{x:Null}" Margin="10,0,0,0"
-                    PreviewMouseWheel="Graph_PreviewMouseWheel" Visibility="Visible" DisableAnimations="True">
+                    PreviewMouseWheel="Graph_PreviewMouseWheel" DisableAnimations="True" Hoverable="False">
                     <lvc:CartesianChart.Series>
                         <lvc:LineSeries Name="Plotter" Values="{Binding ChartValues}" DataLabels="False" PointGeometrySize="0">
                         </lvc:LineSeries> 

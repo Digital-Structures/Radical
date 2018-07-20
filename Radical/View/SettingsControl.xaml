@@ -19,8 +19,8 @@
 
         <DockPanel Grid.Row="0">
             <materialDesign:PackIcon Kind="Refresh" Foreground="DarkGray" VerticalAlignment="Bottom"></materialDesign:PackIcon>
-            <ComboBox materialDesign:HintAssist.Hint="Refresh Mode" HorizontalAlignment="Right" SelectedIndex="0" ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:RefreshMode}}}"
-                                  SelectedValue="{Binding Mode, Mode=OneWayToSource}">
+            <ComboBox Name="ComboBoxRefreshMode" materialDesign:HintAssist.Hint="Refresh Mode" HorizontalAlignment="Right" SelectedIndex="0" ItemsSource="{Binding Source={local:EnumBindingSource {x:Type local:RefreshMode}}}"
+                                  SelectedValue="{Binding Mode, Mode=OneWayToSource}" SelectionChanged="RefreshMode_SelectionChanged">
             </ComboBox>
         </DockPanel>
         <DockPanel Grid.Row="1">

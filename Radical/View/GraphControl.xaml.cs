@@ -57,15 +57,10 @@ namespace Radical
         //UPDATE WINDOW 
         public void UpdateWindowGeneral(ChartValues<double> y)
         {
-            //if (y.Count > 30)
-            //{
-            //    this.GraphVM.ChartAnimationsDisabled = true;
-            //}
-
-            Dispatcher.Invoke(() =>
-            {
+ //           Dispatcher.Invoke(() =>
+   //         {
                 this.GraphVM.ChartValues = y;
-            });
+  //          });
         }
 
         private void Plotter_SizeChanged(object sender, SizeChangedEventArgs e)

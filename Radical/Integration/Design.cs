@@ -41,11 +41,11 @@ namespace Radical.Integration
             if (Geometries.Any()) { this.Variables.AddRange(Geometries.Select(x => x.Variables).SelectMany(x => x).ToList()); } // not the cleanest way to do it, review code structure
             this.ScoreEvolution = new ChartValues<double>();
             this.ConstraintEvolution = new ChartValues<ChartValues<double>>();
+ 
             foreach (Constraint c in this.Constraints)
             {
                 this.ConstraintEvolution.Add(new ChartValues<double>());
             }
-
 
             this.OptComponent = component;
         }

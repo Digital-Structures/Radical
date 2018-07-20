@@ -315,6 +315,41 @@ namespace Radical
 
         } 
 
+        //
+        public void GraphRefreshMode(int mode)
+        {
+            switch (mode)
+            {
+                //Live
+                case 1:
+                    {
+                        foreach (GraphVM g in ActiveGraphs)
+                        {
+                            g.ChartAxisX.MaxValue = double.NaN;
+                        }
+                        break;
+                    }
+                //Data
+                case 2:
+                    {
+                        foreach (GraphVM g in ActiveGraphs)
+                        {
+                            g.ChartAxisX.MaxValue = double.NaN;
+                        }
+                        break;
+                    }
+                //Silent
+                case 3:
+                    {
+                        foreach (GraphVM g in ActiveGraphs)
+                        {
+                            g.ChartAxisX.MaxValue = g.ChartValues.Count;
+                        }
+                        break;
+                    }
+            }
+        }
+
         public IEnumerable<NLoptAlgorithm> BasicAlgs = new[]
         {
             NLoptAlgorithm.AUGLAG, //Calls for secondary alg

@@ -116,10 +116,6 @@ namespace Radical.Integration
                 Design.ConstraintEvolution[i].Add(score);
             }
 
-            if (this.RadicalWindow.RadicalVM.Mode != RefreshMode.Silent)
-            {
-                this.RadicalWindow.UpdateAllGraphs();
-            }
             try
             {
                 this.RadicalWindow.source.Token.ThrowIfCancellationRequested();

@@ -27,11 +27,9 @@ namespace Radical
             _chartlinex = 0;
             _x = "0";
             _y = "0";
-            _graphVisibility = Visibility.Visible;
-            DisplayX = null;
-            DisplayY = null;
-            _chartvalues = new ChartValues<double>();
-            _chartanimationsdisabled = false;
+           // _graphVisibility = Visibility.Visible;
+           // DisplayX = null;
+           // DisplayY = null;
         }
 
         //This is the specific Chart Values array, it seems that you cannot pass in an ordinary list 
@@ -57,19 +55,6 @@ namespace Radical
                 if (CheckPropertyChanged<String>("LineGraphName", ref _linegraph_name, ref value))
                 {
                 }
-            }
-        }
-
-        private int _chartlineiteration;
-        public int ChartLineIteration
-        {
-            get
-            {
-                return _chartlineiteration;
-            }
-            set
-            {
-                _chartlineiteration = value;
             }
         }
 
@@ -270,18 +255,6 @@ namespace Radical
         public void SetLineWidth()
         {
             this.ChartLineWidth = this.Chart.ActualWidth + 25;
-        }
-
-        private bool _chartanimationsdisabled;
-        public bool ChartAnimationsDisabled
-        {
-            get { return _chartanimationsdisabled; }
-            set
-            {
-                if (CheckPropertyChanged<bool>("ChartAnimationsDisabled", ref _chartanimationsdisabled, ref value))
-                {
-                }
-            }
         }
 
     }

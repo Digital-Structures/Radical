@@ -62,6 +62,26 @@ namespace Radical
             }
         }
 
+        private void RefreshMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox box = sender as ComboBox;
+            switch (box.SelectedIndex)
+            {
+                case 1:
+                    {
+                        break;
+                    }
+                case 2:
+                    {
+                        break;
+                    }
+                case 3:
+                    {
+                        break;
+                    }
+            }
+        }
+
         //REFRESH MODE
         [TypeConverter(typeof(EnumDescriptionTypeConverter))]
         public enum RefreshMode
