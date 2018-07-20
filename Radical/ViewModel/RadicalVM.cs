@@ -71,6 +71,7 @@ namespace Radical
             }
         }
 
+        //SET UP GRAPHS
         public void SetUpGraphs()
         {
             GraphVM main = new GraphVM(Design.ScoreEvolution, "Objective");

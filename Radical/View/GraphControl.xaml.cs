@@ -44,10 +44,6 @@ namespace Radical
 
             this.GraphVM.ChartLine = ChartLine;
             this.GraphVM.ChartLineVisibility(Visibility.Collapsed);
-
-            //Not sure if this is correct at all
-            Chart.DataContext = this.GraphVM;
-
         }
 
         public GraphVM GraphVM;
@@ -82,7 +78,6 @@ namespace Radical
                 var mouseCoordinate = e.GetPosition(Chart);
 
                 double mouseX = mouseCoordinate.X;
-                // double ScaleX = Plotter.ScalesXAt;
                 double minx = ChartAxisX.ActualMinValue;
 
                 double ScaleX = (Chart.ActualWidth) / (ChartAxisX.ActualMaxValue - minx);

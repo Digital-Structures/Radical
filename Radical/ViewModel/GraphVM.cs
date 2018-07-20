@@ -28,9 +28,7 @@ namespace Radical
             _x = "0";
             _y = "0";
             _graphVisibility = Visibility.Visible;
-            DisplayX = null;
-            DisplayY = null;
-            _chartvalues = new ChartValues<double>();
+            _chartvalues = scores;
             _chartanimationsdisabled = false;
         }
 

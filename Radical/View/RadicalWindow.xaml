@@ -49,18 +49,6 @@
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
 
-            <Storyboard x:Key="LoadingCircle" Duration="0:0:3.5" RepeatBehavior="Forever">
-                <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="IsIndeterminate" Storyboard.TargetName="LoadingPopup">
-                    <DiscreteBooleanKeyFrame Value="False" KeyTime="0" />
-                </BooleanAnimationUsingKeyFrames>
-                <DoubleAnimation From="20" To="100" Duration="0:0:0.2" BeginTime="0:0:0" 
-                                         Storyboard.TargetProperty="Value" Storyboard.TargetName="LoadingPopup"
-                                         FillBehavior="HoldEnd">
-                    <DoubleAnimation.EasingFunction>
-                        <CircleEase EasingMode="EaseOut" />
-                    </DoubleAnimation.EasingFunction>
-                </DoubleAnimation>
-            </Storyboard>
             <Storyboard x:Key="MenuOpen">
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu" Completed="Animation_Completed">
                     <EasingDoubleKeyFrame KeyTime="0" Value="60"/>
@@ -205,7 +193,7 @@
                         Height="1"
                         HorizontalAlignment="Stretch"
                         SnapsToDevicePixels="True" />
-                    <Expander Name="ConstraintsExpander" FontSize="18" Expanded="Expander_Expanded" Collapsed="Expander_Collapsed">
+                    <Expander Name="ConstraintsExpander" FontSize="18">
                         <Expander.Header>
                             <StackPanel Orientation="Horizontal" Margin="-20,-25">
                                 <Border Background="{DynamicResource PrimaryHueDarkBrush}" Width="5" VerticalAlignment="Stretch"></Border>
@@ -248,9 +236,9 @@
         
         <ScrollViewer Grid.Column="1" Name="GraphsScroller" Width="Auto" VerticalScrollBarVisibility="Auto">
             <VirtualizingStackPanel Name="GraphsContainer" HorizontalAlignment="Stretch">
-                <VirtualizingStackPanel Name="MainBlock">
+                <StackPanel Name="MainBlock">
                     <!-- Panel for the Main Objective graph -->
-                </VirtualizingStackPanel>
+                </StackPanel>
                 <ItemsControl Name="ConstraintsGraphs">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>

@@ -55,7 +55,6 @@ namespace Radical
             this.GroupVars = new List<GroupVariableControl>();
             AddNumbers();
             AddGeometries();
-            AddGraphs(); //Also adds constraints
 
             this.SettingsMenu.Children.Add(new SettingsControl(this.RadicalVM));
 
@@ -71,7 +70,7 @@ namespace Radical
         //Ensures main graph height is correct on loading
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            this.UpdatedGraphVisibility();
+            AddGraphs(); //Also adds constraints
         }
 
         //ACTIVE GRAPHS
@@ -123,6 +122,7 @@ namespace Radical
         {
             //MAIN OBJECTIVE GRAPH
             var g = new GraphControl(this.RadicalVM.Graphs["Main"][0], this.RadicalVM, this);
+            g.GraphGrid.Height = MainGrid.ActualHeight - 20;
             GraphControls["Main"].Add(g);
             MainBlock.Children.Add(GraphControls["Main"][0]);
 
@@ -356,7 +356,7 @@ namespace Radical
 
             else
             {
-                this.ActiveGraphs[0].GraphGrid.Height = 0.45*this.MainGrid.ActualHeight;
+                this.ActiveGraphs[0].GraphGrid.Height = 0.48*this.MainGrid.ActualHeight;
 
                 if (this.ActiveGraphs.Count == 2)
                     this.RadicalVM.Cols = 1;
@@ -402,10 +402,6 @@ namespace Radical
         {
             foreach (GraphControl g in this.ActiveGraphs)
                 g.ChartRow.Visibility = Visibility.Collapsed;
-
-            //this.GraphsScroller.Visibility = Visibility.Collapsed;
-            //this.LoadingPopup.Visibility = Visibility.Visible;
-            
         }
 
         //ANIMATION COMPLETED
@@ -413,12 +409,7 @@ namespace Radical
         {
             foreach (GraphControl g in this.ActiveGraphs)
                 g.ChartRow.Visibility = Visibility.Visible;
-
-            //this.GraphsScroller.Visibility = Visibility.Visible;
-            //this.LoadingPopup.Visibility = Visibility.Collapsed;
         }
-
-        //
 
         //CLOSE MENU CLICK
         private void ButtonCloseMenu_Click(object sender, RoutedEventArgs e)
@@ -486,26 +477,6 @@ namespace Radical
             ButtonSettingsOpen.Visibility = Visibility.Visible;
             SettingsClose.Visibility = Visibility.Collapsed;
             this.AnimationBegan();
-        }
-
-        //EXPADNED
-        private void Expander_Expanded(object sender, RoutedEventArgs e)
-        {
-            if(sender == e.OriginalSource)
-            {
-                Expander menu = (Expander)sender;
-                menu.Background = (SolidColorBrush)this.FindResource("PrimaryHueLightBrush");
-            }
-        }
-
-        //COLLAPSED
-        private void Expander_Collapsed(object sender, RoutedEventArgs e)
-        {
-            if (sender == e.OriginalSource)
-            {
-                Expander menu = (Expander)sender;
-                menu.Background = Brushes.Transparent;
-            }
         }
 
         private void SetUpGraphLineWidth()
