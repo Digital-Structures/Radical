@@ -55,7 +55,6 @@ namespace Radical
             this.GroupVars = new List<GroupVariableControl>();
             AddNumbers();
             AddGeometries();
-            AddGraphs(); //Also adds constraints
 
             this.SettingsMenu.Children.Add(new SettingsControl(this.RadicalVM));
 
@@ -71,7 +70,7 @@ namespace Radical
         //Ensures main graph height is correct on loading
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            this.UpdatedGraphVisibility();
+            AddGraphs(); //Also adds constraints
         }
 
         //ACTIVE GRAPHS
@@ -80,13 +79,17 @@ namespace Radical
         {
             get
             {
-                List<GraphControl> list = new List<GraphControl>();
-                list.Add(this.GraphControls["Main"][0]);
+                if (this.GraphControls["Main"].Any())
+                {
+                    List<GraphControl> list = new List<GraphControl>();
+                    list.Add(this.GraphControls["Main"][0]);
 
-                foreach (GraphControl graph in GraphControls["Constraints"].Where(g => g.GraphVM.GraphVisibility == Visibility.Visible))
-                    list.Add(graph);
+                    foreach (GraphControl graph in GraphControls["Constraints"].Where(g => g.GraphVM.GraphVisibility == Visibility.Visible))
+                        list.Add(graph);
 
-                return list;         
+                    return list;
+                }
+                return null;
             }
         }
 
@@ -123,6 +126,9 @@ namespace Radical
         {
             //MAIN OBJECTIVE GRAPH
             var g = new GraphControl(this.RadicalVM.Graphs["Main"][0], this.RadicalVM, this);
+            g.GraphGrid.Height = MainGrid.ActualHeight * 0.9;
+            g.GraphVM.CalculateChartLineY2();
+
             GraphControls["Main"].Add(g);
             MainBlock.Children.Add(GraphControls["Main"][0]);
 
@@ -138,6 +144,8 @@ namespace Radical
                 {
                     GraphVM gvm = RadicalVM.Graphs["Constraints"][i];
                     g = new GraphControl(gvm, this.RadicalVM, this);
+                    g.GraphGrid.Height = MainGrid.ActualHeight * 0.45;
+                    g.GraphVM.CalculateChartLineY2();
                     GraphControls["Constraints"].Add(g);
 
                     ConstVM c = RadicalVM.Constraints[i];
@@ -148,19 +156,19 @@ namespace Radical
                 this.ConstraintsExpander.Visibility = Visibility.Collapsed;
         }
 
-        public void UpdateAllGraphs()
-        {
-            foreach (KeyValuePair<string,List<GraphControl>> pair in this.GraphControls)
-            {
-                if(pair.Key=="Main")
-                    pair.Value[0].UpdateWindowGeneral(this.RadicalVM.Design.ScoreEvolution);
-                else
-                {
-                    for (int i=0; i<this.GraphControls[pair.Key].Count; i++)
-                        pair.Value[i].UpdateWindowGeneral(this.RadicalVM.Design.ConstraintEvolution[i]);
-                }                   
-            }
-        }
+        //public void UpdateAllGraphs()
+        //{
+        //    foreach (KeyValuePair<string,List<GraphControl>> pair in this.GraphControls)
+        //    {
+        //        if(pair.Key=="Main")
+        //            pair.Value[0].UpdateWindowGeneral(this.RadicalVM.Design.ScoreEvolution);
+        //        else
+        //        {
+        //            for (int i=0; i<this.GraphControls[pair.Key].Count; i++)
+        //                pair.Value[i].UpdateWindowGeneral(this.RadicalVM.Design.ConstraintEvolution[i]);
+        //        }                   
+        //    }
+        //}
 
         public void GraphsShowLine()
         {
@@ -274,19 +282,25 @@ namespace Radical
                 Expander groupControlMenu = new Expander();
                 groupControlMenu.IsExpanded = true;
                 groupControlMenu.Header = Header2Formatting("Group Variable Control");
+                groupControlMenu.Background = (SolidColorBrush)this.FindResource("PrimaryHueLightBrush");
                 groupControlMenu.Content = groupControls;
                 variableMenus.Children.Add(groupControlMenu);
 
                 //Add descriptive control labels
-                groupControls.Children.Add(new VariableHeaderControl());
+                VariableHeaderControl vhc = new VariableHeaderControl();
+                vhc.Background = (SolidColorBrush)this.FindResource("MaterialDesignPaper");
+                groupControls.Children.Add(vhc);
 
                 //Add group controls for X, Y, and Z directions
-                GroupVariableControl groupControlX = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.X), geoIndex-1)); this.GroupVars.Add(groupControlX);
-                GroupVariableControl groupControlY = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.Y), geoIndex-1)); this.GroupVars.Add(groupControlY);
-                GroupVariableControl groupControlZ = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.Z), geoIndex-1)); this.GroupVars.Add(groupControlZ);
+                GroupVariableControl groupControlX = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.X), geoIndex - 1)); this.GroupVars.Add(groupControlX);
+                GroupVariableControl groupControlY = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.Y), geoIndex - 1)); this.GroupVars.Add(groupControlY);
+                GroupVariableControl groupControlZ = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.Z), geoIndex - 1)); this.GroupVars.Add(groupControlZ);
                 groupControlX.GroupControlName.Text = "X Variables";
                 groupControlY.GroupControlName.Text = "Y Variables";
                 groupControlZ.GroupControlName.Text = "Z Variables";
+                groupControlX.Background = (SolidColorBrush)this.FindResource("MaterialDesignPaper");
+                groupControlY.Background = (SolidColorBrush)this.FindResource("MaterialDesignPaper");
+                groupControlZ.Background = (SolidColorBrush)this.FindResource("MaterialDesignPaper");
                 groupControls.Children.Add(groupControlX);
                 groupControls.Children.Add(groupControlY);
                 groupControls.Children.Add(groupControlZ);
@@ -300,15 +314,22 @@ namespace Radical
                 //Expander
                 Expander individualControlMenu = new Expander();
                 individualControlMenu.Header = Header2Formatting("Single Variable Control");
+                individualControlMenu.Background = (SolidColorBrush)this.FindResource("PrimaryHueLightBrush");
                 individualControlMenu.Content = individualControls;
                 variableMenus.Children.Add(individualControlMenu);
 
                 //Add descriptive control labels
-                individualControls.Children.Add(new VariableHeaderControl());
+                VariableHeaderControl vhc2 = new VariableHeaderControl();
+                vhc2.Background = (SolidColorBrush)this.FindResource("MaterialDesignPaper");
+                individualControls.Children.Add(vhc2);
 
                 //Add individual point controls in all directions
-                foreach (VarVM var in geometry)
-                    individualControls.Children.Add(new VariableControl(var));
+                foreach (VarVM var in geometry) {
+                    VariableControl v = new VariableControl(var);
+                    v.Background = (SolidColorBrush)this.FindResource("MaterialDesignPaper");
+                    individualControls.Children.Add(v);
+                }
+            
             }
         }
 
@@ -352,20 +373,43 @@ namespace Radical
             ConstraintsGraphs2.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = displayData[1]});
 
             if (this.ActiveGraphs.Count == 1)
-                this.ActiveGraphs[0].GraphGrid.Height = this.MainGrid.ActualHeight - 20;
-
+            {
+                this.ActiveGraphs[0].GraphGrid.Height = 0.9 * this.MainGrid.ActualHeight;
+                this.ActiveGraphs[0].GraphVM.CalculateChartLineY2();
+            }
             else
             {
-                foreach(GraphControl g in this.ActiveGraphs)
+                this.ActiveGraphs[0].GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
+                this.ActiveGraphs[0].GraphVM.CalculateChartLineY2();
+
+                //foreach (GraphControl g in this.ActiveGraphs)
+                //{
+                //    g.GraphGrid.Height = 0.40 * this.MainGrid.ActualHeight;
+                //    g.GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
+
+                //    //    //g.Card.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
+                //    //    //var width = g.Card.DesiredSize.Width;
+                //    //    //g.Chart.Width = 0.9 * width;
+                //}
+
+                //    g.ChartRow.Visibility = Visibility.Collapsed;
+                //foreach (GraphControl g in this.ActiveGraphs)
+                //    g.ChartRow.Visibility = Visibility.Visible;
+
+                if (this.ActiveGraphs.Count == 2)
                 {
-                    g.GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
+                    this.RadicalVM.Cols = 1; //two columns
+                }
+                else
+                {
+                    this.RadicalVM.Cols = 2; //three columns
                 }
 
-                //What does this do? Is it actually used
-                if (this.ActiveGraphs.Count == 2)
-                    this.RadicalVM.Cols = 1;
-                else
-                    this.RadicalVM.Cols = 2;
+                foreach (GraphControl g in this.ActiveGraphs)
+                {
+                    g.GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
+                    g.GraphVM.CalculateChartLineY2();
+                }
             }
         }
 
@@ -406,10 +450,6 @@ namespace Radical
         {
             foreach (GraphControl g in this.ActiveGraphs)
                 g.ChartRow.Visibility = Visibility.Collapsed;
-
-            //this.GraphsScroller.Visibility = Visibility.Collapsed;
-            //this.LoadingPopup.Visibility = Visibility.Visible;
-            
         }
 
         //ANIMATION COMPLETED
@@ -417,12 +457,7 @@ namespace Radical
         {
             foreach (GraphControl g in this.ActiveGraphs)
                 g.ChartRow.Visibility = Visibility.Visible;
-
-            //this.GraphsScroller.Visibility = Visibility.Visible;
-            //this.LoadingPopup.Visibility = Visibility.Collapsed;
         }
-
-        //
 
         //CLOSE MENU CLICK
         private void ButtonCloseMenu_Click(object sender, RoutedEventArgs e)
@@ -492,26 +527,6 @@ namespace Radical
             this.AnimationBegan();
         }
 
-        //EXPADNED
-        private void Expander_Expanded(object sender, RoutedEventArgs e)
-        {
-            if(sender == e.OriginalSource)
-            {
-                Expander menu = (Expander)sender;
-                menu.Background = (SolidColorBrush)this.FindResource("PrimaryHueLightBrush");
-            }
-        }
-
-        //COLLAPSED
-        private void Expander_Collapsed(object sender, RoutedEventArgs e)
-        {
-            if (sender == e.OriginalSource)
-            {
-                Expander menu = (Expander)sender;
-                menu.Background = Brushes.Transparent;
-            }
-        }
-
         private void SetUpGraphLineWidth()
         {
             foreach (KeyValuePair<string, List<GraphVM>> kvp in this.RadicalVM.Graphs)
@@ -519,6 +534,26 @@ namespace Radical
                 for (int i = 0; i < kvp.Value.Count; i++)
                 {
                     this.RadicalVM.Graphs[kvp.Key][i].SetLineWidth();
+                }
+            }
+        }
+
+        private void UpdateGraphSize(object sender, RoutedEventArgs e)
+        {
+            if (this.ActiveGraphs != null)
+            {
+                if (this.ActiveGraphs.Count == 1)
+                {
+                    this.ActiveGraphs[0].GraphGrid.Height = 0.9 * this.MainGrid.ActualHeight;
+                    this.ActiveGraphs[0].GraphVM.CalculateChartLineY2();
+                }
+                else
+                {
+                    foreach (GraphControl g in this.ActiveGraphs)
+                    {
+                        g.GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
+                        g.GraphVM.CalculateChartLineY2();
+                    }
                 }
             }
         }

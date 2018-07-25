@@ -32,7 +32,7 @@ namespace Radical
 
             this.Constraints = new List<ConstVM>();
 
-            this.Graphs = new Dictionary<string,List<GraphVM>>();
+            this.Graphs = new Dictionary<string, List<GraphVM>>();
             this.Graphs.Add("Main", new List<GraphVM>());
             this.Graphs.Add("Constraints", new List<GraphVM>());
             SetUpGraphs();
@@ -71,14 +71,15 @@ namespace Radical
             }
         }
 
+        //SET UP GRAPHS
         public void SetUpGraphs()
         {
             GraphVM main = new GraphVM(Design.ScoreEvolution, "Objective");
             this.Graphs["Main"].Add(main);
 
-            for(int i = 0; i < Design.Constraints.Count; i++)
+            for (int i = 0; i < Design.Constraints.Count; i++)
             {
-                GraphVM gvm = new GraphVM(Design.ConstraintEvolution[i], String.Format("C{0}",i));
+                GraphVM gvm = new GraphVM(Design.ConstraintEvolution[i], String.Format("C{0}", i));
                 this.Graphs["Constraints"].Add(gvm);
                 this.Constraints.Add(new ConstVM(Design.Constraints[i], gvm));
             }
@@ -186,16 +187,31 @@ namespace Radical
             }
         }
 
-        //ADVANCED OPTIONS
-        private bool _advancedOptions;
-        public bool AdvancedOptions
+        //NUMBER OF ITERATIONS
+        private int _niterations;
+        public int Niterations
         {
-            get { return _advancedOptions; }
+            get
+            { return _niterations; }
             set
             {
-                if (CheckPropertyChanged<bool>("AdvancedOptions", ref _advancedOptions, ref value))
+                if (CheckPropertyChanged<int>("Niterations", ref _niterations, ref value))
                 {
-                    FirePropertyChanged("AvailableAlgs");
+                }
+            }
+
+        }
+
+        //CONVERGENCE
+        private double _convcrit;
+        public double ConvCrit
+        {
+            get
+            { return _convcrit; }
+            set
+            {
+                if (CheckPropertyChanged<double>("ConvCrit", ref _convcrit, ref value))
+                {
                 }
             }
         }
@@ -269,86 +285,36 @@ namespace Radical
             }
         }
 
-        //NUMBER OF ITERATIONS
-        private int _niterations;
-        public int Niterations
+        //ADVANCED OPTIONS
+        private bool _advancedOptions;
+        public bool AdvancedOptions
         {
-            get
-            { return _niterations; }
+            get { return _advancedOptions; }
             set
             {
-                if (CheckPropertyChanged<int>("Niterations", ref _niterations, ref value))
+                if (CheckPropertyChanged<bool>("AdvancedOptions", ref _advancedOptions, ref value))
                 {
-                }
-            }
-
-        }
-
-        //CONVERGENCE
-        private double _convcrit;
-        public double ConvCrit
-        {
-            get
-            { return _convcrit; }
-            set
-            {
-                if (CheckPropertyChanged<double>("ConvCrit", ref _convcrit, ref value))
-                {
+                    FirePropertyChanged("AvailableAlgs");
                 }
             }
         }
 
+        //UNIMPLEMENTED
         //Keeps track of which iteration the user's mouse is currently at so that all graphs can move their
         //focus to that iteration
-        private int _mouseiteration;
-        public int MouseIteration
-        {
-            get
-            { return _mouseiteration; }
-            set
-            {
-                if (CheckPropertyChanged<int>("MouseIteration", ref _mouseiteration, ref value))
-                {
+        //private int _mouseiteration;
+        //public int MouseIteration
+        //{
+        //    get
+        //    { return _mouseiteration; }
+        //    set
+        //    {
+        //        if (CheckPropertyChanged<int>("MouseIteration", ref _mouseiteration, ref value))
+        //        {
                      
-                }
-            }
-
-        } 
-
-        //
-        public void GraphRefreshMode(int mode)
-        {
-            switch (mode)
-            {
-                //Live
-                case 1:
-                    {
-                        foreach (GraphVM g in ActiveGraphs)
-                        {
-                            g.ChartAxisX.MaxValue = double.NaN;
-                        }
-                        break;
-                    }
-                //Data
-                case 2:
-                    {
-                        foreach (GraphVM g in ActiveGraphs)
-                        {
-                            g.ChartAxisX.MaxValue = double.NaN;
-                        }
-                        break;
-                    }
-                //Silent
-                case 3:
-                    {
-                        foreach (GraphVM g in ActiveGraphs)
-                        {
-                            g.ChartAxisX.MaxValue = g.ChartValues.Count;
-                        }
-                        break;
-                    }
-            }
-        }
+        //        }
+        //    }
+        //} 
 
         public IEnumerable<NLoptAlgorithm> BasicAlgs = new[]
         {
@@ -367,8 +333,6 @@ namespace Radical
         };
 
         //List of those that require secondary and the secondary options remain the same. 
-
-
 
         public IEnumerable<NLoptAlgorithm> DFreeAlgs = new[]
         {
@@ -412,7 +376,6 @@ namespace Radical
             NLoptAlgorithm.GN_ORIG_DIRECT_L,
             NLoptAlgorithm.LN_COBYLA
         };
-
 
         //Algorithms that require a secondary algorithm 
         public IEnumerable<NLoptAlgorithm> DFreeAlgs_ReqSec = new[]

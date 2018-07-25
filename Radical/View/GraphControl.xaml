@@ -11,7 +11,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="{DynamicResource MaterialDesignPaper}" Margin="5" Name="Card">
-        <Grid Name="GraphGrid" HorizontalAlignment="Center" Margin="0,0,-10,0" Width="{Binding ElementName=Card, Path=ActualWidth}" Height="500" Visibility="{Binding GraphVisibility}">
+        <Grid Name="GraphGrid" HorizontalAlignment="Stretch" Margin="0,0,-10,0" Height="{Binding GraphGridHeight, Mode=TwoWay}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
@@ -23,9 +23,9 @@
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" Background="{DynamicResource PrimaryHueDarkBrush}">
-                <TextBlock Text="{Binding LineGraphName}" Width="{Binding ActualWidth, ElementName=GraphCard}" FontSize="32" FontFamily="Global User Interface" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-                           TextAlignment="Center" Margin="10">
+            <Grid Grid.Row="0" HorizontalAlignment="Stretch" Background="{DynamicResource PrimaryHueMidBrush}">
+                <TextBlock Text="{Binding LineGraphName}" FontSize="20" FontFamily="Global User Interface" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                           TextAlignment="Left" Margin="22, 5, 0, 5">
                 </TextBlock>
             </Grid>
 
@@ -38,10 +38,10 @@
 
             <Grid Grid.Row="2" Name="ChartRow" Margin="25,0">
                 <lvc:CartesianChart Name="Chart" BorderThickness="1,0,0,1"
-                    PreviewMouseMove="Chart_MouseMove" Background="{x:Null}" Margin="10,0,0,0"
-                    PreviewMouseWheel="Graph_PreviewMouseWheel" DisableAnimations="True" Hoverable="False">
+                    PreviewMouseMove="Chart_MouseMove" Background="{x:Null}" Margin="0,0,0,0"
+                    PreviewMouseWheel="Graph_PreviewMouseWheel" DisableAnimations="True">
                     <lvc:CartesianChart.Series>
-                        <lvc:LineSeries Name="Plotter" Values="{Binding ChartValues}" DataLabels="False" PointGeometrySize="0">
+                        <lvc:LineSeries Name="Plotter" Values="{Binding ChartValues}" DataLabels="False" PointGeometrySize="0" Margin="0,0,0,0">
                         </lvc:LineSeries> 
                     </lvc:CartesianChart.Series>
 
@@ -56,13 +56,9 @@
                 <Line Name ="ChartLine" Stroke="#FFAB91" StrokeThickness="1.5"
                   Visibility="{Binding ChartLineVisibilityX, Mode = TwoWay}"
                   X1="{Binding ChartLineX, Mode=TwoWay}" X2="{Binding ChartLineX, Mode=TwoWay}" 
-                  Y1="15" Y2="{Binding ElementName=Chart, Path=ActualHeight}"></Line>
-
-                <Line Name="ChartLineVertical" Stroke="#FFAB91" StrokeThickness="1.5" 
-                  Visibility="{Binding ChartLineVisibilityY, Mode = TwoWay}"
-                  X1="25" X2="{Binding ChartLineWidth, Mode = TwoWay}" 
-                  Y1="{Binding ChartLineY, Mode=TwoWay}" Y2="{Binding ChartLineY, Mode=TwoWay}">
+                  Y1="6" Y2="{Binding ChartLineY2}">
                 </Line>
+
             </Grid>
 
             <Grid  Grid.Row="3" Margin="25,0,25,10">
@@ -71,23 +67,20 @@
                 </TextBlock>
             </Grid>
 
-
-            <Grid Grid.Row="0" Background="{DynamicResource PrimaryHueLightBrush}">
-                <StackPanel>
-                    <TextBlock Text="{Binding LineGraphName}" FontSize="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
-                           TextAlignment="Left" Margin="10,5,0,5">
-                    </TextBlock>
-                </StackPanel>
-            </Grid>
-
-            <Grid Grid.Row="4" Background="{DynamicResource PrimaryHueLightBrush}">
+            <Grid Grid.Row="4" Background="{DynamicResource MaterialDesignPaper}" Visibility="{Binding ChartLineVisibilityX}">
             <StackPanel>
+                <Border BorderThickness="0,0,0,0.5" BorderBrush="{DynamicResource PrimaryHueDarkBrush}"></Border>
+
+                <TextBlock Text="Value Tracking" FontSize="18" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
+                    Margin="10">
+                </TextBlock>
+                
                 <TextBlock Text="{Binding DisplayX}" FontSize="16" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
-                           TextAlignment="Left" Margin="40,0,0,10" Visibility="{Binding ChartLineVisibilityX}">
+                        TextAlignment="Left" Margin="40,5">
                 </TextBlock>
 
-                <TextBlock Text="{Binding DisplayY}" FontSize="16" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" 
-                           TextAlignment="Left" Margin="0,10,0,10" Visibility="{Binding ChartLineVisibilityX}">
+                    <TextBlock Text="{Binding DisplayY, FallbackValue='no value to display' }" FontSize="16" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" 
+                           TextAlignment="Left" Margin="40,5" >
                 </TextBlock>
             </StackPanel>
         </Grid>

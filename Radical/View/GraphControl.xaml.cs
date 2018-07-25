@@ -38,35 +38,31 @@ namespace Radical
 
             InitializeComponent();
 
+            //this.GraphVM.GraphGrid = GraphGrid;
             this.GraphVM.Chart = Chart;
             this.GraphVM.ChartAxisX = ChartAxisX;
             this.GraphVM.ChartAxisY = ChartAxisY;
+            this.GraphVM.Plotter = Plotter;
+            this.GraphVM.Window = window; 
 
             this.GraphVM.ChartLine = ChartLine;
             this.GraphVM.ChartLineVisibility(Visibility.Collapsed);
-
-            //Not sure if this is correct at all
-            Chart.DataContext = this.GraphVM;
-
         }
 
         public GraphVM GraphVM;
         RadicalWindow MyWindow;       
         RadicalVM RadicalVM;
 
-        //UPDATE WINDOW 
-        public void UpdateWindowGeneral(ChartValues<double> y)
-        {
- //           Dispatcher.Invoke(() =>
-   //         {
-                this.GraphVM.ChartValues = y;
-  //          });
-        }
+        ////UPDATE WINDOW 
+        //public void UpdateWindowGeneral(ChartValues<double> y)
+        //{
+        //    this.GraphVM.ChartValues = y;
+        //}
 
-        private void Plotter_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            this.GraphVM.SetLineWidth();
-        }
+        //private void Plotter_SizeChanged(object sender, SizeChangedEventArgs e)
+        //{
+        //    this.GraphVM.SetLineWidth();
+        //}
 
         //CHART MOUSE DOWN
         //Currently returns graph x value of where the mouse clicks down 
@@ -76,11 +72,14 @@ namespace Radical
             {
                 var mouseCoordinate = e.GetPosition(Chart);
 
+
+                double dummy = Chart.ActualWidth;
+                double dummy2 = ChartAxisX.ActualWidth;
+
                 double mouseX = mouseCoordinate.X;
-                // double ScaleX = Plotter.ScalesXAt;
                 double minx = ChartAxisX.ActualMinValue;
 
-                double ScaleX = (Chart.ActualWidth) / (ChartAxisX.ActualMaxValue - minx);
+                double ScaleX = (Chart.ActualWidth - 21) / (ChartAxisX.ActualMaxValue - minx);
 
                 int actualX = (int)(Math.Truncate(mouseX / ScaleX - minx));
                 if (actualX < 0)

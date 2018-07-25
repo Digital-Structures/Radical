@@ -64,22 +64,8 @@ namespace Radical
 
         private void RefreshMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ComboBox box = sender as ComboBox;
-            switch (box.SelectedIndex)
-            {
-                case 1:
-                    {
-                        break;
-                    }
-                case 2:
-                    {
-                        break;
-                    }
-                case 3:
-                    {
-                        break;
-                    }
-            }
+            //ComboBox box = sender as ComboBox;
+            //this.RadicalVM.GraphRefreshMode(box.SelectedIndex);
         }
 
         //REFRESH MODE

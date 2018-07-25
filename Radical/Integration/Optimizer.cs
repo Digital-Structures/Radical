@@ -29,12 +29,17 @@ namespace Radical.Integration
             BuildWrapper();
             SetBounds();
             Solver.SetMinObjective((x) => Objective(x));
+
+            StoredMainValues = new ChartValues<double>();
+            StoredConstraintValues = new ChartValues<ChartValues<double>>();
+
             if (Design.Constraints != null)
             {
                 foreach (Constraint c in Design.Constraints)
                 {
                     if (c.IsActive)
                     {
+                        StoredConstraintValues.Add(new ChartValues<double>());
                         if (c.ConstraintType == ConstraintType.lessthan)
                             Solver.AddLessOrEqualZeroConstraint((x) => Constraint(x, c));
                         else if (c.ConstraintType == ConstraintType.morethan)
@@ -53,6 +58,9 @@ namespace Radical.Integration
         public NLoptAlgorithm SecondaryAlg; // Optional
         public NLoptSolver Solver;
         public RadicalWindow RadicalWindow;
+
+        public ChartValues<double> StoredMainValues;
+        public ChartValues<ChartValues<double>> StoredConstraintValues;
 
         public void BuildWrapper()
         {
@@ -97,23 +105,42 @@ namespace Radical.Integration
             };
             Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
 
-
             // inelegant, temporary
             while (!finished)
             {
                 Thread.Sleep(1);
             }
 
-            //Adds main objective values to list and draws
             double objective = Design.CurrentScore;
-            Design.ScoreEvolution.Add(objective);
 
-            ((Design)Design).OptComponent.Evolution = Design.ScoreEvolution.ToList();
-
-            for (int i = 0; i < Design.ConstraintEvolution.Count; i++)
+            //If RefreshMode == Silent then values are stored in a local list so that the graph is not updated
+            if (this.RadicalWindow.RadicalVM.Mode == RefreshMode.Silent)
             {
-                double score = Design.Constraints[i].CurrentValue;
-                Design.ConstraintEvolution[i].Add(score);
+                this.StoredMainValues.Add(objective);
+
+                for (int i = 0; i < Design.ConstraintEvolution.Count; i++)
+                {
+                    double score = Design.Constraints[i].CurrentValue;
+                    this.StoredConstraintValues[i].Add(score);
+                }
+            }
+            else
+            {
+                //If refresh mode is switched from Silent to Live 
+                if (StoredMainValues.Any())
+                {
+                    AppendStoredValues();
+                }
+
+                //Adds main objective values to list and draws
+                Design.ScoreEvolution.Add(objective);
+                ((Design)Design).OptComponent.Evolution = Design.ScoreEvolution.ToList();
+
+                for (int i = 0; i < Design.ConstraintEvolution.Count; i++)
+                {
+                    double score = Design.Constraints[i].CurrentValue;
+                    Design.ConstraintEvolution[i].Add(score);
+                }
             }
 
             try
@@ -128,20 +155,41 @@ namespace Radical.Integration
             return objective;
         }
 
-        public double Objective(double[] x, ref double[] grad)
+        public NloptResult RunOptimization()
         {
-            for (int i = 0; i < nVars; i++)
+            //STARTED
+            this.RadicalWindow.OptimizationStarted();
+
+            // Run optimization with only the activeVariables
+            double[] x = Design.ActiveVariables.Select(t => t.CurrentValue).ToArray();
+            double[] query = x;
+            double startingObjective = Design.CurrentScore;
+            NloptResult result = Solver.Optimize(x, out MinValue);
+
+            //FINISHED
+            //Updates graph if the optimization ends in silent mode
+            if (this.RadicalWindow.RadicalVM.Mode == RefreshMode.Silent)
             {
-                IVariable var = Design.Variables[i];
-                var.UpdateValue(x[i]);
+                AppendStoredValues();
             }
+            this.RadicalWindow.OptimizationFinished();
 
-            if (grad != null) { }//update gradient, for gradient-based algs.
+            return result;
+        }
 
-            double objective = Design.CurrentScore;
-            Design.ScoreEvolution.Add(objective);
-            return objective;
-        } //UNIMPLEMENTED
+        //Adds optimization values to array that updates graph display 
+        public void AppendStoredValues()
+        {
+            Design.ScoreEvolution.AddRange(StoredMainValues);
+            StoredMainValues.Clear();
+            ((Design)Design).OptComponent.Evolution = Design.ScoreEvolution.ToList();
+
+            for (int i = 0; i < Design.ConstraintEvolution.Count; i++)
+            {
+                Design.ConstraintEvolution[i].AddRange(StoredConstraintValues[i]);
+                StoredConstraintValues[i].Clear();
+            }
+        }
 
         public double Constraint(double[] x, Constraint c)
         {
@@ -158,21 +206,20 @@ namespace Radical.Integration
             return c.CurrentValue - c.LimitValue;
         }
 
-        public NloptResult RunOptimization()
+        //UNIMPLEMENTED
+        public double Objective(double[] x, ref double[] grad)
         {
-            //STARTED
-            this.RadicalWindow.OptimizationStarted();
+            for (int i = 0; i < nVars; i++)
+            {
+                IVariable var = Design.Variables[i];
+                var.UpdateValue(x[i]);
+            }
 
-            // Run optimization with only the activeVariables
-            double[] x = Design.ActiveVariables.Select(t => t.CurrentValue).ToArray();
-            double[] query = x;
-            double startingObjective = Design.CurrentScore;
-            NloptResult result = Solver.Optimize(x, out MinValue);
+            if (grad != null) { }//update gradient, for gradient-based algs.
 
-            //FINISHED
-            this.RadicalWindow.OptimizationFinished();
-
-            return result;
+            double objective = Design.CurrentScore;
+            Design.ScoreEvolution.Add(objective);
+            return objective;
         }
 
         #region obsolete_constructors

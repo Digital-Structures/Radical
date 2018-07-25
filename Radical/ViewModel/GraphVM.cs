@@ -27,9 +27,11 @@ namespace Radical
             _chartlinex = 0;
             _x = "0";
             _y = "0";
+
            // _graphVisibility = Visibility.Visible;
            // DisplayX = null;
            // DisplayY = null;
+           // _chartanimationsdisabled = false;
         }
 
         //This is the specific Chart Values array, it seems that you cannot pass in an ordinary list 
@@ -112,6 +114,46 @@ namespace Radical
             }
         }
 
+        public LiveCharts.Wpf.LineSeries _plotter;
+        public LiveCharts.Wpf.LineSeries Plotter
+        {
+            get { return _plotter; }
+            set
+            {
+                _plotter = value;
+            }
+        }
+
+        public RadicalWindow _window;
+        public RadicalWindow Window
+        {
+            get { return _window; }
+            set
+            {
+                _window = value;
+            }
+        }
+       
+        public Grid _graphgrid; 
+        //public Grid GraphGrid
+        //{
+        //    get { return _graphgrid; }
+        //    set
+        //    {
+        //        _graphgrid = value; 
+        //    }
+        //}
+
+        public double _graphgridheight;
+        public double GraphGridHeight
+        {
+            get { return _graphgridheight; }
+            set
+            {
+                _graphgridheight = value;
+            }
+        }
+
         public LiveCharts.Wpf.Axis _chartaxisx;
         public LiveCharts.Wpf.Axis ChartAxisX
         {
@@ -157,7 +199,7 @@ namespace Radical
                 this.DisplayY = String.Format("{0:0.00}",yValue);
 
                 double minX = ChartAxisX.ActualMinValue;
-                double ScaleX = (Chart.ActualWidth) / (ChartAxisX.ActualMaxValue - minX);
+                double ScaleX = (Chart.ActualWidth - 21) / (ChartAxisX.ActualMaxValue - minX);
 
                 //Calculations for the horizontal line
                 //actualX * ScaleX scales the graph value to appropriate mouse position
@@ -172,14 +214,14 @@ namespace Radical
                 this.ChartLineX = newXPosition;
 
                 //Calculatoins for the vertical line
-                double minY = ChartAxisY.ActualMinValue;
-                double ScaleY = (Chart.ActualHeight) / (ChartAxisY.ActualMaxValue - minY);
-                double newYPosition = Chart.ActualHeight - (yValue * ScaleY + minY);
-                if (newYPosition < 0 || newYPosition > Chart.ActualHeight)
-                {
-                    ChartLineVisibilityY = Visibility.Collapsed;
-                }
-                this.ChartLineY = newYPosition;
+                //double minY = ChartAxisY.ActualMinValue;
+                //double ScaleY = (Chart.ActualHeight) / (ChartAxisY.ActualMaxValue - minY);
+                //double newYPosition = Chart.ActualHeight - (yValue * ScaleY + minY);
+                //if (newYPosition < 0 || newYPosition > Chart.ActualHeight)
+                //{
+                //    ChartLineVisibilityY = Visibility.Collapsed;
+                //}
+                //this.ChartLineY = newYPosition;
             }
         }
 
@@ -210,34 +252,34 @@ namespace Radical
             }
         }
 
-        private Visibility _chartlinevisibilityy;
-        public Visibility ChartLineVisibilityY
-        {
-            get { return _chartlinevisibilityy; }
-            set
-            {
-                if (CheckPropertyChanged<Visibility>("ChartLineVisibilityY", ref _chartlinevisibilityy, ref value))
-                {
-                }
-            }
-        }
+        //private Visibility _chartlinevisibilityy;
+        //public Visibility ChartLineVisibilityY
+        //{
+        //    get { return _chartlinevisibilityy; }
+        //    set
+        //    {
+        //        if (CheckPropertyChanged<Visibility>("ChartLineVisibilityY", ref _chartlinevisibilityy, ref value))
+        //        {
+        //        }
+        //    }
+        //}
 
         public void ChartLineVisibility(Visibility v)
         {
             ChartLineVisibilityX = v;
-            ChartLineVisibilityY = v;
+            //ChartLineVisibilityY = v;
             
-            if (ChartLineX - 25 < 0 || ChartLineX > this.Chart.ActualWidth + 25)
-            {
-                ChartLineVisibilityX = Visibility.Collapsed;
-                DisplayX = null;
-                DisplayY = null;
-            }
-            if (ChartLineY < 0 || ChartLineY > this.Chart.ActualHeight)
-            {
-                ChartLineVisibilityY = Visibility.Collapsed;
-                DisplayY = null;
-            }
+            //if (ChartLineX - 25 < 0 || ChartLineX > this.Chart.ActualWidth + 25)
+            //{
+            //    ChartLineVisibilityX = Visibility.Collapsed;
+            //    DisplayX = null;
+            //    DisplayY = null;
+            //}
+            //if (ChartLineY < 0 || ChartLineY > this.Chart.ActualHeight)
+            //{
+            //    ChartLineVisibilityY = Visibility.Collapsed;
+            //    DisplayY = null;
+            //}
         }
 
         private double _chartlinewidth;
@@ -252,10 +294,36 @@ namespace Radical
             }
         }
 
+        private double _chartliney2;
+        public double ChartLineY2
+        {
+            get { return _chartliney2; }
+            set
+            {
+                if(CheckPropertyChanged<double>("ChartLineY2", ref _chartliney2, ref value))
+                {
+                }
+            }
+        }
+
+        public void CalculateChartLineY2()
+        {
+            ChartLineY2 = GraphGridHeight - 214;
+        }
+
         public void SetLineWidth()
         {
             this.ChartLineWidth = this.Chart.ActualWidth + 25;
         }
 
+        //public void UpdateGraphWidth()
+        //{
+        //    //this.Chart.Width = GraphGrid.ActualWidth;
+        //}
+
+        public void UpdateHeight()
+        {
+            GraphGridHeight = Window.MainGrid.ActualHeight * 0.45;
+        }
     }
 }
