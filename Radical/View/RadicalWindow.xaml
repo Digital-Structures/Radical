@@ -12,7 +12,7 @@
         mc:Ignorable="d"
         Title="Radical" Height="600" Width="1000"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        Background="{DynamicResource MaterialDesignPaper}"
+        Background="{DynamicResource BackgroundHueDarkBrush}"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="12"
         FontFamily="Global User Interface"
@@ -33,9 +33,18 @@
                         <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.BlueGrey.Primary.xaml" />
                     </ResourceDictionary.MergedDictionaries>
 
+                    <SolidColorBrush x:Key="BackgroundHueDarkBrush" Color="Black"/>
+                    <SolidColorBrush x:Key="BackgroundHueMidBrush" Color="Gray"/>
+                    <SolidColorBrush x:Key="BackgroundHueLightBrush" Color="White"/>
+
+                    <SolidColorBrush x:Key="BackgroundHueDarkForegroundBrush" Color="White"/>
+                    <SolidColorBrush x:Key="BackgroundHueDarkSubtextForegroundBrush" Color="Blue"/>
+                    <SolidColorBrush x:Key="BackgroundHueMidForegroundBrush" Color="Black"/>
+                    <SolidColorBrush x:Key="BackgroundHueLightForegroundBrush" Color="Black"/>
+
                     <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{StaticResource Primary50}"/>
                     <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{StaticResource Primary50Foreground}"/>
-                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{StaticResource Primary400}"/>
+                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#AC6C84"/>
                     <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary400Foreground}"/>
                     <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary800}"/>
                     <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary800Foreground}"/>
@@ -44,10 +53,10 @@
                 <!-- secondary colour -->
                 <ResourceDictionary>
                     <ResourceDictionary.MergedDictionaries>
-                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Red.Primary.xaml" />
+                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Blue.Primary.xaml" />
                     </ResourceDictionary.MergedDictionaries>
 
-                    <SolidColorBrush x:Key="SecondaryAccentBrush" Color="{StaticResource Primary700}"/>
+                    <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#FDAE4F"/>
                     <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="{StaticResource Primary700Foreground}"/>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
@@ -144,8 +153,8 @@
                         <Expander.Header>
                             <StackPanel Orientation="Horizontal" Margin="-20,-25">
                                 <Border Background="{DynamicResource PrimaryHueDarkBrush}" Width="5" VerticalAlignment="Stretch"></Border>
-                                <Label Padding="10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
-                                VARIABLES
+                                <Label Padding="10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+                                Variables
                                 </Label>
                             </StackPanel>
                         </Expander.Header>
@@ -158,7 +167,7 @@
                                 <Expander.Header>
                                     <StackPanel Orientation="Horizontal" Margin="-20,-25">
                                         <Border Background="{DynamicResource PrimaryHueMidBrush}" Width="5" VerticalAlignment="Stretch"></Border>
-                                        <Label Padding="30,10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
+                                        <Label Padding="30,10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
                                             Sliders
                                         </Label>
                                     </StackPanel>
@@ -174,7 +183,7 @@
                                 Height="1"
                                 HorizontalAlignment="Stretch"
                                 SnapsToDevicePixels="True" />
-                            <Expander Name="GeometriesExpander" Padding="20,0,0,0" Visibility="Visible">
+                            <Expander Name="GeometriesExpander" Padding="20,0,0,0" Visibility="Visible" Background="{DynamicResource BackgroundHueDarkBrush}">
                                 <Expander.Header>
                                     <StackPanel Orientation="Horizontal" Margin="-20,-25">
                                         <Border Background="{DynamicResource PrimaryHueMidBrush}" Width="5" VerticalAlignment="Stretch"></Border>
@@ -196,16 +205,16 @@
                         Height="1"
                         HorizontalAlignment="Stretch"
                         SnapsToDevicePixels="True" />
-                    <Expander Name="ConstraintsExpander" FontSize="18">
+                    <Expander Name="ConstraintsExpander" FontSize="18" Background="{DynamicResource BackgroundHueDarkBrush}">
                         <Expander.Header>
                             <StackPanel Orientation="Horizontal" Margin="-20,-25">
                                 <Border Background="{DynamicResource PrimaryHueDarkBrush}" Width="5" VerticalAlignment="Stretch"></Border>
-                                <Label Padding="10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
-                                CONSTRAINTS
+                                <Label Padding="10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}">
+                                Constraints
                                 </Label>
                             </StackPanel>
                         </Expander.Header>
-                        <StackPanel Name="Constraints" Background="{DynamicResource MaterialDesignPaper}">
+                        <StackPanel Name="Constraints">
                             <Border Background="{DynamicResource MaterialDesignDivider}"
                                 Height="1"
                                 HorizontalAlignment="Stretch"
@@ -303,7 +312,7 @@
                 </StackPanel>
             </Grid>
 
-            <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,20" Background="{x:Null}" >
+            <Grid Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,20,20,20" Background="{x:Null}" >
                 <Button x:Name="ButtonPlay" Click="ButtonPlay_Click" Width="40" Height="40"
                         Style="{StaticResource MaterialDesignFloatingActionButton}" 
                         materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="{DynamicResource SecondaryAccentBrush}" BorderBrush="{DynamicResource SecondaryAccentBrush}">

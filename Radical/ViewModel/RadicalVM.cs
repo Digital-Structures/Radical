@@ -147,6 +147,12 @@ namespace Radical
         {
             this.ChangesEnabled = true;
 
+            this.Graphs["Main"][0].Statistics();
+            foreach(GraphVM g in this.Graphs["Constraints"])
+            {
+                g.Statistics();
+            }
+
             foreach (ConstVM constraint in this.Constraints)
                 constraint.OptimizationFinished();
         }
@@ -169,7 +175,14 @@ namespace Radical
             }
             set
             {
-                CheckPropertyChanged<int>("Cols", ref _cols, ref value);
+                if(CheckPropertyChanged<int>("Cols", ref _cols, ref value))
+                {
+                    foreach (GraphVM gvm in ActiveGraphs)
+                    {
+                        gvm.ChartRowVisibility = Visibility.Collapsed;
+                        gvm.ChartRowVisibility = Visibility.Visible;
+                    }
+                }
             }
         }
 

@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Radical"
              mc:Ignorable="d">
-    
-    <Grid Style="{x:Null}" Margin="0,5" Background="Transparent">
+
+    <Grid Style="{x:Null}" Margin="0,5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -22,11 +22,11 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Name="GroupControlName" FontSize="12" Foreground="Gray" 
+            <TextBlock Name="GroupControlName" FontSize="12" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}"
                          Grid.Column="0" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="25,0,0,0"
                          ></TextBlock>
 
-            <TextBox Name="ValueText" Text="{Binding Value, Mode=TwoWay, StringFormat=N2}" FontSize="12" 
+            <TextBox Name="ValueText" Text="{Binding Value, Mode=TwoWay, StringFormat=N2}" FontSize="12" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}"
                          Grid.Column="1" MinWidth="28" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0" BorderBrush="{x:Null}"
                          TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus" Visibility="Visible"
                          ></TextBox>
@@ -37,7 +37,7 @@
                           IsEnabled="{Binding ChangesEnabled}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"
                           ></CheckBox>
 
-            <TextBox Name="MinText" Text="{Binding Min, Mode=TwoWay, StringFormat=N2}" FontSize="12"
+            <TextBox Name="MinText" Text="{Binding Min, Mode=TwoWay, StringFormat=N2}" FontSize="12" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}"
                          Grid.Column="3" MinWidth="50" VerticalAlignment="Center" HorizontalContentAlignment="Right" Margin="0,0,10,0" BorderBrush="{x:Null}" 
                          TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus" Visibility="Visible"
                          ></TextBox>
@@ -47,13 +47,13 @@
                         IsEnabled="{Binding ChangesEnabled}"
                         ></Slider>
 
-            <TextBox Name="MaxText" Text="{Binding Max, Mode=TwoWay, StringFormat=N2}" FontSize="12" 
+            <TextBox Name="MaxText" Text="{Binding Max, Mode=TwoWay, StringFormat=N2}" FontSize="12" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}"
                          Grid.Column="5" MinWidth="50" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="10,0,5,0" BorderBrush="{x:Null}"
                          TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus" Visibility="Visible"
                          ></TextBox>
         </Grid>
 
-        <Grid Grid.Row="1" VerticalAlignment="Center">
+        <!--<Grid Grid.Row="1" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -82,6 +82,6 @@
                          TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus" Visibility="Visible"
                          ></TextBox>
 
-        </Grid>
+        </Grid>-->
     </Grid>
 </local:BaseControl>

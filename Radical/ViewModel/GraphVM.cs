@@ -114,6 +114,18 @@ namespace Radical
             }
         }
 
+        private int _iteration;
+        public int Iteration
+        {
+            get { return _iteration; }
+            set
+            {
+                if (CheckPropertyChanged<int>("Iteration", ref _iteration, ref value))
+                {
+                }
+            }
+        }
+
         public LiveCharts.Wpf.LineSeries _plotter;
         public LiveCharts.Wpf.LineSeries Plotter
         {
@@ -181,37 +193,81 @@ namespace Radical
             set { _chartline = value; }
         }
 
-        private bool _showline;
-        public bool ShowLine
+        private bool _optimizerdone;
+        public bool OptimizerDone
         {
-            get { return _showline; }
-            set { _showline = value; }
+            get { return _optimizerdone; }
+            set
+            {
+                _optimizerdone = value;
+                if (value)
+                {
+                    ButtonStatsVisibility = Visibility.Visible;
+                    ButtonStatsIcon = MaterialDesignThemes.Wpf.PackIconKind.Plus;
+                }
+                else
+                {
+                    ButtonStatsVisibility = Visibility.Collapsed;
+                    //ButtonStatsIcon = MaterialDesignThemes.Wpf.PackIconKind.Minus;
+                }
+            }
+        }
+
+
+        private MaterialDesignThemes.Wpf.PackIconKind _buttonstatsicon;
+        public MaterialDesignThemes.Wpf.PackIconKind ButtonStatsIcon
+        {
+            get { return _buttonstatsicon; }
+            set
+            {
+                if (CheckPropertyChanged<MaterialDesignThemes.Wpf.PackIconKind>("ButtonStatsIcon", ref _buttonstatsicon, ref value))
+                {
+                }
+            }
+        }
+
+        private Visibility _buttonstatsvisibility;
+        public Visibility ButtonStatsVisibility
+        {
+            get { return _buttonstatsvisibility; }
+            set
+            {
+                if (CheckPropertyChanged<Visibility>("ButtonStatsVisibility", ref _buttonstatsvisibility, ref value))
+                {
+                }
+            }
         }
 
         public void UpdateLine(int iteration)
         {
             this.DisplayX = iteration.ToString();
 
-            if (ChartValues.Any() && ShowLine)
+            //Make sure OptimizerDone is actually functioning its purpose
+            if (ChartValues.Any() && OptimizerDone)
             {
                 ChartLineVisibility(Visibility.Visible);
+
                 double yValue = ChartValues.ElementAt(iteration);
                 this.DisplayY = String.Format("{0:0.00}",yValue);
 
-                double minX = ChartAxisX.ActualMinValue;
-                double ScaleX = (Chart.ActualWidth - 21) / (ChartAxisX.ActualMaxValue - minX);
+                Iteration = iteration;
 
-                //Calculations for the horizontal line
-                //actualX * ScaleX scales the graph value to appropriate mouse position
-                //+45 is a hardcoded value because the position is off due to the side of the graph
-                //minx takes into account if the graph has been moved 
-                double newXPosition = iteration * ScaleX - minX + 25;
+                TrackedValueText = String.Format("{0:0.00}", ChartValues.ElementAt(Iteration));
+
+                //double minX = ChartAxisX.ActualMinValue;
+                //double ScaleX = (Chart.ActualWidth - 21) / (ChartAxisX.ActualMaxValue - minX);
+
+                ////Calculations for the horizontal line
+                ////actualX * ScaleX scales the graph value to appropriate mouse position
+                ////+45 is a hardcoded value because the position is off due to the side of the graph
+                ////minx takes into account if the graph has been moved 
+                //double newXPosition = iteration * ScaleX - minX + 25;
                 
-                if (newXPosition - 25 < 0 || newXPosition > Chart.ActualWidth)
-                {
-                    ChartLineVisibilityX = Visibility.Collapsed;
-                }
-                this.ChartLineX = newXPosition;
+                //if (newXPosition - 25 < 0 || newXPosition > Chart.ActualWidth)
+                //{
+                //    ChartLineVisibilityX = Visibility.Collapsed;
+                //}
+                //this.ChartLineX = newXPosition;
 
                 //Calculatoins for the vertical line
                 //double minY = ChartAxisY.ActualMinValue;
@@ -306,6 +362,83 @@ namespace Radical
             }
         }
 
+        private string _finaloptimizedvalue;
+        public string FinalOptimizedValue
+        {
+            get { return _finaloptimizedvalue; }
+            set
+            {
+                if(CheckPropertyChanged<string>("FinalOptimizedValue", ref _finaloptimizedvalue, ref value))
+                {
+                }
+            }
+        }
+
+        private string _trackedvaluetext;
+        public string TrackedValueText
+        {
+            get { return "tracked value " + _trackedvaluetext; }
+            set
+            {
+                if (CheckPropertyChanged<string>("TrackedValueText", ref _trackedvaluetext, ref value))
+                {
+                }
+            }
+        }
+
+        private string _totalimprovementtext;
+        public string TotalImprovementText
+        {
+            get { return "total improvement " + _totalimprovementtext + "%"; }
+            set
+            {
+                if(CheckPropertyChanged<string>("TotalImprovementText", ref _totalimprovementtext, ref value))
+                {
+                }
+            }
+        }
+
+        private string _convergenceratetext;
+        public string ConvergeneceRateText
+        {
+            get { return "convergence rate " + _convergenceratetext + "%"; }
+            set
+            {
+                if (CheckPropertyChanged<string>("ConvergeneceRateText", ref _convergenceratetext, ref value))
+                {
+                }
+            }
+        }
+
+        public void Statistics()
+        {
+            double optimizedValue = ChartValues.ElementAt(ChartValues.Count - 1);
+            FinalOptimizedValue = String.Format("{0:0.00}", optimizedValue);
+
+            double improvement = optimizedValue / ChartValues.ElementAt(0) * 100;
+            if (improvement > 100)
+            {
+                improvement = 0; 
+            }
+            TotalImprovementText = String.Format("{0:0}", improvement);
+
+            //How do you find convergence?
+            double convergence = 100;
+            ConvergeneceRateText = String.Format("{0:0.00}", convergence);
+        }
+
+        private Visibility _statisticvisibility;
+        public Visibility StatisticVisibility
+        {
+            get { return _statisticvisibility; }
+            set
+            {
+                if(CheckPropertyChanged<Visibility>("StatisticVisibility", ref _statisticvisibility, ref value))
+                {
+                }
+            }
+        }
+
         public void CalculateChartLineY2()
         {
             ChartLineY2 = GraphGridHeight - 214;
@@ -324,6 +457,18 @@ namespace Radical
         public void UpdateHeight()
         {
             GraphGridHeight = Window.MainGrid.ActualHeight * 0.45;
+        }
+
+        private Visibility _chartrowvisibility; 
+        public Visibility ChartRowVisibility
+        {
+            get { return _chartrowvisibility; }
+            set
+            {
+                if (CheckPropertyChanged<Visibility>("ChartRowVisibility", ref _chartrowvisibility, ref value))
+                {
+                }
+            }
         }
     }
 }

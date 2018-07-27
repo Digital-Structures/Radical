@@ -177,7 +177,7 @@ namespace Radical
                 foreach (GraphVM graph in pair.Value)
                 {
                     graph.ChartLineVisibility(Visibility.Visible);
-                    graph.ShowLine = true;
+                    graph.OptimizerDone = true;
                 }
             }
             SetUpGraphLineWidth();
@@ -190,7 +190,7 @@ namespace Radical
                 foreach (GraphVM graph in pair.Value)
                 {
                     graph.ChartLineVisibility(Visibility.Collapsed);
-                    graph.ShowLine = false;
+                    graph.OptimizerDone = false;
                 }
             }
         }
@@ -282,25 +282,25 @@ namespace Radical
                 Expander groupControlMenu = new Expander();
                 groupControlMenu.IsExpanded = true;
                 groupControlMenu.Header = Header2Formatting("Group Variable Control");
-                groupControlMenu.Background = (SolidColorBrush)this.FindResource("PrimaryHueLightBrush");
+                groupControlMenu.Background = (SolidColorBrush)this.FindResource("BackgroundHueMidBrush");
+                groupControlMenu.Foreground = (SolidColorBrush)this.FindResource("BackgroundHueDarkSubtextForegroundBrush");
                 groupControlMenu.Content = groupControls;
                 variableMenus.Children.Add(groupControlMenu);
 
                 //Add descriptive control labels
-                VariableHeaderControl vhc = new VariableHeaderControl();
-                vhc.Background = (SolidColorBrush)this.FindResource("MaterialDesignPaper");
-                groupControls.Children.Add(vhc);
+                groupControls.Children.Add(new VariableHeaderControl());
 
                 //Add group controls for X, Y, and Z directions
                 GroupVariableControl groupControlX = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.X), geoIndex - 1)); this.GroupVars.Add(groupControlX);
                 GroupVariableControl groupControlY = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.Y), geoIndex - 1)); this.GroupVars.Add(groupControlY);
                 GroupVariableControl groupControlZ = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.Z), geoIndex - 1)); this.GroupVars.Add(groupControlZ);
+                groupControlX.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
+                groupControlY.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
+                groupControlZ.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
+
                 groupControlX.GroupControlName.Text = "X Variables";
                 groupControlY.GroupControlName.Text = "Y Variables";
                 groupControlZ.GroupControlName.Text = "Z Variables";
-                groupControlX.Background = (SolidColorBrush)this.FindResource("MaterialDesignPaper");
-                groupControlY.Background = (SolidColorBrush)this.FindResource("MaterialDesignPaper");
-                groupControlZ.Background = (SolidColorBrush)this.FindResource("MaterialDesignPaper");
                 groupControls.Children.Add(groupControlX);
                 groupControls.Children.Add(groupControlY);
                 groupControls.Children.Add(groupControlZ);
@@ -314,22 +314,19 @@ namespace Radical
                 //Expander
                 Expander individualControlMenu = new Expander();
                 individualControlMenu.Header = Header2Formatting("Single Variable Control");
-                individualControlMenu.Background = (SolidColorBrush)this.FindResource("PrimaryHueLightBrush");
                 individualControlMenu.Content = individualControls;
+                individualControlMenu.Background = (SolidColorBrush)this.FindResource("BackgroundHueMidBrush");
                 variableMenus.Children.Add(individualControlMenu);
 
                 //Add descriptive control labels
-                VariableHeaderControl vhc2 = new VariableHeaderControl();
-                vhc2.Background = (SolidColorBrush)this.FindResource("MaterialDesignPaper");
-                individualControls.Children.Add(vhc2);
+                individualControls.Children.Add(new VariableHeaderControl());
 
                 //Add individual point controls in all directions
                 foreach (VarVM var in geometry) {
-                    VariableControl v = new VariableControl(var);
-                    v.Background = (SolidColorBrush)this.FindResource("MaterialDesignPaper");
-                    individualControls.Children.Add(v);
+                    VariableControl vc = new VariableControl(var);
+                    vc.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
+                    individualControls.Children.Add(vc);
                 }
-            
             }
         }
 
@@ -337,7 +334,7 @@ namespace Radical
         private TextBlock Header1Formatting(string text)
         {
             TextBlock header = new TextBlock(new Run(text));
-            header.Foreground = Brushes.Gray;
+            header.Foreground = (SolidColorBrush)this.FindResource("BackgroundHueMidForegroundBrush");
             header.FontSize = 16;
 
             return header;
@@ -347,7 +344,7 @@ namespace Radical
         private TextBlock Header2Formatting(string text)
         {
             TextBlock header = new TextBlock(new Run(text));
-            header.Foreground = Brushes.DarkGray;
+            header.Foreground = (SolidColorBrush)this.FindResource("BackgroundHueMidForegroundBrush");
             header.FontSize = 16;
 
             return header;
@@ -361,7 +358,7 @@ namespace Radical
             b.HorizontalAlignment = HorizontalAlignment.Stretch;
             b.SnapsToDevicePixels = true;
             b.BorderThickness = new Thickness(0, 0, 0, 2);
-            b.BorderBrush = Brushes.DarkGray;
+            b.BorderBrush = (SolidColorBrush)this.FindResource("BackgroundHueDarkSubtextForegroundBrush");
             return b;
         }
 

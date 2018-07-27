@@ -38,15 +38,19 @@ namespace Radical
 
             InitializeComponent();
 
+            //this.ButtonStats.Style = (Style)window.FindResource("MaterialDesignFloatingActionLightButton");
+            //this.ButtonStats.Visibility = Visibility.Collapsed;
+
             //this.GraphVM.GraphGrid = GraphGrid;
             this.GraphVM.Chart = Chart;
             this.GraphVM.ChartAxisX = ChartAxisX;
             this.GraphVM.ChartAxisY = ChartAxisY;
-            this.GraphVM.Plotter = Plotter;
             this.GraphVM.Window = window; 
 
-            this.GraphVM.ChartLine = ChartLine;
+          //  this.GraphVM.ChartLine = ChartLine;
             this.GraphVM.ChartLineVisibility(Visibility.Collapsed);
+            this.GraphVM.StatisticVisibility = Visibility.Collapsed;
+
         }
 
         public GraphVM GraphVM;
@@ -71,32 +75,50 @@ namespace Radical
             if (this.GraphVM.ChartValues.Any())
             {
                 var mouseCoordinate = e.GetPosition(Chart);
-
-
-                double dummy = Chart.ActualWidth;
-                double dummy2 = ChartAxisX.ActualWidth;
-
-                double mouseX = mouseCoordinate.X;
-                double minx = ChartAxisX.ActualMinValue;
-
-                double ScaleX = (Chart.ActualWidth - 21) / (ChartAxisX.ActualMaxValue - minx);
-
-                int actualX = (int)(Math.Truncate(mouseX / ScaleX - minx));
-                if (actualX < 0)
-                {
-                    actualX = 0;
-                }
-                else if (actualX >= this.GraphVM.ChartValues.Count)
-                {
-                    actualX = this.GraphVM.ChartValues.Count - 1;
-                }
-
-                this.GraphVM.UpdateLine(actualX);
-                this.RadicalVM.UpdateGraphLines(actualX);
+                double chartCoordinateX = Chart.ConvertToChartValues(mouseCoordinate).X;
+                int closestXPoint = (int)Chart.Series[0].ClosestPointTo(chartCoordinateX, AxisOrientation.X).X;
+                this.GraphVM.UpdateLine(closestXPoint);
+                this.RadicalVM.UpdateGraphLines(closestXPoint);
             }
             else
             {
                 this.GraphVM.ChartLineVisibility(Visibility.Collapsed);
+            }
+            //    double mouseX = mouseCoordinate.X;
+            //    double minx = ChartAxisX.ActualMinValue;
+
+            //    double ScaleX = (Chart.ActualWidth - 21) / (ChartAxisX.ActualMaxValue - minx);
+
+            //    int actualX = (int)(Math.Truncate(mouseX / ScaleX - minx));
+            //    if (actualX < 0)
+            //    {
+            //        actualX = 0;
+            //    }
+            //    else if (actualX >= this.GraphVM.ChartValues.Count)
+            //    {
+            //        actualX = this.GraphVM.ChartValues.Count - 1;
+            //    }
+
+            //    this.GraphVM.UpdateLine(actualX);
+            //    this.RadicalVM.UpdateGraphLines(actualX);
+            //}
+            //else
+            //{
+            //    this.GraphVM.ChartLineVisibility(Visibility.Collapsed);
+            //}
+        }
+
+        private void ButtonStats_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.GraphVM.StatisticVisibility == Visibility.Visible)
+            {
+                this.GraphVM.StatisticVisibility = Visibility.Collapsed;
+                this.GraphVM.ButtonStatsIcon = MaterialDesignThemes.Wpf.PackIconKind.Plus;
+            }
+            else
+            {
+                this.GraphVM.StatisticVisibility = Visibility.Visible;
+                this.GraphVM.ButtonStatsIcon = MaterialDesignThemes.Wpf.PackIconKind.Minus;
             }
         }
 
