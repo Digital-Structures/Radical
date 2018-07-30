@@ -31,7 +31,7 @@
                           ></CheckBox>
 
             <ComboBox Name="EqualityChoice" FontSize="12" SelectedIndex="{Binding ConstraintType, Mode=TwoWay}" IsEnabled="{Binding ChangesEnabled}"
-                          Grid.Column="3" Width="90" HorizontalContentAlignment="Right" Margin="0,0,10,0">
+                          Grid.Column="3" Width="90" HorizontalContentAlignment="Right" Margin="0,0,10,0" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}">
                 <ComboBoxItem Content="Less Than" HorizontalAlignment="Right"></ComboBoxItem>
                 <ComboBoxItem Content="Greater Than" HorizontalAlignment="Right"></ComboBoxItem>
                 <ComboBoxItem Content="Equal To" HorizontalAlignment="Right"></ComboBoxItem>

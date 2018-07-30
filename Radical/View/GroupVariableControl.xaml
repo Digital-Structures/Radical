@@ -22,7 +22,7 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Name="GroupControlName" FontSize="12" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}"
+            <TextBlock Name="GroupControlName" FontSize="12" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}"
                          Grid.Column="0" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="25,0,0,0"
                          ></TextBlock>
 
@@ -53,6 +53,7 @@
                          ></TextBox>
         </Grid>
 
+        <!--SCALING FACTOR CODE-->
         <!--<Grid Grid.Row="1" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>

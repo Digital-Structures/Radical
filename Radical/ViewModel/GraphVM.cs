@@ -47,6 +47,18 @@ namespace Radical
             }
         }
 
+        private ChartValues<LiveCharts.Defaults.ObservablePoint> _hovervalue;
+        public ChartValues<LiveCharts.Defaults.ObservablePoint> HoverValue
+        {
+            get { return _hovervalue; }
+            set
+            {
+                if (CheckPropertyChanged<ChartValues<LiveCharts.Defaults.ObservablePoint>>("HoverValue", ref _hovervalue, ref value))
+                {
+                }
+            }
+        }
+
         private String _linegraph_name;
         public String LineGraphName
         {
@@ -122,6 +134,11 @@ namespace Radical
             {
                 if (CheckPropertyChanged<int>("Iteration", ref _iteration, ref value))
                 {
+                    LiveCharts.Defaults.ObservablePoint point = new LiveCharts.Defaults.ObservablePoint();
+                    point.X = Iteration;
+                    point.Y = ChartValues.ElementAt(Iteration);
+
+                    HoverValue = new ChartValues<LiveCharts.Defaults.ObservablePoint> { point };
                 }
             }
         }
@@ -252,7 +269,9 @@ namespace Radical
 
                 Iteration = iteration;
 
-                TrackedValueText = String.Format("{0:0.00}", ChartValues.ElementAt(Iteration));
+  //              TrackedValueText = String.Format("{0:0.00}", ChartValues.ElementAt(Iteration));
+
+
 
                 //double minX = ChartAxisX.ActualMinValue;
                 //double ScaleX = (Chart.ActualWidth - 21) / (ChartAxisX.ActualMaxValue - minX);

@@ -22,6 +22,7 @@ namespace Radical
         {
             DesignVar = dvar;
             this._name = DesignVar.Parameter.NickName;
+            this._originalvalue = DesignVar.CurrentValue;
             this._value = DesignVar.CurrentValue;
             this._min = DesignVar.Min;
             this._max = DesignVar.Max;
@@ -86,7 +87,20 @@ namespace Radical
                     Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
                 }
             }
+        }
 
+        //ORIGINAL VALUE
+        //Original value of the variable before optimization
+        private double _originalvalue;
+        public double OriginalValue
+        {
+            get { return _originalvalue; }
+            set
+            {
+                if(CheckPropertyChanged<double>("OriginalValue", ref _originalvalue, ref value))
+                {
+                }
+            }
         }
 
         //OPTIMIZATION FINISHED

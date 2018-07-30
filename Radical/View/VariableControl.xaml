@@ -22,7 +22,7 @@
                      PreviewKeyDown="TextBox_PreviewKeyDown" Visibility="Visible"
                      ></TextBox>
 
-        <TextBox Name="ValueText" Text="{Binding Value, Mode=TwoWay, StringFormat=N2}" FontSize="12" 
+        <TextBox Name="ValueText" Text="{Binding Value, Mode=TwoWay, StringFormat=N2}" FontSize="12" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}"
                      Grid.Column="1" MinWidth="30" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0" BorderBrush="{x:Null}"
                      TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus" Visibility="Visible"
                      ></TextBox>

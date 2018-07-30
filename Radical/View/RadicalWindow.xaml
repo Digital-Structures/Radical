@@ -33,21 +33,23 @@
                         <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.BlueGrey.Primary.xaml" />
                     </ResourceDictionary.MergedDictionaries>
 
-                    <SolidColorBrush x:Key="BackgroundHueDarkBrush" Color="Black"/>
-                    <SolidColorBrush x:Key="BackgroundHueMidBrush" Color="Gray"/>
+                    <SolidColorBrush x:Key="BackgroundHueDarkBrush" Color="#cacbcd"/>
+                    <SolidColorBrush x:Key="BackgroundHueMidBrush" Color="#dcddde"/>
                     <SolidColorBrush x:Key="BackgroundHueLightBrush" Color="White"/>
 
                     <SolidColorBrush x:Key="BackgroundHueDarkForegroundBrush" Color="White"/>
-                    <SolidColorBrush x:Key="BackgroundHueDarkSubtextForegroundBrush" Color="Blue"/>
-                    <SolidColorBrush x:Key="BackgroundHueMidForegroundBrush" Color="Black"/>
+                    <SolidColorBrush x:Key="BackgroundHueDarkSubtextForegroundBrush" Color="Gray"/>
+                    <SolidColorBrush x:Key="BackgroundHueMidForegroundBrush" Color="DarkGray"/>
                     <SolidColorBrush x:Key="BackgroundHueLightForegroundBrush" Color="Black"/>
 
-                    <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{StaticResource Primary50}"/>
-                    <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{StaticResource Primary50Foreground}"/>
-                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#AC6C84"/>
-                    <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary400Foreground}"/>
-                    <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary800}"/>
-                    <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary800Foreground}"/>
+                    <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#99def8"/>
+                    <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="White"/>
+                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#33bef2"/>
+                    <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="White"/>
+                    <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="#33bef2"/>
+                    <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="White"/>
+
+                    <SolidColorBrush x:Key="GraphFillColor" Color="#66cef5" Opacity="0.25"/>
                 </ResourceDictionary>
 
                 <!-- secondary colour -->
@@ -136,11 +138,11 @@
             <Grid Grid.Row="0">
                 <Button x:Name="ButtonCloseMenu" Width="Auto" Height="50" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}" 
                             Visibility="Collapsed" Click="ButtonCloseMenu_Click">
-                    <materialDesign:PackIcon Kind="ArrowLeft" Foreground="LightGray" Width="30" Height="30"></materialDesign:PackIcon>
+                    <materialDesign:PackIcon Kind="ArrowLeft" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" Width="30" Height="30"></materialDesign:PackIcon>
                 </Button>
                 <Button x:Name="ButtonOpenMenu" Width="Auto" Height="50" HorizontalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}"
                             Click="ButtonOpenMenu_Click">
-                    <materialDesign:PackIcon Kind="Menu" Foreground="DarkGray" Width="30" Height="30" HorizontalAlignment="Center"></materialDesign:PackIcon>
+                    <materialDesign:PackIcon Kind="Menu" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" Width="30" Height="30" HorizontalAlignment="Center"></materialDesign:PackIcon>
                 </Button>
             </Grid>
             <ScrollViewer x:Name="VarTree" Width="0" Grid.Row="1" VerticalScrollBarVisibility="Auto">
@@ -153,7 +155,7 @@
                         <Expander.Header>
                             <StackPanel Orientation="Horizontal" Margin="-20,-25">
                                 <Border Background="{DynamicResource PrimaryHueDarkBrush}" Width="5" VerticalAlignment="Stretch"></Border>
-                                <Label Padding="10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+                                <Label Padding="10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}">
                                 Variables
                                 </Label>
                             </StackPanel>
@@ -163,11 +165,11 @@
                                 Height="1"
                                 HorizontalAlignment="Stretch"
                                 SnapsToDevicePixels="True" />
-                            <Expander Name="SlidersExpander" Padding ="20,0,0,0" Visibility="Visible">
+                            <Expander Name="SlidersExpander" Padding ="20,0,0,0" Visibility="Visible" Background="{DynamicResource BackgroundHueDarkBrush}">
                                 <Expander.Header>
                                     <StackPanel Orientation="Horizontal" Margin="-20,-25">
                                         <Border Background="{DynamicResource PrimaryHueMidBrush}" Width="5" VerticalAlignment="Stretch"></Border>
-                                        <Label Padding="30,10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+                                        <Label Padding="30,10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}">
                                             Sliders
                                         </Label>
                                     </StackPanel>
@@ -187,12 +189,12 @@
                                 <Expander.Header>
                                     <StackPanel Orientation="Horizontal" Margin="-20,-25">
                                         <Border Background="{DynamicResource PrimaryHueMidBrush}" Width="5" VerticalAlignment="Stretch"></Border>
-                                        <Label Padding="30,10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
+                                        <Label Padding="30,10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}">
                                             Geometries
                                         </Label>
                                     </StackPanel>
                                 </Expander.Header>
-                                <StackPanel Name="Geometries" HorizontalAlignment="Stretch">
+                                <StackPanel Name="Geometries" HorizontalAlignment="Stretch" Background="{DynamicResource BackgroundHueDarkBrush}">
                                     <Border Background="{DynamicResource MaterialDesignDivider}"
                                         Height="1"
                                         HorizontalAlignment="Stretch"
@@ -283,15 +285,15 @@
                 <StackPanel x:Name="SettingsClose"  Orientation="Horizontal" Visibility="Collapsed">
                     <Button x:Name="ButtonSettingsClose"  Height="50" HorizontalAlignment="Left" Background="{x:Null}" BorderBrush="{x:Null}" 
                             Visibility="Visible" Click="ButtonSettingsClose_Click">
-                        <materialDesign:PackIcon Kind="ArrowRight" Foreground="LightGray" Width="30" Height="30"></materialDesign:PackIcon>
+                        <materialDesign:PackIcon Kind="ArrowRight" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" Width="30" Height="30"></materialDesign:PackIcon>
                     </Button>
                     <Button Height="50" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}" >
-                        <materialDesign:PackIcon Kind="Export" Foreground="DarkGray" Width="30" Height="30"></materialDesign:PackIcon>
+                        <materialDesign:PackIcon Kind="Export" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" Width="30" Height="30"></materialDesign:PackIcon>
                     </Button>
                 </StackPanel>
                 <Button x:Name="ButtonSettingsOpen" Width="60" Height="50" HorizontalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}"
                                 Visibility="Visible" Click="ButtonSettingsOpen_Click">
-                    <materialDesign:PackIcon Kind="DotsHorizontal" Foreground="DarkGray" Width="30" Height="30"></materialDesign:PackIcon>
+                    <materialDesign:PackIcon Kind="DotsHorizontal" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" Width="30" Height="30"></materialDesign:PackIcon>
                 </Button>
             </Grid>
 

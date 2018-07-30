@@ -212,6 +212,7 @@ namespace Radical
             StackPanel groupControls = new StackPanel();
             //Expander
             Expander groupControlMenu = new Expander();
+            groupControlMenu.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
             groupControlMenu.IsExpanded = true;
             groupControlMenu.Header = Header2Formatting("Group Variable Control");
             groupControlMenu.Content = groupControls;
@@ -233,6 +234,7 @@ namespace Radical
             StackPanel individualControls = new StackPanel();
             //Expander
             Expander individualControlMenu = new Expander();
+            individualControlMenu.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
             individualControlMenu.Header = Header2Formatting("Single Variable Control");
             individualControlMenu.Content = individualControls;
             this.Sliders.Children.Add(individualControlMenu);
@@ -267,6 +269,8 @@ namespace Radical
                 StackPanel variableMenus = new StackPanel();
                 //Expander
                 Expander singleGeo = new Expander();
+                
+                singleGeo.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
                 singleGeo.Header = Header1Formatting(geometry[geoIndex].Name.Split('.')[0]); geoIndex++;
                 singleGeo.Content = variableMenus;
                 this.Geometries.Children.Add(singleGeo);
@@ -358,7 +362,7 @@ namespace Radical
             b.HorizontalAlignment = HorizontalAlignment.Stretch;
             b.SnapsToDevicePixels = true;
             b.BorderThickness = new Thickness(0, 0, 0, 2);
-            b.BorderBrush = (SolidColorBrush)this.FindResource("BackgroundHueDarkSubtextForegroundBrush");
+            b.BorderBrush = (SolidColorBrush)this.FindResource("BackgroundHueMidBrush");
             return b;
         }
 

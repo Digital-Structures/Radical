@@ -35,8 +35,10 @@
                     <lvc:CartesianChart.Series>
                         <lvc:LineSeries LineSmoothness="0.25" Name="Plotter" Values="{Binding ChartValues}" 
                                         DataLabels="False" PointGeometrySize="0" Margin="0,0,0,0"
-                                        Stroke="{DynamicResource PrimaryHueDarkBrush}" Fill="{DynamicResource PrimaryHueMidBrush}">
+                                        Stroke="{DynamicResource PrimaryHueDarkBrush}" Fill="{DynamicResource GraphFillColor}" ToolTip="">
                         </lvc:LineSeries>
+                        <lvc:ScatterSeries DataLabels="False" Values="{Binding HoverValue}">
+                        </lvc:ScatterSeries>
                     </lvc:CartesianChart.Series>
 
                     <lvc:CartesianChart.AxisX>
