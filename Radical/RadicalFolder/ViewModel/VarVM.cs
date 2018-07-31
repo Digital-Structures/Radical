@@ -21,7 +21,7 @@ namespace Radical
         public VarVM(IVariable dvar)
         {
             DesignVar = dvar;
-            this._name = DesignVar.Parameter.NickName;
+            this._name = DesignVar.Parameter.Name;
             this._value = DesignVar.CurrentValue;
             this._min = DesignVar.Min;
             this._max = DesignVar.Max;
@@ -174,6 +174,15 @@ namespace Radical
                     DesignVar.IsActive = this._isactive;
                 }
             }
+        }
+
+        //GRADIENT
+        //Stores the gradient of the variable for a given objective
+        private double _grad;
+        public double Gradient
+        {
+            get { return _grad; }
+            set { CheckPropertyChanged<double>("Gradient", ref _grad, ref value); }
         }
     }
 }
