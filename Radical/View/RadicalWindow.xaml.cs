@@ -559,6 +559,21 @@ namespace Radical
             }
         }
 
+        public void ButtonRestart_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (VarVM v in this.RadicalVM.NumVars)
+            {
+                v.ResetValue();
+            }
+            foreach (List<VarVM> lvm in this.RadicalVM.GeoVars)
+            {
+                foreach (VarVM v in lvm)
+                {
+                    v.ResetValue();
+                }
+            }
+        }
+
         private void OpenOptSettings(object sender, RoutedEventArgs e)
         {
 

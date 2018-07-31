@@ -240,6 +240,13 @@
                         Height="1"
                         HorizontalAlignment="Stretch"
                         SnapsToDevicePixels="True" />
+                    <StackPanel>
+                        <Button x:Name="ButtonRestart" Click="ButtonRestart_Click" Width="40" Height="40"
+                                    Style="{StaticResource MaterialDesignFloatingActionButton}" HorizontalAlignment="Right"
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="{DynamicResource SecondaryAccentBrush}" BorderBrush="{DynamicResource SecondaryAccentBrush}">
+                            <materialDesign:PackIcon Kind="Restart" Height="32" Width="32" Foreground="{DynamicResource SecondaryAccentForegroundBrush}"/>
+                        </Button>
+                    </StackPanel>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

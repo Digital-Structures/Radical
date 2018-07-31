@@ -189,5 +189,10 @@ namespace Radical
                 }
             }
         }
+
+        public void ResetValue()
+        {
+            Value = OriginalValue;
+        }
     }
 }

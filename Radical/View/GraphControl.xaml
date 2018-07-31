@@ -29,13 +29,13 @@
             </Grid>
 
             <Grid Grid.Row="2" Name="ChartRow" Margin="25,0" Visibility="{Binding ChartRowVisibility, Mode=TwoWay}">
-                <lvc:CartesianChart Name="Chart" BorderThickness="1,0,0,1"
+                <lvc:CartesianChart Name="Chart"
                     PreviewMouseMove="Chart_MouseMove" Background="{x:Null}" Margin="0,0,0,0"
                     PreviewMouseWheel="Graph_PreviewMouseWheel" DisableAnimations="True">
                     <lvc:CartesianChart.Series>
                         <lvc:LineSeries LineSmoothness="0.25" Name="Plotter" Values="{Binding ChartValues}" 
                                         DataLabels="False" PointGeometrySize="0" Margin="0,0,0,0"
-                                        Stroke="{DynamicResource PrimaryHueDarkBrush}" Fill="{DynamicResource GraphFillColor}" ToolTip="">
+                                        Stroke="{DynamicResource PrimaryHueDarkBrush}" Fill="{DynamicResource GraphFillColor}">
                         </lvc:LineSeries>
                         <lvc:ScatterSeries DataLabels="False" Values="{Binding HoverValue}">
                         </lvc:ScatterSeries>
