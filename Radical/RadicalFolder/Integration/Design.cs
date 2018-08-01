@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Rhino.Geometry;
 using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
@@ -19,90 +20,76 @@ namespace Radical.Integration
     //Collection of problem variables, constraints, and objectives to be optimized by Radical
     public class Design : IDesign
     {
-        //Radical Component
-        public Design(List<IVariable> vars, DSOptimizerComponent component)
-        {
-            this.Variables = vars;
-            this.OptComponent = component;
-        }
+        public DSOptimizerComponent MyComponent { get; set; }
 
-        public Design(List<IVariable> vars, List<Constraint> consts, DSOptimizerComponent component)
-        {
-            this.Variables = vars;
-            this.Constraints = consts;
-            this.OptComponent = component;
-        }
+        //INPUT PROPERTIES
+        public List<IVariable> Variables { get; set; }
+        public List<IDesignGeometry> Geometries { get; set; }
+        public List<Constraint> Constraints { get; set; }
 
-        //CONSTRUCTOR
-        public Design(List<IVariable> vars, List<IDesignGeometry> geos, List<Constraint> consts, DSOptimizerComponent component)
+
+        public Design(DSOptimizerComponent component)
         {
-            this.Variables = vars;
-           // this.NumVars = vars; 
-            this.Constraints = consts;
-            this.Geometries = geos;
-            if (Geometries.Any()) { this.Variables.AddRange(Geometries.Select(x => x.Variables).SelectMany(x => x).ToList()); } // not the cleanest way to do it, review code structure
-            this.ScoreEvolution = new ChartValues<double>();
-            this.ConstraintEvolution = new ChartValues<ChartValues<double>>();
- 
-            foreach (Constraint c in this.Constraints)
+            //Access the component
+            this.MyComponent = component;
+
+            this.Variables = new List<IVariable>();
+            this.Geometries = new List<IDesignGeometry>();
+            this.Constraints = new List<Constraint>();
+
+            // ADD VARIABLES
+            //Sliders
+            foreach (IGH_Param param in component.Params.Input[2].Sources)
             {
-                this.ConstraintEvolution.Add(new ChartValues<double>());
+                this.Variables.Add(new SliderVariable(param));
+            }
+            //Curves
+            for (int i = 0; i < component.Params.Input[3].Sources.Count; i++)
+            {
+                IGH_Param param = component.Params.Input[3].Sources[i];
+                NurbsSurface surf = component.SrfVariables[i];
+                Geometries.Add(new DesignSurface(param, surf));
+            }
+            //Surfaces
+            for (int i = 0; i < component.Params.Input[4].Sources.Count; i++)
+            {
+                IGH_Param param = component.Params.Input[4].Sources[i];
+                NurbsCurve surf = component.CrvVariables[i];
+                this.Geometries.Add(new DesignCurve(param, surf));
             }
 
-            this.OptComponent = component;
+            // ADD CONSTRAINTS
+            for (int i = 0; i < component.Constraints.Count; i++)
+            {
+                this.Constraints.Add(new Constraint(component, ConstraintType.morethan, i));
+            }
         }
 
-        //EVALUATION PROPERTIES
-        public List<List<double>> Samples { get; set; }
-        public List<List<double>> Properties { get; set; }
+        //Objectives
+        public List<double> Objectives
+        {
+            get { return MyComponent.Objectives; }
+        }
+
+        //Active Variables
+        public List<IVariable> ActiveVariables
+        {
+            get { return Variables.Where(var => var.IsActive).ToList(); }
+        }
+
         public IOptimizationComponent OptComponent { get; set; }
         public IExplorationComponent ExpComponent;
         public ChartValues<double> ScoreEvolution { get; set; }
         public ChartValues<ChartValues<double>> ConstraintEvolution { get; set; }
         public IGH_Param ScoreParameter { get; set; }
 
-        //INPUT PROPERTIES
-        public List<IVariable> Variables { get; set; }
-        public List<IVariable> ActiveVariables { get { return Variables.Where(var => var.IsActive).ToList(); } }
-       // public List<IVariable> NumVars { get; set; }
-        public List<IDesignGeometry> Geometries { get; set; }
-        public List<Constraint> Constraints { get; set; }
-        public List<double> ConstraintsNumber
-        {
-            get { return OptComponent.Constraints; }
-        }
-
-        //Stepper has a list of objectives, this may need to change
-        //Neither of these are actually accessed?
-        public double Objective
-        {
-            get { return OptComponent.Objective; }
-        }
-
-        public List<double> Objectives
-        {
-            get { return OptComponent.Objectives; }
-        }
-
-
-        //CURRENT SCORE
-        //The value of the objective with the current variable values
-        public double CurrentScore
-        {
-            get
-            {
-                return OptComponent.Objective;
-            }
-            set { }
-        }
-
-        public void Optimize()
-        {
-            Optimizer opt = new Optimizer(this);
-            opt.RunOptimization();
-            this.OptComponent.Evolution = this.ScoreEvolution.ToList();
-            Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
-        }
+        //public void Optimize()
+        //{
+        //    Optimizer opt = new Optimizer(this);
+        //    opt.RunOptimization();
+        //    this.OptComponent.Evolution = this.ScoreEvolution.ToList();
+        //    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
+        //}
 
         //OPTIMIZE for Radical
         //Runs the optimizer and stores the objective data
@@ -136,34 +123,5 @@ namespace Radical.Integration
             Sampler sam = new Sampler(this, samplingAlg, ExpComponent.nSamples);
             sam.RunSampling();
         }
-
-        #region obsolete_constructors
-        public Design(List<IVariable> vars, IExplorationComponent component)
-        {
-            this.Variables = vars;
-            //this.CurrentScore = 0; //init objective function
-            this.Samples = new List<List<double>>();
-            this.Properties = new List<List<double>>();
-            this.ExpComponent = component;
-        }
-
-        public Design(List<IVariable> vars, IOptimizationComponent component)
-        {
-            this.Variables = vars;
-            //this.CurrentScore = 0; //init objective function
-            this.ScoreEvolution = new ChartValues<double>();
-            this.OptComponent = component;
-        }
-
-        public Design(List<IVariable> vars, List<IDesignGeometry> geos, IOptimizationComponent component)
-        {
-            this.Variables = vars;
-            this.Geometries = geos;
-            if (Geometries.Any()) { this.Variables.AddRange(Geometries.Select(x => x.Variables).SelectMany(x => x).ToList()); } // not the cleanest way to do it, review code structure
-            //this.CurrentScore = 0; //init objective function
-            this.ScoreEvolution = new ChartValues<double>();
-            this.OptComponent = component;
-        }
-        #endregion
     }
 }

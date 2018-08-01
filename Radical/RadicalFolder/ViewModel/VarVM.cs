@@ -25,7 +25,6 @@ namespace Radical
             this._originalvalue = DesignVar.CurrentValue;
 
             this._name = DesignVar.Parameter.Name;
-            //this._name = DesignVar.Parameter.NickName;
 
             this._value = DesignVar.CurrentValue;
             this._min = DesignVar.Min;

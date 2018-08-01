@@ -17,7 +17,7 @@ using Stepper;
 
 namespace Radical.TestComponents
 {
-    public class DSOptimizerComponent : GH_Component, IOptimizationComponent
+    public class DSOptimizerComponent : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the RadicalComponent class.
@@ -27,26 +27,22 @@ namespace Radical.TestComponents
               "Optimization Component",
               "DSE", "Optimization")
         {
-            this.Objective = 0;
+            this.Objectives = new List<double>();
 
-            //Stepper only has one list for all variables, but it should eventually handle all three types
             this.NumVariables = new List<double>();
             this.SrfVariables = new List<NurbsSurface>();
             this.CrvVariables = new List<NurbsCurve>();
 
-            //Stepper currently does not handle constraints 
             this.Constraints = new List<double>();
 
             this.open = false; //Is window open
         }
 
-        public double Objective { get; set; }
-        public List<double> Objectives { get; set; } //Stepper has multiple objectives. This should be cleaned up but it is currently too much destruction
+        public List<double> Objectives { get; set; }
         public List<double> Constraints { get; set; }
         public List<double> NumVariables { get; set; }
         public List<NurbsSurface> SrfVariables { get; set; }
         public List<NurbsCurve> CrvVariables { get; set; }
-        public List<double> Evolution { get; set; }
 
         //Determine whether there is already a Radical window open
         private bool open;
@@ -66,7 +62,7 @@ namespace Radical.TestComponents
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("Objective", "O", "Objective to Minimize", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Objective", "O", "Objective to Minimize", GH_ParamAccess.list);
             pManager.AddNumberParameter("Constraints", "C", "Optimization Constraints", GH_ParamAccess.list);
             pManager.AddNumberParameter("Numerical Variables", "numVar", "Numerical Optimization Variables", GH_ParamAccess.list);
             pManager.AddSurfaceParameter("Variable Surfaces", "srfVar", "Geometrical Optimization Variables (Surfaces)", GH_ParamAccess.list);
@@ -92,13 +88,9 @@ namespace Radical.TestComponents
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             //assign objective
-            double obj = 0;
+            List<double> obj = new List<double>();
             if (!DA.GetData(0,ref obj)) { return; }
-            this.Objective = obj;
-
-            //Temporary to give objectives (and therefore Stepper) something to work with
-            List<double> objs = new List<double> { obj };
-            this.Objectives = objs; 
+            this.Objectives = obj;
 
             //assign constraints
             List<double> constraints = new List<double>();
@@ -173,11 +165,8 @@ namespace Radical.TestComponents
                 {
                     //Window viewer = new Radical.RadicalWindow(radicalVM);
 
-
-                    System.Windows.Window viewer = new StepperWindow(stepperVM);
-
+                    Window viewer = new StepperWindow(stepperVM);
                     viewer.Show();
-                    //viewer.Topmost = true;
                     System.Windows.Threading.Dispatcher.Run();
                 });
 

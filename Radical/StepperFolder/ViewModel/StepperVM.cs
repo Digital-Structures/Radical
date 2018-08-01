@@ -56,10 +56,10 @@ namespace Stepper
             foreach (double objective in this.Design.Objectives)
             {
                 ObjectiveVM Obj = new ObjectiveVM(objective, this);
-                Obj.Name = this.MyComponent.Params.Input[1].Sources[i].Name;
+                Obj.Name = this.MyComponent.Params.Input[0].Sources[i].Name;
                 Obj.IsActive = (this.ObjIndex == i); //Active objective specified by component input parameter
-                this.Objectives.Add(Obj);
 
+                this.Objectives.Add(Obj);
                 this.ObjectiveEvolution.Add(new ChartValues<double> { objective });
                 i++;
             }
