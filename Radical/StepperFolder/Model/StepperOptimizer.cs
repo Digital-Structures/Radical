@@ -11,6 +11,7 @@ using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Special;
 using Grasshopper.Kernel.Types;
 using Radical.Integration;
+using DSOptimization;
 
 namespace Stepper
 {

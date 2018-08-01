@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Radical.TestComponents;
 using Radical.Integration;
 using NLoptNet;
 using System.Windows.Markup;
 using System.Windows.Data;
 using System.Windows;
-
+using DSOptimization;
 
 namespace Radical
 {
@@ -25,7 +24,7 @@ namespace Radical
         }
 
         //CONSTRUCTOR
-        public RadicalVM(IDesign design, DSOptimizerComponent component)
+        public RadicalVM(Design design, DSOptimizerComponent component)
         {
             this.Component = component;
             this.Design = design;
@@ -48,7 +47,7 @@ namespace Radical
         }
         private List<GroupVarVM> GroupVars;
         private DSOptimizerComponent Component;
-        public IDesign Design;
+        public Design Design;
         public List<ConstVM> Constraints;
         public List<VarVM> NumVars;
         public List<List<VarVM>> GeoVars;

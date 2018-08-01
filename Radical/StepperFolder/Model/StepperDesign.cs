@@ -7,6 +7,7 @@ using Radical.Integration;
 using Radical;
 using Grasshopper;
 using Grasshopper.Kernel;
+using DSOptimization;
 
 namespace Stepper
 {

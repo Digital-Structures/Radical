@@ -12,25 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Radical;
-using DSOptimization;
 
-namespace Stepper
+namespace DSOptimization
 {
     /// <summary>
-    /// Interaction logic for GradientControl.xaml
+    /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class GradientControl : UserControl
+    public partial class VariableHeaderControl : UserControl
     {
-        public GradientControl()
+        public VariableHeaderControl()
         {
-            InitializeComponent();
-        }
-
-        //CONSTRUCTOR
-        public GradientControl(VarVM VM)
-        {
-            this.DataContext = VM;
             InitializeComponent();
         }
     }

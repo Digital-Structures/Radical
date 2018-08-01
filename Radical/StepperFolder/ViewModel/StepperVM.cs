@@ -13,8 +13,7 @@ using LiveCharts.Wpf;
 using System.Threading;
 using Radical;
 using Radical.Integration;
-using Radical.Components;
-using Radical.TestComponents;
+using DSOptimization;
 
 namespace Stepper
 {

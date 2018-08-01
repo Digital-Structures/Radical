@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
 using NLoptNet;
+using DSOptimization;
 
 namespace Radical
 {

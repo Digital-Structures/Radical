@@ -24,6 +24,7 @@ using LiveCharts;
 using LiveCharts.Helpers;
 using LiveCharts.Wpf;
 using MaterialDesignThemes;
+using DSOptimization;
 
 
 namespace Radical
@@ -435,7 +436,7 @@ namespace Radical
         //OPTIMIZE
         void Optimize()
         {
-            this.RadicalVM.Design.Optimize(this);
+            this.RadicalVM.Optimize(this);
         }
 
         //WINDOW CLOSING

@@ -22,6 +22,7 @@ using Radical;
 using LiveCharts;
 using LiveCharts.Wpf;
 using MaterialDesignThemes;
+using DSOptimization;
 
 namespace Stepper
 {
