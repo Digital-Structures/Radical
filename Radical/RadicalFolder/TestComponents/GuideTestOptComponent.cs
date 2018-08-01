@@ -106,7 +106,7 @@ namespace Radical.TestComponents
         {
             Design design = HelperFunctions.GenerateDesign(MyComponent);
             DialogResult result = MessageBox.Show("Run Optimization?","Optimization", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (result == DialogResult.Yes) { design.Optimize(); }
+            //if (result == DialogResult.Yes) { design.Optimize(); }
             return base.RespondToMouseDoubleClick(sender, e);
         }
     }

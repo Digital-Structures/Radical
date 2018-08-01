@@ -21,7 +21,7 @@ namespace Radical.Integration
         public double? MinValue; //init objective
 
         // CONSTRUCTOR FOR RADICAL
-        public Optimizer(IDesign design, RadicalWindow radicalWindow)
+        public Optimizer(Design design, RadicalWindow radicalWindow)
         {
             this.Design = design;
             this.MainAlg = radicalWindow.RadicalVM.PrimaryAlgorithm;
@@ -52,7 +52,7 @@ namespace Radical.Integration
             }
         }
 
-        public IDesign Design;
+        public Design Design;
         public uint nVars { get { return (uint)this.Design.ActiveVariables.Count; } }
 
         public NLoptAlgorithm MainAlg;
@@ -112,7 +112,7 @@ namespace Radical.Integration
                 Thread.Sleep(1);
             }
 
-            double objective = Design.CurrentScore;
+            double objective = Design.Objectives[0];
 
             //If RefreshMode == Silent then values are stored in a local list so that the graph is not updated
             if (this.RadicalWindow.RadicalVM.Mode == RefreshMode.Silent)
@@ -164,7 +164,7 @@ namespace Radical.Integration
             // Run optimization with only the activeVariables
             double[] x = Design.ActiveVariables.Select(t => t.CurrentValue).ToArray();
             double[] query = x;
-            double startingObjective = Design.CurrentScore;
+            double startingObjective = Design.Objectives[0];
             NloptResult result = Solver.Optimize(x, out MinValue);
 
             //FINISHED
@@ -218,43 +218,9 @@ namespace Radical.Integration
 
             if (grad != null) { }//update gradient, for gradient-based algs.
 
-            double objective = Design.CurrentScore;
+            double objective = Design.Objectives[0];
             Design.ScoreEvolution.Add(objective);
             return objective;
         }
-
-        #region obsolete_constructors
-        public Optimizer(IDesign design)
-        {
-            Design = design;
-            this.MainAlg = NLoptAlgorithm.LD_LBFGS;
-            BuildWrapper();
-            SetBounds();
-            Solver.SetMinObjective((x) => Objective(x));
-            if (Design.Constraints != null)
-            {
-                foreach (Constraint c in Design.Constraints)
-                {
-                    Solver.AddLessOrEqualZeroConstraint((x) => Constraint(x, c));
-                }
-            }
-        }
-
-        public Optimizer(IDesign design, double relStopTol, int niter)
-        {
-            Design = design;
-            this.MainAlg = NLoptAlgorithm.LN_COBYLA;
-            BuildWrapper(relStopTol, niter);
-            SetBounds();
-            Solver.SetMinObjective((x) => Objective(x));
-            if (Design.Constraints != null)
-            {
-                for (int i = 0; i < Design.Constraints.Count; i++)
-                {
-                    Solver.AddLessOrEqualZeroConstraint((x) => Constraint(x, Design.Constraints[i]));
-                }
-            }
-        }
-        #endregion
     }
 }

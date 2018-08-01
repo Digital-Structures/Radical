@@ -8,7 +8,6 @@ namespace Radical.Components
 {
     public interface IOptimizationComponent
     {
-        double Objective { get; set; }
         List<double> Objectives { get; set; }
         List<double> Constraints { get; set; }
         List<double> Evolution { get; set; }
