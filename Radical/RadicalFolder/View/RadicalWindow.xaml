@@ -37,6 +37,8 @@
                     <SolidColorBrush x:Key="BackgroundHueMidBrush" Color="#dcddde"/>
                     <SolidColorBrush x:Key="BackgroundHueLightBrush" Color="White"/>
 
+                    <SolidColorBrush x:Key="SideBarColor" Color="DarkGray"/>
+
                     <SolidColorBrush x:Key="BackgroundHueDarkForegroundBrush" Color="White"/>
                     <SolidColorBrush x:Key="BackgroundHueDarkSubtextForegroundBrush" Color="Gray"/>
                     <SolidColorBrush x:Key="BackgroundHueMidForegroundBrush" Color="DarkGray"/>

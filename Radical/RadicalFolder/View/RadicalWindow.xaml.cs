@@ -463,6 +463,7 @@ namespace Radical
         //CLOSE MENU CLICK
         private void ButtonCloseMenu_Click(object sender, RoutedEventArgs e)
         {
+            GridMenu.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
             ButtonOpenMenu.Visibility = Visibility.Visible;
             ButtonCloseMenu.Visibility = Visibility.Collapsed;
             this.AnimationBegan();
@@ -473,6 +474,7 @@ namespace Radical
         {
             ButtonOpenMenu.Visibility = Visibility.Collapsed;
             ButtonCloseMenu.Visibility = Visibility.Visible;
+            GridMenu.Background = (SolidColorBrush)this.FindResource("SideBarColor");
             this.AnimationBegan();
         }
 

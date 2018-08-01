@@ -166,15 +166,15 @@ namespace Radical.TestComponents
                 //Would be nice to not need the HelperFunctions file
                 Design design = HelperFunctions.GenerateDesign(MyComponent);
 
-                //RadicalVM radicalVM = new RadicalVM(design, this.MyComponent);
-                StepperVM stepperVM = new StepperVM(this.MyComponent, design);
+                RadicalVM radicalVM = new RadicalVM(design, this.MyComponent);
+                //StepperVM stepperVM = new StepperVM(this.MyComponent, design);
 
                 Thread viewerThread = new Thread(delegate ()
                 {
-                    //Window viewer = new Radical.RadicalWindow(radicalVM);
+                    Window viewer = new Radical.RadicalWindow(radicalVM);
 
 
-                    System.Windows.Window viewer = new StepperWindow(stepperVM);
+                    //System.Windows.Window viewer = new StepperWindow(stepperVM);
 
                     viewer.Show();
                     //viewer.Topmost = true;

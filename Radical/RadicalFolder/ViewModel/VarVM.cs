@@ -22,7 +22,9 @@ namespace Radical
         {
             DesignVar = dvar;
 
+            //value trackers
             this._originalvalue = DesignVar.CurrentValue;
+            this._bestsolutionvalue = DesignVar.CurrentValue;
 
             this._name = DesignVar.Parameter.Name;
             //this._name = DesignVar.Parameter.NickName;
@@ -105,6 +107,26 @@ namespace Radical
                 {
                 }
             }
+        }
+
+        //MINIMUM VALUE
+        //Minimum value obtained through the optimization process
+        private double _bestsolutionvalue;
+        public double BestSolutionValue
+        {
+            get { return _bestsolutionvalue; }
+            set
+            {
+                _bestsolutionvalue = value;
+            }
+        }
+
+        //UPDATE BEST SOLUTION VALUE 
+        //Should be called when the current value of the variable corresponds to the current
+        //best solution of the objective
+        public void UpdateBestSolutionValue()
+        {
+            BestSolutionValue = Value;
         }
 
         //OPTIMIZATION FINISHED
