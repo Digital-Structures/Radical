@@ -14,9 +14,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
 using NLoptNet;
-using DSOptimization;
+using Radical;
 
-namespace Radical
+namespace DSOptimization
 {
     /// <summary>
     /// Interaction logic for SettingsControl.xaml

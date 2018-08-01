@@ -92,6 +92,12 @@ namespace Radical
             }
         }
 
+        //OPTIMIZE
+        public void Optimize()
+        {
+
+        }
+
         //SORT VARIABLES
         //Separate geometric and numeric variables
         //Sorting helps with UI stack panel organization

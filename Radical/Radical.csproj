@@ -107,6 +107,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DSOptimization\View\DSOptimizeWindow.xaml.cs">
+      <DependentUpon>DSOptimizeWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RadicalFolder\Components\IExplorationComponent.cs" />
     <Compile Include="RadicalFolder\Components\IOptimizationComponent.cs" />
     <Compile Include="DSOptimization\Model\GeoVariable.cs" />
@@ -208,6 +211,10 @@
     <Page Include="DSOptimization\View\ConstraintControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DSOptimization\View\DSOptimizeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="RadicalFolder\View\GraphControl.xaml">
       <SubType>Designer</SubType>

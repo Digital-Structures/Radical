@@ -12,22 +12,24 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MaterialDesignThemes;
+using System.ComponentModel;
 
-namespace Stepper
+namespace DSOptimization
 {
     /// <summary>
-    /// Interaction logic for ObjectiveControl.xaml
+    /// Interaction logic for DSOptimizeWindow.xaml
     /// </summary>
-    public partial class ObjectiveControl : UserControl
+    public partial class DSOptimizeWindow : Window
     {
-        public ObjectiveControl() { InitializeComponent(); }
-
-        //CONSTRUCTOR
-        public ObjectiveControl(ObjectiveVM VM)
+        public DSOptimizeWindow()
         {
-            this.DataContext = VM;
             InitializeComponent();
         }
+
+        public void Window_Closing(object sender, CancelEventArgs e)
+        {
+
+        }
+
     }
 }

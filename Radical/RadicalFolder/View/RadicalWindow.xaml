@@ -317,7 +317,6 @@
                             <Setter Property="HorizontalContentAlignment"   Value="Right"></Setter>
                         </Style>
                     </StackPanel.Resources>
-
                 </StackPanel>
             </Grid>
 

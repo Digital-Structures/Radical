@@ -434,9 +434,9 @@ namespace Radical
         }
 
         //OPTIMIZE
-        void Optimize()
+        private void Optimize()
         {
-            this.RadicalVM.Optimize(this);
+            this.RadicalVM.Optimize();
         }
 
         //WINDOW CLOSING

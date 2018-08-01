@@ -13,9 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
-using DSOptimization;
+using Radical;
 
-namespace Radical
+namespace DSOptimization
 {
     /// <summary>
     /// Interaction logic for ConstraintControl.xaml
