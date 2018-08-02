@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LiveCharts;
 using LiveCharts.Wpf;
-
+using DSOptimization;
 
 namespace Radical
 {
@@ -27,11 +27,6 @@ namespace Radical
             _chartlinex = 0;
             _x = "0";
             _y = "0";
-
-           // _graphVisibility = Visibility.Visible;
-           // DisplayX = null;
-           // DisplayY = null;
-           // _chartanimationsdisabled = false;
         }
 
         //This is the specific Chart Values array, it seems that you cannot pass in an ordinary list 
@@ -162,16 +157,6 @@ namespace Radical
                 _window = value;
             }
         }
-       
-        public Grid _graphgrid; 
-        //public Grid GraphGrid
-        //{
-        //    get { return _graphgrid; }
-        //    set
-        //    {
-        //        _graphgrid = value; 
-        //    }
-        //}
 
         public double _graphgridheight;
         public double GraphGridHeight
@@ -203,13 +188,7 @@ namespace Radical
             }
         }
 
-        private Line _chartline;
-        public Line ChartLine
-        {
-            get { return _chartline; }
-            set { _chartline = value; }
-        }
-
+        //THIS TOOL SHOULD BE IMPROVED
         private bool _optimizerdone;
         public bool OptimizerDone
         {
@@ -268,35 +247,6 @@ namespace Radical
                 this.DisplayY = String.Format("{0:0.00}",yValue);
 
                 Iteration = iteration;
-
-  //              TrackedValueText = String.Format("{0:0.00}", ChartValues.ElementAt(Iteration));
-
-
-
-                //double minX = ChartAxisX.ActualMinValue;
-                //double ScaleX = (Chart.ActualWidth - 21) / (ChartAxisX.ActualMaxValue - minX);
-
-                ////Calculations for the horizontal line
-                ////actualX * ScaleX scales the graph value to appropriate mouse position
-                ////+45 is a hardcoded value because the position is off due to the side of the graph
-                ////minx takes into account if the graph has been moved 
-                //double newXPosition = iteration * ScaleX - minX + 25;
-                
-                //if (newXPosition - 25 < 0 || newXPosition > Chart.ActualWidth)
-                //{
-                //    ChartLineVisibilityX = Visibility.Collapsed;
-                //}
-                //this.ChartLineX = newXPosition;
-
-                //Calculatoins for the vertical line
-                //double minY = ChartAxisY.ActualMinValue;
-                //double ScaleY = (Chart.ActualHeight) / (ChartAxisY.ActualMaxValue - minY);
-                //double newYPosition = Chart.ActualHeight - (yValue * ScaleY + minY);
-                //if (newYPosition < 0 || newYPosition > Chart.ActualHeight)
-                //{
-                //    ChartLineVisibilityY = Visibility.Collapsed;
-                //}
-                //this.ChartLineY = newYPosition;
             }
         }
 
@@ -327,34 +277,9 @@ namespace Radical
             }
         }
 
-        //private Visibility _chartlinevisibilityy;
-        //public Visibility ChartLineVisibilityY
-        //{
-        //    get { return _chartlinevisibilityy; }
-        //    set
-        //    {
-        //        if (CheckPropertyChanged<Visibility>("ChartLineVisibilityY", ref _chartlinevisibilityy, ref value))
-        //        {
-        //        }
-        //    }
-        //}
-
         public void ChartLineVisibility(Visibility v)
         {
             ChartLineVisibilityX = v;
-            //ChartLineVisibilityY = v;
-            
-            //if (ChartLineX - 25 < 0 || ChartLineX > this.Chart.ActualWidth + 25)
-            //{
-            //    ChartLineVisibilityX = Visibility.Collapsed;
-            //    DisplayX = null;
-            //    DisplayY = null;
-            //}
-            //if (ChartLineY < 0 || ChartLineY > this.Chart.ActualHeight)
-            //{
-            //    ChartLineVisibilityY = Visibility.Collapsed;
-            //    DisplayY = null;
-            //}
         }
 
         private double _chartlinewidth;
@@ -405,79 +330,24 @@ namespace Radical
             }
         }
 
-        private string _totalimprovementtext;
-        public string TotalImprovementText
-        {
-            get { return "total improvement " + _totalimprovementtext + "%"; }
-            set
-            {
-                if(CheckPropertyChanged<string>("TotalImprovementText", ref _totalimprovementtext, ref value))
-                {
-                }
-            }
-        }
-
-        private string _convergenceratetext;
-        public string ConvergeneceRateText
-        {
-            get { return "convergence rate " + _convergenceratetext + "%"; }
-            set
-            {
-                if (CheckPropertyChanged<string>("ConvergeneceRateText", ref _convergenceratetext, ref value))
-                {
-                }
-            }
-        }
-
-        public void Statistics()
-        {
-            double optimizedValue = ChartValues.ElementAt(ChartValues.Count - 1);
-            FinalOptimizedValue = String.Format("{0:0.00}", optimizedValue);
-
-            double improvement = optimizedValue / ChartValues.ElementAt(0) * 100;
-            if (improvement > 100)
-            {
-                improvement = 0; 
-            }
-            TotalImprovementText = String.Format("{0:0}", improvement);
-
-            //How do you find convergence?
-            double convergence = 100;
-            ConvergeneceRateText = String.Format("{0:0.00}", convergence);
-        }
-
-        private Visibility _statisticvisibility;
-        public Visibility StatisticVisibility
-        {
-            get { return _statisticvisibility; }
-            set
-            {
-                if(CheckPropertyChanged<Visibility>("StatisticVisibility", ref _statisticvisibility, ref value))
-                {
-                }
-            }
-        }
-
         public void CalculateChartLineY2()
         {
             ChartLineY2 = GraphGridHeight - 214;
         }
 
+        //I don't think this is actually being used
         public void SetLineWidth()
         {
             this.ChartLineWidth = this.Chart.ActualWidth + 25;
         }
 
-        //public void UpdateGraphWidth()
-        //{
-        //    //this.Chart.Width = GraphGrid.ActualWidth;
-        //}
 
         public void UpdateHeight()
         {
             GraphGridHeight = Window.MainGrid.ActualHeight * 0.45;
         }
 
+        //Not sure if this is actually being used
         private Visibility _chartrowvisibility; 
         public Visibility ChartRowVisibility
         {

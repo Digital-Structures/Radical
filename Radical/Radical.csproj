@@ -109,40 +109,31 @@
   <ItemGroup>
     <Compile Include="RadicalFolder\Components\IExplorationComponent.cs" />
     <Compile Include="RadicalFolder\Components\IOptimizationComponent.cs" />
-    <Compile Include="RadicalFolder\Integration\GeoVariable.cs" />
-    <Compile Include="RadicalFolder\Integration\csvWriter.cs" />
-    <Compile Include="RadicalFolder\Integration\CurveVariable.cs" />
-    <Compile Include="RadicalFolder\Integration\Constraint.cs" />
-    <Compile Include="RadicalFolder\Integration\Sampler.cs" />
-    <Compile Include="RadicalFolder\Integration\DesignCurve.cs" />
-    <Compile Include="RadicalFolder\TestComponents\ExploreComponent.cs" />
-    <Compile Include="RadicalFolder\TestComponents\GuideTestComponent.cs" />
-    <Compile Include="RadicalFolder\TestComponents\GuideTestOptComponent.cs" />
-    <Compile Include="RadicalFolder\Integration\SurfaceVariable.cs" />
-    <Compile Include="RadicalFolder\Integration\Design.cs" />
-    <Compile Include="RadicalFolder\Integration\HelperFunctions.cs" />
-    <Compile Include="RadicalFolder\Integration\IDesign.cs" />
-    <Compile Include="RadicalFolder\Integration\IVariable.cs" />
-    <Compile Include="RadicalFolder\Integration\IDesignGeometry.cs" />
-    <Compile Include="RadicalFolder\Integration\Optimizer.cs" />
-    <Compile Include="RadicalFolder\Integration\SliderVariable.cs" />
-    <Compile Include="RadicalFolder\Integration\DesignSurface.cs" />
+    <Compile Include="DSOptimization\Model\GeoVariable.cs" />
+    <Compile Include="RadicalFolder\Model\csvWriter.cs" />
+    <Compile Include="DSOptimization\Model\CurveVariable.cs" />
+    <Compile Include="DSOptimization\Model\Constraint.cs" />
+    <Compile Include="RadicalFolder\Model\Sampler.cs" />
+    <Compile Include="DSOptimization\Model\DesignCurve.cs" />
+    <Compile Include="DSOptimization\Model\SurfaceVariable.cs" />
+    <Compile Include="DSOptimization\Design.cs" />
+    <Compile Include="DSOptimization\Model\IVariable.cs" />
+    <Compile Include="DSOptimization\Model\IDesignGeometry.cs" />
+    <Compile Include="RadicalFolder\Model\RadicalOptimizer.cs" />
+    <Compile Include="DSOptimization\Model\SliderVariable.cs" />
+    <Compile Include="DSOptimization\Model\DesignSurface.cs" />
     <Compile Include="RadicalFolder\RadicalInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RadicalFolder\TestComponents\GuideTestCurveConstOptComponent.cs" />
-    <Compile Include="RadicalFolder\TestComponents\GuideTestSurfConstOptComponent.cs" />
-    <Compile Include="RadicalFolder\TestComponents\GuideTestSurfOptComponent.cs" />
-    <Compile Include="RadicalFolder\TestComponents\IncrementComponent.cs" />
-    <Compile Include="RadicalFolder\TestComponents\DSOptimizerComponent.cs" />
-    <Compile Include="RadicalFolder\ViewModel\BaseVM.cs" />
-    <Compile Include="RadicalFolder\ViewModel\GroupVarVM.cs" />
+    <Compile Include="DSOptimization\DSOptimizerComponent.cs" />
+    <Compile Include="DSOptimization\ViewModel\BaseVM.cs" />
+    <Compile Include="DSOptimization\ViewModel\GroupVarVM.cs" />
     <Compile Include="RadicalFolder\ViewModel\GraphVM.cs" />
-    <Compile Include="RadicalFolder\ViewModel\IViewModel.cs" />
-    <Compile Include="RadicalFolder\ViewModel\ConstVM.cs" />
+    <Compile Include="DSOptimization\ViewModel\IViewModel.cs" />
+    <Compile Include="DSOptimization\ViewModel\ConstVM.cs" />
     <Compile Include="RadicalFolder\ViewModel\RadicalVM.cs" />
-    <Compile Include="RadicalFolder\ViewModel\VarVM.cs" />
-    <Compile Include="RadicalFolder\View\BaseControl.cs" />
-    <Compile Include="RadicalFolder\View\ConstraintControl.xaml.cs">
+    <Compile Include="DSOptimization\ViewModel\VarVM.cs" />
+    <Compile Include="DSOptimization\View\BaseControl.cs" />
+    <Compile Include="DSOptimization\View\ConstraintControl.xaml.cs">
       <DependentUpon>ConstraintControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="RadicalFolder\View\GraphControl.xaml.cs">
@@ -151,16 +142,16 @@
     <Compile Include="RadicalFolder\View\RadicalWindow.xaml.cs">
       <DependentUpon>RadicalWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadicalFolder\View\SettingsControl.xaml.cs">
-      <DependentUpon>SettingsControl.xaml</DependentUpon>
+    <Compile Include="RadicalFolder\View\RadicalSettingsControl.xaml.cs">
+      <DependentUpon>RadicalSettingsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadicalFolder\View\GroupVariableControl.xaml.cs">
+    <Compile Include="DSOptimization\View\GroupVariableControl.xaml.cs">
       <DependentUpon>GroupVariableControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadicalFolder\View\VariableHeaderControl.xaml.cs">
+    <Compile Include="DSOptimization\View\VariableHeaderControl.xaml.cs">
       <DependentUpon>VariableHeaderControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadicalFolder\View\VariableControl.xaml.cs">
+    <Compile Include="DSOptimization\View\VariableControl.xaml.cs">
       <DependentUpon>VariableControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="StepperFolder\Model\StepperOptimizer.cs" />
@@ -214,7 +205,7 @@
     <Content Include="StepperFolder\x64\nlopt.h" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="RadicalFolder\View\ConstraintControl.xaml">
+    <Page Include="DSOptimization\View\ConstraintControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -226,19 +217,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="RadicalFolder\View\SettingsControl.xaml">
+    <Page Include="RadicalFolder\View\RadicalSettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RadicalFolder\View\GroupVariableControl.xaml">
+    <Page Include="DSOptimization\View\GroupVariableControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RadicalFolder\View\VariableHeaderControl.xaml">
+    <Page Include="DSOptimization\View\VariableHeaderControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RadicalFolder\View\VariableControl.xaml">
+    <Page Include="DSOptimization\View\VariableControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -263,6 +254,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

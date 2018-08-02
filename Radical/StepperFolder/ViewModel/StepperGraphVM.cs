@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using LiveCharts;
 using LiveCharts.Wpf;
 using Radical;
+using DSOptimization;
 
 namespace Stepper
 {

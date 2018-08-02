@@ -3,18 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Radical.TestComponents;
 using Radical.Integration;
 using NLoptNet;
 using System.Windows.Markup;
 using System.Windows.Data;
 using System.Windows;
-
+using DSOptimization;
+using LiveCharts;
 
 namespace Radical
 {
     public class RadicalVM : BaseVM
     {
+        private List<GroupVarVM> GroupVars;
+        private DSOptimizerComponent Component;
+        public Design Design;
+        public List<ConstVM> Constraints;
+        public List<VarVM> NumVars;
+        public List<List<VarVM>> GeoVars;
+        public Dictionary<string, List<GraphVM>> Graphs;
+        public enum Direction { X, Y, Z };
+
+        //EVOLUTIONS for all objectives and constraints 
+        public ChartValues<double> ObjectiveEvolution { get; set; }
+        public ChartValues<ChartValues<double>> ConstraintsEvolution { get; set; }
+
         public RadicalVM()
         {
         }
@@ -25,12 +38,19 @@ namespace Radical
         }
 
         //CONSTRUCTOR
-        public RadicalVM(IDesign design, DSOptimizerComponent component)
+        public RadicalVM(Design design, DSOptimizerComponent component)
         {
             this.Component = component;
             this.Design = design;
 
             this.Constraints = new List<ConstVM>();
+
+            this.ObjectiveEvolution = new ChartValues<double>();
+            this.ConstraintsEvolution = new ChartValues<ChartValues<double>>();
+            foreach (Constraint c in this.Design.Constraints)
+            {
+                this.ConstraintsEvolution.Add(new ChartValues<double>());
+            }
 
             this.Graphs = new Dictionary<string, List<GraphVM>>();
             this.Graphs.Add("Main", new List<GraphVM>());
@@ -46,14 +66,6 @@ namespace Radical
             this.OptRunning = false;
             this._advancedOptions = false;
         }
-        private List<GroupVarVM> GroupVars;
-        private DSOptimizerComponent Component;
-        public IDesign Design;
-        public List<ConstVM> Constraints;
-        public List<VarVM> NumVars;
-        public List<List<VarVM>> GeoVars;
-        public Dictionary<string, List<GraphVM>> Graphs;
-        public enum Direction { X, Y, Z };
 
         //ACTIVE GRAPHS
         //A list of active constraint graphs to populate the window graph grid
@@ -74,12 +86,12 @@ namespace Radical
         //SET UP GRAPHS
         public void SetUpGraphs()
         {
-            GraphVM main = new GraphVM(Design.ScoreEvolution, "Objective");
+            GraphVM main = new GraphVM(this.ObjectiveEvolution, "Objective");
             this.Graphs["Main"].Add(main);
 
             for (int i = 0; i < Design.Constraints.Count; i++)
             {
-                GraphVM gvm = new GraphVM(Design.ConstraintEvolution[i], String.Format("C{0}", i));
+                GraphVM gvm = new GraphVM(ConstraintsEvolution[i], String.Format("C{0}", i));
                 this.Graphs["Constraints"].Add(gvm);
                 this.Constraints.Add(new ConstVM(Design.Constraints[i], gvm));
             }
@@ -146,12 +158,6 @@ namespace Radical
         public void OptimizationFinished()
         {
             this.ChangesEnabled = true;
-
-            this.Graphs["Main"][0].Statistics();
-            foreach(GraphVM g in this.Graphs["Constraints"])
-            {
-                g.Statistics();
-            }
 
             foreach (ConstVM constraint in this.Constraints)
                 constraint.OptimizationFinished();
@@ -229,6 +235,7 @@ namespace Radical
             }
         }
 
+        #region Algorithms 
         //PRIMARY ALGORITHM
         private NLoptAlgorithm _primaryalgorithm;
         public NLoptAlgorithm PrimaryAlgorithm
@@ -255,7 +262,6 @@ namespace Radical
                 {
                 }
             }
-
         }
 
         //AVAILABLE ALGORITHMS
@@ -311,23 +317,6 @@ namespace Radical
                 }
             }
         }
-
-        //UNIMPLEMENTED
-        //Keeps track of which iteration the user's mouse is currently at so that all graphs can move their
-        //focus to that iteration
-        //private int _mouseiteration;
-        //public int MouseIteration
-        //{
-        //    get
-        //    { return _mouseiteration; }
-        //    set
-        //    {
-        //        if (CheckPropertyChanged<int>("MouseIteration", ref _mouseiteration, ref value))
-        //        {
-                     
-        //        }
-        //    }
-        //} 
 
         public IEnumerable<NLoptAlgorithm> BasicAlgs = new[]
         {
@@ -404,5 +393,12 @@ namespace Radical
             NLoptAlgorithm.LN_BOBYQA,
             NLoptAlgorithm.LN_COBYLA,
         };
+        #endregion
+
+        internal void Optimize(RadicalWindow radicalWindow)
+        {
+            RadicalOptimizer opt = new RadicalOptimizer(this.Design, radicalWindow);
+            opt.RunOptimization();
+        }
     }
 }
