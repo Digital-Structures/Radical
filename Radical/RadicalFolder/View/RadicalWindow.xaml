@@ -48,10 +48,10 @@
                     <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="White"/>
                     <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#33bef2"/>
                     <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="White"/>
-                    <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="#33bef2"/>
+                    <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="#707f8e"/>
                     <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="White"/>
 
-                    <SolidColorBrush x:Key="GraphFillColor" Color="#66cef5" Opacity="0.25"/>
+                    <SolidColorBrush x:Key="GraphFillColor" Color="#ffc654" Opacity="0.25"/>
                 </ResourceDictionary>
 
                 <!-- secondary colour -->
@@ -60,7 +60,7 @@
                         <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Blue.Primary.xaml" />
                     </ResourceDictionary.MergedDictionaries>
 
-                    <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#FDAE4F"/>
+                    <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#ffc654"/>
                     <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="{StaticResource Primary700Foreground}"/>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>

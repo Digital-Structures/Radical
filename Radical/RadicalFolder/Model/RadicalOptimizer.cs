@@ -137,6 +137,7 @@ namespace Radical
 
                 //Adds main objective values to list and draws
                 this.RadicalVM.ObjectiveEvolution.Add(objective);
+                this.RadicalVM.Graphs["Main"].ElementAt(0).FinalOptimizedValue = objective;
 
                 for (int i = 0; i < this.RadicalVM.ConstraintsEvolution.Count; i++)
                 {

@@ -77,14 +77,15 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock  FontSize="20" FontFamily="Global User Interface" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                    <TextBlock FontSize="20" FontFamily="Global User Interface" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                                 TextAlignment="Right" Padding="40, 5, 20, 5" VerticalAlignment="Center" Text="{Binding LineGraphName, Mode=TwoWay}" Grid.Column="0"/>
 
-                    <!--<Border Background="PrimaryHueDarkForegroundBrush" BorderThickness="1" Grid.Column="1">
-                    </Border>-->
+                    <Border BorderBrush="White" BorderThickness="2, 0, 0, 0" Grid.Column="1" HorizontalAlignment="Center">
+                        <TextBlock> </TextBlock>
+                    </Border>
 
                     <TextBlock FontSize="20" FontFamily="Global User Interface" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-                                TextAlignment="Left" Padding="20, 5, 0, 5" VerticalAlignment="Center" Text="{Binding FinalOptimizedValue, Mode=TwoWay}" Grid.Column="2"/>
+                                TextAlignment="Left" Padding="20, 5, 0, 5" VerticalAlignment="Center" Text="{Binding FinalOptimizedValueString, Mode=TwoWay}" Grid.Column="2"/>
 
                 </Grid>
             </Grid>

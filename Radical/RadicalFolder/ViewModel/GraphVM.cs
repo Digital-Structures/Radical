@@ -244,7 +244,7 @@ namespace Radical
                 ChartLineVisibility(Visibility.Visible);
 
                 double yValue = ChartValues.ElementAt(iteration);
-                this.DisplayY = String.Format("{0:0.00}",yValue);
+                this.DisplayY = String.Format("{0:0.000}",yValue);
 
                 Iteration = iteration;
             }
@@ -306,17 +306,32 @@ namespace Radical
             }
         }
 
-        private string _finaloptimizedvalue;
-        public string FinalOptimizedValue
+        private double _finaloptimizedvalue;
+        public double FinalOptimizedValue
         {
             get { return _finaloptimizedvalue; }
             set
             {
-                if(CheckPropertyChanged<string>("FinalOptimizedValue", ref _finaloptimizedvalue, ref value))
+                if(CheckPropertyChanged<double>("FinalOptimizedValue", ref _finaloptimizedvalue, ref value))
+                {
+                    FinalOptimizedValueString = String.Format("{0:0.00}", FinalOptimizedValue);
+                }
+            }
+        }
+
+        private string _finaloptimizedvaluestring;
+        public string FinalOptimizedValueString
+        {
+            get { return _finaloptimizedvaluestring; }
+            set
+            {
+                if (CheckPropertyChanged<string>("FinalOptimizedValueString", ref _finaloptimizedvaluestring, ref value))
                 {
                 }
             }
         }
+
+
 
         private string _trackedvaluetext;
         public string TrackedValueText
