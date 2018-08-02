@@ -32,7 +32,7 @@ namespace Radical
     /// <summary>
     /// Interaction logic for MaiWindow.xaml
     /// </summary>
-    public partial class RadicalWindow : Window
+    public partial class RadicalWindow : UserControl
     {
         public RadicalWindow()
         {
@@ -46,6 +46,8 @@ namespace Radical
             this.RadicalVM = radicalVM;
             this.DataContext = this.RadicalVM;
             InitializeComponent();
+
+            this.IsAlreadyLoaded = false;
 
             //GRAPH CONTROLS
             //Dictionary containing lists of GraphControls to be displayed, with string keys specifying graph data types.
@@ -66,12 +68,17 @@ namespace Radical
         public enum Direction { X, Y, Z, None };
         public RadicalVM RadicalVM;
         public CancellationTokenSource source;
+        private bool IsAlreadyLoaded;
 
         //MAIN WINDOW LOADED
         //Ensures main graph height is correct on loading
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            AddGraphs(); //Also adds constraints
+            if (!IsAlreadyLoaded)
+            {
+                AddGraphs(); //Also adds constraints
+                this.IsAlreadyLoaded = true;
+            }
         }
 
         //ACTIVE GRAPHS

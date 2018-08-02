@@ -10,67 +10,25 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:nlopt="clr-namespace:NLoptNet;assembly=NLoptNet"
         mc:Ignorable="d"
-        Title="Radical" Height="600" Width="1000"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        Background="{DynamicResource BackgroundHueDarkBrush}"
+        Title="DS Optimization Tools" Height="600" Width="1000"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="12"
         FontFamily="Global User Interface"
         Closing="Window_Closing"
         >
-
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-
-                <!-- primary color -->
-                <ResourceDictionary>
-                    <ResourceDictionary.MergedDictionaries>
-                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.BlueGrey.Primary.xaml" />
-                    </ResourceDictionary.MergedDictionaries>
-
-                    <SolidColorBrush x:Key="BackgroundHueDarkBrush" Color="#cacbcd"/>
-                    <SolidColorBrush x:Key="BackgroundHueMidBrush" Color="#dcddde"/>
-                    <SolidColorBrush x:Key="BackgroundHueLightBrush" Color="White"/>
-
-                    <SolidColorBrush x:Key="BackgroundHueDarkForegroundBrush" Color="White"/>
-                    <SolidColorBrush x:Key="BackgroundHueDarkSubtextForegroundBrush" Color="Gray"/>
-                    <SolidColorBrush x:Key="BackgroundHueMidForegroundBrush" Color="DarkGray"/>
-                    <SolidColorBrush x:Key="BackgroundHueLightForegroundBrush" Color="Black"/>
-
-                    <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#99def8"/>
-                    <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="White"/>
-                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#33bef2"/>
-                    <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="White"/>
-                    <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="#33bef2"/>
-                    <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="White"/>
-
-                    <SolidColorBrush x:Key="GraphFillColor" Color="#66cef5" Opacity="0.25"/>
-                </ResourceDictionary>
-
-                <!-- secondary colour -->
-                <ResourceDictionary>
-                    <ResourceDictionary.MergedDictionaries>
-                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Blue.Primary.xaml" />
-                    </ResourceDictionary.MergedDictionaries>
-
-                    <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#FDAE4F"/>
-                    <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="{StaticResource Primary700Foreground}"/>
-                </ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
-
+    
     <Grid>
         <TabControl>
-            <TabItem Header="Radical">
-                <Label Content="Content goes here..." />
+            <TabItem Name="StepperTab" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <TabItem.Header>
+                    <TextBlock FontSize="18"> Stepper</TextBlock>
+                </TabItem.Header>
             </TabItem>
 
-            <TabItem Header="Stepper">
-                <Label Content="Content goes here..." />
+            <TabItem Name="RadicalTab" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <TabItem.Header>
+                    <TextBlock FontSize="18"> Radical</TextBlock>
+                </TabItem.Header>
             </TabItem>
         </TabControl>
     </Grid>

@@ -17,12 +17,12 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <TextBox Name="VarName" Text="{Binding Name, Mode=TwoWay}" FontFamily="Roboto" FontSize="12" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}"
+        <TextBox Name="VarName" Text="{Binding Name, Mode=TwoWay}" FontFamily="Roboto" FontSize="12" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                      Grid.Column="0" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="25,0,0,0"
                      PreviewKeyDown="TextBox_PreviewKeyDown" Visibility="Visible"
                      ></TextBox>
 
-        <TextBox Name="ValueText" Text="{Binding Value, Mode=TwoWay, StringFormat=N2}" FontSize="12" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}"
+        <TextBox Name="ValueText" Text="{Binding Value, Mode=TwoWay, StringFormat=N2}" FontSize="12" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                      Grid.Column="1" MinWidth="30" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0" BorderBrush="{x:Null}"
                      TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus" Visibility="Visible"
                      ></TextBox>
@@ -32,17 +32,17 @@
                       IsChecked="{Binding IsActive, Mode=TwoWay}" IsEnabled="{Binding ChangesEnabled}"
                       ></CheckBox>
 
-        <TextBox Name="MinText" Text="{Binding Min, Mode=TwoWay, StringFormat=N2}" FontSize="12" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}"
+        <TextBox Name="MinText" Text="{Binding Min, Mode=TwoWay, StringFormat=N2}" FontSize="12" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                      Grid.Column="3" MinWidth="50" VerticalAlignment="Center" HorizontalContentAlignment="Right" Margin="0,0,10,0" BorderBrush="{x:Null}" 
                      TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus" Visibility="Visible"
                      ></TextBox>
 
-        <Slider Name ="Slider" Minimum="{Binding Min, Mode=TwoWay}" Maximum="{Binding Max, Mode=TwoWay}" Value="{Binding Value, Mode=TwoWay}" FontSize="8" Foreground="{DynamicResource PrimaryHueDarkBrush}"
+        <Slider Name ="Slider" Minimum="{Binding Min, Mode=TwoWay}" Maximum="{Binding Max, Mode=TwoWay}" Value="{Binding Value, Mode=TwoWay}" FontSize="8" Foreground="{DynamicResource PrimaryHueLightBrush}"
                     Grid.Column="4" Width="125" VerticalAlignment="Center" HorizontalAlignment="Center" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2" Visibility="Visible"
                     IsEnabled="{Binding ChangesEnabled}"
                     ></Slider>
 
-        <TextBox Name="MaxText" Text="{Binding Max, Mode=TwoWay,StringFormat=N2}" FontSize="12" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}"
+        <TextBox Name="MaxText" Text="{Binding Max, Mode=TwoWay,StringFormat=N2}" FontSize="12" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                      Grid.Column="5" MinWidth="50" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="10,0,5,0" BorderBrush="{x:Null}"
                      TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus" Visibility="Visible"
                      ></TextBox>

@@ -35,7 +35,7 @@ namespace Stepper
         public StepperVM() { }
 
         //CONSTRUCTOR
-        public StepperVM(DSOptimizerComponent stepper, Design design)
+        public StepperVM(Design design, DSOptimizerComponent stepper)
         {
             //StepperComponent
             this.MyComponent = stepper;

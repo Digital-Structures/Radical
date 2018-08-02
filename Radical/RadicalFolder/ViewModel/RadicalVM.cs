@@ -7,6 +7,7 @@ using Radical.Integration;
 using NLoptNet;
 using System.Windows.Markup;
 using System.Windows.Data;
+using LiveCharts;
 using System.Windows;
 using DSOptimization;
 
@@ -73,12 +74,12 @@ namespace Radical
         //SET UP GRAPHS
         public void SetUpGraphs()
         {
-            GraphVM main = new GraphVM(Design.ScoreEvolution, "Objective");
+            GraphVM main = new GraphVM(/*Design.ScoreEvolution*/ new ChartValues<double>(), "Objective");
             this.Graphs["Main"].Add(main);
 
             for (int i = 0; i < Design.Constraints.Count; i++)
             {
-                GraphVM gvm = new GraphVM(Design.ConstraintEvolution[i], String.Format("C{0}", i));
+                GraphVM gvm = new GraphVM(/*Design.ConstraintEvolution[i]*/ new ChartValues<double>(), String.Format("C{0}", i));
                 this.Graphs["Constraints"].Add(gvm);
                 this.Constraints.Add(new ConstVM(Design.Constraints[i], gvm));
             }

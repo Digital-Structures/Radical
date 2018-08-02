@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using Radical;
+using Stepper;
 
 namespace DSOptimization
 {
@@ -26,9 +28,20 @@ namespace DSOptimization
             InitializeComponent();
         }
 
+        DSOptimizerComponent MyComponent;
+
+        public DSOptimizeWindow(Design design, DSOptimizerComponent component)
+        {
+            MyComponent = component;
+            InitializeComponent();
+
+            this.StepperTab.Content = new StepperWindow(new StepperVM(design, component));
+            this.RadicalTab.Content = new RadicalWindow(new RadicalVM(design, component));
+        }
+
         public void Window_Closing(object sender, CancelEventArgs e)
         {
-
+            this.MyComponent.IsWindowOpen = false;
         }
 
     }
