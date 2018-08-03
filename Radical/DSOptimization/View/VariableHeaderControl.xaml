@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DSOptimization"
              mc:Ignorable="d">
-    <Grid Name="HeaderGrid" Background="{DynamicResource BackgroundHueDarkBrush}">
+    <Grid Name="HeaderGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>

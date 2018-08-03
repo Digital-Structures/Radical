@@ -13,7 +13,7 @@ using DSOptimization;
 
 namespace Radical
 {
-    public class RadicalVM : BaseVM
+    public class RadicalVM : BaseVM, IOptimizeToolVM
     {
         public RadicalVM()
         {
@@ -46,12 +46,12 @@ namespace Radical
             this.OptRunning = false;
             this._advancedOptions = false;
         }
-        private List<GroupVarVM> GroupVars;
-        private DSOptimizerComponent Component;
-        public Design Design;
+        public List<GroupVarVM> GroupVars { get; set; }
+        public DSOptimizerComponent Component { get; set; }
+        public Design Design { get; set; }
         public List<ConstVM> Constraints;
-        public List<VarVM> NumVars;
-        public List<List<VarVM>> GeoVars;
+        public List<VarVM> NumVars { get; set; }
+        public List<List<VarVM>> GeoVars { get; set; }
         public Dictionary<string, List<GraphVM>> Graphs;
         public enum Direction { X, Y, Z };
 

@@ -229,7 +229,7 @@ namespace Radical
             //Add descriptive control labels
             groupControls.Children.Add(new VariableHeaderControl());
 
-            //Add group controls for X, Y, and Z directions
+            //Add group controls for slider direction
             GroupVariableControl groupControl = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.None))); this.GroupVars.Add(groupControl);
             groupControl.GroupControlName.Text = "All Variables";
             groupControls.Children.Add(groupControl);
