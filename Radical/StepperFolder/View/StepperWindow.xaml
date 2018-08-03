@@ -125,12 +125,16 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
 
                 <DockPanel Name="ChartPanel" Grid.Row="0">
                 </DockPanel>
 
-                <Grid Name="ButtonGrid" Grid.Row="1" VerticalAlignment="Bottom" Height="150">
+                <Slider Grid.Row="1" HorizontalAlignment="Stretch" Margin="50,10" Foreground="{DynamicResource SecondaryAccentBrush}"
+                        Value="{Binding TrackedStep, Mode=TwoWay}" Minimum="0" Maximum="{Binding NumSteps}" FontSize="12" TickFrequency="1" IsSnapToTickEnabled="True"></Slider>
+
+                <Grid Name="ButtonGrid" Grid.Row="2" VerticalAlignment="Bottom" Height="150">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -192,7 +196,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <materialDesign:PackIcon Grid.Column="0" HorizontalAlignment="Left" Margin="0,0,60,0" Kind="ArrowDown" Height="30" Width="30"/>
-                                <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"> STEP DOWN </TextBlock>
+                                <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"> STEP DOWN</TextBlock>
                                 <materialDesign:PackIcon Grid.Column="2" HorizontalAlignment="Left" Margin="60,0,0,0" Kind="ArrowDown" Height="30" Width="30"/>
 
                             </Grid>

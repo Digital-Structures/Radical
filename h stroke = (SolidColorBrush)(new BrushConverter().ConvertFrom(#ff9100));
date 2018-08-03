@@ -1,0 +1,229 @@
+[33mcommit 66d217dd834a804f36307ef490c23439bc63bed9[m[33m ([m[1;36mHEAD -> [m[1;32mv/wip[m[33m)[m
+Author: Alicia Nimrick <animrick@mit.edu>
+Date:   Tue Jul 3 16:48:46 2018 -0400
+
+    Updated variable naming to include u,v coordinates
+
+[33mcommit 8ce2ce90e7ca65bedc08cda62694951ba6828128[m
+Author: vjusiega <vjusiega@mit.edu>
+Date:   Tue Jul 3 16:29:09 2018 -0400
+
+    implemented secondary algorithm
+
+[33mcommit d38e60976a8e33bb3396c23c5d40f0e17fbe1ac2[m
+Merge: b983dd8 5c1746e
+Author: vjusiega <vjusiega@mit.edu>
+Date:   Tue Jul 3 15:58:06 2018 -0400
+
+    Merge branch 'a/wip' of github.mit.edu:digitalstructures/Radical into v/wip
+
+[33mcommit 5c1746e66885eaf4ae56a7b1c51026d80302e69f[m
+Author: Alicia Nimrick <animrick@mit.edu>
+Date:   Tue Jul 3 15:55:47 2018 -0400
+
+    Simplified constraint implementation
+
+[33mcommit 59507d5bf1f428bec5f4d94a1e2b994326032973[m
+Author: danhaive <danhaive@mit.edu>
+Date:   Tue Jul 3 14:15:21 2018 -0400
+
+    constraints wokr
+
+[33mcommit 40f22f2006e95a21670909f1bb4ce0f194808dcd[m
+Author: Alicia Nimrick <animrick@mit.edu>
+Date:   Tue Jul 3 13:08:06 2018 -0400
+
+    Radical window sliders update when optimization stops
+
+[33mcommit b983dd8245e4dcc4f5510ce0fd09748056fed64f[m
+Author: vjusiega <vjusiega@mit.edu>
+Date:   Tue Jul 3 11:21:03 2018 -0400
+
+    secondary algorithm option w/ icon disappears
+
+[33mcommit db20bfa757ff2af5224949ff1a0f031bb63ebc3e[m
+Author: Alicia Nimrick <animrick@mit.edu>
+Date:   Tue Jul 3 11:38:24 2018 -0400
+
+    Enabled changes when optimizer is paused, textboxes default to previous value
+
+[33mcommit 1b0228779662eebac9252554559507ff9e1117f9[m
+Merge: 438e322 b80bfb9
+Author: danhaive <danhaive@mit.edu>
+Date:   Mon Jul 2 16:16:46 2018 -0400
+
+    dcrv fix merged from a/wip to v/wip
+
+[33mcommit b80bfb959969c0335da8caf0192365089ec611fb[m
+Author: danhaive <danhaive@mit.edu>
+Date:   Mon Jul 2 15:49:20 2018 -0400
+
+    added design curves
+
+[33mcommit 438e3220198d113fca77a49d75cfd626949892f8[m
+Author: vjusiega <vjusiega@mit.edu>
+Date:   Mon Jul 2 15:47:14 2018 -0400
+
+    fixed curveVariable display update
+
+[33mcommit 252a347a50a99333b938bbd07314ee2c3a873ca4[m
+Author: danhaive <danhaive@mit.edu>
+Date:   Mon Jul 2 13:54:16 2018 -0400
+
+    Fixed variable update for surfaces
+
+[33mcommit 4afd68b0bdd48b361a3d7b4e6bc04869dc0ed2cb[m
+Author: Alicia Nimrick <animrick@mit.edu>
+Date:   Fri Jun 29 16:53:49 2018 -0400
+
+    Added a few base classes to eliminate redundancy
+
+[33mcommit 6686265ea1840d16accbad21815c593cc435049c[m
+Author: Violetta J Jusiega <vjusiega@MIT.EDU>
+Date:   Fri Jun 29 14:31:03 2018 -0400
+
+    Made secondary algorithm option disappear when not required
+
+[33mcommit cbb71c7673fe1313ed4730f9676bf0b6b6dc4641[m
+Author: Alicia Nimrick <animrick@mit.edu>
+Date:   Thu Jun 28 17:04:20 2018 -0400
+
+    Updated optimization setting input formatting
+
+[33mcommit 80bdc445cc37d682d920b2af32c2a1c5acfe3247[m
+Author: Alicia Nimrick <animrick@mit.edu>
+Date:   Thu Jun 28 16:06:01 2018 -0400
+
+    Disabled changes while optimizing, formatted constraint UI
+
+[33mcommit efe0d7b2b4b738b108e35a308769e05be8326171[m
+Author: Alicia Nimrick <animrick@mit.edu>
+Date:   Wed Jun 27 17:25:16 2018 -0400
+
+    Enabled using Enter for inputs, fixed cropping
+
+[33mcommit b211059079c107eb1c1bb51c3f5a6a6f713bdca6[m
+Author: Alicia Nimrick <animrick@mit.edu>
+Date:   Tue Jun 26 17:41:33 2018 -0400
+
+    Partially resolved cropping issues
+
+[33mcommit 11a2e1a3eea579852266653e6c0008895f7ab4df[m
+Author: Alicia Nimrick <animrick@mit.edu>
+Date:   Mon Jun 25 14:23:12 2018 -0400
+
+    Added visual hierarchy to variable tree
+
+[33mcommit 24861995c9f8dd39671d97dcefaf53e1df423a53[m
+Author: Alicia Nimrick <animrick@mit.edu>
+Date:   Fri Jun 22 17:56:39 2018 -0400
+
+    Established variable tree naming hierarchy
+
+[33mcommit 13f6e87d83df5168b4345ebccf6d6c61e6c47cd3[m
+Author: Alicia Nimrick <animrick@mit.edu>
+Date:   Tue Jun 19 22:44:46 2018 -0400
+
+    Resolved input slider bound issues
+
+[33mcommit d02abb6b0ccb8c35b7849fe89c40a011b6fb38e7[m
+Author: Alicia Nimrick <animrick@mit.edu>
+Date:   Tue Jun 19 18:54:27 2018 -0400
+
+    Partially resolved variable bounds handling
+
+[33mcommit 7e2956c71995a9ba6367f0cb9841da2dcf84e5e7[m
+Author: Alicia Nimrick <animrick@mit.edu>
+Date:   Tue Jun 19 17:30:13 2018 -0400
+
+    Enabled decimal point input
+
+[33mcommit 0ebb2c142ab2479fd5ebd00de2ee7de63df56bac[m[33m ([m[1;31morigin/wip[m[33m)[m
+Author: danhaive <danhaive@mit.edu>
+Date:   Mon Jun 18 12:11:10 2018 -0400
+
+    misc
+
+[33mcommit ad92767672a166ba2a3913843e3a1f581d17085f[m
+Author: Alicia Nimrick <animrick@mit.edu>
+Date:   Fri Jun 15 16:27:45 2018 -0400
+
+    Added comments for curves/surfaces, enum for directions
+
+[33mcommit ed743d24220c0998ea44574691ae8af355ac83e4[m
+Author: danhaive <danhaive@mit.edu>
+Date:   Fri Jun 15 14:29:44 2018 -0400
+
+    added nlopt dlls
+
+[33mcommit f5561387c3d5a46c9b551d0f7a12b227a41d23c5[m
+Author: danhaive <danhaive@mit.edu>
+Date:   Fri Jun 15 14:25:32 2018 -0400
+
+    added packages
+
+[33mcommit cdd73bef861b3600441945c7cbd167b766f6ce71[m
+Author: danhaive <danhaive@mit.edu>
+Date:   Fri Jun 15 14:21:09 2018 -0400
+
+    added nlopt.dll to libs
+
+[33mcommit 7d993d600f8ff271a96bb62cce7fae877aa1a16b[m[33m ([m[1;32mwip[m[33m)[m
+Author: danhaive <danhaive@mit.edu>
+Date:   Fri Jun 15 12:48:37 2018 -0400
+
+    removed some unnecessary code
+
+[33mcommit c93e193368f3496388154a5ac03de2ac6056aa19[m
+Author: danhaive <danhaive@mit.edu>
+Date:   Fri Jun 15 10:22:46 2018 -0400
+
+    only show the async window
+
+[33mcommit f36262ef646f9bfb4af3d02d2b3da28a5ca00dec[m
+Author: danhaive <danhaive@mit.edu>
+Date:   Fri Jun 15 10:13:44 2018 -0400
+
+    added gh libs in local folder
+
+[33mcommit 7bb6141f5a8c5ed7229c40192e3f0736cf7284bc[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m
+Author: danhaive <danhaive@mit.edu>
+Date:   Fri Jun 15 09:57:30 2018 -0400
+
+    Misc
+
+[33mcommit b2e459fccd417153a1a30f71ec6ff077ac725b3b[m
+Author: danhaive <danhaive@mit.edu>
+Date:   Wed Apr 11 14:43:55 2018 -0400
+
+    added increment component
+
+[33mcommit 2f23b6b8d7bea92b35558000d3ce10b4757f0b68[m
+Author: danhaive <danhaive@mit.edu>
+Date:   Tue Apr 10 19:51:16 2018 -0400
+
+    made some params optional and sampling silent
+
+[33mcommit 6b1827fae036e6da7fa3d9c5412df0355bec7484[m
+Author: danhaive <danhaive@mit.edu>
+Date:   Tue Apr 10 19:08:47 2018 -0400
+
+    remove useless RadicalApp folder
+
+[33mcommit b886e7984c359235073fda4474e39746a69fce8b[m
+Author: danhaive <danhaive@mit.edu>
+Date:   Tue Apr 10 18:07:16 2018 -0400
+
+    Remove ignored files
+
+[33mcommit 7c5151e4f40a9c2e051c88a5b90fefc94a539a9c[m
+Author: danhaive <danhaive@mit.edu>
+Date:   Tue Apr 10 17:59:38 2018 -0400
+
+    stop tracking compiling results
+
+[33mcommit fddefd1ccb547d214f87da364a4a54bf275f3fee[m
+Author: danhaive <danhaive@mit.edu>
+Date:   Tue Apr 10 15:31:50 2018 -0400
+
+    First Add

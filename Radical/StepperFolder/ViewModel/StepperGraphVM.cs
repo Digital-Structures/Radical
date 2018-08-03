@@ -15,13 +15,13 @@ namespace Stepper
     public class StepperGraphVM : BaseVM
     {
         private StepperVM StepperVM;
-        private List<List<SolidColorBrush>> Colors;
+        private List<SolidColorBrush> Colors;
 
         //CONSTRUCTOR
         public StepperGraphVM(StepperVM VM)
         {
             this.StepperVM = VM;
-            this.Colors = new List<List<SolidColorBrush>>();
+            this.Colors = new List<SolidColorBrush>();
 
             InitializeColors();
             InitializeGraphSeries();
@@ -38,15 +38,11 @@ namespace Stepper
         //INITIALIZE COLORS
         public void InitializeColors()
         {
-            SolidColorBrush stroke1 = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ff9100"));
-            SolidColorBrush fill1 = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ff9100"));
-            fill1.Opacity = 0.3;
-            this.Colors.Add(new List<SolidColorBrush> { stroke1, fill1 });
+            var stroke1 = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ff9100"));
+            this.Colors.Add(stroke1);
 
             var stroke2 = (SolidColorBrush)(new BrushConverter().ConvertFrom("#607d8b"));
-            var fill2 = (SolidColorBrush)(new BrushConverter().ConvertFrom("#607d8b"));
-            fill2.Opacity = 0.3;
-            this.Colors.Add(new List<SolidColorBrush> { stroke2, fill2 });
+            this.Colors.Add(stroke2);
         }
 
         //INITIALIZE GRAPH SERIES
@@ -63,9 +59,11 @@ namespace Stepper
                 {
                     Title = this.StepperVM.Objectives[i].Name,
                     Values = objective,
-                    Stroke = this.Colors[i][0],
-                    Fill = this.Colors[i][1],
-                    LineSmoothness = 0
+                    Stroke = this.Colors[i],
+                    StrokeThickness = 5,
+                    Fill = Brushes.Transparent,
+                    LineSmoothness = 0,
+                    PointGeometrySize = 20
                 });
 
                 i++;

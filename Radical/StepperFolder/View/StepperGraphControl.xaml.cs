@@ -30,6 +30,9 @@ namespace Stepper
         {
             this.DataContext = VM;
             InitializeComponent();
+
+            this.XAxis.LabelFormatter = val => val.ToString("n2");
+            this.YAxis.LabelFormatter = val => val.ToString("n2");
         }
     }
 }

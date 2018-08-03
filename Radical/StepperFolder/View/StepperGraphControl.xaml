@@ -14,16 +14,21 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" TextAlignment="Center" Padding="10, 10, 0, 5" FontSize="32">
-                    Exploration History
+        <TextBlock Grid.Row="0" TextAlignment="Center" Padding="10, 10, 0, 5" FontSize="36">
+            Exploration History
         </TextBlock>
 
-        <lvc:CartesianChart Grid.Row="1" Series="{Binding ObjectiveSeries, Mode=OneWay}" LegendLocation="Right">
+        <lvc:CartesianChart Grid.Row="1" Series="{Binding ObjectiveSeries, Mode=OneWay}" LegendLocation="Right" Hoverable="False" DataTooltip="{x:Null}">
             <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="Objective Value" FontSize="18" Margin="5"></lvc:Axis>
+                <lvc:Axis Name="YAxis" FontSize="18" Margin="5">
+                </lvc:Axis>
             </lvc:CartesianChart.AxisY>
             <lvc:CartesianChart.AxisX>
-                <lvc:Axis Title="Step" FontSize="18" Margin="5"></lvc:Axis>
+                <lvc:Axis Name="XAxis" FontSize="18" Margin="5">
+                    <lvc:Axis.Separator>
+                        <lvc:Separator IsEnabled="False" Step="1"></lvc:Separator>
+                    </lvc:Axis.Separator>
+                </lvc:Axis>
             </lvc:CartesianChart.AxisX>
         </lvc:CartesianChart>
     </Grid>
