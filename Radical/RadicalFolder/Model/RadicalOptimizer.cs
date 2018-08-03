@@ -115,8 +115,22 @@ namespace Radical
                 Thread.Sleep(1);
             }
 
-            //double objective = Design.CurrentScore; 
             double objective = Design.Objectives[0];
+            if (objective < this.RadicalVM.SmallestObjectiveValue)
+            {
+                this.RadicalVM.SmallestObjectiveValue = objective; 
+                foreach (VarVM v in this.RadicalVM.NumVars)
+                {
+                    v.UpdateBestSolutionValue();
+                }
+                foreach (List<VarVM> lvm in this.RadicalVM.GeoVars)
+                {
+                    foreach (VarVM v in lvm)
+                    {
+                        v.UpdateBestSolutionValue();
+                    }
+                }
+            }
 
             //If RefreshMode == Silent then values are stored in a local list so that the graph is not updated
             if (this.RadicalVM.Mode == RefreshMode.Silent)
@@ -131,6 +145,8 @@ namespace Radical
             }
             else
             {
+                this.RadicalVM.UpdateCurrentScoreDisplay();
+
                 //If refresh mode is switched from Silent to Live 
                 if (StoredMainValues.Any())
                 {
@@ -139,7 +155,6 @@ namespace Radical
 
                 //Adds main objective values to list and draws
                 this.RadicalVM.ObjectiveEvolution.Add(objective);
-                this.RadicalVM.Graphs["Main"].ElementAt(0).FinalOptimizedValue = objective;
 
                 for (int i = 0; i < this.RadicalVM.ConstraintsEvolution.Count; i++)
                 {
@@ -176,6 +191,7 @@ namespace Radical
             if (this.RadicalWindow.RadicalVM.Mode == RefreshMode.Silent)
             {
                 AppendStoredValues();
+                this.RadicalVM.UpdateCurrentScoreDisplay();
             }
             this.RadicalWindow.OptimizationFinished();
 

@@ -42,12 +42,11 @@ namespace Radical
 
             InitializeComponent();
 
-            this.GraphVM.Chart = Chart;
             this.GraphVM.ChartAxisX = ChartAxisX;
             this.GraphVM.ChartAxisY = ChartAxisY;
             this.GraphVM.Window = window; 
 
-            this.GraphVM.ChartLineVisibility(Visibility.Collapsed);
+            this.GraphVM.ChartLineVisibility = Visibility.Collapsed;
         }
 
 
@@ -64,7 +63,7 @@ namespace Radical
             }
             else
             {
-                this.GraphVM.ChartLineVisibility(Visibility.Collapsed);
+                this.GraphVM.ChartLineVisibility = Visibility.Collapsed;
             }
         }
 
@@ -78,6 +77,16 @@ namespace Radical
             var e2 = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta);
             e2.RoutedEvent = UIElement.MouseWheelEvent;
             MyWindow.GraphsScroller.RaiseEvent(e2);
+        }
+
+        private void Chart_MouseEnter(object sender, MouseEventArgs e)
+        {
+            this.GraphVM.GraphAxisLabelsVisibility = Visibility.Visible;
+        }
+
+        private void Chart_MouseLeave(object sender, MouseEventArgs e)
+        {
+            this.GraphVM.GraphAxisLabelsVisibility = Visibility.Hidden;
         }
     }
 }

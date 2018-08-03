@@ -34,12 +34,13 @@
                     <SolidColorBrush x:Key="BackgroundHueDarkBrush" Color="#cacbcd"/>
                     <SolidColorBrush x:Key="BackgroundHueMidBrush" Color="#dcddde"/>
 
-                    <SolidColorBrush x:Key="SideBarColor" Color="DarkGray"/>
-
                     <SolidColorBrush x:Key="BackgroundHueDarkForegroundBrush" Color="White"/>
                     <SolidColorBrush x:Key="BackgroundHueDarkSubtextForegroundBrush" Color="Gray"/>
                     <SolidColorBrush x:Key="BackgroundHueMidForegroundBrush" Color="DarkGray"/>
                     <SolidColorBrush x:Key="BackgroundHueLightForegroundBrush" Color="Black"/>
+
+                    
+                    <SolidColorBrush x:Key="SideBarBackgroundColor" Color="Gray"/>
 
                     <!--<SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#99def8"/>
                     <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="White"/>
@@ -253,6 +254,11 @@
                                     Style="{StaticResource MaterialDesignFloatingActionButton}" HorizontalAlignment="Right"
                                     materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="{DynamicResource SecondaryAccentBrush}" BorderBrush="{DynamicResource SecondaryAccentBrush}">
                             <materialDesign:PackIcon Kind="Restart" Height="32" Width="32" Foreground="{DynamicResource SecondaryAccentForegroundBrush}"/>
+                        </Button>
+                        <Button x:Name="ButtonOptimalResult" Click="ButtonOptimalResult_Click" Width="40" Height="40"
+                                    Style="{StaticResource MaterialDesignFloatingActionButton}" HorizontalAlignment="Right"
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="{DynamicResource SecondaryAccentBrush}" BorderBrush="{DynamicResource SecondaryAccentBrush}">
+                            <materialDesign:PackIcon Kind="Robot" Height="32" Width="32" Foreground="{DynamicResource SecondaryAccentForegroundBrush}"/>
                         </Button>
                     </StackPanel>
                 </StackPanel>

@@ -15,6 +15,14 @@ namespace DSOptimization
     {
         public enum Direction { X, Y, Z, None };
 
+        //ORIGINAL VALUE
+        //Original value of the variable before optimization
+        public double OriginalValue { get; set; }
+
+        //MINIMUM VALUE
+        //Minimum value obtained through the optimization process
+        public double BestSolutionValue { get; set; }
+
         //CONSTRUCTOR
         //default values obtained from original Grasshopper component variables
         public VarVM(IVariable dvar)
@@ -22,8 +30,8 @@ namespace DSOptimization
             DesignVar = dvar;
 
             //value trackers
-            this._originalvalue = DesignVar.CurrentValue;
-            this._bestsolutionvalue = DesignVar.CurrentValue;
+            this.OriginalValue = DesignVar.CurrentValue;
+            this.BestSolutionValue = DesignVar.CurrentValue;
 
             this._name = DesignVar.Parameter.Name;
 
@@ -91,40 +99,6 @@ namespace DSOptimization
                     Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
                 }
             }
-        }
-
-        //ORIGINAL VALUE
-        //Original value of the variable before optimization
-        private double _originalvalue;
-        public double OriginalValue
-        {
-            get { return _originalvalue; }
-            set
-            {
-                if(CheckPropertyChanged<double>("OriginalValue", ref _originalvalue, ref value))
-                {
-                }
-            }
-        }
-
-        //MINIMUM VALUE
-        //Minimum value obtained through the optimization process
-        private double _bestsolutionvalue;
-        public double BestSolutionValue
-        {
-            get { return _bestsolutionvalue; }
-            set
-            {
-                _bestsolutionvalue = value;
-            }
-        }
-
-        //UPDATE BEST SOLUTION VALUE 
-        //Should be called when the current value of the variable corresponds to the current
-        //best solution of the objective
-        public void UpdateBestSolutionValue()
-        {
-            BestSolutionValue = Value;
         }
 
         //OPTIMIZATION FINISHED
@@ -217,6 +191,20 @@ namespace DSOptimization
         public void ResetValue()
         {
             this.Value = this.OriginalValue;
+            this.BestSolutionValue = this.OriginalValue;
+        }
+
+        //UPDATE BEST SOLUTION VALUE 
+        //Should be called when the current value of the variable corresponds to the current
+        //best solution of the objective
+        public void UpdateBestSolutionValue()
+        {
+            this.BestSolutionValue = this.DesignVar.CurrentValue;
+        }
+
+        public void SetBestSolution()
+        {
+            this.Value = this.BestSolutionValue;
         }
 
         //GRADIENT

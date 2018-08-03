@@ -135,7 +135,6 @@ namespace Radical
             //MAIN OBJECTIVE GRAPH
             var g = new GraphControl(this.RadicalVM.Graphs["Main"][0], this.RadicalVM, this);
             g.GraphGrid.Height = MainGrid.ActualHeight * 0.9;
-            g.GraphVM.CalculateChartLineY2();
 
             GraphControls["Main"].Add(g);
             MainBlock.Children.Add(GraphControls["Main"][0]);
@@ -153,7 +152,6 @@ namespace Radical
                     GraphVM gvm = RadicalVM.Graphs["Constraints"][i];
                     g = new GraphControl(gvm, this.RadicalVM, this);
                     g.GraphGrid.Height = MainGrid.ActualHeight * 0.45;
-                    g.GraphVM.CalculateChartLineY2();
                     GraphControls["Constraints"].Add(g);
 
                     ConstVM c = RadicalVM.Constraints[i];
@@ -184,11 +182,10 @@ namespace Radical
             {
                 foreach (GraphVM graph in pair.Value)
                 {
-                    graph.ChartLineVisibility(Visibility.Visible);
+                    graph.ChartLineVisibility = Visibility.Visible;
                     graph.OptimizerDone = true;
                 }
             }
-            SetUpGraphLineWidth();
         }
 
         public void GraphsHideLine()
@@ -197,7 +194,7 @@ namespace Radical
             {
                 foreach (GraphVM graph in pair.Value)
                 {
-                    graph.ChartLineVisibility(Visibility.Collapsed);
+                    graph.ChartLineVisibility = Visibility.Collapsed;
                     graph.OptimizerDone = false;
                 }
             }
@@ -384,12 +381,10 @@ namespace Radical
             if (this.ActiveGraphs.Count == 1)
             {
                 this.ActiveGraphs[0].GraphGrid.Height = 0.9 * this.MainGrid.ActualHeight;
-                this.ActiveGraphs[0].GraphVM.CalculateChartLineY2();
             }
             else
             {
                 this.ActiveGraphs[0].GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
-                this.ActiveGraphs[0].GraphVM.CalculateChartLineY2();
 
                 //foreach (GraphControl g in this.ActiveGraphs)
                 //{
@@ -417,7 +412,6 @@ namespace Radical
                 foreach (GraphControl g in this.ActiveGraphs)
                 {
                     g.GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
-                    g.GraphVM.CalculateChartLineY2();
                 }
             }
         }
@@ -474,6 +468,7 @@ namespace Radical
            // GridMenu.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
             ButtonOpenMenu.Visibility = Visibility.Visible;
             ButtonCloseMenu.Visibility = Visibility.Collapsed;
+            GridMenu.Background = (SolidColorBrush)this.FindResource("SideBarBackgroundColor");
             this.AnimationBegan();
         }
 
@@ -482,7 +477,7 @@ namespace Radical
         {
             ButtonOpenMenu.Visibility = Visibility.Collapsed;
             ButtonCloseMenu.Visibility = Visibility.Visible;
-          //  GridMenu.Background = (SolidColorBrush)this.FindResource("SideBarColor");
+            GridMenu.Background = (SolidColorBrush)this.FindResource("SideBarBackgroundColor");
             this.AnimationBegan();
         }
 
@@ -538,17 +533,6 @@ namespace Radical
             this.AnimationBegan();
         }
 
-        private void SetUpGraphLineWidth()
-        {
-            foreach (KeyValuePair<string, List<GraphVM>> kvp in this.RadicalVM.Graphs)
-            {
-                for (int i = 0; i < kvp.Value.Count; i++)
-                {
-                    this.RadicalVM.Graphs[kvp.Key][i].SetLineWidth();
-                }
-            }
-        }
-
         private void UpdateGraphSize(object sender, RoutedEventArgs e)
         {
             if (this.ActiveGraphs != null)
@@ -556,21 +540,20 @@ namespace Radical
                 if (this.ActiveGraphs.Count == 1)
                 {
                     this.ActiveGraphs[0].GraphGrid.Height = 0.9 * this.MainGrid.ActualHeight;
-                    this.ActiveGraphs[0].GraphVM.CalculateChartLineY2();
                 }
                 else
                 {
                     foreach (GraphControl g in this.ActiveGraphs)
                     {
                         g.GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
-                        g.GraphVM.CalculateChartLineY2();
                     }
                 }
             }
         }
 
-        public void ButtonRestart_Click(object sender, RoutedEventArgs e)
+        private void ButtonRestart_Click(object sender, RoutedEventArgs e)
         {
+            this.RadicalVM.ResetObjective();
             foreach (VarVM v in this.RadicalVM.NumVars)
             {
                 v.ResetValue();
@@ -580,6 +563,21 @@ namespace Radical
                 foreach (VarVM v in lvm)
                 {
                     v.ResetValue();
+                }
+            }
+        }
+
+        private void ButtonOptimalResult_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (VarVM v in this.RadicalVM.NumVars)
+            {
+                v.SetBestSolution();
+            }
+            foreach (List<VarVM> lvm in this.RadicalVM.GeoVars)
+            {
+                foreach (VarVM v in lvm)
+                {
+                    v.SetBestSolution();
                 }
             }
         }

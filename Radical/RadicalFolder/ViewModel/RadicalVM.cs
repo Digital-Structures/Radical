@@ -10,7 +10,6 @@ using System.Windows.Data;
 using LiveCharts;
 using System.Windows;
 using DSOptimization;
-using LiveCharts;
 
 namespace Radical
 {
@@ -28,6 +27,9 @@ namespace Radical
         //EVOLUTIONS for all objectives and constraints 
         public ChartValues<double> ObjectiveEvolution { get; set; }
         public ChartValues<ChartValues<double>> ConstraintsEvolution { get; set; }
+
+        public double OriginalObjectiveValue { get; set; }
+        public double SmallestObjectiveValue { get; set; }
 
         public RadicalVM()
         {
@@ -66,6 +68,9 @@ namespace Radical
             this.OptRunning = false;
             this.OptRunning = false;
             this._advancedOptions = false;
+
+            this.OriginalObjectiveValue = this.Design.Objectives.ElementAt(0);
+            this.SmallestObjectiveValue = this.Design.Objectives.ElementAt(0);
         }
 
         //ACTIVE GRAPHS
@@ -171,6 +176,23 @@ namespace Radical
                 constraint.OptimizationFinished();
         }
 
+        public void UpdateCurrentScoreDisplay()
+        {
+            double objective = this.Design.Objectives[0];
+            this.Graphs["Main"][0].FinalOptimizedValue = objective;
+            
+            for (int i = 0; i < this.Graphs["Constraints"].Count; i++)
+            {
+                double score = this.Design.Constraints[i].CurrentValue;
+                this.Graphs["Constraints"][i].FinalOptimizedValue = score;
+            }
+        }
+
+        public void ResetObjective()
+        {
+            this.SmallestObjectiveValue = this.OriginalObjectiveValue;
+        }
+
         //ON WINDOW CLOSING
         //Alert the component that the window has been closed
         //(and therefore a new window can open on double click)
@@ -191,11 +213,6 @@ namespace Radical
             {
                 if(CheckPropertyChanged<int>("Cols", ref _cols, ref value))
                 {
-                    foreach (GraphVM gvm in ActiveGraphs)
-                    {
-                        gvm.ChartRowVisibility = Visibility.Collapsed;
-                        gvm.ChartRowVisibility = Visibility.Visible;
-                    }
                 }
             }
         }
