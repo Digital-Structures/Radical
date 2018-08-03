@@ -59,7 +59,7 @@
                     <lvc:CartesianChart.AxisX>
                         <lvc:Axis Name="ChartAxisX">
                             <lvc:Axis.Sections>
-                                <lvc:AxisSection Name="AxisSectionX" Value="{Binding Iteration, Mode=TwoWay}" Visibility="{Binding ChartLineVisibility, Mode=TwoWay}" DisableAnimations="True" StrokeThickness="1" Stroke="{DynamicResource PrimaryHueDarkBrush}">
+                                <lvc:AxisSection Name="AxisSectionX" Value="{Binding MouseIteration, Mode=TwoWay}" Visibility="{Binding ChartLineVisibility, Mode=TwoWay}" DisableAnimations="True" StrokeThickness="1" Stroke="{DynamicResource PrimaryHueDarkBrush}">
 
                                 </lvc:AxisSection>
                             </lvc:Axis.Sections>

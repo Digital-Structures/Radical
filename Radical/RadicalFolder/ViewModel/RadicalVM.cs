@@ -107,7 +107,7 @@ namespace Radical
         {
             foreach (GraphVM graph in this.ActiveGraphs)
             {
-                graph.UpdateLine(iteration);
+                graph.MouseIteration = iteration;
             }
         }
 

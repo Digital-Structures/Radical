@@ -116,6 +116,8 @@ namespace Radical
             }
 
             double objective = Design.Objectives[0];
+
+            //When a new global objective minimum is reached all variable values at that point are recorded
             if (objective < this.RadicalVM.SmallestObjectiveValue)
             {
                 this.RadicalVM.SmallestObjectiveValue = objective; 

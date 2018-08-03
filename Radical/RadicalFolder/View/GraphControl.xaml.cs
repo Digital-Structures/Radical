@@ -33,6 +33,7 @@ namespace Radical
             InitializeComponent();
         }
 
+        //CONSTRUCTOR
         public GraphControl(GraphVM graphVM, RadicalVM radicalVM, RadicalWindow window)
         {
             this.RadicalVM = radicalVM;
@@ -42,23 +43,23 @@ namespace Radical
 
             InitializeComponent();
 
-            this.GraphVM.ChartAxisX = ChartAxisX;
-            this.GraphVM.ChartAxisY = ChartAxisY;
             this.GraphVM.Window = window; 
 
             this.GraphVM.ChartLineVisibility = Visibility.Collapsed;
         }
 
-
-        //CHART MOUSE DOWN
+        #region Mouse_Events
+        //CHART MOUSE MOVE
+        //Tracks mouse movement and sets the vertical lines on the graph to be on the points closest to the mouse
         private void Chart_MouseMove(object sender, MouseEventArgs e)
         {
             if (this.GraphVM.ChartValues.Any())
             {
+                this.GraphVM.ChartLineVisibility = Visibility.Visible;
                 var mouseCoordinate = e.GetPosition(Chart);
                 double chartCoordinateX = Chart.ConvertToChartValues(mouseCoordinate).X;
                 int closestXPoint = (int)Chart.Series[0].ClosestPointTo(chartCoordinateX, AxisOrientation.X).X;
-                this.GraphVM.UpdateLine(closestXPoint);
+                this.GraphVM.MouseIteration = closestXPoint;
                 this.RadicalVM.UpdateGraphLines(closestXPoint);
             }
             else
@@ -79,14 +80,18 @@ namespace Radical
             MyWindow.GraphsScroller.RaiseEvent(e2);
         }
 
+        //Shows graph axis labels when mouse is over card
         private void Chart_MouseEnter(object sender, MouseEventArgs e)
         {
             this.GraphVM.GraphAxisLabelsVisibility = Visibility.Visible;
         }
 
+        //Hides graph axis labels when mouse is not over card
         private void Chart_MouseLeave(object sender, MouseEventArgs e)
         {
             this.GraphVM.GraphAxisLabelsVisibility = Visibility.Hidden;
         }
+
+        #endregion
     }
 }

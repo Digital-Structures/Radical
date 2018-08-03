@@ -14,12 +14,10 @@ namespace DSOptimization
     public class VarVM : BaseVM
     {
         public enum Direction { X, Y, Z, None };
+        public IVariable DesignVar;
 
-        //ORIGINAL VALUE
         //Original value of the variable before optimization
         public double OriginalValue { get; set; }
-
-        //MINIMUM VALUE
         //Minimum value obtained through the optimization process
         public double BestSolutionValue { get; set; }
 
@@ -56,8 +54,6 @@ namespace DSOptimization
                 this._dir = (Direction)value;
             }
         }
-
-        public IVariable DesignVar;
 
         //NAME
         //The name of an individual variable
@@ -99,14 +95,6 @@ namespace DSOptimization
                     Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
                 }
             }
-        }
-
-        //OPTIMIZATION FINISHED
-        //Update UI sliders to reflect optimized values
-        public void OptimizationFinished()
-        {
-            this.ChangesEnabled = true;
-            this.Value = DesignVar.CurrentValue;
         }
 
         //MIN
@@ -188,10 +176,21 @@ namespace DSOptimization
             }
         }
 
-        public void ResetValue()
+        //GRADIENT
+        //Stores the gradient of the variable for a given objective
+        private double _grad;
+        public double Gradient
         {
-            this.Value = this.OriginalValue;
-            this.BestSolutionValue = this.OriginalValue;
+            get { return _grad; }
+            set { CheckPropertyChanged<double>("Gradient", ref _grad, ref value); }
+        }
+
+        //OPTIMIZATION FINISHED
+        //Update UI sliders to reflect optimized values
+        public void OptimizationFinished()
+        {
+            this.ChangesEnabled = true;
+            this.Value = DesignVar.CurrentValue;
         }
 
         //UPDATE BEST SOLUTION VALUE 
@@ -207,13 +206,10 @@ namespace DSOptimization
             this.Value = this.BestSolutionValue;
         }
 
-        //GRADIENT
-        //Stores the gradient of the variable for a given objective
-        private double _grad;
-        public double Gradient
+        public void ResetValue()
         {
-            get { return _grad; }
-            set { CheckPropertyChanged<double>("Gradient", ref _grad, ref value); }
+            this.Value = this.OriginalValue;
+            this.BestSolutionValue = this.OriginalValue;
         }
     }
 }

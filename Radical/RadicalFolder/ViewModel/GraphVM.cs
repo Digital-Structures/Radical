@@ -20,27 +20,14 @@ namespace Radical
 {
     public class GraphVM : BaseVM
     {
+        public ChartValues<double> ChartValues { get; set; }
+
         public GraphVM(ChartValues<double> scores, string name)
         {
-            _chartvalues = scores; 
+            ChartValues = scores; 
             _linegraph_name = name;
-            //_chartlinex = 0;
-            //_x = "0";
             _y = "0";
             _graphaxislabelsvisibility = Visibility.Hidden;
-        }
-
-        //This is the specific Chart Values array, it seems that you cannot pass in an ordinary list 
-        private ChartValues<double> _chartvalues;
-        public ChartValues<double> ChartValues
-        {
-            get { return _chartvalues; }
-            set
-            {
-                if (CheckPropertyChanged<ChartValues<double>>("ChartValues", ref _chartvalues, ref value))
-                {
-                }
-            }
         }
 
         private String _linegraph_name;
@@ -56,47 +43,14 @@ namespace Radical
             }
         }
 
-        //private double _chartlinex;
-        //public double ChartLineX
-        //{
-        //    get { return _chartlinex; }
-        //    set
-        //    {
-        //        if (CheckPropertyChanged<double>("ChartLineX", ref _chartlinex, ref value))
-        //        {
-        //        }
-        //    }
-        //}
-
-        //private double _chartliney;
-        //public double ChartLineY
-        //{
-        //    get { return _chartliney; }
-        //    set
-        //    {
-        //        if (CheckPropertyChanged<double>("ChartLineY", ref _chartliney, ref value))
-        //        {
-        //        }
-        //    }
-        //}
-
-        //private string _x;
-        //public string DisplayX
-        //{
-        //    get { return String.Format("Iteration: {0}", _x); }
-        //    set
-        //    {
-        //        CheckPropertyChanged<string>("DisplayX", ref _x, ref value);
-        //    }
-        //}
-
-        private int _iteration;
-        public int Iteration
+        //Tells the vertical line on the chart where it should be relative to the mouse
+        private int _mouseiteration;
+        public int MouseIteration
         {
-            get { return _iteration; }
+            get { return _mouseiteration; }
             set
             {
-                if (CheckPropertyChanged<int>("Iteration", ref _iteration, ref value))
+                if (CheckPropertyChanged<int>("MouseIteration", ref _mouseiteration, ref value))
                 {
                 }
             }
@@ -132,26 +86,6 @@ namespace Radical
             }
         }
 
-        public LiveCharts.Wpf.Axis _chartaxisx;
-        public LiveCharts.Wpf.Axis ChartAxisX
-        {
-            get { return _chartaxisx; }
-            set
-            {
-                _chartaxisx = value;
-            }
-        }
-
-        public LiveCharts.Wpf.Axis _chartaxisy;
-        public LiveCharts.Wpf.Axis ChartAxisY
-        {
-            get { return _chartaxisy; }
-            set
-            {
-                _chartaxisy = value;
-            }
-        }
-
         //THIS TOOL SHOULD BE IMPROVED
         private bool _optimizerdone;
         public bool OptimizerDone
@@ -160,49 +94,6 @@ namespace Radical
             set
             {
                 _optimizerdone = value;
-            }
-        }
-
-        public void UpdateLine(int iteration)
-        {
-            //this.DisplayX = iteration.ToString();
-
-            //Make sure OptimizerDone is actually functioning its purpose
-            if (ChartValues.Any() && OptimizerDone)
-            {
-                ChartLineVisibility = Visibility.Visible;
-
-                double yValue = ChartValues.ElementAt(iteration);
-                this.DisplayY = String.Format("{0:0.000}",yValue);
-
-                Iteration = iteration;
-            }
-        }
-
-        //GRAPH VISIBILITY
-        //Disables graph visibility when you don't want to see it (checkbox option)
-        private Visibility _graphVisibility;
-        public Visibility GraphVisibility
-        {
-            get
-            {
-                return _graphVisibility;
-            }
-            set
-            {
-                CheckPropertyChanged<Visibility>("GraphVisibility", ref _graphVisibility, ref value);
-            }
-        }
-
-        private Visibility _chartlinevisiblity;
-        public Visibility ChartLineVisibility
-        {
-            get { return _chartlinevisiblity; }
-            set
-            {
-                if (CheckPropertyChanged<Visibility>("ChartLineVisibility", ref _chartlinevisiblity, ref value))
-                {
-                }
             }
         }
 
@@ -237,6 +128,35 @@ namespace Radical
             GraphGridHeight = Window.MainGrid.ActualHeight * 0.45;
         }
 
+        #region Visibility
+
+        //GRAPH VISIBILITY
+        //Disables graph visibility when you don't want to see it (checkbox option)
+        private Visibility _graphVisibility;
+        public Visibility GraphVisibility
+        {
+            get
+            {
+                return _graphVisibility;
+            }
+            set
+            {
+                CheckPropertyChanged<Visibility>("GraphVisibility", ref _graphVisibility, ref value);
+            }
+        }
+
+        private Visibility _chartlinevisiblity;
+        public Visibility ChartLineVisibility
+        {
+            get { return _chartlinevisiblity; }
+            set
+            {
+                if (CheckPropertyChanged<Visibility>("ChartLineVisibility", ref _chartlinevisiblity, ref value))
+                {
+                }
+            }
+        }
+
         private Visibility _graphaxislabelsvisibility;
         public Visibility GraphAxisLabelsVisibility
         {
@@ -248,6 +168,7 @@ namespace Radical
                 }
             }
         }
+        #endregion
 
     }
 }
