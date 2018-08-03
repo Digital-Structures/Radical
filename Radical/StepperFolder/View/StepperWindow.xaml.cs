@@ -29,14 +29,16 @@ namespace Stepper
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class StepperWindow : Window
+    public partial class StepperWindow : UserControl
     {
         //Variables and properties
         private StepperVM StepperVM;
         private List<ObjectiveControl> Objectives;
         private List<VariableControl> Variables;
         private List<GradientControl> Gradients;
+
         private StepperGraphControl Chart;
+        private List<List<SolidColorBrush>> ChartColors;
 
         public StepperWindow() : base()
         {
@@ -63,8 +65,9 @@ namespace Stepper
             {
                 this.Variables.Add(new VariableControl(var));
                 this.Gradients.Add(new GradientControl(var));
-            }              
+            }
 
+            //this.GenerateChartColors();
             this.Chart = new StepperGraphControl(new StepperGraphVM(this.StepperVM));
 
             ConfigureDisplay();
@@ -75,6 +78,33 @@ namespace Stepper
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             this.ChartCard.Height = this.MainGrid.ActualHeight;
+        }
+
+        //GENERATE CHART COLORS
+        //Establish list of theme colors to use for objective graphs
+        private void GenerateChartColors()
+        {
+            this.ChartColors = new List<List<SolidColorBrush>>();
+
+            SolidColorBrush Stroke1 = (SolidColorBrush)this.FindResource("SecondaryAccentBrush");
+            SolidColorBrush Fill1 = (SolidColorBrush)this.FindResource("SecondaryAccentBrush");
+            Fill1.Opacity = 0.25;
+            this.ChartColors.Add(new List<SolidColorBrush> {Stroke1, Fill1});
+
+            SolidColorBrush Stroke2 = (SolidColorBrush)this.FindResource("PrimaryHueMidBrush");
+            SolidColorBrush Fill2 = (SolidColorBrush)this.FindResource("PrimaryHueMidBrush");
+            Fill1.Opacity = 0.25;
+            this.ChartColors.Add(new List<SolidColorBrush> { Stroke2, Fill2 });
+
+            SolidColorBrush Stroke3 = (SolidColorBrush)this.FindResource("PrimaryHueDarkBrush");
+            SolidColorBrush Fill3 = (SolidColorBrush)this.FindResource("PrimaryHueDarkBrush");
+            Fill1.Opacity = 0.25;
+            this.ChartColors.Add(new List<SolidColorBrush> { Stroke3, Fill3 });
+
+            SolidColorBrush Stroke4 = (SolidColorBrush)this.FindResource("PrimaryHueLightBrush");
+            SolidColorBrush Fill4 = (SolidColorBrush)this.FindResource("PrimaryHueLightBrush");
+            Fill1.Opacity = 0.25;
+            this.ChartColors.Add(new List<SolidColorBrush> { Stroke4, Fill4 });
         }
 
         //CONFIGURE DISPLAY
@@ -135,6 +165,20 @@ namespace Stepper
 
                 this.StepperVM.Optimize(dir);
             }
+        }
+
+        //CLOSE MENU CLICK
+        private void ButtonCloseMenu_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonOpenMenu.Visibility = Visibility.Visible;
+            ButtonCloseMenu.Visibility = Visibility.Collapsed;
+        }
+
+        //OPEN MENU CLICK
+        private void ButtonOpenMenu_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonOpenMenu.Visibility = Visibility.Collapsed;
+            ButtonCloseMenu.Visibility = Visibility.Visible;
         }
     }
 }

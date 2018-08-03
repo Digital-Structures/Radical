@@ -10,7 +10,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="{DynamicResource BackgroundHueLightBrush}" Margin="5" Name="Card">
+    <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="{DynamicResource MaterialDesignPaper}" Margin="5" Name="Card">
         <Grid Name="GraphGrid" HorizontalAlignment="Stretch" Margin="0,0,-10,0" Height="{Binding GraphGridHeight, Mode=TwoWay}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -35,7 +35,7 @@
                     <lvc:CartesianChart.Series>
                         <lvc:LineSeries LineSmoothness="0.25" Name="Plotter" Values="{Binding ChartValues}" 
                                         DataLabels="False" PointGeometrySize="0" Margin="0,0,0,0"
-                                        Stroke="{DynamicResource PrimaryHueDarkBrush}" Fill="{DynamicResource GraphFillColor}">
+                                        Stroke="{DynamicResource SecondaryAccentBrush}" Fill="{x:Null}">
                         </lvc:LineSeries>
                         <lvc:ScatterSeries DataLabels="False" Values="{Binding HoverValue}">
                         </lvc:ScatterSeries>
@@ -54,12 +54,6 @@
                         <lvc:Axis Name="ChartAxisY"></lvc:Axis>
                     </lvc:CartesianChart.AxisY>
                 </lvc:CartesianChart>
-
-                <!--<Line Name ="ChartLine" Stroke="#FFAB91" StrokeThickness="1.5"
-                  Visibility="{Binding ChartLineVisibilityX, Mode = TwoWay}"
-                  X1="{Binding ChartLineX, Mode=TwoWay}" X2="{Binding ChartLineX, Mode=TwoWay}" 
-                  Y1="6" Y2="{Binding ChartLineY2}">
-                </Line>-->
 
             </Grid>
 
@@ -81,14 +75,14 @@
                                 TextAlignment="Right" Padding="40, 5, 20, 5" VerticalAlignment="Center" Text="{Binding LineGraphName, Mode=TwoWay}" Grid.Column="0"/>
 
                     <Border BorderBrush="White" BorderThickness="2, 0, 0, 0" Grid.Column="1" HorizontalAlignment="Center">
-                        <TextBlock> </TextBlock>
+                        <TextBlock></TextBlock>
                     </Border>
 
                     <TextBlock FontSize="20" FontFamily="Global User Interface" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                                 TextAlignment="Left" Padding="20, 5, 0, 5" VerticalAlignment="Center" Text="{Binding FinalOptimizedValueString, Mode=TwoWay}" Grid.Column="2"/>
 
                 </Grid>
-            </Grid>
+        </Grid>
         </Grid>
     </materialDesign:Card>
 

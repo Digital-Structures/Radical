@@ -23,10 +23,6 @@ namespace DSOptimization
         public const System.Globalization.NumberStyles STYLEINT = System.Globalization.NumberStyles.Integer;
     }
 
-    /// <summary>
-    /// Interaction logic for BaseControl
-    /// </summary>
-
     //BASE CONTROL
     //Base class for variable control and constraint control UI elements
     public class BaseControl : UserControl

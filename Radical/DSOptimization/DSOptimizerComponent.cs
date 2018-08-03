@@ -155,18 +155,11 @@ namespace DSOptimization
             {
                 MyComponent.IsWindowOpen = true;
 
-                //Would be nice to not need the HelperFunctions file
                 Design design = new Design(MyComponent);
-
-                RadicalVM radicalVM = new RadicalVM(design, this.MyComponent);
-                //StepperVM stepperVM = new StepperVM(this.MyComponent, design);
 
                 Thread viewerThread = new Thread(delegate ()
                 {
-                    Window viewer = new Radical.RadicalWindow(radicalVM);
-
-                    //Window viewer = new StepperWindow(stepperVM);
-
+                    Window viewer = new DSOptimizeWindow(design, this.MyComponent);
                     viewer.Show();
                     System.Windows.Threading.Dispatcher.Run();
                 });

@@ -7,6 +7,7 @@ using Radical.Integration;
 using NLoptNet;
 using System.Windows.Markup;
 using System.Windows.Data;
+using LiveCharts;
 using System.Windows;
 using DSOptimization;
 using LiveCharts;
@@ -103,6 +104,13 @@ namespace Radical
             {
                 graph.UpdateLine(iteration);
             }
+        }
+
+        //OPTIMIZE
+        public void Optimize(RadicalWindow radicalWindow)
+        {
+            RadicalOptimizer opt = new RadicalOptimizer(this.Design, radicalWindow);
+            opt.RunOptimization();
         }
 
         //SORT VARIABLES
@@ -395,10 +403,5 @@ namespace Radical
         };
         #endregion
 
-        public void Optimize(RadicalWindow radicalWindow)
-        {
-            RadicalOptimizer opt = new RadicalOptimizer(this.Design, radicalWindow);
-            opt.RunOptimization();
-        }
     }
 }

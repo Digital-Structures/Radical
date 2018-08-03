@@ -35,7 +35,7 @@ namespace Stepper
         public StepperVM() { }
 
         //CONSTRUCTOR
-        public StepperVM(DSOptimizerComponent stepper, Design design)
+        public StepperVM(Design design, DSOptimizerComponent stepper)
         {
             //StepperComponent
             this.MyComponent = stepper;
@@ -44,6 +44,8 @@ namespace Stepper
             this.Design = design;
             this.index = 0;
             this.step = 0.05;
+
+            this.trackedstep = 1;
 
             //Set up Objective View Models and list of objective value evolution 
             this.ObjectiveEvolution = new ChartValues<ChartValues<double>>();
@@ -88,6 +90,7 @@ namespace Stepper
             }
         }
 
+        //OBJECTIVE INDEX
         private int index;
         public int ObjIndex
         {
@@ -95,11 +98,29 @@ namespace Stepper
             set { CheckPropertyChanged<int>("ObjIndex", ref index, ref value); }
         }
 
+        //STEP SIZE
         private double step;
         public double StepSize
         {
             get { return step; }
             set { CheckPropertyChanged<double>("StepSize", ref step, ref value); }
+        }
+
+        //TRACKED STEP
+        //Step number user is tracking with the UI slider
+        //To potentially be reverted back to
+        private int trackedstep;
+        public int TrackedStep
+        {
+            get { return this.trackedstep; }
+            set { CheckPropertyChanged<int>("TrackedStep", ref trackedstep, ref value); }
+        }
+
+        //NUM STEPS
+        //The number of steps taken so far (for graph tracking purposes)
+        public int NumSteps
+        {
+            get { return this.ObjectiveEvolution[0].Count - 1; }
         }
 
         //Objective Names Changed
@@ -132,6 +153,8 @@ namespace Stepper
                 this.VariableEvolution[i].Add(var.Value);
                 i++;
             }
+
+            FirePropertyChanged("NumSteps");
         }
 
         //ON WINDOW CLOSING

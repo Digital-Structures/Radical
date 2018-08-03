@@ -1,0 +1,35 @@
+﻿<Window x:Class="DSOptimization.DSOptimizeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DSOptimization"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:Converters="clr-namespace:MaterialDesignThemes.Wpf.Converters;assembly=MaterialDesignThemes.Wpf" 
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        xmlns:nlopt="clr-namespace:NLoptNet;assembly=NLoptNet"
+        mc:Ignorable="d"
+        Title="DS Optimization Tools" Height="600" Width="1000"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="12"
+        FontFamily="Global User Interface"
+        Closing="Window_Closing"
+        >
+    
+    <Grid>
+        <TabControl>
+            <TabItem Name="StepperTab" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <TabItem.Header>
+                    <TextBlock FontSize="18"> Stepper</TextBlock>
+                </TabItem.Header>
+            </TabItem>
+
+            <TabItem Name="RadicalTab" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <TabItem.Header>
+                    <TextBlock FontSize="18"> Radical</TextBlock>
+                </TabItem.Header>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
