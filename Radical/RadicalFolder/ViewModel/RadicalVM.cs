@@ -395,7 +395,7 @@ namespace Radical
         };
         #endregion
 
-        internal void Optimize(RadicalWindow radicalWindow)
+        public void Optimize(RadicalWindow radicalWindow)
         {
             RadicalOptimizer opt = new RadicalOptimizer(this.Design, radicalWindow);
             opt.RunOptimization();

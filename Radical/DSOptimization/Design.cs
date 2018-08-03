@@ -61,6 +61,10 @@ namespace DSOptimization
                 this.Geometries.Add(new DesignCurve(param, surf));
             }
 
+            // Add geometries to variables list 
+            // not the cleanest way to do it, review code structure
+            if (Geometries.Any()) { this.Variables.AddRange(Geometries.Select(x => x.Variables).SelectMany(x => x).ToList()); } 
+
             // ADD CONSTRAINTS
             for (int i = 0; i < component.Constraints.Count; i++)
             {

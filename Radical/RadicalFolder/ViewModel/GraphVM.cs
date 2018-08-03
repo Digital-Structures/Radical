@@ -314,7 +314,7 @@ namespace Radical
             {
                 if(CheckPropertyChanged<double>("FinalOptimizedValue", ref _finaloptimizedvalue, ref value))
                 {
-                    FinalOptimizedValueString = String.Format("{0:0.00}", FinalOptimizedValue);
+                    FinalOptimizedValueString = String.Format("{0:0.000000}", FinalOptimizedValue);
                 }
             }
         }

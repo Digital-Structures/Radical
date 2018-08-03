@@ -42,7 +42,6 @@ namespace Radical
             //this.SecondaryAlg = NLoptAlgorithm.LN_COBYLA;
             BuildWrapper();
             SetBounds();
-            Solver.SetMinObjective((x) => Objective(x));
 
             StoredMainValues = new ChartValues<double>();
             StoredConstraintValues = new ChartValues<ChartValues<double>>();
@@ -63,6 +62,8 @@ namespace Radical
                     }
                 }
             }
+
+            Solver.SetMinObjective((x) => Objective(x));
         }
 
         public void BuildWrapper()
@@ -114,6 +115,7 @@ namespace Radical
                 Thread.Sleep(1);
             }
 
+            //double objective = Design.CurrentScore; 
             double objective = Design.Objectives[0];
 
             //If RefreshMode == Silent then values are stored in a local list so that the graph is not updated
