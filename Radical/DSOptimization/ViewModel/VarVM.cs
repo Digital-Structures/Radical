@@ -43,7 +43,7 @@ namespace DSOptimization
 
         //DIRECTION
         private Direction _dir;
-        public int Dir
+        public virtual int Dir
         {
             get
             {
@@ -79,7 +79,7 @@ namespace DSOptimization
         //VALUE
         //Current value of the individual variable
         private double _value;
-        public double Value
+        public virtual double Value
         {
             get
             { return _value; }
@@ -100,7 +100,7 @@ namespace DSOptimization
         //MIN
         //Minimum value the variable should hold
         private double _min;
-        public double Min
+        public virtual double Min
         {
             get
             { return _min; }
@@ -131,7 +131,7 @@ namespace DSOptimization
         //MAX
         //Maximum value the variable should hold
         private double _max;
-        public double Max
+        public virtual double Max
         {
             get
             { return _max; }
@@ -161,7 +161,7 @@ namespace DSOptimization
         //IS ACTIVE
         //Determines whether variable will be considered in optimization
         private bool _isactive;
-        public bool IsActive
+        public virtual bool IsActive
         {
             get
             {
@@ -187,7 +187,7 @@ namespace DSOptimization
 
         //OPTIMIZATION FINISHED
         //Update UI sliders to reflect optimized values
-        public void OptimizationFinished()
+        public virtual void OptimizationFinished()
         {
             this.ChangesEnabled = true;
             this.Value = DesignVar.CurrentValue;

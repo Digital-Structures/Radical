@@ -20,13 +20,17 @@
 
         <lvc:CartesianChart Grid.Row="1" Series="{Binding ObjectiveSeries, Mode=OneWay}" LegendLocation="Right" Hoverable="False" DataTooltip="{x:Null}">
             <lvc:CartesianChart.AxisY>
-                <lvc:Axis Name="YAxis" FontSize="18" Margin="5">
+                <lvc:Axis Name="YAxis" FontSize="18" Margin="5" MaxValue="{Binding YMax, Mode=OneWayToSource}" MinValue="{Binding YMax, Mode=OneWayToSource}">
                 </lvc:Axis>
             </lvc:CartesianChart.AxisY>
             <lvc:CartesianChart.AxisX>
                 <lvc:Axis Name="XAxis" FontSize="18" Margin="5">
+                    <lvc:Axis.Sections>
+                        <lvc:AxisSection Value="{Binding GraphStep}" Stroke="{DynamicResource SecondaryAccentBrush}" StrokeThickness="3" Fill="Transparent">
+                        </lvc:AxisSection>
+                    </lvc:Axis.Sections>
                     <lvc:Axis.Separator>
-                        <lvc:Separator IsEnabled="False" Step="1"></lvc:Separator>
+                        <lvc:Separator IsEnabled="False" Step="{Binding XAxisSteps}"></lvc:Separator>
                     </lvc:Axis.Separator>
                 </lvc:Axis>
             </lvc:CartesianChart.AxisX>

@@ -27,10 +27,10 @@
                         <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.BlueGrey.Primary.xaml" />
                     </ResourceDictionary.MergedDictionaries>
 
-                    <SolidColorBrush x:Key="BackgroundHueDarkBrush" Color="#cacbcd"/>
-                    <SolidColorBrush x:Key="BackgroundHueMidBrush" Color="#dcddde"/>
+                    <SolidColorBrush x:Key="BackgroundHueDarkBrush" Color="#cacbcd" Opacity="0.10"/>
+                    <SolidColorBrush x:Key="BackgroundHueMidBrush" Color="#cacbcd" Opacity="0.25"/>
 
-                    <SolidColorBrush x:Key="BackgroundHueDarkForegroundBrush" Color="White"/>
+                    <SolidColorBrush x:Key="LightTextBrush" Color="White"/>
                     <SolidColorBrush x:Key="BackgroundHueDarkSubtextForegroundBrush" Color="Gray"/>
                     <SolidColorBrush x:Key="BackgroundHueMidForegroundBrush" Color="DarkGray"/>
                     <SolidColorBrush x:Key="BackgroundHueLightForegroundBrush" Color="Black"/>
@@ -87,7 +87,7 @@
         </EventTrigger>
     </UserControl.Triggers>
 
-    <Grid Margin="25" Name="MainGrid">
+    <Grid Margin="15" Name="MainGrid" PreviewKeyDown="MainGrid_PreviewKeyDown">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -111,16 +111,56 @@
                 </Button>
             </Grid>
 
-            <Expander Grid.Row="1" Name="VariablesExpander" Width="0" Padding="20,0" Background="Transparent" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+            <Expander Grid.Row="1" Name="VariablesExpander" Width="0" Padding="20,0" Background="Transparent" Foreground="{DynamicResource LightTextBrush}">
                 <Expander.Header>
-                    <TextBlock FontSize="24" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"> Variables</TextBlock>
+                    <TextBlock FontSize="24" Foreground="{DynamicResource LightTextBrush}"> Variables</TextBlock>
                 </Expander.Header>
-                <StackPanel Name="VariablesPanel" Width="Auto">
+                <StackPanel>
+                    <Border Background="{DynamicResource MaterialDesignDivider}"
+                                Height="1"
+                                HorizontalAlignment="Stretch"
+                                SnapsToDevicePixels="True" />
+                    <Expander Name="SlidersExpander" Padding ="20,0,0,0" Visibility="Visible" Background="Transparent" Foreground="{DynamicResource LightTextBrush}">
+                        <Expander.Header>
+                            <StackPanel Orientation="Horizontal" Margin="-20,-25">
+                                <Border Background="{DynamicResource PrimaryHueMidBrush}" Width="5" VerticalAlignment="Stretch"></Border>
+                                <Label Padding="30,10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource LightTextBrush}">
+                                    Sliders
+                                </Label>
+                            </StackPanel>
+                        </Expander.Header>
+                        <StackPanel  Name="Sliders" HorizontalAlignment="Stretch">
+                            <Border Background="{DynamicResource PrimaryHueMidBrush}"
+                                        Height="1"
+                                        HorizontalAlignment="Stretch"
+                                        SnapsToDevicePixels="True" />
+                        </StackPanel>
+                    </Expander>
+                    <Border Background="{DynamicResource MaterialDesignDivider}"
+                                Height="1"
+                                HorizontalAlignment="Stretch"
+                                SnapsToDevicePixels="True" />
+                    <Expander Name="GeometriesExpander" Padding="20,0,0,0" Visibility="Visible" Background="Transparent" Foreground="{DynamicResource LightTextBrush}">
+                        <Expander.Header>
+                            <StackPanel Orientation="Horizontal" Margin="-20,-25">
+                                <Border Background="{DynamicResource PrimaryHueMidBrush}" Width="5" VerticalAlignment="Stretch"></Border>
+                                <Label Padding="30,10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource LightTextBrush}">
+                                    Geometries
+                                </Label>
+                            </StackPanel>
+                        </Expander.Header>
+                        <StackPanel Name="Geometries" HorizontalAlignment="Stretch">
+                            <Border Background="{DynamicResource PrimaryHueMidBrush}"
+                                        Height="1"
+                                        HorizontalAlignment="Stretch"
+                                        SnapsToDevicePixels="True" />
+                        </StackPanel>
+                    </Expander>
                 </StackPanel>
             </Expander>
         </Grid>
 
-        <materialDesign:Card Name="ChartCard" Grid.Column="1" Margin="10,0" Background="{DynamicResource MaterialDesignPaper}">
+        <materialDesign:Card Name="ChartCard" Grid.Column="1" Margin="10,0" Padding="20,0" Background="{DynamicResource MaterialDesignPaper}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"></RowDefinition>
@@ -131,95 +171,30 @@
                 <DockPanel Name="ChartPanel" Grid.Row="0">
                 </DockPanel>
 
-                <Slider Grid.Row="1" HorizontalAlignment="Stretch" Margin="50,10" Foreground="{DynamicResource SecondaryAccentBrush}"
+                <Slider Name="GraphSlider" Grid.Row="1" HorizontalAlignment="Stretch" Margin="43,10,70,10" Foreground="{DynamicResource SecondaryAccentBrush}" Visibility="Hidden"
                         Value="{Binding TrackedStep, Mode=TwoWay}" Minimum="0" Maximum="{Binding NumSteps}" FontSize="12" TickFrequency="1" IsSnapToTickEnabled="True"></Slider>
 
-                <Grid Name="ButtonGrid" Grid.Row="2" VerticalAlignment="Bottom" Height="150">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
+                <Button Grid.Row="2" Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="10" Click="ButtonReset_Click">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                    </Grid.RowDefinitions>
-
-                    <Grid Grid.Column="0" Grid.Row="0" Margin="5">
-                        <Button Name="ButtonStepUp" Grid.Column="1" VerticalAlignment="Bottom" Width="Auto" Height="40"
-                Style="{StaticResource MaterialDesignRaisedLightButton}"
-                Click="ButtonPlay_Click" >
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-
-                                <materialDesign:PackIcon Grid.Column="0" HorizontalAlignment="Left" Margin="0,0,60,0" Kind="ArrowUp" Height="30" Width="30"/>
-                                <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"> STEP UP</TextBlock>
-                                <materialDesign:PackIcon Grid.Column="2" HorizontalAlignment="Left" Margin="60,0,0,0" Kind="ArrowUp" Height="30" Width="30"/>
-
-                            </Grid>
-                        </Button>
+                        <materialDesign:PackIcon Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,60,0" Kind="Refresh" Height="30" Width="30"/>
+                        <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"> RESET to STEP</TextBlock>
+                        <materialDesign:PackIcon Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="60,0,0,0" Kind="Refresh" Height="30" Width="30"/>
                     </Grid>
-
-                    <Grid Grid.Column="0" Grid.Row="1" Margin="5">
-                        <Button Name="ButtonStepIso" Grid.Column="1" VerticalAlignment="Bottom" Width="Auto" Height="40"
-                Style="{StaticResource MaterialDesignRaisedDarkButton}"
-                Click="ButtonPlay_Click" >
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-
-                                <materialDesign:PackIcon Grid.Column="0" HorizontalAlignment="Left" Kind="ArrowLeft" Margin="0,0,10,0" Height="30" Width="30"/>
-                                <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"> STEP ISOPERFORMANCE</TextBlock>
-                                <materialDesign:PackIcon Grid.Column="2" HorizontalAlignment="Left" Kind="ArrowRight" Margin="10,0,0,0" Height="30" Width="30"/>
-
-                            </Grid>
-                        </Button>
-                    </Grid>
-
-                    <Grid Grid.Column="0" Grid.Row="2" Margin="5">
-                        <Button Name="ButtonStepDown" Grid.Column="1" VerticalAlignment="Bottom" Width="Auto" Height="40"
-                Style="{StaticResource MaterialDesignRaisedLightButton}"
-                Click="ButtonPlay_Click" >
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-
-                                <materialDesign:PackIcon Grid.Column="0" HorizontalAlignment="Left" Margin="0,0,60,0" Kind="ArrowDown" Height="30" Width="30"/>
-                                <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"> STEP DOWN</TextBlock>
-                                <materialDesign:PackIcon Grid.Column="2" HorizontalAlignment="Left" Margin="60,0,0,0" Kind="ArrowDown" Height="30" Width="30"/>
-
-                            </Grid>
-                        </Button>
-                    </Grid>
-
-                    <Grid Grid.Column="1" Grid.RowSpan="3">
-                        <Button Name="ButtonGradient" Grid.Column="1" VerticalAlignment="Stretch" Width="110" Margin="5" Height="{Binding ActualHeight, ElementName=ButtonGrid}"
-                Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                                materialDesign:ShadowAssist.ShadowDepth="Depth5"
-                Click="ButtonPlay_Click" >
-                            <TextBlock TextAlignment="Center" TextWrapping="Wrap"> CALCULATE GRADIENT</TextBlock>
-                        </Button>
-                    </Grid>
-                </Grid>
+                </Button>
             </Grid>
         </materialDesign:Card>
 
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
 
             <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
@@ -243,6 +218,85 @@
                     </StackPanel>
                 </Expander>
             </ScrollViewer>
+
+            <Grid Name="ButtonGrid" Grid.Row="2" VerticalAlignment="Bottom" Height="150">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Column="0" Grid.Row="0" Margin="5">
+                    <Button Name="ButtonStepUp" Grid.Column="1" VerticalAlignment="Bottom" Width="Auto" Height="40"
+                Style="{StaticResource MaterialDesignRaisedLightButton}"
+                Click="ButtonPlay_Click" >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <materialDesign:PackIcon Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,60,0" Kind="ArrowUp" Height="30" Width="30"/>
+                            <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"> STEP UP</TextBlock>
+                            <materialDesign:PackIcon Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="60,0,0,0" Kind="ArrowUp" Height="30" Width="30"/>
+
+                        </Grid>
+                    </Button>
+                </Grid>
+
+                <Grid Grid.Column="0" Grid.Row="1" Margin="5">
+                    <Button Name="ButtonStepIso" Grid.Column="1" VerticalAlignment="Bottom" Width="Auto" Height="40"
+                Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                Click="ButtonPlay_Click" >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <materialDesign:PackIcon Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Kind="ArrowLeft" Margin="0,0,10,0" Height="30" Width="30"/>
+                            <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"> STEP ISOPERFORMANCE</TextBlock>
+                            <materialDesign:PackIcon Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Kind="ArrowRight" Margin="10,0,0,0" Height="30" Width="30"/>
+
+                        </Grid>
+                    </Button>
+                </Grid>
+
+                <Grid Grid.Column="0" Grid.Row="2" Margin="5">
+                    <Button Name="ButtonStepDown" Grid.Column="1" VerticalAlignment="Bottom" Width="Auto" Height="40"
+                Style="{StaticResource MaterialDesignRaisedLightButton}"
+                Click="ButtonPlay_Click" >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <materialDesign:PackIcon Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,60,0" Kind="ArrowDown" Height="30" Width="30"/>
+                            <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"> STEP DOWN</TextBlock>
+                            <materialDesign:PackIcon Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="60,0,0,0" Kind="ArrowDown" Height="30" Width="30"/>
+
+                        </Grid>
+                    </Button>
+                </Grid>
+
+                <Grid Grid.Column="1" Grid.RowSpan="3">
+                    <Button Name="ButtonGradient" Grid.Column="1" VerticalAlignment="Stretch" Width="110" Margin="5" Height="{Binding ActualHeight, ElementName=ButtonGrid}"
+                Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth5"
+                Click="ButtonPlay_Click" >
+                        <TextBlock TextAlignment="Center" TextWrapping="Wrap"> CALCULATE GRADIENT</TextBlock>
+                    </Button>
+                </Grid>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

@@ -107,6 +107,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DSOptimization\IOptimizeToolVM.cs" />
     <Compile Include="DSOptimization\View\DSOptimizeWindow.xaml.cs">
       <DependentUpon>DSOptimizeWindow.xaml</DependentUpon>
     </Compile>

@@ -19,17 +19,21 @@ namespace Stepper
 {
     //STEPPER VM
     //View Model to mediate communication between StepperWindow and StepperComponent
-    public class StepperVM : BaseVM
+    public class StepperVM : BaseVM, IOptimizeToolVM
     {
         //Variables and properties
-        private DSOptimizerComponent MyComponent;
+        public DSOptimizerComponent Component { get; set; }
 
         public ChartValues<ChartValues<double>> ObjectiveEvolution;
         public List<List<double>> VariableEvolution;
-        public List<ObjectiveVM> Objectives;
-        public List<VarVM> Variables;
 
-        public GraphVM ObjectiveChart;
+        public List<ObjectiveVM> Objectives;
+        public List<VarVM> Variables { get; set; }
+        public List<VarVM> NumVars { get; set; }
+        public List<List<VarVM>> GeoVars { get; set; }
+        public List<GroupVarVM> GroupVars { get; set; }
+
+        public StepperGraphVM ObjectiveChart;
         public Design Design;
 
         public StepperVM() { }
@@ -38,14 +42,27 @@ namespace Stepper
         public StepperVM(Design design, DSOptimizerComponent stepper)
         {
             //StepperComponent
-            this.MyComponent = stepper;
+            this.Component = stepper;
 
             //DesignSystem
             this.Design = design;
             this.index = 0;
             this.step = 0.05;
+            this.trackedstep = 0;
 
-            this.trackedstep = 1;
+            //Variable Lists
+            //Separate for display
+            this.NumVars = new List<VarVM>();
+            this.GeoVars = new List<List<VarVM>>();
+            this.GroupVars = new List<GroupVarVM>();
+            SortVariables();
+
+            //Variable lists
+            //Combined for easy value updates
+            this.Variables = new List<VarVM>();
+            this.Variables.AddRange(this.NumVars);
+            this.Variables.AddRange(this.GeoVars.SelectMany(x => x).ToList());
+            
 
             //Set up Objective View Models and list of objective value evolution 
             this.ObjectiveEvolution = new ChartValues<ChartValues<double>>();
@@ -57,7 +74,7 @@ namespace Stepper
             foreach (double objective in this.Design.Objectives)
             {
                 ObjectiveVM Obj = new ObjectiveVM(objective, this);
-                Obj.Name = this.MyComponent.Params.Input[0].Sources[i].Name;
+                Obj.Name = this.Component.Params.Input[0].Sources[i].Name;
                 Obj.IsActive = (this.ObjIndex == i); //Active objective specified by component input parameter
 
                 this.Objectives.Add(Obj);
@@ -65,13 +82,11 @@ namespace Stepper
                 i++;
             }
 
-            //Set up Variable View Models and list of variable value evolution 
+            //Set up list of variable value evolution 
             this.VariableEvolution = new List<List<double>>();
-            this.Variables = new List<VarVM>();
-            foreach (IVariable var in this.Design.Variables)
+            foreach (VarVM var in this.Variables)
             {
-                this.Variables.Add(new VarVM(var));
-                this.VariableEvolution.Add(new List<double> { var.CurrentValue });
+                this.VariableEvolution.Add(new List<double> { var.Value });
             }
         }
 
@@ -113,7 +128,11 @@ namespace Stepper
         public int TrackedStep
         {
             get { return this.trackedstep; }
-            set { CheckPropertyChanged<int>("TrackedStep", ref trackedstep, ref value); }
+            set
+            {
+                if (CheckPropertyChanged<int>("TrackedStep", ref trackedstep, ref value))
+                    this.ObjectiveChart.GraphStep = value;
+            }
         }
 
         //NUM STEPS
@@ -121,6 +140,44 @@ namespace Stepper
         public int NumSteps
         {
             get { return this.ObjectiveEvolution[0].Count - 1; }
+        }
+
+        //SORT VARIABLES
+        //Separate geometric and numeric variables
+        //Sorting helps with UI stack panel organization
+        private void SortVariables()
+        {
+            //GEOMETRIES
+            int geoIndex = 1;
+            foreach (IDesignGeometry geo in this.Design.Geometries)
+            {
+                List<VarVM> singleGeoVars = new List<VarVM> { };
+
+                //Add all the variables for that geometry to a sublist of varVMs
+                int varIndex = 0;
+                foreach (GeoVariable var in geo.Variables)
+                {
+                    VarVM geoVar = new VarVM(var);
+                    int dir = var.Dir;
+
+                    //Logical default naming of variable
+                    //e.g. G1.u1v1.X
+                    geoVar.Name += ((GeoVariable)geoVar.DesignVar).PointName;
+
+                    singleGeoVars.Add(geoVar);
+                    varIndex++;
+                }
+
+                this.GeoVars.Add(singleGeoVars);
+                geoIndex++;
+            }
+
+            //SLIDERS
+            /***This is probably not the best way to do this as it involves looping over geometry variables already stored***/
+            foreach (var numVar in this.Design.Variables.Where(numVar => numVar is SliderVariable))
+            {
+                this.NumVars.Add(new VarVM(numVar));
+            }
         }
 
         //Objective Names Changed
@@ -135,8 +192,12 @@ namespace Stepper
             StepperOptimizer optimizer = new StepperOptimizer(this.Design, this.ObjIndex, dir, this.StepSize);
             optimizer.Optimize();
 
-            foreach (VarVM var in this.Variables)
+            //Update variable values at the end of the optimization
+            foreach (GroupVarVM var in this.GroupVars)
                 var.OptimizationFinished();
+            foreach (List<VarVM> geo in this.GeoVars)
+                foreach (VarVM var in geo)
+                    var.OptimizationFinished();
 
             //Update objective evolution
             int i = 0;
@@ -155,6 +216,21 @@ namespace Stepper
             }
 
             FirePropertyChanged("NumSteps");
+            this.ObjectiveChart.XAxisSteps = this.NumSteps / 10 + 1;
+        }
+
+        //RESET
+        //Allow user to return to previous step systems
+        public void Reset()
+        {
+            var step = this.TrackedStep;
+
+            int i = 0;
+            foreach(VarVM var in this.Variables)
+            {
+                var.Value = this.VariableEvolution[i][step];
+                i++;
+            }
         }
 
         //ON WINDOW CLOSING
@@ -162,7 +238,7 @@ namespace Stepper
         //(and therefore a new window can open on double click)
         public void OnWindowClosing()
         {
-            this.MyComponent.IsWindowOpen = false;
+            this.Component.IsWindowOpen = false;
         }
     }
 }

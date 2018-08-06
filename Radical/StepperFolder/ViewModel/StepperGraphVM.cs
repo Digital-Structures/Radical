@@ -15,15 +15,15 @@ namespace Stepper
     public class StepperGraphVM : BaseVM
     {
         private StepperVM StepperVM;
-        private List<SolidColorBrush> Colors;
+        public List<SolidColorBrush> Colors;
 
         //CONSTRUCTOR
-        public StepperGraphVM(StepperVM VM)
+        public StepperGraphVM(StepperVM VM, List<SolidColorBrush> colors)
         {
             this.StepperVM = VM;
-            this.Colors = new List<SolidColorBrush>();
+            this.Colors = colors;
+            this.axissteps = 1;
 
-            InitializeColors();
             InitializeGraphSeries();
         }
 
@@ -35,14 +35,23 @@ namespace Stepper
             get { return this.GraphSeries; }
         }
 
-        //INITIALIZE COLORS
-        public void InitializeColors()
+        //TRACKED STEP
+        private int step;
+        public int GraphStep
         {
-            var stroke1 = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ff9100"));
-            this.Colors.Add(stroke1);
+            get { return this.step; }
+            set
+            {
+                CheckPropertyChanged<int>("GraphStep", ref step, ref value);
+            }
+        }
 
-            var stroke2 = (SolidColorBrush)(new BrushConverter().ConvertFrom("#607d8b"));
-            this.Colors.Add(stroke2);
+        //XAxisSteps
+        private int axissteps;
+        public int XAxisSteps
+        {
+            get { return axissteps; }
+            set { CheckPropertyChanged<int>("XAxisSteps", ref axissteps, ref value); }
         }
 
         //INITIALIZE GRAPH SERIES
@@ -63,7 +72,7 @@ namespace Stepper
                     StrokeThickness = 5,
                     Fill = Brushes.Transparent,
                     LineSmoothness = 0,
-                    PointGeometrySize = 20
+                    PointGeometrySize = 15
                 });
 
                 i++;
