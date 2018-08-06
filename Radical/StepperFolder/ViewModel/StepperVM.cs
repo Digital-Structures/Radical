@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Markup;
 using System.Windows.Data;
+using System.Windows.Media;
 using System.Windows;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Special;
@@ -24,7 +25,8 @@ namespace Stepper
         //Variables and properties
         public DSOptimizerComponent Component { get; set; }
 
-        public ChartValues<ChartValues<double>> ObjectiveEvolution;
+        public ChartValues<ChartValues<double>> ObjectiveEvolution_Norm;
+        public ChartValues<ChartValues<double>> ObjectiveEvolution_Abs;
         public List<List<double>> VariableEvolution;
 
         public List<ObjectiveVM> Objectives;
@@ -33,7 +35,8 @@ namespace Stepper
         public List<List<VarVM>> GeoVars { get; set; }
         public List<GroupVarVM> GroupVars { get; set; }
 
-        public StepperGraphVM ObjectiveChart;
+        public StepperGraphVM ObjectiveChart_Norm;
+        public StepperGraphVM ObjectiveChart_Abs;
         public Design Design;
 
         public StepperVM() { }
@@ -65,20 +68,21 @@ namespace Stepper
             
 
             //Set up Objective View Models and list of objective value evolution 
-            this.ObjectiveEvolution = new ChartValues<ChartValues<double>>();
+            this.ObjectiveEvolution_Norm = new ChartValues<ChartValues<double>>();
+            this.ObjectiveEvolution_Abs = new ChartValues<ChartValues<double>>();
             this.Objectives = new List<ObjectiveVM>();
             int i = 0;
 
-            //Copied what was done to set up num vars in display
-            //Still not best solution --> consider creating a seperate list in design 
+            //Set up list of objective evolution
             foreach (double objective in this.Design.Objectives)
             {
                 ObjectiveVM Obj = new ObjectiveVM(objective, this);
-                Obj.Name = this.Component.Params.Input[0].Sources[i].Name;
-                Obj.IsActive = (this.ObjIndex == i); //Active objective specified by component input parameter
+                Obj.Name = this.Component.Params.Input[0].Sources[i].NickName;
+                Obj.IsActive = (this.ObjIndex == i);
 
                 this.Objectives.Add(Obj);
-                this.ObjectiveEvolution.Add(new ChartValues<double> { objective });
+                this.ObjectiveEvolution_Norm.Add(new ChartValues<double> { 1 });
+                this.ObjectiveEvolution_Abs.Add(new ChartValues<double> { objective });
                 i++;
             }
 
@@ -88,6 +92,11 @@ namespace Stepper
             {
                 this.VariableEvolution.Add(new List<double> { var.Value });
             }
+
+            //Set up both charts
+            this.ObjectiveChart_Norm = new StepperGraphVM(ObjectiveEvolution_Norm);
+            this.ObjectiveChart_Abs = new StepperGraphVM(ObjectiveEvolution_Abs);
+            this.ObjectiveNamesChanged();
         }
 
         //OBJECTIVE NAMES
@@ -131,7 +140,11 @@ namespace Stepper
             set
             {
                 if (CheckPropertyChanged<int>("TrackedStep", ref trackedstep, ref value))
-                    this.ObjectiveChart.GraphStep = value;
+                {
+                    this.ObjectiveChart_Norm.GraphStep = value;
+                    this.ObjectiveChart_Abs.GraphStep = value;
+                }
+                    
             }
         }
 
@@ -139,7 +152,7 @@ namespace Stepper
         //The number of steps taken so far (for graph tracking purposes)
         public int NumSteps
         {
-            get { return this.ObjectiveEvolution[0].Count - 1; }
+            get { return this.ObjectiveEvolution_Norm[0].Count - 1; }
         }
 
         //SORT VARIABLES
@@ -183,7 +196,19 @@ namespace Stepper
         //Objective Names Changed
         public void ObjectiveNamesChanged()
         {
-            FirePropertyChanged("ObjectiveNames");           
+            FirePropertyChanged("ObjectiveNames");
+
+            if (this.ObjectiveChart_Abs != null)
+            {
+                int i = 0;
+                foreach (LineSeries objectiveSeries in this.ObjectiveChart_Norm.ObjectiveSeries)
+                {
+                    objectiveSeries.SetBinding(LineSeries.TitleProperty, new Binding { Source = ObjectiveNames[i] });
+                    ((LineSeries)this.ObjectiveChart_Abs.ObjectiveSeries[i]).SetBinding(LineSeries.TitleProperty, new Binding { Source = ObjectiveNames[i] });
+
+                    i++;
+                }
+            }
         }
 
         //OPTIMIZE
@@ -201,9 +226,14 @@ namespace Stepper
 
             //Update objective evolution
             int i = 0;
-            foreach (ChartValues<double> objective in this.ObjectiveEvolution)
+            foreach (ChartValues<double> objective in this.ObjectiveEvolution_Abs)
             {
-                objective.Add(this.Design.Objectives[i]);
+                double value = this.Design.Objectives[i];
+                objective.Add(value);
+
+                double normalized = value / objective[0];
+                this.ObjectiveEvolution_Norm[i].Add(normalized);
+
                 i++;
             }
 
@@ -215,8 +245,10 @@ namespace Stepper
                 i++;
             }
 
+            //Rescale X-Axis every 10 steps for appearance
             FirePropertyChanged("NumSteps");
-            this.ObjectiveChart.XAxisSteps = this.NumSteps / 10 + 1;
+            this.ObjectiveChart_Norm.XAxisSteps = this.NumSteps / 10 + 1;
+            this.ObjectiveChart_Abs.XAxisSteps = this.NumSteps / 10 + 1;
         }
 
         //RESET

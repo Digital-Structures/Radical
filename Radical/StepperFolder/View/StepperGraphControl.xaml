@@ -18,7 +18,10 @@
             Exploration History
         </TextBlock>
 
-        <lvc:CartesianChart Grid.Row="1" Series="{Binding ObjectiveSeries, Mode=OneWay}" LegendLocation="Right" Hoverable="False" DataTooltip="{x:Null}">
+        <lvc:CartesianChart Grid.Row="1" Name="Graph" Series="{Binding ObjectiveSeries, Mode=OneWay}" LegendLocation="Top"  Hoverable="False" DataTooltip="{x:Null}">
+            <lvc:CartesianChart.ChartLegend>
+                <lvc:DefaultLegend BulletSize="20"/>
+            </lvc:CartesianChart.ChartLegend>
             <lvc:CartesianChart.AxisY>
                 <lvc:Axis Name="YAxis" FontSize="18" Margin="5" MaxValue="{Binding YMax, Mode=OneWayToSource}" MinValue="{Binding YMax, Mode=OneWayToSource}">
                 </lvc:Axis>

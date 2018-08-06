@@ -164,20 +164,6 @@ namespace Radical
                 this.ConstraintsExpander.Visibility = Visibility.Collapsed;
         }
 
-        //public void UpdateAllGraphs()
-        //{
-        //    foreach (KeyValuePair<string,List<GraphControl>> pair in this.GraphControls)
-        //    {
-        //        if(pair.Key=="Main")
-        //            pair.Value[0].UpdateWindowGeneral(this.RadicalVM.Design.ScoreEvolution);
-        //        else
-        //        {
-        //            for (int i=0; i<this.GraphControls[pair.Key].Count; i++)
-        //                pair.Value[i].UpdateWindowGeneral(this.RadicalVM.Design.ConstraintEvolution[i]);
-        //        }                   
-        //    }
-        //}
-
         public void GraphsShowLine()
         {
             foreach (KeyValuePair<string,List<GraphVM>> pair in this.RadicalVM.Graphs)
@@ -390,20 +376,6 @@ namespace Radical
             {
                 this.ActiveGraphs[0].GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
                 this.ActiveGraphs[0].GraphVM.CalculateChartLineY2();
-
-                //foreach (GraphControl g in this.ActiveGraphs)
-                //{
-                //    g.GraphGrid.Height = 0.40 * this.MainGrid.ActualHeight;
-                //    g.GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
-
-                //    //    //g.Card.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
-                //    //    //var width = g.Card.DesiredSize.Width;
-                //    //    //g.Chart.Width = 0.9 * width;
-                //}
-
-                //    g.ChartRow.Visibility = Visibility.Collapsed;
-                //foreach (GraphControl g in this.ActiveGraphs)
-                //    g.ChartRow.Visibility = Visibility.Visible;
 
                 if (this.ActiveGraphs.Count == 2)
                 {
