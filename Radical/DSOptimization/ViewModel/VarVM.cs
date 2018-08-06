@@ -14,6 +14,12 @@ namespace DSOptimization
     public class VarVM : BaseVM, IStepDataElement
     {
         public enum Direction { X, Y, Z, None };
+        public IVariable DesignVar;
+
+        //Original value of the variable before optimization
+        public double OriginalValue { get; set; }
+        //Minimum value obtained through the optimization process
+        public double BestSolutionValue { get; set; }
 
         //CONSTRUCTOR
         //default values obtained from original Grasshopper component variables
@@ -21,7 +27,9 @@ namespace DSOptimization
         {
             DesignVar = dvar;
 
-            this._originalvalue = DesignVar.CurrentValue;
+            //value trackers
+            this.OriginalValue = DesignVar.CurrentValue;
+            this.BestSolutionValue = DesignVar.CurrentValue;
 
             this._name = DesignVar.Parameter.NickName;
 
@@ -46,8 +54,6 @@ namespace DSOptimization
                 this._dir = (Direction)value;
             }
         }
-
-        public IVariable DesignVar;
 
         //NAME
         //The name of an individual variable
@@ -89,28 +95,6 @@ namespace DSOptimization
                     Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
                 }
             }
-        }
-
-        //ORIGINAL VALUE
-        //Original value of the variable before optimization
-        private double _originalvalue;
-        public double OriginalValue
-        {
-            get { return _originalvalue; }
-            set
-            {
-                if(CheckPropertyChanged<double>("OriginalValue", ref _originalvalue, ref value))
-                {
-                }
-            }
-        }
-
-        //OPTIMIZATION FINISHED
-        //Update UI sliders to reflect optimized values
-        public virtual void OptimizationFinished()
-        {
-            this.ChangesEnabled = true;
-            this.Value = DesignVar.CurrentValue;
         }
 
         //MIN
@@ -192,11 +176,6 @@ namespace DSOptimization
             }
         }
 
-        public void ResetValue()
-        {
-            Value = OriginalValue;
-        }
-
         //GRADIENT
         //Stores the gradient of the variable for a given objective
         private double _grad;
@@ -204,6 +183,33 @@ namespace DSOptimization
         {
             get { return _grad; }
             set { CheckPropertyChanged<double>("Gradient", ref _grad, ref value); }
+        }
+
+        //OPTIMIZATION FINISHED
+        //Update UI sliders to reflect optimized values
+        public virtual void OptimizationFinished()
+        {
+            this.ChangesEnabled = true;
+            this.Value = DesignVar.CurrentValue;
+        }
+
+        //UPDATE BEST SOLUTION VALUE 
+        //Should be called when the current value of the variable corresponds to the current
+        //best solution of the objective
+        public void UpdateBestSolutionValue()
+        {
+            this.BestSolutionValue = this.DesignVar.CurrentValue;
+        }
+
+        public void SetBestSolution()
+        {
+            this.Value = this.BestSolutionValue;
+        }
+
+        public void ResetValue()
+        {
+            this.Value = this.OriginalValue;
+            this.BestSolutionValue = this.OriginalValue;
         }
     }
 }

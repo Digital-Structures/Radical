@@ -23,12 +23,17 @@ namespace Radical
     /// </summary>
     public partial class GraphControl : UserControl
     {
+        public GraphVM GraphVM;
+        public RadicalWindow MyWindow;
+        public RadicalVM RadicalVM;
+
         public GraphControl()
         {
             this.DataContext = GraphVM;
             InitializeComponent();
         }
 
+        //CONSTRUCTOR
         public GraphControl(GraphVM graphVM, RadicalVM radicalVM, RadicalWindow window)
         {
             this.RadicalVM = radicalVM;
@@ -38,87 +43,28 @@ namespace Radical
 
             InitializeComponent();
 
-            //this.ButtonStats.Style = (Style)window.FindResource("MaterialDesignFloatingActionLightButton");
-            //this.ButtonStats.Visibility = Visibility.Collapsed;
-
-            //this.GraphVM.GraphGrid = GraphGrid;
-            this.GraphVM.Chart = Chart;
-            this.GraphVM.ChartAxisX = ChartAxisX;
-            this.GraphVM.ChartAxisY = ChartAxisY;
             this.GraphVM.Window = window; 
 
-          //  this.GraphVM.ChartLine = ChartLine;
-            this.GraphVM.ChartLineVisibility(Visibility.Collapsed);
-            this.GraphVM.StatisticVisibility = Visibility.Collapsed;
-
+            this.GraphVM.ChartLineVisibility = Visibility.Collapsed;
         }
 
-        public GraphVM GraphVM;
-        RadicalWindow MyWindow;       
-        RadicalVM RadicalVM;
-
-        ////UPDATE WINDOW 
-        //public void UpdateWindowGeneral(ChartValues<double> y)
-        //{
-        //    this.GraphVM.ChartValues = y;
-        //}
-
-        //private void Plotter_SizeChanged(object sender, SizeChangedEventArgs e)
-        //{
-        //    this.GraphVM.SetLineWidth();
-        //}
-
-        //CHART MOUSE DOWN
-        //Currently returns graph x value of where the mouse clicks down 
+        #region Mouse_Events
+        //CHART MOUSE MOVE
+        //Tracks mouse movement and sets the vertical lines on the graph to be on the points closest to the mouse
         private void Chart_MouseMove(object sender, MouseEventArgs e)
         {
             if (this.GraphVM.ChartValues.Any())
             {
+                this.GraphVM.ChartLineVisibility = Visibility.Visible;
                 var mouseCoordinate = e.GetPosition(Chart);
                 double chartCoordinateX = Chart.ConvertToChartValues(mouseCoordinate).X;
                 int closestXPoint = (int)Chart.Series[0].ClosestPointTo(chartCoordinateX, AxisOrientation.X).X;
-                this.GraphVM.UpdateLine(closestXPoint);
+                this.GraphVM.MouseIteration = closestXPoint;
                 this.RadicalVM.UpdateGraphLines(closestXPoint);
             }
             else
             {
-                this.GraphVM.ChartLineVisibility(Visibility.Collapsed);
-            }
-            //    double mouseX = mouseCoordinate.X;
-            //    double minx = ChartAxisX.ActualMinValue;
-
-            //    double ScaleX = (Chart.ActualWidth - 21) / (ChartAxisX.ActualMaxValue - minx);
-
-            //    int actualX = (int)(Math.Truncate(mouseX / ScaleX - minx));
-            //    if (actualX < 0)
-            //    {
-            //        actualX = 0;
-            //    }
-            //    else if (actualX >= this.GraphVM.ChartValues.Count)
-            //    {
-            //        actualX = this.GraphVM.ChartValues.Count - 1;
-            //    }
-
-            //    this.GraphVM.UpdateLine(actualX);
-            //    this.RadicalVM.UpdateGraphLines(actualX);
-            //}
-            //else
-            //{
-            //    this.GraphVM.ChartLineVisibility(Visibility.Collapsed);
-            //}
-        }
-
-        private void ButtonStats_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.GraphVM.StatisticVisibility == Visibility.Visible)
-            {
-                this.GraphVM.StatisticVisibility = Visibility.Collapsed;
-                this.GraphVM.ButtonStatsIcon = MaterialDesignThemes.Wpf.PackIconKind.Plus;
-            }
-            else
-            {
-                this.GraphVM.StatisticVisibility = Visibility.Visible;
-                this.GraphVM.ButtonStatsIcon = MaterialDesignThemes.Wpf.PackIconKind.Minus;
+                this.GraphVM.ChartLineVisibility = Visibility.Collapsed;
             }
         }
 
@@ -133,5 +79,19 @@ namespace Radical
             e2.RoutedEvent = UIElement.MouseWheelEvent;
             MyWindow.GraphsScroller.RaiseEvent(e2);
         }
+
+        //Shows graph axis labels when mouse is over card
+        private void Chart_MouseEnter(object sender, MouseEventArgs e)
+        {
+            this.GraphVM.GraphAxisLabelsVisibility = Visibility.Visible;
+        }
+
+        //Hides graph axis labels when mouse is not over card
+        private void Chart_MouseLeave(object sender, MouseEventArgs e)
+        {
+            this.GraphVM.GraphAxisLabelsVisibility = Visibility.Hidden;
+        }
+
+        #endregion
     }
 }

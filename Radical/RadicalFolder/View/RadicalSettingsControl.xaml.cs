@@ -21,15 +21,15 @@ namespace DSOptimization
     /// <summary>
     /// Interaction logic for SettingsControl.xaml
     /// </summary>
-    public partial class SettingsControl : BaseControl
+    public partial class RadicalSettingsControl : BaseControl
     {
-        public SettingsControl() : base()
+        public RadicalSettingsControl() : base()
         {
             InitializeComponent();
         }
 
         //CONSTRUCTOR
-        public SettingsControl(RadicalVM radvm) : base(radvm)
+        public RadicalSettingsControl(RadicalVM radvm) : base(radvm)
         {
             this.RadicalVM = radvm;
             InitializeComponent();

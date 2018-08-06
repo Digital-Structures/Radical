@@ -17,19 +17,31 @@ namespace Radical
     public class RadicalOptimizer
 
     {
+        public Design Design;
+        public uint nVars { get { return (uint)this.Design.ActiveVariables.Count; } }
+
+        public NLoptAlgorithm MainAlg;
+        public NLoptAlgorithm SecondaryAlg; // Optional
+        public NLoptSolver Solver;
+        public RadicalVM RadicalVM;
+        public RadicalWindow RadicalWindow; 
+
+        public ChartValues<double> StoredMainValues;
+        public ChartValues<ChartValues<double>> StoredConstraintValues;
+
         //static bool verbose = true;
         public double? MinValue; //init objective
 
         // CONSTRUCTOR FOR RADICAL
-        public RadicalOptimizer(Design design, RadicalWindow radicalWindow)
+        public RadicalOptimizer(Design design, RadicalWindow radwindow)
         {
             this.Design = design;
-            this.MainAlg = radicalWindow.RadicalVM.PrimaryAlgorithm;
+            this.RadicalWindow = radwindow;
+            this.RadicalVM = this.RadicalWindow.RadicalVM;
+            this.MainAlg = this.RadicalVM.PrimaryAlgorithm;
             //this.SecondaryAlg = NLoptAlgorithm.LN_COBYLA;
-            this.RadicalWindow = radicalWindow;
             BuildWrapper();
             SetBounds();
-            Solver.SetMinObjective((x) => Objective(x));
 
             StoredMainValues = new ChartValues<double>();
             StoredConstraintValues = new ChartValues<ChartValues<double>>();
@@ -50,27 +62,18 @@ namespace Radical
                     }
                 }
             }
+
+            Solver.SetMinObjective((x) => Objective(x));
         }
-
-        public Design Design;
-        public uint nVars { get { return (uint)this.Design.ActiveVariables.Count; } }
-
-        public NLoptAlgorithm MainAlg;
-        public NLoptAlgorithm SecondaryAlg; // Optional
-        public NLoptSolver Solver;
-        public RadicalWindow RadicalWindow;
-
-        public ChartValues<double> StoredMainValues;
-        public ChartValues<ChartValues<double>> StoredConstraintValues;
 
         public void BuildWrapper()
         {
-            this.Solver = new NLoptSolver(MainAlg, nVars, this.RadicalWindow.RadicalVM.ConvCrit, this.RadicalWindow.RadicalVM.Niterations);
+            this.Solver = new NLoptSolver(MainAlg, nVars, this.RadicalVM.ConvCrit, this.RadicalVM.Niterations);
         }
         public void BuildWrapper(double relStopTol, int niter)
         {
             this.Solver = new NLoptSolver(MainAlg, nVars, relStopTol, niter);
-        } // relStopTO, niter should be made optional arguments
+        } // relStopTO, neither should be made optional arguments
 
         public void SetBounds()
         {
@@ -84,7 +87,7 @@ namespace Radical
 
             Grasshopper.Kernel.GH_SolutionMode refresh = Grasshopper.Kernel.GH_SolutionMode.Silent;
 
-            if (this.RadicalWindow.RadicalVM.Mode == RefreshMode.Live) { refresh = Grasshopper.Kernel.GH_SolutionMode.Default; }
+            if (this.RadicalVM.Mode == RefreshMode.Live) { refresh = Grasshopper.Kernel.GH_SolutionMode.Default; }
 
             System.Action run = delegate ()
             {
@@ -114,12 +117,29 @@ namespace Radical
 
             double objective = Design.Objectives[0];
 
+            //When a new global objective minimum is reached all variable values at that point are recorded
+            if (objective < this.RadicalVM.SmallestObjectiveValue)
+            {
+                this.RadicalVM.SmallestObjectiveValue = objective; 
+                foreach (VarVM v in this.RadicalVM.NumVars)
+                {
+                    v.UpdateBestSolutionValue();
+                }
+                foreach (List<VarVM> lvm in this.RadicalVM.GeoVars)
+                {
+                    foreach (VarVM v in lvm)
+                    {
+                        v.UpdateBestSolutionValue();
+                    }
+                }
+            }
+
             //If RefreshMode == Silent then values are stored in a local list so that the graph is not updated
-            if (this.RadicalWindow.RadicalVM.Mode == RefreshMode.Silent)
+            if (this.RadicalVM.Mode == RefreshMode.Silent)
             {
                 this.StoredMainValues.Add(objective);
 
-                for (int i = 0; i < Design.ConstraintEvolution.Count; i++)
+                for (int i = 0; i < this.RadicalVM.ConstraintsEvolution.Count; i++)
                 {
                     double score = Design.Constraints[i].CurrentValue;
                     this.StoredConstraintValues[i].Add(score);
@@ -127,6 +147,8 @@ namespace Radical
             }
             else
             {
+                this.RadicalVM.UpdateCurrentScoreDisplay();
+
                 //If refresh mode is switched from Silent to Live 
                 if (StoredMainValues.Any())
                 {
@@ -134,12 +156,12 @@ namespace Radical
                 }
 
                 //Adds main objective values to list and draws
-                Design.ScoreEvolution.Add(objective);
+                this.RadicalVM.ObjectiveEvolution.Add(objective);
 
-                for (int i = 0; i < Design.ConstraintEvolution.Count; i++)
+                for (int i = 0; i < this.RadicalVM.ConstraintsEvolution.Count; i++)
                 {
                     double score = Design.Constraints[i].CurrentValue;
-                    Design.ConstraintEvolution[i].Add(score);
+                    this.RadicalVM.ConstraintsEvolution[i].Add(score);
                 }
             }
 
@@ -171,6 +193,7 @@ namespace Radical
             if (this.RadicalWindow.RadicalVM.Mode == RefreshMode.Silent)
             {
                 AppendStoredValues();
+                this.RadicalVM.UpdateCurrentScoreDisplay();
             }
             this.RadicalWindow.OptimizationFinished();
 
@@ -180,12 +203,12 @@ namespace Radical
         //Adds optimization values to array that updates graph display 
         public void AppendStoredValues()
         {
-            Design.ScoreEvolution.AddRange(StoredMainValues);
+            this.RadicalVM.ObjectiveEvolution.AddRange(StoredMainValues);
             StoredMainValues.Clear();
 
-            for (int i = 0; i < Design.ConstraintEvolution.Count; i++)
+            for (int i = 0; i < this.RadicalVM.ConstraintsEvolution.Count; i++)
             {
-                Design.ConstraintEvolution[i].AddRange(StoredConstraintValues[i]);
+                this.RadicalVM.ConstraintsEvolution[i].AddRange(StoredConstraintValues[i]);
                 StoredConstraintValues[i].Clear();
             }
         }
@@ -217,7 +240,7 @@ namespace Radical
             if (grad != null) { }//update gradient, for gradient-based algs.
 
             double objective = Design.Objectives[0];
-            Design.ScoreEvolution.Add(objective);
+            this.RadicalVM.ObjectiveEvolution.Add(objective);
             return objective;
         }
     }

@@ -34,6 +34,13 @@ namespace Radical
     /// </summary>
     public partial class RadicalWindow : UserControl
     {
+        private Dictionary<string, List<GraphControl>> GraphControls;
+        private List<GroupVariableControl> GroupVars;
+        public enum Direction { X, Y, Z, None };
+        public RadicalVM RadicalVM;
+        public CancellationTokenSource source;
+        private bool IsAlreadyLoaded;
+
         public RadicalWindow()
         {
             this.DataContext = RadicalVM;
@@ -59,16 +66,10 @@ namespace Radical
             AddNumbers();
             AddGeometries();
 
-            this.SettingsMenu.Children.Add(new SettingsControl(this.RadicalVM));
+            this.SettingsMenu.Children.Add(new RadicalSettingsControl(this.RadicalVM));
 
             this.Loaded += new RoutedEventHandler(MainWindow_Loaded);
         }
-        private Dictionary<string, List<GraphControl>> GraphControls;
-        private List<GroupVariableControl> GroupVars;
-        public enum Direction { X, Y, Z, None };
-        public RadicalVM RadicalVM;
-        public CancellationTokenSource source;
-        private bool IsAlreadyLoaded;
 
         //MAIN WINDOW LOADED
         //Ensures main graph height is correct on loading
@@ -135,7 +136,6 @@ namespace Radical
             //MAIN OBJECTIVE GRAPH
             var g = new GraphControl(this.RadicalVM.Graphs["Main"][0], this.RadicalVM, this);
             g.GraphGrid.Height = MainGrid.ActualHeight * 0.9;
-            g.GraphVM.CalculateChartLineY2();
 
             GraphControls["Main"].Add(g);
             MainBlock.Children.Add(GraphControls["Main"][0]);
@@ -153,7 +153,6 @@ namespace Radical
                     GraphVM gvm = RadicalVM.Graphs["Constraints"][i];
                     g = new GraphControl(gvm, this.RadicalVM, this);
                     g.GraphGrid.Height = MainGrid.ActualHeight * 0.45;
-                    g.GraphVM.CalculateChartLineY2();
                     GraphControls["Constraints"].Add(g);
 
                     ConstVM c = RadicalVM.Constraints[i];
@@ -162,31 +161,6 @@ namespace Radical
             }
             else
                 this.ConstraintsExpander.Visibility = Visibility.Collapsed;
-        }
-
-        public void GraphsShowLine()
-        {
-            foreach (KeyValuePair<string,List<GraphVM>> pair in this.RadicalVM.Graphs)
-            {
-                foreach (GraphVM graph in pair.Value)
-                {
-                    graph.ChartLineVisibility(Visibility.Visible);
-                    graph.OptimizerDone = true;
-                }
-            }
-            SetUpGraphLineWidth();
-        }
-
-        public void GraphsHideLine()
-        {
-            foreach (KeyValuePair<string, List<GraphVM>> pair in this.RadicalVM.Graphs)
-            {
-                foreach (GraphVM graph in pair.Value)
-                {
-                    graph.ChartLineVisibility(Visibility.Collapsed);
-                    graph.OptimizerDone = false;
-                }
-            }
         }
 
         //ADD NUMBERS
@@ -206,7 +180,7 @@ namespace Radical
             StackPanel groupControls = new StackPanel();
             //Expander
             Expander groupControlMenu = new Expander();
-            groupControlMenu.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
+            //groupControlMenu.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
             groupControlMenu.IsExpanded = true;
             groupControlMenu.Header = Header2Formatting("Group Variable Control");
             groupControlMenu.Content = groupControls;
@@ -228,7 +202,7 @@ namespace Radical
             StackPanel individualControls = new StackPanel();
             //Expander
             Expander individualControlMenu = new Expander();
-            individualControlMenu.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
+            //individualControlMenu.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
             individualControlMenu.Header = Header2Formatting("Single Variable Control");
             individualControlMenu.Content = individualControls;
             this.Sliders.Children.Add(individualControlMenu);
@@ -370,12 +344,10 @@ namespace Radical
             if (this.ActiveGraphs.Count == 1)
             {
                 this.ActiveGraphs[0].GraphGrid.Height = 0.9 * this.MainGrid.ActualHeight;
-                this.ActiveGraphs[0].GraphVM.CalculateChartLineY2();
             }
             else
             {
                 this.ActiveGraphs[0].GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
-                this.ActiveGraphs[0].GraphVM.CalculateChartLineY2();
 
                 if (this.ActiveGraphs.Count == 2)
                 {
@@ -389,9 +361,14 @@ namespace Radical
                 foreach (GraphControl g in this.ActiveGraphs)
                 {
                     g.GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
-                    g.GraphVM.CalculateChartLineY2();
                 }
             }
+        }
+
+        //OPTIMIZE
+        private void Optimize()
+        {
+            this.RadicalVM.Optimize(this);
         }
 
         //OPTIMIZATION STARTED
@@ -400,7 +377,6 @@ namespace Radical
             this.RadicalVM.OptimizationStarted();
             foreach (GroupVariableControl group in this.GroupVars)
                 group.OptimizationStarted();         
-            GraphsHideLine();
         }
 
         //OPTIMIZATION FINISHED
@@ -409,13 +385,6 @@ namespace Radical
             this.RadicalVM.OptimizationFinished();
             foreach (GroupVariableControl group in this.GroupVars)
                 group.OptimizationFinished();         
-            GraphsShowLine();
-        }
-
-        //OPTIMIZE
-        private void Optimize()
-        {
-            this.RadicalVM.Optimize();
         }
 
         //WINDOW CLOSING
@@ -440,19 +409,41 @@ namespace Radical
                 g.ChartRow.Visibility = Visibility.Visible;
         }
 
-        //CLOSE MENU CLICK
-        private void ButtonCloseMenu_Click(object sender, RoutedEventArgs e)
+        private void UpdateGraphSize(object sender, RoutedEventArgs e)
         {
-            ButtonOpenMenu.Visibility = Visibility.Visible;
-            ButtonCloseMenu.Visibility = Visibility.Collapsed;
-            this.AnimationBegan();
+            if (this.ActiveGraphs != null)
+            {
+                if (this.ActiveGraphs.Count == 1)
+                {
+                    this.ActiveGraphs[0].GraphGrid.Height = 0.9 * this.MainGrid.ActualHeight;
+                }
+                else
+                {
+                    foreach (GraphControl g in this.ActiveGraphs)
+                    {
+                        g.GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
+                    }
+                }
+            }
         }
 
+        #region Button_Events
         //OPEN MENU CLICK
         private void ButtonOpenMenu_Click(object sender, RoutedEventArgs e)
         {
             ButtonOpenMenu.Visibility = Visibility.Collapsed;
             ButtonCloseMenu.Visibility = Visibility.Visible;
+            GridMenu.Background = (SolidColorBrush)this.FindResource("SideBarBackgroundColor");
+            this.AnimationBegan();
+        }
+
+        //CLOSE MENU CLICK
+        private void ButtonCloseMenu_Click(object sender, RoutedEventArgs e)
+        {
+           // GridMenu.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
+            ButtonOpenMenu.Visibility = Visibility.Visible;
+            ButtonCloseMenu.Visibility = Visibility.Collapsed;
+            GridMenu.Background = (SolidColorBrush)this.FindResource("SideBarBackgroundColor");
             this.AnimationBegan();
         }
 
@@ -508,39 +499,10 @@ namespace Radical
             this.AnimationBegan();
         }
 
-        private void SetUpGraphLineWidth()
+        //BUTTON RESTART (reset) CLICK
+        private void ButtonRestart_Click(object sender, RoutedEventArgs e)
         {
-            foreach (KeyValuePair<string, List<GraphVM>> kvp in this.RadicalVM.Graphs)
-            {
-                for (int i = 0; i < kvp.Value.Count; i++)
-                {
-                    this.RadicalVM.Graphs[kvp.Key][i].SetLineWidth();
-                }
-            }
-        }
-
-        private void UpdateGraphSize(object sender, RoutedEventArgs e)
-        {
-            if (this.ActiveGraphs != null)
-            {
-                if (this.ActiveGraphs.Count == 1)
-                {
-                    this.ActiveGraphs[0].GraphGrid.Height = 0.9 * this.MainGrid.ActualHeight;
-                    this.ActiveGraphs[0].GraphVM.CalculateChartLineY2();
-                }
-                else
-                {
-                    foreach (GraphControl g in this.ActiveGraphs)
-                    {
-                        g.GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
-                        g.GraphVM.CalculateChartLineY2();
-                    }
-                }
-            }
-        }
-
-        public void ButtonRestart_Click(object sender, RoutedEventArgs e)
-        {
+            this.RadicalVM.ResetObjective();
             foreach (VarVM v in this.RadicalVM.NumVars)
             {
                 v.ResetValue();
@@ -554,19 +516,34 @@ namespace Radical
             }
         }
 
+        //BUTTON OPTIMAL RESULT CLICK
+        private void ButtonOptimalResult_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (VarVM v in this.RadicalVM.NumVars)
+            {
+                v.SetBestSolution();
+            }
+            foreach (List<VarVM> lvm in this.RadicalVM.GeoVars)
+            {
+                foreach (VarVM v in lvm)
+                {
+                    v.SetBestSolution();
+                }
+            }
+        }
+        #endregion
+
+        #region Unimplemented
         private void OpenOptSettings(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void Export_SVG(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void Export_CSV(object sender, RoutedEventArgs e)
         {
-
         }
 
         void worker_DoWork(object sender, DoWorkEventArgs e)
@@ -576,6 +553,7 @@ namespace Radical
         void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
         }
+        #endregion
     }
 
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]

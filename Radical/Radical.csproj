@@ -146,8 +146,8 @@
     <Compile Include="RadicalFolder\View\RadicalWindow.xaml.cs">
       <DependentUpon>RadicalWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadicalFolder\View\SettingsControl.xaml.cs">
-      <DependentUpon>SettingsControl.xaml</DependentUpon>
+    <Compile Include="RadicalFolder\View\RadicalSettingsControl.xaml.cs">
+      <DependentUpon>RadicalSettingsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DSOptimization\View\GroupVariableControl.xaml.cs">
       <DependentUpon>GroupVariableControl.xaml</DependentUpon>
@@ -229,7 +229,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="RadicalFolder\View\SettingsControl.xaml">
+    <Page Include="RadicalFolder\View\RadicalSettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

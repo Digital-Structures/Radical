@@ -6,18 +6,41 @@ using Rhino.Geometry;
 using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
+using Radical.Components;
+using Radical.TestComponents;
 using LiveCharts;
 using NLoptNet;
 using LiveCharts.Helpers;
 using LiveCharts.Wpf;
 
-namespace DSOptimization
+
+namespace Radical.Integration
 {
     //DESIGN
     //Collection of problem variables, constraints, and objectives to be optimized by Radical
-    public class Design
+    public class Design : IDesign
     {
         public DSOptimizerComponent MyComponent { get; set; }
+
+                    //Move Score and ConstraintEvolution 
+                    public ChartValues<double> ScoreEvolution { get; set; }
+                    public ChartValues<ChartValues<double>> ConstraintEvolution { get; set; }
+
+                    //OPTIMIZE for Radical (Should be moved to RadicalVM)
+                    //Runs the optimizer and stores the objective data
+                    public void Optimize(RadicalWindow radicalWindow)
+                    {
+                        Optimizer opt = new Optimizer(this, radicalWindow);
+                        opt.RunOptimization();
+                    }
+
+                    //public void Optimize()
+                    //{
+                    //    Optimizer opt = new Optimizer(this);
+                    //    opt.RunOptimization();
+                    //    this.OptComponent.Evolution = this.ScoreEvolution.ToList();
+                    //    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
+                    //}
 
         //INPUT PROPERTIES
         public List<IVariable> Variables { get; set; }
@@ -25,12 +48,12 @@ namespace DSOptimization
         public List<Constraint> Constraints { get; set; }
 
         //OBJECTIVES
-        public List<double> Objectives{ get { return MyComponent.Objectives; } }
+        public List<double> Objectives { get { return MyComponent.Objectives; } }
 
         //ACTIVE VARIABLES
-        public List<IVariable> ActiveVariables{ get { return Variables.Where(var => var.IsActive).ToList(); } }
+        public List<IVariable> ActiveVariables { get { return Variables.Where(var => var.IsActive).ToList(); } }
 
-        //CONSTRUCTOR
+
         public Design(DSOptimizerComponent component)
         {
             //Access the component
@@ -42,33 +65,29 @@ namespace DSOptimization
 
             // ADD VARIABLES
             //Sliders
-            foreach (IGH_Param param in MyComponent.Params.Input[2].Sources)
+            foreach (IGH_Param param in component.Params.Input[2].Sources)
             {
                 this.Variables.Add(new SliderVariable(param));
             }
-            //Surfaces
-            for (int i = 0; i < MyComponent.Params.Input[3].Sources.Count; i++)
+            //Curves
+            for (int i = 0; i < component.Params.Input[3].Sources.Count; i++)
             {
-                IGH_Param param = MyComponent.Params.Input[3].Sources[i];
-                NurbsSurface surf = MyComponent.SrfVariables[i];
+                IGH_Param param = component.Params.Input[3].Sources[i];
+                NurbsSurface surf = component.SrfVariables[i];
                 Geometries.Add(new DesignSurface(param, surf));
             }
-            //Curves
-            for (int i = 0; i < MyComponent.Params.Input[4].Sources.Count; i++)
+            //Surfaces
+            for (int i = 0; i < component.Params.Input[4].Sources.Count; i++)
             {
-                IGH_Param param = MyComponent.Params.Input[4].Sources[i];
-                NurbsCurve surf = MyComponent.CrvVariables[i];
+                IGH_Param param = component.Params.Input[4].Sources[i];
+                NurbsCurve surf = component.CrvVariables[i];
                 this.Geometries.Add(new DesignCurve(param, surf));
             }
-
-            // Add geometries to variables list 
-            // not the cleanest way to do it, review code structure
-            if (Geometries.Any()) { this.Variables.AddRange(Geometries.Select(x => x.Variables).SelectMany(x => x).ToList()); } 
 
             // ADD CONSTRAINTS
             for (int i = 0; i < component.Constraints.Count; i++)
             {
-                this.Constraints.Add(new Constraint(MyComponent, Constraint.ConstraintType.morethan, i));
+                this.Constraints.Add(new Constraint(component, ConstraintType.morethan, i));
             }
         }
 

@@ -39,12 +39,25 @@
                     <SolidColorBrush x:Key="BackgroundHueMidForegroundBrush" Color="DarkGray"/>
                     <SolidColorBrush x:Key="BackgroundHueLightForegroundBrush" Color="Black"/>
 
+                    
+                    <SolidColorBrush x:Key="SideBarBackgroundColor" Color="Gray"/>
+
+                    <!--<SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#99def8"/>
+                    <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="White"/>
+                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#33bef2"/>
+                    <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="White"/>
+                    <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="#707f8e"/>
+                    <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="White"/>-->
+
+                    <SolidColorBrush x:Key="GraphFillColor" Color="#ffc654" Opacity="0.25"/>
+
                     <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{StaticResource Primary200}"/>
                     <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{StaticResource Primary200Foreground}"/>
                     <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{StaticResource Primary500}"/>
                     <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary500Foreground}"/>
                     <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary800}"/>
                     <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary800Foreground}"/>
+
                 </ResourceDictionary>
 
                 <!-- secondary colour -->
@@ -53,8 +66,9 @@
                         <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Orange.Accent.xaml" />
                     </ResourceDictionary.MergedDictionaries>
 
-                    <SolidColorBrush x:Key="SecondaryAccentBrush" Color="{StaticResource Accent400}"/>
-                    <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="{DynamicResource Accent400Foreground}"/>
+                    <!--<SolidColorBrush x:Key="SecondaryAccentBrush" Color="#ffc654"/>
+                    <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="{StaticResource Primary700Foreground}"/>-->
+
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
 
@@ -240,6 +254,11 @@
                                     Style="{StaticResource MaterialDesignFloatingActionButton}" HorizontalAlignment="Right"
                                     materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="{DynamicResource SecondaryAccentBrush}" BorderBrush="{DynamicResource SecondaryAccentBrush}">
                             <materialDesign:PackIcon Kind="Restart" Height="32" Width="32" Foreground="{DynamicResource SecondaryAccentForegroundBrush}"/>
+                        </Button>
+                        <Button x:Name="ButtonOptimalResult" Click="ButtonOptimalResult_Click" Width="40" Height="40"
+                                    Style="{StaticResource MaterialDesignFloatingActionButton}" HorizontalAlignment="Right"
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="{DynamicResource SecondaryAccentBrush}" BorderBrush="{DynamicResource SecondaryAccentBrush}">
+                            <materialDesign:PackIcon Kind="Robot" Height="32" Width="32" Foreground="{DynamicResource SecondaryAccentForegroundBrush}"/>
                         </Button>
                     </StackPanel>
                 </StackPanel>

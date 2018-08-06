@@ -15,6 +15,22 @@ namespace Radical
 {
     public class RadicalVM : BaseVM, IOptimizeToolVM
     {
+        public List<GroupVarVM> GroupVars { get; set; }
+        public DSOptimizerComponent Component { get; set; }
+        public Design Design { get; set; }
+        public List<ConstVM> Constraints { get; set; }
+        public List<VarVM> NumVars { get; set; }
+        public List<List<VarVM>> GeoVars { get; set; }
+        public Dictionary<string, List<GraphVM>> Graphs { get; set; }
+        public enum Direction { X, Y, Z } 
+
+        //EVOLUTIONS for all objectives and constraints 
+        public ChartValues<double> ObjectiveEvolution { get; set; }
+        public ChartValues<ChartValues<double>> ConstraintsEvolution { get; set; }
+
+        public double OriginalObjectiveValue { get; set; }
+        public double SmallestObjectiveValue { get; set; }
+
         public RadicalVM()
         {
         }
@@ -32,6 +48,13 @@ namespace Radical
 
             this.Constraints = new List<ConstVM>();
 
+            this.ObjectiveEvolution = new ChartValues<double>();
+            this.ConstraintsEvolution = new ChartValues<ChartValues<double>>();
+            foreach (Constraint c in this.Design.Constraints)
+            {
+                this.ConstraintsEvolution.Add(new ChartValues<double>());
+            }
+
             this.Graphs = new Dictionary<string, List<GraphVM>>();
             this.Graphs.Add("Main", new List<GraphVM>());
             this.Graphs.Add("Constraints", new List<GraphVM>());
@@ -45,15 +68,10 @@ namespace Radical
             this.OptRunning = false;
             this.OptRunning = false;
             this._advancedOptions = false;
+
+            this.OriginalObjectiveValue = this.Design.Objectives.ElementAt(0);
+            this.SmallestObjectiveValue = this.Design.Objectives.ElementAt(0);
         }
-        public List<GroupVarVM> GroupVars { get; set; }
-        public DSOptimizerComponent Component { get; set; }
-        public Design Design { get; set; }
-        public List<ConstVM> Constraints;
-        public List<VarVM> NumVars { get; set; }
-        public List<List<VarVM>> GeoVars { get; set; }
-        public Dictionary<string, List<GraphVM>> Graphs;
-        public enum Direction { X, Y, Z };
 
         //ACTIVE GRAPHS
         //A list of active constraint graphs to populate the window graph grid
@@ -74,12 +92,12 @@ namespace Radical
         //SET UP GRAPHS
         public void SetUpGraphs()
         {
-            GraphVM main = new GraphVM(/*Design.ScoreEvolution*/ new ChartValues<double>(), "Objective");
+            GraphVM main = new GraphVM(this.ObjectiveEvolution, "Objective");
             this.Graphs["Main"].Add(main);
 
             for (int i = 0; i < Design.Constraints.Count; i++)
             {
-                GraphVM gvm = new GraphVM(/*Design.ConstraintEvolution[i]*/ new ChartValues<double>(), String.Format("C{0}", i));
+                GraphVM gvm = new GraphVM(ConstraintsEvolution[i], String.Format("C{0}", i));
                 this.Graphs["Constraints"].Add(gvm);
                 this.Constraints.Add(new ConstVM(Design.Constraints[i], gvm));
             }
@@ -89,14 +107,15 @@ namespace Radical
         {
             foreach (GraphVM graph in this.ActiveGraphs)
             {
-                graph.UpdateLine(iteration);
+                graph.MouseIteration = iteration;
             }
         }
 
         //OPTIMIZE
-        public void Optimize()
+        public void Optimize(RadicalWindow radicalWindow)
         {
-
+            RadicalOptimizer opt = new RadicalOptimizer(this.Design, radicalWindow);
+            opt.RunOptimization();
         }
 
         //SORT VARIABLES
@@ -153,14 +172,25 @@ namespace Radical
         {
             this.ChangesEnabled = true;
 
-            this.Graphs["Main"][0].Statistics();
-            foreach(GraphVM g in this.Graphs["Constraints"])
-            {
-                g.Statistics();
-            }
-
             foreach (ConstVM constraint in this.Constraints)
                 constraint.OptimizationFinished();
+        }
+
+        public void UpdateCurrentScoreDisplay()
+        {
+            double objective = this.Design.Objectives[0];
+            this.Graphs["Main"][0].FinalOptimizedValue = objective;
+            
+            for (int i = 0; i < this.Graphs["Constraints"].Count; i++)
+            {
+                double score = this.Design.Constraints[i].CurrentValue;
+                this.Graphs["Constraints"][i].FinalOptimizedValue = score;
+            }
+        }
+
+        public void ResetObjective()
+        {
+            this.SmallestObjectiveValue = this.OriginalObjectiveValue;
         }
 
         //ON WINDOW CLOSING
@@ -183,11 +213,6 @@ namespace Radical
             {
                 if(CheckPropertyChanged<int>("Cols", ref _cols, ref value))
                 {
-                    foreach (GraphVM gvm in ActiveGraphs)
-                    {
-                        gvm.ChartRowVisibility = Visibility.Collapsed;
-                        gvm.ChartRowVisibility = Visibility.Visible;
-                    }
                 }
             }
         }
@@ -235,6 +260,7 @@ namespace Radical
             }
         }
 
+        #region Algorithms 
         //PRIMARY ALGORITHM
         private NLoptAlgorithm _primaryalgorithm;
         public NLoptAlgorithm PrimaryAlgorithm
@@ -261,7 +287,6 @@ namespace Radical
                 {
                 }
             }
-
         }
 
         //AVAILABLE ALGORITHMS
@@ -317,23 +342,6 @@ namespace Radical
                 }
             }
         }
-
-        //UNIMPLEMENTED
-        //Keeps track of which iteration the user's mouse is currently at so that all graphs can move their
-        //focus to that iteration
-        //private int _mouseiteration;
-        //public int MouseIteration
-        //{
-        //    get
-        //    { return _mouseiteration; }
-        //    set
-        //    {
-        //        if (CheckPropertyChanged<int>("MouseIteration", ref _mouseiteration, ref value))
-        //        {
-                     
-        //        }
-        //    }
-        //} 
 
         public IEnumerable<NLoptAlgorithm> BasicAlgs = new[]
         {
@@ -410,5 +418,7 @@ namespace Radical
             NLoptAlgorithm.LN_BOBYQA,
             NLoptAlgorithm.LN_COBYLA,
         };
+        #endregion
+
     }
 }

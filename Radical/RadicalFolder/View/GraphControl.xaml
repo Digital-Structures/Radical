@@ -10,7 +10,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="{DynamicResource MaterialDesignPaper}" Margin="5" Name="Card">
+    <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="{DynamicResource MaterialDesignPaper}" Margin="5" Name="Card"  MouseEnter="Chart_MouseEnter" MouseLeave="Chart_MouseLeave">
         <Grid Name="GraphGrid" HorizontalAlignment="Stretch" Margin="0,0,-10,0" Height="{Binding GraphGridHeight, Mode=TwoWay}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -22,13 +22,30 @@
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="1" Margin="25,15,25,0">
-                <TextBlock Text="Value" FontSize="14" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}"
-                           VerticalAlignment="Bottom" HorizontalAlignment="Left" TextAlignment="Right">
+            <Grid Grid.Row="0" HorizontalAlignment="Stretch">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontSize="27" FontFamily="Global User Interface" Foreground="{DynamicResource BackgroundHueLightForegroundBrush}"
+                                TextAlignment="Right" Padding="40, 10, 20, 0" VerticalAlignment="Center" Text="{Binding LineGraphName, Mode=TwoWay}" Grid.Column="0"/>
+                    
+                    <Border BorderBrush="Black" BorderThickness="1, 0, 0, 0" Grid.Column="1" HorizontalAlignment="Left" Height="20" VerticalAlignment="Center">
+                        <TextBlock FontSize="20" FontFamily="Global User Interface" Foreground="{DynamicResource BackgroundHueLightForegroundBrush}"
+                                TextAlignment="Left" Padding="20, 5, 0, 0" VerticalAlignment="Center" Text="{Binding FinalOptimizedValueString, Mode=TwoWay}" Grid.Column="1"/>
+                    </Border>
+                </Grid>
+            </Grid>
+            
+            <Grid Grid.Row="1" Margin="25,0,25,0">
+                <TextBlock Text="Value" FontSize="14" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}"
+                           VerticalAlignment="Bottom" HorizontalAlignment="Left" TextAlignment="Right" Visibility="{Binding GraphAxisLabelsVisibility, Mode=TwoWay, FallbackValue=Hidden}">
                 </TextBlock>
             </Grid>
 
-            <Grid Grid.Row="2" Name="ChartRow" Margin="25,0" Visibility="{Binding ChartRowVisibility, Mode=TwoWay}">
+            <Grid Grid.Row="2" Name="ChartRow" Margin="25,0">
                 <lvc:CartesianChart Name="Chart"
                     PreviewMouseMove="Chart_MouseMove" Background="{x:Null}" Margin="0,0,0,0"
                     PreviewMouseWheel="Graph_PreviewMouseWheel" DisableAnimations="True">
@@ -37,14 +54,12 @@
                                         DataLabels="False" PointGeometrySize="0" Margin="0,0,0,0"
                                         Stroke="{DynamicResource SecondaryAccentBrush}" Fill="{x:Null}">
                         </lvc:LineSeries>
-                        <lvc:ScatterSeries DataLabels="False" Values="{Binding HoverValue}">
-                        </lvc:ScatterSeries>
                     </lvc:CartesianChart.Series>
 
                     <lvc:CartesianChart.AxisX>
                         <lvc:Axis Name="ChartAxisX">
                             <lvc:Axis.Sections>
-                                <lvc:AxisSection Name="AxisSectionX" Value="{Binding Iteration, Mode=TwoWay}" Visibility="{Binding ChartLineVisibilityX, Mode=TwoWay}" DisableAnimations="True" StrokeThickness="1" Stroke="{DynamicResource PrimaryHueDarkBrush}">
+                                <lvc:AxisSection Name="AxisSectionX" Value="{Binding MouseIteration, Mode=TwoWay}" Visibility="{Binding ChartLineVisibility, Mode=TwoWay}" DisableAnimations="True" StrokeThickness="1" Stroke="{DynamicResource PrimaryHueDarkBrush}">
 
                                 </lvc:AxisSection>
                             </lvc:Axis.Sections>
@@ -58,25 +73,12 @@
             </Grid>
 
             <Grid  Grid.Row="3" Margin="25,0,25,10">
-                <TextBlock VerticalAlignment="Top" FontSize="14" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}" TextAlignment="Right">
+                <TextBlock VerticalAlignment="Top" FontSize="14" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" TextAlignment="Right" Visibility="{Binding GraphAxisLabelsVisibility, FallbackValue=Hidden}">
                 Iterations
                 </TextBlock>
             </Grid>
-
-            <Grid Grid.Row="0" HorizontalAlignment="Stretch" Background="{DynamicResource PrimaryHueDarkForegroundBrush}">
-
-                <TextBlock FontSize="20" FontFamily="Global User Interface" Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                           TextAlignment="Left" Padding="40, 5, 0, 5" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="{}{0} | {1}">
-                            <Binding Path="LineGraphName"/>
-                            <Binding Path="FinalOptimizedValue" />
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
-            </Grid>
-            </Grid>
-        <!--</Grid>-->
+            
+        </Grid>
     </materialDesign:Card>
 
 </UserControl>
