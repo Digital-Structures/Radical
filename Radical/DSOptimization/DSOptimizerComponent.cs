@@ -19,6 +19,15 @@ namespace DSOptimization
 { 
     public class DSOptimizerComponent : GH_Component
     {
+        public List<double> Objectives { get; set; }
+        public List<double> Constraints { get; set; }
+        public List<double> NumVariables { get; set; }
+        public List<NurbsSurface> SrfVariables { get; set; }
+        public List<NurbsCurve> CrvVariables { get; set; }
+
+        //Checks to see if there is an objective and that at least one variable is connected (can change to make it so that only one variable is connected)
+        public bool InputsSatisfied { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the RadicalComponent class.
         /// </summary>
@@ -36,13 +45,8 @@ namespace DSOptimization
             this.Constraints = new List<double>();
 
             this.open = false; //Is window open
+            this.InputsSatisfied = false; 
         }
-
-        public List<double> Objectives { get; set; }
-        public List<double> Constraints { get; set; }
-        public List<double> NumVariables { get; set; }
-        public List<NurbsSurface> SrfVariables { get; set; }
-        public List<NurbsCurve> CrvVariables { get; set; }
 
         //Determine whether there is already a Radical window open
         private bool open;
@@ -89,7 +93,11 @@ namespace DSOptimization
         {
             //assign objective
             List<double> obj = new List<double>();
-            if (!DA.GetDataList(0, obj)) { return; }
+            if (!DA.GetDataList(0, obj))
+            {
+                this.InputsSatisfied = false; 
+                return;
+            }
             this.Objectives = obj;
 
             //assign constraints
@@ -105,12 +113,28 @@ namespace DSOptimization
             //assign surface variables
             List<Surface> surfaces= new List<Surface>();
             DA.GetDataList(3, surfaces);
-            this.SrfVariables = surfaces.Select(x=>x.ToNurbsSurface()).ToList();
+            foreach (Surface s in surfaces)
+            {
+                if (s == null)
+                {
+                    this.InputsSatisfied = false;
+                    return;
+                }
+            }
+            this.SrfVariables = surfaces.Select(x => x.ToNurbsSurface()).ToList();
 
             //assign curve variables
             List<Curve> curves = new List<Curve>();
             DA.GetDataList(4, curves);
-            this.CrvVariables = curves.Select(x => x.ToNurbsCurve()).ToList();
+            foreach (Curve c in curves)
+            {
+                if (c == null){
+                    this.InputsSatisfied = false;
+                    return;
+                }
+            }
+
+            this.InputsSatisfied = true;
         }
 
         /// <summary>
@@ -151,7 +175,7 @@ namespace DSOptimization
         public override Grasshopper.GUI.Canvas.GH_ObjectResponse RespondToMouseDoubleClick(Grasshopper.GUI.Canvas.GH_Canvas sender, Grasshopper.GUI.GH_CanvasMouseEvent e)
         {
             //Prevent opening of multiple windows at once
-            if (!MyComponent.IsWindowOpen)
+            if (!MyComponent.IsWindowOpen && MyComponent.InputsSatisfied)
             {
                 MyComponent.IsWindowOpen = true;
 

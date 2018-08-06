@@ -46,14 +46,14 @@ namespace DSOptimization
             {
                 this.Variables.Add(new SliderVariable(param));
             }
-            //Curves
+            //Surfaces
             for (int i = 0; i < MyComponent.Params.Input[3].Sources.Count; i++)
             {
                 IGH_Param param = MyComponent.Params.Input[3].Sources[i];
                 NurbsSurface surf = MyComponent.SrfVariables[i];
                 Geometries.Add(new DesignSurface(param, surf));
             }
-            //Surfaces
+            //Curves
             for (int i = 0; i < MyComponent.Params.Input[4].Sources.Count; i++)
             {
                 IGH_Param param = MyComponent.Params.Input[4].Sources[i];
