@@ -21,18 +21,33 @@ namespace Stepper
     /// </summary>
     public partial class SettingsControl : UserControl
     {
+        private StepperWindow MyWindow;
+
         public SettingsControl()
         {
             InitializeComponent();
         }
 
         //CONSTRUCTOR
-        public SettingsControl(StepperVM Stepper)
+        public SettingsControl(StepperVM Stepper, StepperWindow Window)
         {
             this.DataContext = Stepper;
+            this.MyWindow = Window;
             InitializeComponent();
         }
 
+        //CHECKED
+        //Enables absolute objective value graph
+        private void ToggleButton_Checked(object sender, RoutedEventArgs e)
+        {
+            this.MyWindow.DisplayAbsolute();
+        }
 
+        //UNCHECKED
+        //Enables normalized objective value graph
+        private void ToggleButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            this.MyWindow.DisplayNormalized();
+        }
     }
 }

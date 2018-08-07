@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Controls;
+using System.Windows.Data;
 using LiveCharts;
 using LiveCharts.Wpf;
 using Radical;
@@ -14,14 +16,13 @@ namespace Stepper
     //GRAPH VM
     public class StepperGraphVM : BaseVM
     {
-        private StepperVM StepperVM;
-        public List<SolidColorBrush> Colors;
+        private ChartValues<ChartValues<double>> MyData;
 
         //CONSTRUCTOR
-        public StepperGraphVM(StepperVM VM, List<SolidColorBrush> colors)
+        public StepperGraphVM(ChartValues<ChartValues<double>> data)
         {
-            this.StepperVM = VM;
-            this.Colors = colors;
+            this.MyData = data;
+            this.colors = new List<SolidColorBrush>();
             this.axissteps = 1;
 
             InitializeGraphSeries();
@@ -46,6 +47,25 @@ namespace Stepper
             }
         }
 
+        //COLORS
+        //Assign thematic colors to the various line series
+        private List<SolidColorBrush> colors;
+        public List<SolidColorBrush> Colors
+        {
+            set
+            {
+                this.colors = value;
+
+                for (int i=0; i<this.MyData.Count; i++)
+                {
+                    if (i == this.colors.Count)
+                        i = 0;
+                    else
+                        ((LineSeries)this.ObjectiveSeries[i]).Stroke = this.colors[i];
+                }
+            }
+        }
+
         //XAxisSteps
         private int axissteps;
         public int XAxisSteps
@@ -60,24 +80,17 @@ namespace Stepper
             //Series Collection for objective graphs
             this.GraphSeries = new SeriesCollection();
 
-            int i= 0;
-            foreach (ChartValues<double> objective in this.StepperVM.ObjectiveEvolution)
+            foreach (ChartValues<double> objective in this.MyData)
             {
                 //Make a line series for the given objective
                 GraphSeries.Add(new LineSeries
                 {
-                    Title = this.StepperVM.Objectives[i].Name,
                     Values = objective,
-                    Stroke = this.Colors[i],
                     StrokeThickness = 5,
                     Fill = Brushes.Transparent,
                     LineSmoothness = 0,
                     PointGeometrySize = 15
                 });
-
-                i++;
-                if (i == this.Colors.Count)
-                    i = 0;
             }
         }
     }

@@ -10,7 +10,7 @@ namespace Stepper
 {
     //OBJECTIVE VM
     //View Model for storing properties of input objectives
-    public class ObjectiveVM : BaseVM
+    public class ObjectiveVM : BaseVM, IStepDataElement
     {
         private StepperVM Stepper;
         public int index;
@@ -45,6 +45,7 @@ namespace Stepper
         public double Value
         {
             get { return this._val; }
+            set { CheckPropertyChanged<double>("Value", ref _val, ref value); }
         }
 
         //IS ACTIVE
@@ -65,6 +66,5 @@ namespace Stepper
                 }
             }
         }
-
     }
 }

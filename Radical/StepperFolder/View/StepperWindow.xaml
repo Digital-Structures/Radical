@@ -160,7 +160,7 @@
             </Expander>
         </Grid>
 
-        <materialDesign:Card Name="ChartCard" Grid.Column="1" Margin="10,0" Padding="20,0" Background="{DynamicResource MaterialDesignPaper}">
+        <materialDesign:Card Name="ChartCard" Grid.Column="1" Margin="10,0" Padding="20,10" VerticalAlignment="Bottom" Background="{DynamicResource MaterialDesignPaper}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"></RowDefinition>
@@ -171,41 +171,89 @@
                 <DockPanel Name="ChartPanel" Grid.Row="0">
                 </DockPanel>
 
-                <Slider Name="GraphSlider" Grid.Row="1" HorizontalAlignment="Stretch" Margin="43,10,70,10" Foreground="{DynamicResource SecondaryAccentBrush}" Visibility="Hidden"
-                        Value="{Binding TrackedStep, Mode=TwoWay}" Minimum="0" Maximum="{Binding NumSteps}" FontSize="12" TickFrequency="1" IsSnapToTickEnabled="True"></Slider>
+                <Slider Name="GraphSlider" Grid.Row="1" HorizontalAlignment="Stretch" Margin="38,10,15,10" Foreground="{DynamicResource SecondaryAccentBrush}" Visibility="Hidden"
+                        Value="{Binding TrackedStep, Mode=TwoWay}" Minimum="0" Maximum="{Binding NumSteps}" FontSize="12" TickFrequency="1" IsSnapToTickEnabled="True"
+                        ValueChanged="GraphSlider_ValueChanged"></Slider>
 
-                <Button Grid.Row="2" Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="10" Click="ButtonReset_Click">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
+                <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" MaxHeight="200">
+                    <Expander>
+                        <Expander.Header>
+                            <Grid Margin="-15,0,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
 
-                        <materialDesign:PackIcon Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,60,0" Kind="Refresh" Height="30" Width="30"/>
-                        <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"> RESET to STEP</TextBlock>
-                        <materialDesign:PackIcon Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="60,0,0,0" Kind="Refresh" Height="30" Width="30"/>
-                    </Grid>
-                </Button>
+                                <TextBlock Grid.Column="0" FontSize="22" Foreground="{DynamicResource PrimaryHueDarkBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"> 
+                                    Current Step: </TextBlock>
+
+                                <TextBlock Grid.Column="1" Text="{Binding Path=Value, ElementName=GraphSlider}"
+                                           FontSize="22" Foreground="{DynamicResource PrimaryHueDarkBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"></TextBlock>
+
+                                <Button Grid.Column="2" Style="{StaticResource MaterialDesignRaisedAccentButton}" Click="ButtonReset_Click"
+                                        Margin="10,0" MaxWidth="400" HorizontalAlignment="Center">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+
+                                        <materialDesign:PackIcon Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,40,0" Kind="Refresh" Height="30" Width="30"/>
+                                        <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"> RESET to CURRENT STEP</TextBlock>
+                                        <materialDesign:PackIcon Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="40,0,0,0" Kind="Refresh" Height="30" Width="30"/>
+                                    </Grid>
+                                </Button>
+
+                                <TextBlock Grid.Column="3" FontSize="22" Foreground="{DynamicResource PrimaryHueDarkBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"> Display Data</TextBlock>
+                            </Grid>
+                        </Expander.Header>
+                        <StackPanel>
+                            <Border BorderBrush="{DynamicResource PrimaryHueLightBrush}" BorderThickness="1" Margin="0,0,0,10"></Border>
+                            
+                            <TextBlock Foreground="{DynamicResource PrimaryHueDarkBrush}" FontSize="16" Padding="10,0,0,0">
+                                Objectives
+                            </TextBlock>
+
+                            <ItemsControl Name="StepObjData">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="4">
+                                            <!-- Grid for displaying variable values at a step -->
+                                        </UniformGrid>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+
+                            <TextBlock Foreground="{DynamicResource PrimaryHueDarkBrush}" FontSize="16" Padding="10,0,0,0">
+                                Variables
+                            </TextBlock>
+
+                            <ItemsControl Name="StepVarData">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="4">
+                                            <!-- Grid for displaying variable values at a step -->
+                                        </UniformGrid>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Expander>
+                </ScrollViewer>
             </Grid>
         </materialDesign:Card>
 
-        <Grid Grid.Column="2">
+        <Grid Grid.Column="2" Name="RightMenus">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
 
             <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
-                <Expander Name="SettingsExpander" HorizontalAlignment="Stretch" Background="Transparent" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
-                    <Expander.Header>
-                        <TextBlock FontSize="24" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"> Optimization Settings</TextBlock>
-                    </Expander.Header>
-                </Expander>
-            </ScrollViewer>
-
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                 <Expander Name="ObjectivesExpander" HorizontalAlignment="Stretch" Background="Transparent" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
                     <Expander.Header>
                         <TextBlock FontSize="24" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"> Objective Data</TextBlock>
@@ -216,6 +264,14 @@
                         <StackPanel Name="GradientDataPanel">
                         </StackPanel>
                     </StackPanel>
+                </Expander>
+            </ScrollViewer>
+
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <Expander Name="SettingsExpander" IsExpanded="True" HorizontalAlignment="Stretch" Background="Transparent" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+                    <Expander.Header>
+                        <TextBlock FontSize="24" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"> Optimization Settings</TextBlock>
+                    </Expander.Header>
                 </Expander>
             </ScrollViewer>
 

@@ -42,7 +42,7 @@
                          TextChanged="TextBox_TextChanged" PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus" Visibility="Visible"
                          ></TextBox>
 
-            <Slider Name ="Slider" Minimum="{Binding Min, Mode=TwoWay}" Maximum="{Binding Max, Mode=TwoWay}" Value="{Binding Value, Mode=TwoWay}" FontSize="8" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+            <Slider Name ="Slider" Minimum="{Binding Min, Mode=TwoWay}" Maximum="{Binding Max, Mode=TwoWay}" Value="{Binding Value, Mode=TwoWay}" FontSize="8" Foreground="{DynamicResource PrimaryHueLightBrush}"
                         Grid.Column="4" Width="125" VerticalAlignment="Center" HorizontalAlignment="Center" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2" Visibility="Visible"
                         IsEnabled="{Binding ChangesEnabled}"
                         ></Slider>

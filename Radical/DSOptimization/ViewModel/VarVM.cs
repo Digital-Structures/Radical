@@ -11,7 +11,7 @@ namespace DSOptimization
 { 
     //VARIABLE VIEW MODEL
     //Manages the bounds and values of input variables to be optimized
-    public class VarVM : BaseVM
+    public class VarVM : BaseVM, IStepDataElement
     {
         public enum Direction { X, Y, Z, None };
         public IVariable DesignVar;
@@ -31,7 +31,7 @@ namespace DSOptimization
             this.OriginalValue = DesignVar.CurrentValue;
             this.BestSolutionValue = DesignVar.CurrentValue;
 
-            this._name = DesignVar.Parameter.Name;
+            this._name = DesignVar.Parameter.NickName;
 
             this._value = DesignVar.CurrentValue;
             this._min = DesignVar.Min;

@@ -38,7 +38,11 @@ namespace Stepper
         private List<GradientControl> Gradients;
         private List<GroupVariableControl> GroupVars;
 
-        private StepperGraphControl Chart;
+        private List<StepDataControl> StepObjs;
+        private List<StepDataControl> StepVars;
+
+        private StepperGraphControl Chart_Norm;
+        private StepperGraphControl Chart_Abs;
         private List<SolidColorBrush> ChartColors;
 
         public StepperWindow() : base()
@@ -56,22 +60,38 @@ namespace Stepper
 
             //Create a list of ObjectiveControl UI objects for each objective
             this.Objectives = new List<ObjectiveControl>();
+            this.StepObjs = new List<StepDataControl>();
+
             foreach (ObjectiveVM objective in this.StepperVM.Objectives)
+            {
                 this.Objectives.Add(new ObjectiveControl(objective));
+
+                var StepDataElement = new StepDataControl(objective);
+                this.StepObjs.Add(StepDataElement);
+            }
+
 
             //Create a list of VariableConrol UI objects for each variable
             this.GroupVars = new List<GroupVariableControl>();
             this.Variables = new List<VariableControl>();
             this.Gradients = new List<GradientControl>();
+            this.StepVars = new List<StepDataControl>();
+
             foreach (VarVM var in this.StepperVM.Variables)
             {
                 this.Variables.Add(new VariableControl(var));
                 this.Gradients.Add(new GradientControl(var));
+
+                var StepDataElement = new StepDataControl(var);
+                this.StepVars.Add(StepDataElement);
             }
 
             GenerateChartColors();
-            this.StepperVM.ObjectiveChart = new StepperGraphVM(this.StepperVM, this.ChartColors);
-            this.Chart = new StepperGraphControl(this.StepperVM.ObjectiveChart);
+            this.StepperVM.ObjectiveChart_Norm.Colors = this.ChartColors;
+            this.Chart_Norm = new StepperGraphControl(this.StepperVM.ObjectiveChart_Norm);
+
+            this.StepperVM.ObjectiveChart_Abs.Colors = this.ChartColors;
+            this.Chart_Abs = new StepperGraphControl(this.StepperVM.ObjectiveChart_Abs);
 
             ConfigureDisplay();
 
@@ -123,9 +143,11 @@ namespace Stepper
                 this.GradientDataPanel.Children.Add(grad);
             }
 
-            this.ChartPanel.Children.Add(Chart);
+            this.ChartPanel.Children.Add(Chart_Norm);
+            StepObjData.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = StepObjs });
+            StepVarData.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = StepVars });
 
-            this.SettingsExpander.Content = new SettingsControl(this.StepperVM);
+            this.SettingsExpander.Content = new SettingsControl(this.StepperVM, this);
         }
 
         //ADD NUMBERS
@@ -346,6 +368,26 @@ namespace Stepper
             }
         }
 
+        //SLIDER VALUE CHANGED
+        //Update all data display values
+        private void GraphSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            int i = 0;
+            foreach (StepDataControl data in this.StepVars)
+            {
+                data.Value = this.StepperVM.VariableEvolution[i][(int)this.GraphSlider.Value];
+                i++;
+            }
+
+            i = 0;
+            foreach (StepDataControl data in this.StepObjs)
+            {
+                data.Value = this.StepperVM.ObjectiveEvolution_Abs[i][(int)this.GraphSlider.Value];
+                i++;
+            }
+
+        }
+
         //BUTTON RESET
         private void ButtonReset_Click(object sender, RoutedEventArgs e)
         {
@@ -364,6 +406,20 @@ namespace Stepper
         {
             ButtonOpenMenu.Visibility = Visibility.Collapsed;
             ButtonCloseMenu.Visibility = Visibility.Visible;
+        }
+
+        //DISPLAY ABSOLUTE
+        public void DisplayAbsolute()
+        {
+            this.ChartPanel.Children.Remove(this.Chart_Norm);
+            this.ChartPanel.Children.Add(this.Chart_Abs);
+        }
+
+        //DISPLAY NORMALIZED
+        public void DisplayNormalized()
+        {
+            this.ChartPanel.Children.Remove(this.Chart_Abs);
+            this.ChartPanel.Children.Add(this.Chart_Norm);
         }
 
         //KEY DOWN
