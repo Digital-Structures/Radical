@@ -349,8 +349,7 @@ namespace Stepper
 
             if (name != "ButtonGradient")
             {
-                if (this.GraphSlider.Visibility == Visibility.Hidden)
-                    this.GraphSlider.Visibility = Visibility.Visible;
+                this.GraphSlider.Visibility = Visibility.Visible;
 
                 StepperOptimizer.Direction dir;
 
@@ -363,6 +362,8 @@ namespace Stepper
 
                 this.StepperVM.Optimize(dir, GradientData);
             }
+            else
+                this.GradientsExpander.IsExpanded = true;
 
             //Update objective value display from menu
             for (int i=0; i<this.Objectives.Count; i++)

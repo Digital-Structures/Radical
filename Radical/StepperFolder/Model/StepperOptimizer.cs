@@ -38,7 +38,7 @@ namespace Stepper
         {
             this.Design = design;
 
-            numVars = Design.Variables.Count;
+            numVars = Design.ActiveVariables.Count;
             numObjs = Design.Objectives.Count;
             FDstep = 0.01;
 
@@ -54,7 +54,7 @@ namespace Stepper
             this.Dir = dir;
             this.StepSize = stepSize;
 
-            numVars = Design.Variables.Count;
+            numVars = Design.ActiveVariables.Count;
             numObjs = Design.Objectives.Count;
             FDstep = 0.01;
 
@@ -78,11 +78,11 @@ namespace Stepper
 
                 for (int j = 0; j < numVars; j++)
                 {
-                    DesignMapStepperOne[i].Add(Design.Variables[j].CurrentValue);
-                    DesignMapStepperTwo[i].Add(Design.Variables[j].CurrentValue);
+                    DesignMapStepperOne[i].Add(Design.ActiveVariables[j].CurrentValue);
+                    DesignMapStepperTwo[i].Add(Design.ActiveVariables[j].CurrentValue);
                 }
 
-                IVariable var = Design.Variables[i];
+                IVariable var = Design.ActiveVariables[i];
                 double difference = 0.5 * FDstep * (var.Max - var.Min);
 
                 double left = var.CurrentValue - difference;
@@ -97,7 +97,7 @@ namespace Stepper
             DesignMapStepperCombined.AddRange(DesignMapStepperTwo);
 
             // Add dummy at end to resent sliders
-            DesignMapStepperCombined.Add(Design.Variables.Select(var => var.CurrentValue).ToList());
+            DesignMapStepperCombined.Add(Design.ActiveVariables.Select(var => var.CurrentValue).ToList());
 
             return DesignMapStepperCombined;
         }
@@ -114,7 +114,7 @@ namespace Stepper
                     int i = 0;
                     foreach (double val in sample)
                     {
-                        Design.Variables[i].UpdateValue(val);
+                        Design.ActiveVariables[i].UpdateValue(val);
                         i++;
                     }
                     Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
@@ -254,7 +254,7 @@ namespace Stepper
             //Set all sliders to their optimized values
             for (int i = 0; i < numVars; i++)
             {
-                IVariable var = Design.Variables[i];
+                IVariable var = Design.ActiveVariables[i];
                 double SteppedValue;
 
                 switch(this.Dir)
