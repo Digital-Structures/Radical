@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Radical;
+using Grasshopper;
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
 using Rhino.Geometry;
 using System.Linq;
 using System.Text;
@@ -25,6 +27,10 @@ namespace DSOptimization
         public List<NurbsSurface> SrfVariables { get; set; }
         public List<NurbsCurve> CrvVariables { get; set; }
 
+        private DataTree<double> ObjectiveHistory;
+        private DataTree<double> VariableHistory;
+        private DataTree<double> GradientHistory;
+
         //Checks to see if there is an objective and that at least one variable is connected (can change to make it so that only one variable is connected)
         public bool InputsSatisfied { get; set; }
 
@@ -37,10 +43,14 @@ namespace DSOptimization
               "DSE", "Optimization")
         {
             this.Objectives = new List<double>();
+            this.ObjectiveHistory = new DataTree<double>();
 
             this.NumVariables = new List<double>();
             this.SrfVariables = new List<NurbsSurface>();
             this.CrvVariables = new List<NurbsCurve>();
+            this.VariableHistory = new DataTree<double>();
+
+            this.GradientHistory = new DataTree<double>();
 
             this.Constraints = new List<double>();
 
@@ -82,6 +92,9 @@ namespace DSOptimization
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
+            pManager.AddNumberParameter("Objective Evolution", "Obj", "Objective value history", GH_ParamAccess.tree);
+            pManager.AddNumberParameter("Variable Evolution", "Var", "Variable value history", GH_ParamAccess.tree);
+            pManager.AddNumberParameter("Gradient Evolution", "Grad", "Gradient value history", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -150,7 +163,57 @@ namespace DSOptimization
             }
 
             this.InputsSatisfied = true;
+
+            DA.SetDataTree(0, this.ObjectiveHistory);
+            DA.SetDataTree(1, this.VariableHistory);
+            DA.SetDataTree(2, this.GradientHistory);
         }
+
+        #region Update Ouput Data
+        //Takes a list of all objective values for a step
+        //Appends values to the output tree
+        public void AppendToObjectives(List<double> values)
+        {
+            int i = 0;
+            foreach (double obj in values)
+            {
+                GH_Path path = new GH_Path(i);
+                this.ObjectiveHistory.Add(obj, path);
+
+                i++;
+            }
+                
+        }
+
+        public void AppendToVariables (List<double> values)
+        {
+            int i = 0;
+            foreach (double var in values)
+            {
+                GH_Path path = new GH_Path(i);
+                this.VariableHistory.Add(var, path);
+
+                i++;
+            }
+        }
+
+        public void AppendToGradients (List<List<double>> values)
+        {
+            int i = 0;
+            foreach (List<double> obj in values)
+            {
+                int j = 0;
+                foreach (double grad in obj)
+                {
+                    GH_Path path = new GH_Path(i,j);
+                    this.GradientHistory.Add(grad, path);                    
+
+                    j++;
+                }
+                i++;
+            }
+        }
+        #endregion
 
         /// <summary>
         /// Provides an Icon for the component.

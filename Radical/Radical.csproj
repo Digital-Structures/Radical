@@ -166,12 +166,6 @@
     <Compile Include="StepperFolder\ViewModel\ObjectiveVM.cs" />
     <Compile Include="StepperFolder\ViewModel\StepperGraphVM.cs" />
     <Compile Include="StepperFolder\ViewModel\StepperVM.cs" />
-    <Compile Include="StepperFolder\View\GradientControl.xaml.cs">
-      <DependentUpon>GradientControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="StepperFolder\View\ObjectiveControl.xaml.cs">
-      <DependentUpon>ObjectiveControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="StepperFolder\View\SettingsControl.xaml.cs">
       <DependentUpon>SettingsControl.xaml</DependentUpon>
     </Compile>
@@ -181,8 +175,8 @@
     <Compile Include="StepperFolder\View\StepperWindow.xaml.cs">
       <DependentUpon>StepperWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StepperFolder\View\StepDataControl.xaml.cs">
-      <DependentUpon>StepDataControl.xaml</DependentUpon>
+    <Compile Include="StepperFolder\View\DataControl.xaml.cs">
+      <DependentUpon>DataControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -245,14 +239,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="StepperFolder\View\GradientControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="StepperFolder\View\ObjectiveControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="StepperFolder\View\SettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -265,7 +251,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="StepperFolder\View\StepDataControl.xaml">
+    <Page Include="StepperFolder\View\DataControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

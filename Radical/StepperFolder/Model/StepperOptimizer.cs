@@ -182,10 +182,8 @@ namespace Stepper
             return Gradient;
         }
 
-        public void Optimize()
+        public void Optimize(List<List<double>> Gradient)
         {
-            var Gradient = this.CalculateGradient();
-
             //// FIND THE ORTHOGONAL VECTORS
             ////double[][] gradientArray = Gradient.Select(a => a.ToArray()).ToArray();
             List<List<string>> lst = new List<List<string>>();
@@ -277,6 +275,8 @@ namespace Stepper
                         break;
                 }
             }
+
+            this.Design.UpdateComponentOutputs(Gradient);
         }
     }
 }

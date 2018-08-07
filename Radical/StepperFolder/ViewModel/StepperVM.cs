@@ -28,6 +28,7 @@ namespace Stepper
         public ChartValues<ChartValues<double>> ObjectiveEvolution_Norm;
         public ChartValues<ChartValues<double>> ObjectiveEvolution_Abs;
         public List<List<double>> VariableEvolution;
+        public List<List<double>> GradientEvolution;
 
         public List<ObjectiveVM> Objectives;
         public List<VarVM> Variables { get; set; }
@@ -86,11 +87,13 @@ namespace Stepper
                 i++;
             }
 
-            //Set up list of variable value evolution 
+            //Set up list of variable value and gradient evolution 
             this.VariableEvolution = new List<List<double>>();
+            this.GradientEvolution = new List<List<double>>();
             foreach (VarVM var in this.Variables)
             {
                 this.VariableEvolution.Add(new List<double> { var.Value });
+                this.GradientEvolution.Add(new List<double> { });
             }
 
             //Set up both charts
@@ -120,6 +123,12 @@ namespace Stepper
         {
             get { return index; }
             set { CheckPropertyChanged<int>("ObjIndex", ref index, ref value); }
+        }
+
+        //OBJECTIVE NAME
+        public string CurrentObjectiveName
+        {
+            get { return this.Objectives[ObjIndex].Name; }
         }
 
         //STEP SIZE
@@ -212,10 +221,10 @@ namespace Stepper
         }
 
         //OPTIMIZE
-        public void Optimize(StepperOptimizer.Direction dir)
+        public void Optimize(StepperOptimizer.Direction dir, List<List<double>> GradientData)
         {
             StepperOptimizer optimizer = new StepperOptimizer(this.Design, this.ObjIndex, dir, this.StepSize);
-            optimizer.Optimize();
+            optimizer.Optimize(GradientData);
 
             //Update variable values at the end of the optimization
             foreach (GroupVarVM var in this.GroupVars)

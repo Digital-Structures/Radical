@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:Stepper"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d">
-    <Grid>
+    
+    <Grid Name="SettingsGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -22,7 +23,7 @@
             <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,5" FontSize="18"> Active Objective:</TextBlock>
 
             <ComboBox Grid.Column="1" Name="ChosenObjective" HorizontalAlignment="Right" HorizontalContentAlignment="Right"
-                                  ItemsSource="{Binding ObjectiveNames, Mode=OneWay}" 
+                                  ItemsSource="{Binding ObjectiveNames, Mode=OneWay}" SelectionChanged="ChosenObjective_SelectionChanged"
                                   SelectedIndex="{Binding ObjIndex, Mode=OneWayToSource, FallbackValue=0}"
                                   IsEditable="True" IsReadOnly="True" FontSize="18">
             </ComboBox>
@@ -53,7 +54,7 @@
 
             <TextBlock Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">Normalized</TextBlock>
 
-            <ToggleButton Grid.Column="2" Width="60"
+            <ToggleButton Grid.Column="2" Name="DisplayModeButton" Width="60"
                           IsChecked="False" Checked="ToggleButton_Checked" Unchecked="ToggleButton_Unchecked" ></ToggleButton>
             
             <TextBlock Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center">Absolute</TextBlock>

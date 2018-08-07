@@ -33,13 +33,13 @@ namespace Stepper
     {
         //Variables and properties
         private StepperVM StepperVM;
-        private List<ObjectiveControl> Objectives;
+        private List<DataControl> Objectives;
         private List<VariableControl> Variables;
-        private List<GradientControl> Gradients;
+        private List<DataControl> Gradients;
         private List<GroupVariableControl> GroupVars;
 
-        private List<StepDataControl> StepObjs;
-        private List<StepDataControl> StepVars;
+        private List<DataControl> StepObjs;
+        private List<DataControl> StepVars;
 
         private StepperGraphControl Chart_Norm;
         private StepperGraphControl Chart_Abs;
@@ -58,15 +58,15 @@ namespace Stepper
             this.DataContext = svm;
             InitializeComponent();
 
-            //Create a list of ObjectiveControl UI objects for each objective
-            this.Objectives = new List<ObjectiveControl>();
-            this.StepObjs = new List<StepDataControl>();
+            //Create a list of DataControl UI objects for each objective
+            this.Objectives = new List<DataControl>();
+            this.StepObjs = new List<DataControl>();
 
             foreach (ObjectiveVM objective in this.StepperVM.Objectives)
             {
-                this.Objectives.Add(new ObjectiveControl(objective));
+                this.Objectives.Add(new DataControl(objective));
 
-                var StepDataElement = new StepDataControl(objective);
+                var StepDataElement = new DataControl(objective);
                 this.StepObjs.Add(StepDataElement);
             }
 
@@ -74,15 +74,15 @@ namespace Stepper
             //Create a list of VariableConrol UI objects for each variable
             this.GroupVars = new List<GroupVariableControl>();
             this.Variables = new List<VariableControl>();
-            this.Gradients = new List<GradientControl>();
-            this.StepVars = new List<StepDataControl>();
+            this.Gradients = new List<DataControl>();
+            this.StepVars = new List<DataControl>();
 
             foreach (VarVM var in this.StepperVM.Variables)
             {
                 this.Variables.Add(new VariableControl(var));
-                this.Gradients.Add(new GradientControl(var));
+                this.Gradients.Add(new DataControl(var));
 
-                var StepDataElement = new StepDataControl(var);
+                var StepDataElement = new DataControl(var);
                 this.StepVars.Add(StepDataElement);
             }
 
@@ -120,6 +120,12 @@ namespace Stepper
 
             SolidColorBrush Stroke4 = (SolidColorBrush)this.FindResource("PrimaryHueLightBrush");
             this.ChartColors.Add(Stroke4);
+
+            SolidColorBrush Stroke5 = Brushes.Black;
+            this.ChartColors.Add(Stroke5);
+
+            SolidColorBrush Stroke6 = Brushes.Gray;
+            this.ChartColors.Add(Stroke6);
         }
 
         //CONFIGURE DISPLAY
@@ -132,16 +138,8 @@ namespace Stepper
             foreach (GroupVariableControl group in this.GroupVars)
                 this.StepperVM.GroupVars.Add((GroupVarVM)group.MyVM);
 
-            //Add objective controls
-            foreach (ObjectiveControl objective in this.Objectives)
-                this.ObjectivesPanel.Children.Add(objective);
-
-            //Add gradient info controls
-            for(int i=0; i < this.Variables.Count; i++)
-            {
-                GradientControl grad = this.Gradients[i];
-                this.GradientDataPanel.Children.Add(grad);
-            }
+            ObjData.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = this.Objectives });
+            GradientData.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = this.Gradients });
 
             this.ChartPanel.Children.Add(Chart_Norm);
             StepObjData.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = StepObjs });
@@ -337,24 +335,23 @@ namespace Stepper
         //Runs one step of the animation on click
         private void ButtonPlay_Click(object sender, RoutedEventArgs e)
         {
-            if (this.GraphSlider.Visibility == Visibility.Hidden)
-                this.GraphSlider.Visibility = Visibility.Visible;
-
             Button button = (Button)sender;
             string name = button.Name;
 
-            if (name == "ButtonGradient")
-            {
-                StepperOptimizer calculator = new StepperOptimizer(this.StepperVM.Design);
-                var GradientData = calculator.CalculateGradient();
+            //Always calculate and store gradient
+            StepperOptimizer calculator = new StepperOptimizer(this.StepperVM.Design);
+            var GradientData = calculator.CalculateGradient();
 
-                int obj = this.StepperVM.ObjIndex;
+            int obj = this.StepperVM.ObjIndex;
 
-                for (int i = 0; i < GradientData[obj].Count; i++)
-                    this.StepperVM.Variables[i].Gradient = GradientData[obj][i];
-            }
-            else
+            for (int i = 0; i < GradientData[obj].Count; i++)
+                this.Gradients[i].Value = GradientData[obj][i];
+
+            if (name != "ButtonGradient")
             {
+                if (this.GraphSlider.Visibility == Visibility.Hidden)
+                    this.GraphSlider.Visibility = Visibility.Visible;
+
                 StepperOptimizer.Direction dir;
 
                 if (name == "ButtonStepUp")
@@ -364,23 +361,36 @@ namespace Stepper
                 else
                     dir = StepperOptimizer.Direction.Isoperformance;
 
-                this.StepperVM.Optimize(dir);
+                this.StepperVM.Optimize(dir, GradientData);
+            }
+
+            //Update objective value display from menu
+            for (int i=0; i<this.Objectives.Count; i++)
+            {
+                //Convert nullable bool to bool
+                bool? abs = ((SettingsControl)this.SettingsExpander.Content).DisplayModeButton.IsChecked;
+                bool ModeIsAbsolute = abs.HasValue && abs.Value;
+
+                if (ModeIsAbsolute)
+                    Objectives[i].Value = StepperVM.ObjectiveEvolution_Abs[i].Last();
+                else
+                    Objectives[i].Value = StepperVM.ObjectiveEvolution_Norm[i].Last();
             }
         }
 
         //SLIDER VALUE CHANGED
-        //Update all data display values
+        //Update all step data display values
         private void GraphSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             int i = 0;
-            foreach (StepDataControl data in this.StepVars)
+            foreach (DataControl data in this.StepVars)
             {
                 data.Value = this.StepperVM.VariableEvolution[i][(int)this.GraphSlider.Value];
                 i++;
             }
 
             i = 0;
-            foreach (StepDataControl data in this.StepObjs)
+            foreach (DataControl data in this.StepObjs)
             {
                 data.Value = this.StepperVM.ObjectiveEvolution_Abs[i][(int)this.GraphSlider.Value];
                 i++;

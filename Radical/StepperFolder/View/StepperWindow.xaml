@@ -37,8 +37,8 @@
 
                     <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{StaticResource Primary100}"/>
                     <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{StaticResource Primary100Foreground}"/>
-                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{StaticResource Primary400}"/>
-                    <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary400Foreground}"/>
+                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{StaticResource Primary300}"/>
+                    <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary300Foreground}"/>
                     <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary800}"/>
                     <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary800Foreground}"/>
                 </ResourceDictionary>
@@ -111,7 +111,7 @@
                 </Button>
             </Grid>
 
-            <Expander Grid.Row="1" Name="VariablesExpander" Width="0" Padding="20,0" Background="Transparent" Foreground="{DynamicResource LightTextBrush}">
+            <Expander Grid.Row="1" Name="VariablesExpander" IsExpanded="True" Width="0" Padding="20,0" Background="Transparent" Foreground="{DynamicResource LightTextBrush}">
                 <Expander.Header>
                     <TextBlock FontSize="24" Foreground="{DynamicResource LightTextBrush}"> Variables</TextBlock>
                 </Expander.Header>
@@ -171,7 +171,7 @@
                 <DockPanel Name="ChartPanel" Grid.Row="0">
                 </DockPanel>
 
-                <Slider Name="GraphSlider" Grid.Row="1" HorizontalAlignment="Stretch" Margin="38,10,15,10" Foreground="{DynamicResource SecondaryAccentBrush}" Visibility="Hidden"
+                <Slider Name="GraphSlider" Grid.Row="1" HorizontalAlignment="Stretch" Margin="38,10,17,10" Foreground="{DynamicResource SecondaryAccentBrush}" Visibility="Hidden"
                         Value="{Binding TrackedStep, Mode=TwoWay}" Minimum="0" Maximum="{Binding NumSteps}" FontSize="12" TickFrequency="1" IsSnapToTickEnabled="True"
                         ValueChanged="GraphSlider_ValueChanged"></Slider>
 
@@ -253,16 +253,54 @@
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
-                <Expander Name="ObjectivesExpander" HorizontalAlignment="Stretch" Background="Transparent" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Padding="0,50,0,0">
+                <Expander Background="Transparent" >
                     <Expander.Header>
-                        <TextBlock FontSize="24" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"> Objective Data</TextBlock>
+                        <TextBlock FontSize="24" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" > Objective Data</TextBlock>
                     </Expander.Header>
                     <StackPanel>
-                        <StackPanel Name="ObjectivesPanel">
-                        </StackPanel>
-                        <StackPanel Name="GradientDataPanel">
-                        </StackPanel>
+                        <TextBlock Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" FontSize="20" Margin="25,10">
+                                Objectives
+                        </TextBlock>
+
+                        <ItemsControl Name="ObjData" Padding="25,0">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="2">
+                                        <!-- Grid for displaying current objective values -->
+                                    </UniformGrid>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+
+                        <TextBlock Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" FontSize="20" Margin="25,10">
+                                Gradients 
+                        </TextBlock>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Opacity="0.75" FontSize="16" Padding="25,0,10,0">
+                                Current Objective:
+                            </TextBlock>
+
+                            <TextBlock Grid.Column="1" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Opacity="0.75" FontSize="16" Padding="25,0,0,0"
+                                       Text="{Binding CurrentObjectiveName}" HorizontalAlignment="Left">
+                            </TextBlock>
+                        </Grid>
+
+                        <ItemsControl Name="GradientData" Padding="25,0">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="2">
+                                        <!-- Grid for displaying gradient values before last step -->
+                                    </UniformGrid>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
                     </StackPanel>
                 </Expander>
             </ScrollViewer>
