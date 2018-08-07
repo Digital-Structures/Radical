@@ -444,5 +444,12 @@ namespace Stepper
             else if (e.Key == Key.Left || e.Key == Key.Right)
                 this.ButtonPlay_Click(this.ButtonStepIso, new RoutedEventArgs());
         }
+
+        //EXPORT to .CSV
+        //Exports all ObjectiveEvolution, VariableEvolution, and GradientEvolution data
+        private void ExportButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

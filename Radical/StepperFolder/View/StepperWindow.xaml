@@ -248,12 +248,30 @@
 
         <Grid Grid.Column="2" Name="RightMenus">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Padding="0,50,0,0">
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Opacity="0.75" FontSize="16"
+                           Width="50" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Right">
+                        Export Data
+                </TextBlock>
+
+                <Button Grid.Column="1" Name="ExportButton" Height="50" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}"
+                        Click="ExportButton_Click">
+                    <materialDesign:PackIcon Kind="Export" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Width="30" Height="30"></materialDesign:PackIcon>
+                </Button>
+            </Grid>
+
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
                 <Expander Background="Transparent" IsExpanded="True" Padding="20,0">
                     <Expander.Header>
                         <TextBlock FontSize="24" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" > Objective Data</TextBlock>
@@ -342,7 +360,7 @@
                 </Expander>
             </ScrollViewer>
 
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
                 <Expander Name="SettingsExpander" IsExpanded="True" HorizontalAlignment="Stretch" Background="Transparent" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
                     <Expander.Header>
                         <TextBlock FontSize="24" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"> Optimization Settings</TextBlock>
@@ -350,7 +368,7 @@
                 </Expander>
             </ScrollViewer>
 
-            <Grid Name="ButtonGrid" Grid.Row="2" VerticalAlignment="Bottom" Height="150">
+            <Grid Name="ButtonGrid" Grid.Row="3" VerticalAlignment="Bottom" Height="150">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
