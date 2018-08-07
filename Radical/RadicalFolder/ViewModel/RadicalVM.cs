@@ -22,7 +22,7 @@ namespace Radical
         public List<VarVM> NumVars { get; set; }
         public List<List<VarVM>> GeoVars { get; set; }
         public Dictionary<string, List<GraphVM>> Graphs { get; set; }
-        public enum Direction { X, Y, Z } 
+        public enum Direction { X, Y, Z }
 
         //EVOLUTIONS for all objectives and constraints 
         public ChartValues<double> ObjectiveEvolution { get; set; }
@@ -101,6 +101,8 @@ namespace Radical
                 this.Graphs["Constraints"].Add(gvm);
                 this.Constraints.Add(new ConstVM(Design.Constraints[i], gvm));
             }
+
+            UpdateCurrentScoreDisplay();
         }
 
         //SORT VARIABLES
@@ -158,8 +160,12 @@ namespace Radical
                 constraint.ChangesEnabled = false;
 
             this.Graphs["Main"][0].OptimizerDone = false;
+            this.Graphs["Main"][0].ChartLineVisibility = Visibility.Collapsed;
             foreach (GraphVM g in this.Graphs["Constraints"])
+            {
                 g.OptimizerDone = false;
+                g.ChartLineVisibility = Visibility.Collapsed;
+            }
         }
 
         //OPTIMIZATION FINISHED
@@ -172,8 +178,12 @@ namespace Radical
                 constraint.OptimizationFinished();
 
             this.Graphs["Main"][0].OptimizerDone = true;
+            //this.Graphs["Main"][0].ChartLineVisibility = Visibility.Visible;
             foreach (GraphVM g in this.Graphs["Constraints"])
-                g.OptimizerDone = true; 
+            {
+                g.OptimizerDone = true;
+                //g.ChartLineVisibility = Visibility.Visible;
+            }
         }
 
         public void UpdateGraphLines(int iteration)
@@ -192,7 +202,7 @@ namespace Radical
         {
             double objective = this.Design.Objectives[0];
             this.Graphs["Main"][0].FinalOptimizedValue = objective;
-            
+
             for (int i = 0; i < this.Graphs["Constraints"].Count; i++)
             {
                 double score = this.Design.Constraints[i].CurrentValue;
@@ -200,9 +210,11 @@ namespace Radical
             }
         }
 
-        public void UpdateStepSize()
+        //If ObjectiveEvolution has the same amount of objects as the max value on the x axis then the x-axis display
+        //will be automated to display all values in objective evolution
+        public void AutomateStepSize(bool Force)
         {
-            if (ObjectiveEvolution.Count == 10)
+            if (ObjectiveEvolution.Count == this.Graphs["Main"][0].MaxXAxis || Force)
             {
                 this.Graphs["Main"][0].XAxisStep = double.NaN;
                 this.Graphs["Main"][0].MaxXAxis = double.NaN;
@@ -217,6 +229,26 @@ namespace Radical
         public void ResetObjective()
         {
             this.SmallestObjectiveValue = this.OriginalObjectiveValue;
+        }
+
+        public void ClearGraphs()
+        {
+            GraphVM MainGVM = this.Graphs["Main"][0];
+            int max = MainGVM.DefaultMaxXAxis;
+
+            MainGVM.ChartValues.Clear();
+            MainGVM.XAxisStep = 1;
+            MainGVM.MaxXAxis = max;
+            MainGVM.ChartLineVisibility = Visibility.Collapsed;
+
+            for (int i = 0; i < this.Graphs["Constraints"].Count; i++)
+            {
+                GraphVM ConstraintGVM = this.Graphs["Constraints"].ElementAt(i);
+                ConstraintGVM.ChartValues.Clear();
+                ConstraintGVM.XAxisStep = 1;
+                ConstraintGVM.MaxXAxis = max;
+                ConstraintGVM.ChartLineVisibility = Visibility.Collapsed;
+            }
         }
 
         //ON WINDOW CLOSING

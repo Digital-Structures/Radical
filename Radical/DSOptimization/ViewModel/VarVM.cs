@@ -203,12 +203,15 @@ namespace DSOptimization
 
         public void SetBestSolution()
         {
+            //Do we want to switch the original value to be this best solution?
             this.Value = this.BestSolutionValue;
+            this.DesignVar.UpdateValue(this.Value);
         }
 
         public void ResetValue()
         {
             this.Value = this.OriginalValue;
+            this.DesignVar.UpdateValue(this.Value);
             this.BestSolutionValue = this.OriginalValue;
         }
     }

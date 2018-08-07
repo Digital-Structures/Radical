@@ -30,16 +30,16 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock FontSize="27" FontFamily="Global User Interface" Foreground="{DynamicResource BackgroundHueLightForegroundBrush}"
-                                TextAlignment="Right" Padding="40, 10, 20, 0" VerticalAlignment="Center" Text="{Binding LineGraphName, Mode=TwoWay}" Grid.Column="0"/>
+                                TextAlignment="Right" Padding="50, 20, 20, 0" VerticalAlignment="Center" Text="{Binding LineGraphName, Mode=TwoWay}" Grid.Column="0"/>
                     
-                    <Border BorderBrush="Black" BorderThickness="1, 0, 0, 0" Grid.Column="1" HorizontalAlignment="Left" Height="20" VerticalAlignment="Center">
+                    <!--<Border BorderBrush="Black" BorderThickness="1, 0, 0, 0" Grid.Column="1" HorizontalAlignment="Left" Height="20" VerticalAlignment="Center">-->
                         <TextBlock FontSize="20" FontFamily="Global User Interface" Foreground="{DynamicResource BackgroundHueLightForegroundBrush}"
-                                TextAlignment="Left" Padding="20, 5, 0, 0" VerticalAlignment="Center" Text="{Binding FinalOptimizedValueString, Mode=TwoWay}" Grid.Column="1"/>
-                    </Border>
+                                TextAlignment="Left" Padding="20, 20, 0, 0" VerticalAlignment="Center" Text="{Binding FinalOptimizedValueString, Mode=TwoWay}" Grid.Column="1"/>
+                    <!--</Border>-->
                 </Grid>
             </Grid>
             
-            <Grid Grid.Row="1" Margin="25,0,25,0">
+            <Grid Grid.Row="1" Margin="19,0,25,4">
                 <TextBlock Text="Value" FontSize="14" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}"
                            VerticalAlignment="Bottom" HorizontalAlignment="Left" TextAlignment="Right" Visibility="{Binding GraphAxisLabelsVisibility, Mode=TwoWay, FallbackValue=Hidden}">
                 </TextBlock>

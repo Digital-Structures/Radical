@@ -450,7 +450,7 @@ namespace Radical
            // GridMenu.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
             ButtonOpenMenu.Visibility = Visibility.Visible;
             ButtonCloseMenu.Visibility = Visibility.Collapsed;
-            GridMenu.Background = (SolidColorBrush)this.FindResource("SideBarBackgroundColor");
+            GridMenu.Background = (SolidColorBrush)this.FindResource("PrimaryHueDarkBrush");
             this.AnimationBegan();
         }
 
@@ -521,6 +521,15 @@ namespace Radical
                     v.ResetValue();
                 }
             }
+
+            foreach (IDesignGeometry geo in this.RadicalVM.Design.Geometries)
+            {
+                geo.Update();
+            }
+
+            UpdateRhino();
+            this.RadicalVM.UpdateCurrentScoreDisplay();
+            this.RadicalVM.ClearGraphs();
         }
 
         //BUTTON OPTIMAL RESULT CLICK
@@ -537,8 +546,28 @@ namespace Radical
                     v.SetBestSolution();
                 }
             }
+
+            foreach (IDesignGeometry geo in this.RadicalVM.Design.Geometries)
+            {
+                geo.Update();
+            }
+
+            UpdateRhino();
+            this.RadicalVM.UpdateCurrentScoreDisplay();
+            this.RadicalVM.ClearGraphs();
         }
         #endregion
+
+        //Updates variables in Rhino
+        public void UpdateRhino()
+        {
+            System.Action run = delegate ()
+            {
+                Grasshopper.Kernel.GH_SolutionMode refresh = Grasshopper.Kernel.GH_SolutionMode.Default;
+                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, refresh);
+            };
+            Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
+        }
 
         #region Unimplemented
         private void OpenOptSettings(object sender, RoutedEventArgs e)

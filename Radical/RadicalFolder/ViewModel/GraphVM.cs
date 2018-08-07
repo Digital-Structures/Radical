@@ -21,7 +21,8 @@ namespace Radical
     public class GraphVM : BaseVM
     {
         public ChartValues<double> ChartValues { get; set; }
-        private int margin = 10;
+        public int DefaultMaxXAxis { get; set; }
+        private int margin = 20;
         private int space = 5; 
 
         public GraphVM(ChartValues<double> scores, string name)
@@ -31,7 +32,9 @@ namespace Radical
             _y = "0";
             _graphaxislabelsvisibility = Visibility.Hidden;
             _xaxisstep = 1;
-            _maxxaxis = 10;
+            DefaultMaxXAxis = 5;
+            _maxxaxis = DefaultMaxXAxis;
+            _finaloptimizedvalue = double.NaN;
         }
 
         private String _linegraph_name;

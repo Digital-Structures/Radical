@@ -153,9 +153,11 @@ namespace Radical
                 if (StoredMainValues.Any())
                 {
                     AppendStoredValues();
+                    this.RadicalVM.AutomateStepSize(true);
                 }
 
-                this.RadicalVM.UpdateStepSize();
+                //Checks to see if # of iterations is = number of original steps in graph, if it is it will make it auto
+                this.RadicalVM.AutomateStepSize(false);
 
                 //Adds main objective values to list and draws
                 this.RadicalVM.ObjectiveEvolution.Add(objective);
@@ -195,6 +197,7 @@ namespace Radical
             if (this.RadicalWindow.RadicalVM.Mode == RefreshMode.Silent)
             {
                 AppendStoredValues();
+                this.RadicalVM.AutomateStepSize(true);
                 this.RadicalVM.UpdateCurrentScoreDisplay();
             }
             this.RadicalWindow.OptimizationFinished();
