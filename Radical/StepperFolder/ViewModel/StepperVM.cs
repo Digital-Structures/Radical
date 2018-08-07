@@ -54,6 +54,11 @@ namespace Stepper
             this.step = 0.05;
             this.trackedstep = 0;
 
+            //Warn user that system can't handle constraints
+            this.opendialog = false;
+            if (this.Design.Constraints.Any())
+                this.OpenDialog = true;
+
             //Variable Lists
             //Separate for display
             this.NumVars = new List<VarVM>();
@@ -101,6 +106,16 @@ namespace Stepper
             this.ObjectiveChart_Abs = new StepperGraphVM(ObjectiveEvolution_Abs);
             this.ObjectiveNamesChanged();
         }
+
+        //OPEN DIALOG
+        //Boolean to notify user if he's entered constraints
+        private bool opendialog;
+        public virtual bool OpenDialog
+        {
+            get { return this.opendialog; }
+            set { CheckPropertyChanged<bool>("OpenDialog", ref opendialog, ref value); }
+        }
+
 
         //OBJECTIVE NAMES
         //For combo box drop down

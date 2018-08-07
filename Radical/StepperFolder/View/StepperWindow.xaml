@@ -3,9 +3,9 @@
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-            xmlns:local="clr-namespace:Stepper"
+            xmlns:local="clr-namespace:Stepper" 
             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-            xmlns:sys="clr-namespace:System;assembly=mscorlib"
+            xmlns:system="clr-namespace:System;assembly=mscorlib"
             xmlns:Converters="clr-namespace:MaterialDesignThemes.Wpf.Converters;assembly=MaterialDesignThemes.Wpf" 
             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
             xmlns:nlopt="clr-namespace:NLoptNet;assembly=NLoptNet"
@@ -93,6 +93,36 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
+
+        <!--Error Message-->
+        <materialDesign:DialogHost Name="ConstraintsNotice" IsOpen="{Binding OpenDialog, Mode=TwoWay}"
+                                       Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel Margin="16" Width="Auto" MaxWidth="400">
+
+                    <TextBlock FontSize="24" Foreground="{DynamicResource SecondaryAccentBrush}" HorizontalAlignment="Center">
+                        Notice</TextBlock>
+                    
+                    <TextBlock FontSize="16" TextWrapping="Wrap" HorizontalAlignment="Center" Foreground="{DynamicResource SecondaryAccentBrush}">
+                        You've entered some constraints.</TextBlock>
+
+                    <TextBlock FontSize="16" TextWrapping="Wrap" HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryHueDarkBrush}">
+                        Stepper does not support constrained optimization and will ignore constraint inputs.
+                        If you would like your constraints to be considered, please use Radical.</TextBlock>
+
+                    <Button Background="Transparent"
+                            IsDefault="True"
+                            Margin="10"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                            Command="materialDesign:DialogHost.CloseDialogCommand">
+                        <Button.CommandParameter>
+                            <system:Boolean>True</system:Boolean>
+                        </Button.CommandParameter>
+                        CONTINUE
+                    </Button>
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
 
         <Grid Grid.Column="0" Name="LeftMenu">
             <Grid.RowDefinitions>
@@ -187,7 +217,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Grid.Column="0" FontSize="22" Foreground="{DynamicResource PrimaryHueDarkBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"> 
-                                    Current Step: </TextBlock>
+                                    Current Step:</TextBlock>
 
                                 <TextBlock Grid.Column="1" Text="{Binding Path=Value, ElementName=GraphSlider}"
                                            FontSize="22" Foreground="{DynamicResource PrimaryHueDarkBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"></TextBlock>
@@ -212,7 +242,7 @@
                         </Expander.Header>
                         <StackPanel>
                             <Border BorderBrush="{DynamicResource PrimaryHueLightBrush}" BorderThickness="1" Margin="0,0,0,10"></Border>
-                            
+
                             <TextBlock Foreground="{DynamicResource PrimaryHueDarkBrush}" FontSize="16" Padding="10,0,0,0">
                                 Objectives
                             </TextBlock>
@@ -272,7 +302,7 @@
             </Grid>
 
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
-                <Expander Background="Transparent" IsExpanded="True" Padding="20,0">
+                <Expander Name="ObjectiveData" Background="Transparent" IsExpanded="True" Padding="20,0">
                     <Expander.Header>
                         <TextBlock FontSize="24" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" > Objective Data</TextBlock>
                     </Expander.Header>
@@ -281,8 +311,7 @@
                                 Height="1"
                                 HorizontalAlignment="Stretch"
                                 SnapsToDevicePixels="True" />
-                        <Expander Name="ObjectivesExpander" Padding ="20,0,0,0" Visibility="Visible" Background="Transparent" Foreground="{DynamicResource LightTextBrush}"
-                                  IsExpanded="True">
+                        <Expander Name="ObjectivesExpander" Padding ="20,0,0,0" Visibility="Visible" Background="Transparent" Foreground="{DynamicResource LightTextBrush}">
                             <Expander.Header>
                                 <StackPanel Orientation="Horizontal" Margin="-20,-25">
                                     <Border Background="{DynamicResource PrimaryHueMidBrush}" Width="5" VerticalAlignment="Stretch"></Border>
@@ -340,7 +369,7 @@
                                        Text="{Binding CurrentObjectiveName}" HorizontalAlignment="Left">
                                     </TextBlock>
                                 </Grid>
-                                
+
                                 <ItemsControl Name="GradientData" Padding="25,0">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>

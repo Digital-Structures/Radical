@@ -363,7 +363,11 @@ namespace Stepper
                 this.StepperVM.Optimize(dir, GradientData);
             }
             else
+            {
                 this.GradientsExpander.IsExpanded = true;
+                this.ObjectiveData.IsExpanded = true;
+            }
+                
 
             //Update objective value display from menu
             for (int i=0; i<this.Objectives.Count; i++)
