@@ -40,7 +40,7 @@ namespace DSOptimization
         //CHECK BOX CHECKED
         protected void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            ((ConstVM)this.MyVM).GraphVM.UpdateHeight();
+            ((ConstVM)this.MyVM).GraphVM.UpdateHeightHalfScreen();
             ((ConstVM)this.MyVM).GraphVM.GraphVisibility = Visibility.Visible;
             this.MyWindow.UpdatedGraphVisibility();
         }

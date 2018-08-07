@@ -103,21 +103,6 @@ namespace Radical
             }
         }
 
-        public void UpdateGraphLines(int iteration)
-        {
-            foreach (GraphVM graph in this.ActiveGraphs)
-            {
-                graph.MouseIteration = iteration;
-            }
-        }
-
-        //OPTIMIZE
-        public void Optimize(RadicalWindow radicalWindow)
-        {
-            RadicalOptimizer opt = new RadicalOptimizer(this.Design, radicalWindow);
-            opt.RunOptimization();
-        }
-
         //SORT VARIABLES
         //Separate geometric and numeric variables
         //Sorting helps with UI stack panel organization
@@ -156,6 +141,13 @@ namespace Radical
             }
         }
 
+        //OPTIMIZE
+        public void Optimize(RadicalWindow radicalWindow)
+        {
+            RadicalOptimizer opt = new RadicalOptimizer(this.Design, radicalWindow);
+            opt.RunOptimization();
+        }
+
         //OPTIMIZATION STARTED
         //Disable changes to all optimization variables and constraints
         public void OptimizationStarted()
@@ -164,6 +156,10 @@ namespace Radical
 
             foreach (ConstVM constraint in this.Constraints)
                 constraint.ChangesEnabled = false;
+
+            this.Graphs["Main"][0].OptimizerDone = false;
+            foreach (GraphVM g in this.Graphs["Constraints"])
+                g.OptimizerDone = false;
         }
 
         //OPTIMIZATION FINISHED
@@ -174,6 +170,22 @@ namespace Radical
 
             foreach (ConstVM constraint in this.Constraints)
                 constraint.OptimizationFinished();
+
+            this.Graphs["Main"][0].OptimizerDone = true;
+            foreach (GraphVM g in this.Graphs["Constraints"])
+                g.OptimizerDone = true; 
+        }
+
+        public void UpdateGraphLines(int iteration)
+        {
+            foreach (GraphVM graph in this.ActiveGraphs)
+            {
+                graph.MouseIteration = iteration;
+                if (graph.DisplayLine())
+                    graph.ChartLineVisibility = Visibility.Visible;
+                else
+                    graph.ChartLineVisibility = Visibility.Collapsed;
+            }
         }
 
         public void UpdateCurrentScoreDisplay()
@@ -185,6 +197,20 @@ namespace Radical
             {
                 double score = this.Design.Constraints[i].CurrentValue;
                 this.Graphs["Constraints"][i].FinalOptimizedValue = score;
+            }
+        }
+
+        public void UpdateStepSize()
+        {
+            if (ObjectiveEvolution.Count == 10)
+            {
+                this.Graphs["Main"][0].XAxisStep = double.NaN;
+                this.Graphs["Main"][0].MaxXAxis = double.NaN;
+                foreach (GraphVM g in this.Graphs["Constraints"])
+                {
+                    g.XAxisStep = double.NaN;
+                    g.MaxXAxis = double.NaN;
+                }
             }
         }
 

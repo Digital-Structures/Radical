@@ -155,6 +155,8 @@ namespace Radical
                     AppendStoredValues();
                 }
 
+                this.RadicalVM.UpdateStepSize();
+
                 //Adds main objective values to list and draws
                 this.RadicalVM.ObjectiveEvolution.Add(objective);
 

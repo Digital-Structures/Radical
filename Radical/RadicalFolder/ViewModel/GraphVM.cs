@@ -21,6 +21,8 @@ namespace Radical
     public class GraphVM : BaseVM
     {
         public ChartValues<double> ChartValues { get; set; }
+        private int margin = 10;
+        private int space = 5; 
 
         public GraphVM(ChartValues<double> scores, string name)
         {
@@ -28,6 +30,8 @@ namespace Radical
             _linegraph_name = name;
             _y = "0";
             _graphaxislabelsvisibility = Visibility.Hidden;
+            _xaxisstep = 1;
+            _maxxaxis = 10;
         }
 
         private String _linegraph_name;
@@ -66,7 +70,7 @@ namespace Radical
             }
         }
 
-        public RadicalWindow _window;
+        private RadicalWindow _window;
         public RadicalWindow Window
         {
             get { return _window; }
@@ -76,13 +80,39 @@ namespace Radical
             }
         }
 
-        public double _graphgridheight;
+        private double _graphgridheight;
         public double GraphGridHeight
         {
             get { return _graphgridheight; }
             set
             {
-                _graphgridheight = value;
+                if (CheckPropertyChanged<double>("GraphGridHeight", ref _graphgridheight, ref value))
+                {
+                }
+            }
+        }
+
+        private double? _xaxisstep;
+        public double? XAxisStep
+        {
+            get { return _xaxisstep; }
+            set
+            {
+                if (CheckPropertyChanged<double?>("XAxisStep", ref _xaxisstep, ref value))
+                {
+                }
+            }
+        }
+
+        private double? _maxxaxis;
+        public double? MaxXAxis
+        {
+            get { return _maxxaxis; }
+            set
+            {
+                if (CheckPropertyChanged<double?>("MaxXAxis", ref _maxxaxis, ref value))
+                {
+                }
             }
         }
 
@@ -95,6 +125,15 @@ namespace Radical
             {
                 _optimizerdone = value;
             }
+        }
+    
+        public bool DisplayLine()
+        {
+            if (ChartValues.Any() && OptimizerDone)
+            {
+                return true;
+            }
+            return false;
         }
 
         private double _finaloptimizedvalue;
@@ -123,9 +162,15 @@ namespace Radical
             }
         }
 
-        public void UpdateHeight()
+        public void UpdateHeightFullScreen()
         {
-            GraphGridHeight = Window.MainGrid.ActualHeight * 0.45;
+            GraphGridHeight = Window.MainGrid.ActualHeight - (2 * this.margin);
+        }
+
+
+        public void UpdateHeightHalfScreen()
+        {
+            GraphGridHeight = (Window.MainGrid.ActualHeight - this.space - (2 * this.margin)) * 0.5;
         }
 
         #region Visibility

@@ -57,12 +57,14 @@
                     </lvc:CartesianChart.Series>
 
                     <lvc:CartesianChart.AxisX>
-                        <lvc:Axis Name="ChartAxisX">
+                        <lvc:Axis Name="ChartAxisX" MaxValue="{Binding MaxXAxis}">
                             <lvc:Axis.Sections>
                                 <lvc:AxisSection Name="AxisSectionX" Value="{Binding MouseIteration, Mode=TwoWay}" Visibility="{Binding ChartLineVisibility, Mode=TwoWay}" DisableAnimations="True" StrokeThickness="1" Stroke="{DynamicResource PrimaryHueDarkBrush}">
-
                                 </lvc:AxisSection>
                             </lvc:Axis.Sections>
+                            <lvc:Axis.Separator>
+                                <lvc:Separator Step="{Binding XAxisStep}"></lvc:Separator>
+                            </lvc:Axis.Separator>
                         </lvc:Axis>
                     </lvc:CartesianChart.AxisX>
                     <lvc:CartesianChart.AxisY>

@@ -46,6 +46,8 @@ namespace Radical
             this.GraphVM.Window = window; 
 
             this.GraphVM.ChartLineVisibility = Visibility.Collapsed;
+
+            ChartAxisY.LabelFormatter = value => value.ToString("N2");
         }
 
         #region Mouse_Events
@@ -53,7 +55,7 @@ namespace Radical
         //Tracks mouse movement and sets the vertical lines on the graph to be on the points closest to the mouse
         private void Chart_MouseMove(object sender, MouseEventArgs e)
         {
-            if (this.GraphVM.ChartValues.Any())
+            if (this.GraphVM.DisplayLine())
             {
                 this.GraphVM.ChartLineVisibility = Visibility.Visible;
                 var mouseCoordinate = e.GetPosition(Chart);
@@ -91,7 +93,18 @@ namespace Radical
         {
             this.GraphVM.GraphAxisLabelsVisibility = Visibility.Hidden;
         }
-
         #endregion
+
+        public void UpdateHeightFullScreen()
+        {
+            this.GraphVM.UpdateHeightFullScreen();
+        }
+
+
+        public void UpdateHeightHalfScreen()
+        {
+            this.GraphVM.UpdateHeightHalfScreen();
+        }
+
     }
 }

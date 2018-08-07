@@ -135,7 +135,8 @@ namespace Radical
         {
             //MAIN OBJECTIVE GRAPH
             var g = new GraphControl(this.RadicalVM.Graphs["Main"][0], this.RadicalVM, this);
-            g.GraphGrid.Height = MainGrid.ActualHeight * 0.9;
+            //g.GraphGrid.Height = MainGrid.ActualHeight * 0.9;
+            g.UpdateHeightFullScreen();
 
             GraphControls["Main"].Add(g);
             MainBlock.Children.Add(GraphControls["Main"][0]);
@@ -152,7 +153,8 @@ namespace Radical
                 {
                     GraphVM gvm = RadicalVM.Graphs["Constraints"][i];
                     g = new GraphControl(gvm, this.RadicalVM, this);
-                    g.GraphGrid.Height = MainGrid.ActualHeight * 0.45;
+                    // g.GraphGrid.Height = MainGrid.ActualHeight * 0.45;
+                    g.UpdateHeightHalfScreen();
                     GraphControls["Constraints"].Add(g);
 
                     ConstVM c = RadicalVM.Constraints[i];
@@ -343,11 +345,13 @@ namespace Radical
 
             if (this.ActiveGraphs.Count == 1)
             {
-                this.ActiveGraphs[0].GraphGrid.Height = 0.9 * this.MainGrid.ActualHeight;
+                //this.ActiveGraphs[0].GraphGrid.Height = 0.9 * this.MainGrid.ActualHeight;
+                this.ActiveGraphs[0].UpdateHeightFullScreen();
             }
             else
             {
-                this.ActiveGraphs[0].GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
+                //this.ActiveGraphs[0].GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
+                this.ActiveGraphs[0].UpdateHeightHalfScreen();
 
                 if (this.ActiveGraphs.Count == 2)
                 {
@@ -360,7 +364,8 @@ namespace Radical
 
                 foreach (GraphControl g in this.ActiveGraphs)
                 {
-                    g.GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
+                    //g.GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
+                    g.UpdateHeightHalfScreen();
                 }
             }
         }
@@ -415,13 +420,15 @@ namespace Radical
             {
                 if (this.ActiveGraphs.Count == 1)
                 {
-                    this.ActiveGraphs[0].GraphGrid.Height = 0.9 * this.MainGrid.ActualHeight;
+                    //this.ActiveGraphs[0].GraphGrid.Height = 0.9 * this.MainGrid.ActualHeight;
+                    this.ActiveGraphs[0].UpdateHeightFullScreen();
                 }
                 else
                 {
                     foreach (GraphControl g in this.ActiveGraphs)
                     {
-                        g.GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
+                        //g.GraphGrid.Height = 0.45 * this.MainGrid.ActualHeight;
+                        g.UpdateHeightHalfScreen();
                     }
                 }
             }
