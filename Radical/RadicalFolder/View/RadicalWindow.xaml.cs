@@ -178,11 +178,12 @@ namespace Radical
             }
 
             //GROUP VARIABLE CONTROL
-            //Stack Panel
+            //stackpanel
             StackPanel groupControls = new StackPanel();
-            //Expander
+            groupControls.Background = (SolidColorBrush)this.FindResource("PrimaryHueDarkBrush");
+            //expander
             Expander groupControlMenu = new Expander();
-            //groupControlMenu.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
+            groupControlMenu.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
             groupControlMenu.IsExpanded = true;
             groupControlMenu.Header = Header2Formatting("Group Variable Control");
             groupControlMenu.Content = groupControls;
@@ -202,9 +203,10 @@ namespace Radical
             //INDIVIDUAL VARIBALE CONTROL
             //Stack Panel
             StackPanel individualControls = new StackPanel();
+            individualControls.Background = (SolidColorBrush)this.FindResource("PrimaryHueDarkBrush");
             //Expander
             Expander individualControlMenu = new Expander();
-            //individualControlMenu.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
+            individualControlMenu.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
             individualControlMenu.Header = Header2Formatting("Single Variable Control");
             individualControlMenu.Content = individualControls;
             this.Sliders.Children.Add(individualControlMenu);
@@ -237,10 +239,11 @@ namespace Radical
                 //SINGLE GEOMETRY
                 //Stack Panel
                 StackPanel variableMenus = new StackPanel();
+                variableMenus.Background = (SolidColorBrush)this.FindResource("PrimaryHueDarkBrush");
                 //Expander
                 Expander singleGeo = new Expander();
                 
-                singleGeo.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
+                singleGeo.Background = (SolidColorBrush)this.FindResource("BackgroundHueMidBrush");
                 singleGeo.Header = Header1Formatting(geometry[geoIndex].Name.Split('.')[0]); geoIndex++;
                 singleGeo.Content = variableMenus;
                 this.Geometries.Children.Add(singleGeo);
@@ -252,12 +255,13 @@ namespace Radical
                 //GROUP VARIABLE CONTROL
                 //Stack Panel
                 StackPanel groupControls = new StackPanel();
+                groupControls.Background = (SolidColorBrush)this.FindResource("PrimaryHueDarkBrush");
                 //Expander
                 Expander groupControlMenu = new Expander();
                 groupControlMenu.IsExpanded = true;
                 groupControlMenu.Header = Header2Formatting("Group Variable Control");
-                groupControlMenu.Background = (SolidColorBrush)this.FindResource("BackgroundHueMidBrush");
-                groupControlMenu.Foreground = (SolidColorBrush)this.FindResource("BackgroundHueDarkSubtextForegroundBrush");
+                groupControlMenu.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
+                //groupControlMenu.Foreground = (SolidColorBrush)this.FindResource("BackgroundHueDarkSubtextForegroundBrush");
                 groupControlMenu.Content = groupControls;
                 variableMenus.Children.Add(groupControlMenu);
 
@@ -268,9 +272,6 @@ namespace Radical
                 GroupVariableControl groupControlX = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.X), geoIndex - 1)); this.GroupVars.Add(groupControlX);
                 GroupVariableControl groupControlY = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.Y), geoIndex - 1)); this.GroupVars.Add(groupControlY);
                 GroupVariableControl groupControlZ = new GroupVariableControl(new GroupVarVM(this.RadicalVM, (int)(Direction.Z), geoIndex - 1)); this.GroupVars.Add(groupControlZ);
-                groupControlX.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
-                groupControlY.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
-                groupControlZ.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
 
                 groupControlX.GroupControlName.Text = "X Variables";
                 groupControlY.GroupControlName.Text = "Y Variables";
@@ -285,11 +286,12 @@ namespace Radical
                 //INDIVIDUAL VARIBALE CONTROL
                 //Stack Panel
                 StackPanel individualControls = new StackPanel();
+                individualControls.Background = (SolidColorBrush)this.FindResource("PrimaryHueDarkBrush");
                 //Expander
                 Expander individualControlMenu = new Expander();
                 individualControlMenu.Header = Header2Formatting("Single Variable Control");
                 individualControlMenu.Content = individualControls;
-                individualControlMenu.Background = (SolidColorBrush)this.FindResource("BackgroundHueMidBrush");
+                individualControlMenu.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
                 variableMenus.Children.Add(individualControlMenu);
 
                 //Add descriptive control labels
@@ -298,7 +300,7 @@ namespace Radical
                 //Add individual point controls in all directions
                 foreach (VarVM var in geometry) {
                     VariableControl vc = new VariableControl(var);
-                    vc.Background = (SolidColorBrush)this.FindResource("BackgroundHueDarkBrush");
+                    vc.Background = (SolidColorBrush)this.FindResource("PrimaryHueDarkBrush");
                     individualControls.Children.Add(vc);
                 }
             }
@@ -308,7 +310,7 @@ namespace Radical
         private TextBlock Header1Formatting(string text)
         {
             TextBlock header = new TextBlock(new Run(text));
-            header.Foreground = (SolidColorBrush)this.FindResource("BackgroundHueMidForegroundBrush");
+            header.Foreground = (SolidColorBrush)this.FindResource("BackgroundHueDarkForegroundBrush");
             header.FontSize = 16;
 
             return header;
@@ -318,7 +320,7 @@ namespace Radical
         private TextBlock Header2Formatting(string text)
         {
             TextBlock header = new TextBlock(new Run(text));
-            header.Foreground = (SolidColorBrush)this.FindResource("BackgroundHueMidForegroundBrush");
+            header.Foreground = (SolidColorBrush)this.FindResource("PrimaryHueDarkForegroundBrush");
             header.FontSize = 16;
 
             return header;
@@ -440,7 +442,7 @@ namespace Radical
         {
             ButtonOpenMenu.Visibility = Visibility.Collapsed;
             ButtonCloseMenu.Visibility = Visibility.Visible;
-            GridMenu.Background = (SolidColorBrush)this.FindResource("SideBarBackgroundColor");
+            GridMenu.Background = (SolidColorBrush)this.FindResource("PrimaryHueDarkBrush");
             this.AnimationBegan();
         }
 

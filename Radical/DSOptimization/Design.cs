@@ -57,8 +57,8 @@ namespace DSOptimization
             for (int i = 0; i < MyComponent.Params.Input[4].Sources.Count; i++)
             {
                 IGH_Param param = MyComponent.Params.Input[4].Sources[i];
-                NurbsCurve surf = MyComponent.CrvVariables[i];
-                this.Geometries.Add(new DesignCurve(param, surf));
+                NurbsCurve curv = MyComponent.CrvVariables[i];
+                this.Geometries.Add(new DesignCurve(param, curv));
             }
 
             // Add geometries to variables list 

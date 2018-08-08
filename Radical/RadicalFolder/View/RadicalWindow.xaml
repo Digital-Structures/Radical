@@ -31,8 +31,8 @@
                         <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.BlueGrey.Primary.xaml" />
                     </ResourceDictionary.MergedDictionaries>
 
-                    <SolidColorBrush x:Key="BackgroundHueDarkBrush" Color="#cacbcd"/>
-                    <SolidColorBrush x:Key="BackgroundHueMidBrush" Color="#dcddde"/>
+                    <SolidColorBrush x:Key="BackgroundHueDarkBrush" Color="#cacbcd" Opacity="0.10"/>
+                    <SolidColorBrush x:Key="BackgroundHueMidBrush" Color="#cacbcd" Opacity="0.25"/>
 
                     <SolidColorBrush x:Key="BackgroundHueDarkForegroundBrush" Color="White"/>
                     <SolidColorBrush x:Key="BackgroundHueDarkSubtextForegroundBrush" Color="Gray"/>
@@ -40,7 +40,7 @@
                     <SolidColorBrush x:Key="BackgroundHueLightForegroundBrush" Color="Black"/>
 
                     
-                    <SolidColorBrush x:Key="SideBarBackgroundColor" Color="Gray"/>
+                    <SolidColorBrush x:Key="SideBarBackgroundColor" Color="Red"/>
 
                     <!--<SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#99def8"/>
                     <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="White"/>
@@ -154,16 +154,21 @@
                     <materialDesign:PackIcon Kind="Menu" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Width="30" Height="30" HorizontalAlignment="Center"></materialDesign:PackIcon>
                 </Button>
             </Grid>
+            
             <ScrollViewer x:Name="VarTree" Width="0" Grid.Row="1" VerticalScrollBarVisibility="Auto">
                 <StackPanel>
+                    <Border Background="{DynamicResource MaterialDesignDivider}"
+                                Height="1"
+                                HorizontalAlignment="Stretch"
+                                SnapsToDevicePixels="True" />
                     <Border Background="{DynamicResource MaterialDesignDivider}"
                         Height="1"
                         HorizontalAlignment="Stretch"
                         SnapsToDevicePixels="True" />
-                    <Expander Name ="VariablesExpander" Background="Transparent" >
+                    <Expander Name ="VariablesExpander" Background="Transparent" Foreground="{DynamicResource LightTextBrush}">
                         <Expander.Header>
                             <StackPanel Orientation="Horizontal" Margin="-20,-25">
-                                <Border Background="{DynamicResource PrimaryHueDarkBrush}" Width="5" VerticalAlignment="Stretch"></Border>
+                                <Border Background="{DynamicResource PrimaryHueMidBrush}" Width="5" VerticalAlignment="Stretch"></Border>
                                 <Label Padding="10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}">
                                 Variables
                                 </Label>
@@ -174,7 +179,7 @@
                                 Height="1"
                                 HorizontalAlignment="Stretch"
                                 SnapsToDevicePixels="True" />
-                            <Expander Name="SlidersExpander" Padding ="20,0,0,0" Visibility="Visible" Background="{DynamicResource BackgroundHueDarkBrush}">
+                            <Expander Name="SlidersExpander" Padding ="20,0,0,0" Visibility="Visible" Background="{DynamicResource PrimaryHueDarkBrush}">
                                 <Expander.Header>
                                     <StackPanel Orientation="Horizontal" Margin="-20,-25">
                                         <Border Background="{DynamicResource PrimaryHueMidBrush}" Width="5" VerticalAlignment="Stretch"></Border>
@@ -184,7 +189,7 @@
                                     </StackPanel>
                                 </Expander.Header>
                                 <StackPanel  Name="Sliders" HorizontalAlignment="Stretch">
-                                    <Border Background="{DynamicResource MaterialDesignDivider}"
+                                    <Border Background="{DynamicResource PrimaryHueMidBrush}"
                                         Height="1"
                                         HorizontalAlignment="Stretch"
                                         SnapsToDevicePixels="True" />
@@ -194,7 +199,7 @@
                                 Height="1"
                                 HorizontalAlignment="Stretch"
                                 SnapsToDevicePixels="True" />
-                            <Expander Name="GeometriesExpander" Padding="20,0,0,0" Visibility="Visible" Background="{DynamicResource BackgroundHueDarkBrush}">
+                            <Expander Name="GeometriesExpander" Padding="20,0,0,0" Visibility="Visible" Background="{DynamicResource PrimaryHueDarkBrush}">
                                 <Expander.Header>
                                     <StackPanel Orientation="Horizontal" Margin="-20,-25">
                                         <Border Background="{DynamicResource PrimaryHueMidBrush}" Width="5" VerticalAlignment="Stretch"></Border>
@@ -203,8 +208,8 @@
                                         </Label>
                                     </StackPanel>
                                 </Expander.Header>
-                                <StackPanel Name="Geometries" HorizontalAlignment="Stretch" Background="{DynamicResource BackgroundHueDarkBrush}">
-                                    <Border Background="{DynamicResource MaterialDesignDivider}"
+                                <StackPanel Name="Geometries" HorizontalAlignment="Stretch" Background="{DynamicResource PrimaryHueDarkBrush}">
+                                    <Border Background="{DynamicResource PrimaryHueMidBrush}"
                                         Height="1"
                                         HorizontalAlignment="Stretch"
                                         SnapsToDevicePixels="True" />
@@ -216,7 +221,7 @@
                         Height="1"
                         HorizontalAlignment="Stretch"
                         SnapsToDevicePixels="True" />
-                    <Expander Name="ConstraintsExpander" FontSize="18" Background="{DynamicResource BackgroundHueDarkBrush}">
+                    <Expander Name="ConstraintsExpander" FontSize="18" Background="{DynamicResource PrimaryHueDarkBrush}">
                         <Expander.Header>
                             <StackPanel Orientation="Horizontal" Margin="-20,-25">
                                 <Border Background="{DynamicResource PrimaryHueDarkBrush}" Width="5" VerticalAlignment="Stretch"></Border>

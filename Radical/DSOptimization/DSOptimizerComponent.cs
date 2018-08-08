@@ -113,11 +113,18 @@ namespace DSOptimization
             //assign surface variables
             List<Surface> surfaces= new List<Surface>();
             DA.GetDataList(3, surfaces);
+            if (Params.Input[3].Sources.Count > 0 && surfaces.Count == 0)
+            {
+                this.InputsSatisfied = false;
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Your surfaces are messed up");
+                return;
+            }
             foreach (Surface s in surfaces)
             {
-                if (s == null)
+                if (s.UserData == null)
                 {
                     this.InputsSatisfied = false;
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Your surfaces are messed up");
                     return;
                 }
             }
@@ -126,10 +133,18 @@ namespace DSOptimization
             //assign curve variables
             List<Curve> curves = new List<Curve>();
             DA.GetDataList(4, curves);
+            if (Params.Input[4].Sources.Count > 0 && curves.Count == 0)
+            {
+                this.InputsSatisfied = false;
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Your curves are messed up");
+                return;
+            }
             foreach (Curve c in curves)
             {
-                if (c == null){
+                if (c == null)
+                {
                     this.InputsSatisfied = false;
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Your curves are messed up");
                     return;
                 }
             }
