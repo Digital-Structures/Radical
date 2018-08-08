@@ -133,19 +133,19 @@
 
     <Grid Name="MainGrid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition x:Name="SettingsBarColumn" Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="*" Name="GraphsColumn"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" x:Name="GridMenu" HorizontalAlignment="Right">
+        <Grid Grid.Column="0" x:Name="GridMenu" HorizontalAlignment="Right" Width="80">
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
-                <Button x:Name="ButtonCloseMenu" Width="Auto" Height="50" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}" 
+                <Button x:Name="ButtonCloseMenu" Width="Auto" Height="50" HorizontalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" 
                             Visibility="Collapsed" Click="ButtonCloseMenu_Click">
                     <materialDesign:PackIcon Kind="ArrowLeft" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Width="30" Height="30"></materialDesign:PackIcon>
                 </Button>
