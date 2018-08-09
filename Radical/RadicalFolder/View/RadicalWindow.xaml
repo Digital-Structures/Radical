@@ -31,6 +31,8 @@
                         <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.BlueGrey.Primary.xaml" />
                     </ResourceDictionary.MergedDictionaries>
 
+                    <SolidColorBrush x:Key="LightTextBrush" Color="White"/>
+
                     <SolidColorBrush x:Key="BackgroundHueDarkBrush" Color="#cacbcd" Opacity="0.10"/>
                     <SolidColorBrush x:Key="BackgroundHueMidBrush" Color="#cacbcd" Opacity="0.25"/>
 
@@ -81,6 +83,10 @@
                     <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="505"/>
                 </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="ResetButtons">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="505"/>
+                </DoubleAnimationUsingKeyFrames>
             </Storyboard>
             <Storyboard x:Key="MenuClose">
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu" Completed="Animation_Completed">
@@ -88,6 +94,10 @@
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="60"/>
                 </DoubleAnimationUsingKeyFrames>
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="VarTree">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="505"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="ResetButtons">
                     <EasingDoubleKeyFrame KeyTime="0" Value="505"/>
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
                 </DoubleAnimationUsingKeyFrames>
@@ -131,21 +141,22 @@
         </EventTrigger>
     </UserControl.Triggers>
 
-    <Grid Name="MainGrid">
+    <Grid Name="MainGrid" Margin="15">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="SettingsBarColumn" Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="*" Name="GraphsColumn"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" x:Name="GridMenu" HorizontalAlignment="Right" Width="80">
+        <Grid Grid.Column="0" x:Name="GridMenu">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
-                <Button x:Name="ButtonCloseMenu" Width="Auto" Height="50" HorizontalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" 
+                <Button x:Name="ButtonCloseMenu" Width="Auto" Height="50" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}" 
                             Visibility="Collapsed" Click="ButtonCloseMenu_Click">
                     <materialDesign:PackIcon Kind="ArrowLeft" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Width="30" Height="30"></materialDesign:PackIcon>
                 </Button>
@@ -154,36 +165,24 @@
                     <materialDesign:PackIcon Kind="Menu" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Width="30" Height="30" HorizontalAlignment="Center"></materialDesign:PackIcon>
                 </Button>
             </Grid>
-            
-            <ScrollViewer x:Name="VarTree" Width="0" Grid.Row="1" VerticalScrollBarVisibility="Auto">
+
+            <Grid Grid.Row="1">
+                <ScrollViewer x:Name="VarTree" Width="0" Grid.Row="1" VerticalScrollBarVisibility="Auto">
                 <StackPanel>
-                    <Border Background="{DynamicResource MaterialDesignDivider}"
-                                Height="1"
-                                HorizontalAlignment="Stretch"
-                                SnapsToDevicePixels="True" />
-                    <Border Background="{DynamicResource MaterialDesignDivider}"
-                        Height="1"
-                        HorizontalAlignment="Stretch"
-                        SnapsToDevicePixels="True" />
-                    <Expander Name ="VariablesExpander" Background="Transparent" Foreground="{DynamicResource LightTextBrush}">
+                    <Expander Name ="VariablesExpander" Background="Transparent" Foreground="{DynamicResource LightTextBrush}" Grid.Row="1" Padding="20,0">
                         <Expander.Header>
-                            <StackPanel Orientation="Horizontal" Margin="-20,-25">
-                                <Border Background="{DynamicResource PrimaryHueMidBrush}" Width="5" VerticalAlignment="Stretch"></Border>
-                                <Label Padding="10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}">
-                                Variables
-                                </Label>
-                            </StackPanel>
+                            <TextBlock FontSize="24" Foreground="{DynamicResource LightTextBrush}"> Variables</TextBlock>
                         </Expander.Header>
                         <StackPanel>
                             <Border Background="{DynamicResource MaterialDesignDivider}"
                                 Height="1"
                                 HorizontalAlignment="Stretch"
                                 SnapsToDevicePixels="True" />
-                            <Expander Name="SlidersExpander" Padding ="20,0,0,0" Visibility="Visible" Background="{DynamicResource PrimaryHueDarkBrush}">
+                            <Expander Name="SlidersExpander" Padding ="20,0,0,0" Visibility="Visible" Background="Transparent" Foreground="{DynamicResource LightTextBrush}">
                                 <Expander.Header>
                                     <StackPanel Orientation="Horizontal" Margin="-20,-25">
                                         <Border Background="{DynamicResource PrimaryHueMidBrush}" Width="5" VerticalAlignment="Stretch"></Border>
-                                        <Label Padding="30,10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}">
+                                        <Label Padding="30,10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource LightTextBrush}">
                                             Sliders
                                         </Label>
                                     </StackPanel>
@@ -199,7 +198,7 @@
                                 Height="1"
                                 HorizontalAlignment="Stretch"
                                 SnapsToDevicePixels="True" />
-                            <Expander Name="GeometriesExpander" Padding="20,0,0,0" Visibility="Visible" Background="{DynamicResource PrimaryHueDarkBrush}">
+                            <Expander Name="GeometriesExpander" Padding="20,0,0,0" Visibility="Visible" Background="Transparent" Foreground="{DynamicResource LightTextBrush}">
                                 <Expander.Header>
                                     <StackPanel Orientation="Horizontal" Margin="-20,-25">
                                         <Border Background="{DynamicResource PrimaryHueMidBrush}" Width="5" VerticalAlignment="Stretch"></Border>
@@ -208,7 +207,7 @@
                                         </Label>
                                     </StackPanel>
                                 </Expander.Header>
-                                <StackPanel Name="Geometries" HorizontalAlignment="Stretch" Background="{DynamicResource PrimaryHueDarkBrush}">
+                                <StackPanel Name="Geometries" HorizontalAlignment="Stretch">
                                     <Border Background="{DynamicResource PrimaryHueMidBrush}"
                                         Height="1"
                                         HorizontalAlignment="Stretch"
@@ -221,14 +220,9 @@
                         Height="1"
                         HorizontalAlignment="Stretch"
                         SnapsToDevicePixels="True" />
-                    <Expander Name="ConstraintsExpander" FontSize="18" Background="{DynamicResource PrimaryHueDarkBrush}">
+                    <Expander Name="ConstraintsExpander" Padding="20,0" Background="Transparent" Foreground="{DynamicResource LightTextBrush}">
                         <Expander.Header>
-                            <StackPanel Orientation="Horizontal" Margin="-20,-25">
-                                <Border Background="{DynamicResource PrimaryHueDarkBrush}" Width="5" VerticalAlignment="Stretch"></Border>
-                                <Label Padding="10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}">
-                                Constraints
-                                </Label>
-                            </StackPanel>
+                            <TextBlock FontSize="24" Foreground="{DynamicResource LightTextBrush}"> Constraints</TextBlock>
                         </Expander.Header>
                         <StackPanel Name="Constraints">
                             <Border Background="{DynamicResource MaterialDesignDivider}"
@@ -254,20 +248,24 @@
                         Height="1"
                         HorizontalAlignment="Stretch"
                         SnapsToDevicePixels="True" />
-                    <StackPanel>
-                        <Button x:Name="ButtonRestart" Click="ButtonRestart_Click" Width="40" Height="40"
-                                    Style="{StaticResource MaterialDesignFloatingActionButton}" HorizontalAlignment="Right"
-                                    materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="{DynamicResource SecondaryAccentBrush}" BorderBrush="{DynamicResource SecondaryAccentBrush}">
-                            <materialDesign:PackIcon Kind="Restart" Height="32" Width="32" Foreground="{DynamicResource SecondaryAccentForegroundBrush}"/>
-                        </Button>
-                        <Button x:Name="ButtonOptimalResult" Click="ButtonOptimalResult_Click" Width="40" Height="40"
-                                    Style="{StaticResource MaterialDesignFloatingActionButton}" HorizontalAlignment="Right"
-                                    materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="{DynamicResource SecondaryAccentBrush}" BorderBrush="{DynamicResource SecondaryAccentBrush}">
-                            <materialDesign:PackIcon Kind="Robot" Height="32" Width="32" Foreground="{DynamicResource SecondaryAccentForegroundBrush}"/>
-                        </Button>
-                    </StackPanel>
                 </StackPanel>
             </ScrollViewer>
+            </Grid>
+            <Grid Name="ResetButtons" Grid.Row="2" Width="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="ButtonRestart" Click="ButtonRestart_Click" Grid.Column="0" Width="Auto" Height="40"  Style="{StaticResource MaterialDesignRaisedLightButton}" Margin="25,0,20,15">
+                    <TextBlock>Reset System</TextBlock>
+                </Button>
+
+                <Button x:Name="ButtonOptimalResult" Click="ButtonOptimalResult_Click" Grid.Column="1" Width="Auto" Height="40"  Style="{StaticResource MaterialDesignRaisedLightButton}"  Margin="20,0,30,15">
+                    <TextBlock>Set To Optimal Value</TextBlock>
+                </Button>
+            </Grid>
+            
         </Grid>
 
         <ProgressBar Name="LoadingPopup" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" BorderThickness="10" Visibility="Collapsed"

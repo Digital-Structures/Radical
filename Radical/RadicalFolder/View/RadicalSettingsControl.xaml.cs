@@ -77,5 +77,17 @@ namespace DSOptimization
             [Description("Live Data")] Data = 2,
             [Description("Silent")] Silent = 3
         }
+
+        private void MoreInformation_Click(object sender, RoutedEventArgs e)
+        {
+            MoreInformationButton.Visibility = Visibility.Collapsed;
+            LessInformationButton.Visibility = Visibility.Visible;
+        }
+
+        private void LessInformation_Click(object sender, RoutedEventArgs e)
+        {
+            MoreInformationButton.Visibility = Visibility.Visible;
+            LessInformationButton.Visibility = Visibility.Collapsed;
+        }
     }
 }
