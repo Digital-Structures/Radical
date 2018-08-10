@@ -24,7 +24,7 @@
 
             <ComboBox Grid.Column="1" Name="ChosenObjective" HorizontalAlignment="Right" HorizontalContentAlignment="Right"
                                   ItemsSource="{Binding ObjectiveNames, Mode=OneWay}" SelectionChanged="ChosenObjective_SelectionChanged"
-                                  SelectedIndex="{Binding ObjIndex, Mode=OneWayToSource, FallbackValue=0}"
+                                  SelectedIndex="{Binding ObjIndex, Mode=TwoWay, FallbackValue=0}"
                                   IsEditable="True" IsReadOnly="True" FontSize="18">
             </ComboBox>
         </Grid>

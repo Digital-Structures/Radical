@@ -70,9 +70,11 @@ namespace DSOptimization
             {
                 this.Constraints.Add(new Constraint(MyComponent, Constraint.ConstraintType.morethan, i));
             }
+
+            MyComponent.numVars = this.Variables.Count;
         }
 
-        public void UpdateComponentOutputs(List<List<double>> GradientData)
+        public void UpdateComponentOutputs(List<List<double?>> GradientData)
         {
             MyComponent.AppendToObjectives(this.Objectives);
             MyComponent.AppendToVariables(this.Variables.Select(var => var.CurrentValue).ToList());

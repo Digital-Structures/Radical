@@ -159,8 +159,6 @@
       <DependentUpon>VariableControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="StepperFolder\Model\StepperOptimizer.cs" />
-    <Compile Include="StepperFolder\Model\StepperComponent.cs" />
-    <Compile Include="StepperFolder\Model\StepperDesign.cs" />
     <Compile Include="StepperFolder\Model\StepperInfo.cs" />
     <Compile Include="DSOptimization\ViewModel\IStepDataElement.cs" />
     <Compile Include="StepperFolder\ViewModel\ObjectiveVM.cs" />

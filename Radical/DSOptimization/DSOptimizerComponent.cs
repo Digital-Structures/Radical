@@ -29,7 +29,9 @@ namespace DSOptimization
 
         private DataTree<double> ObjectiveHistory;
         private DataTree<double> VariableHistory;
-        private DataTree<double> GradientHistory;
+        private DataTree<double?> GradientHistory;
+
+        public int numVars;
 
         //Checks to see if there is an objective and that at least one variable is connected (can change to make it so that only one variable is connected)
         public bool InputsSatisfied { get; set; }
@@ -50,7 +52,7 @@ namespace DSOptimization
             this.CrvVariables = new List<NurbsCurve>();
             this.VariableHistory = new DataTree<double>();
 
-            this.GradientHistory = new DataTree<double>();
+            this.GradientHistory = new DataTree<double?>();
 
             this.Constraints = new List<double>();
 
@@ -197,18 +199,19 @@ namespace DSOptimization
             }
         }
 
-        public void AppendToGradients (List<List<double>> values)
-        {
+        public void AppendToGradients (List<List<double?>> values)
+        { 
             int i = 0;
-            foreach (List<double> obj in values)
+            foreach (double obj in this.Objectives)
             {
-                int j = 0;
-                foreach (double grad in obj)
+                for (int j= 0; j < this.numVars; j++)
                 {
                     GH_Path path = new GH_Path(i,j);
-                    this.GradientHistory.Add(grad, path);                    
 
-                    j++;
+                    if (values.Any())
+                        this.GradientHistory.Add(values[i][j], path);
+                    else
+                        this.GradientHistory.Add(null, path);
                 }
                 i++;
             }
@@ -263,7 +266,7 @@ namespace DSOptimization
                 {
                     Window viewer = new DSOptimizeWindow(design, this.MyComponent);
                     viewer.Show();
-                    System.Windows.Threading.Dispatcher.Run();
+                   System.Windows.Threading.Dispatcher.Run();
                 });
 
                 viewerThread.SetApartmentState(ApartmentState.STA); // needs to be STA or throws exception

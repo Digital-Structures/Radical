@@ -35,7 +35,8 @@ namespace Stepper
             this.MyData = data;
 
             MyData.PropertyChanged += new PropertyChangedEventHandler(VarPropertyChanged);
-            
+
+            this.DataContext = this;
             InitializeComponent();
 
             this.Value = MyData.Value;
@@ -80,6 +81,8 @@ namespace Stepper
                     this.VarName.Text = name;
                 }
 
+                if (this.VariableName != this.MyData.Name)
+                    this.MyData.Name = this.VariableName;
             }
         }
     }

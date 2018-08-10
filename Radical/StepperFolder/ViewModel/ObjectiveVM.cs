@@ -20,7 +20,6 @@ namespace Stepper
         {
             this._name = "Objective";
             this._val = value;
-            this.index = 0;
             this.Stepper = stepper;
         }
 
@@ -46,25 +45,6 @@ namespace Stepper
         {
             get { return this._val; }
             set { CheckPropertyChanged<double>("Value", ref _val, ref value); }
-        }
-
-        //IS ACTIVE
-        //Boolean, indicates whether the specified objective is the one to be optimized
-        //Only one objective may be active at a time
-        private bool _active;
-        public bool IsActive
-        {
-            get { return this._active; }
-            set
-            {
-                //If this objective is activated, deactivate all other objectives
-                if (CheckPropertyChanged<bool>("IsActive", ref _active, ref value) && value)
-                {
-                    foreach (ObjectiveVM obj in this.Stepper.Objectives)
-                        if (obj != this)
-                            obj.IsActive = false;
-                }
-            }
         }
     }
 }

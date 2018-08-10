@@ -344,8 +344,8 @@ namespace Stepper
 
             int obj = this.StepperVM.ObjIndex;
 
-            for (int i = 0; i < GradientData[obj].Count; i++)
-                this.Gradients[i].Value = GradientData[obj][i];
+            for (int i = 0; i < (double)GradientData[obj].Count; i++)
+                this.Gradients[i].Value = (double)GradientData[obj][i];
 
             if (name != "ButtonGradient")
             {
@@ -361,25 +361,24 @@ namespace Stepper
                     dir = StepperOptimizer.Direction.Isoperformance;
 
                 this.StepperVM.Optimize(dir, GradientData);
+
+                //Update objective value display from menu
+                for (int i = 0; i < this.Objectives.Count; i++)
+                {
+                    //Convert nullable bool to bool
+                    bool? abs = ((SettingsControl)this.SettingsExpander.Content).DisplayModeButton.IsChecked;
+                    bool ModeIsAbsolute = abs.HasValue && abs.Value;
+
+                    if (ModeIsAbsolute)
+                        Objectives[i].Value = StepperVM.ObjectiveEvolution_Abs[i].Last();
+                    else
+                        Objectives[i].Value = StepperVM.ObjectiveEvolution_Norm[i].Last();
+                }
             }
             else
             {
                 this.GradientsExpander.IsExpanded = true;
                 this.ObjectiveData.IsExpanded = true;
-            }
-                
-
-            //Update objective value display from menu
-            for (int i=0; i<this.Objectives.Count; i++)
-            {
-                //Convert nullable bool to bool
-                bool? abs = ((SettingsControl)this.SettingsExpander.Content).DisplayModeButton.IsChecked;
-                bool ModeIsAbsolute = abs.HasValue && abs.Value;
-
-                if (ModeIsAbsolute)
-                    Objectives[i].Value = StepperVM.ObjectiveEvolution_Abs[i].Last();
-                else
-                    Objectives[i].Value = StepperVM.ObjectiveEvolution_Norm[i].Last();
             }
         }
 
@@ -387,17 +386,27 @@ namespace Stepper
         //Update all step data display values
         private void GraphSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            int step = (int)this.GraphSlider.Value;
+
             int i = 0;
             foreach (DataControl data in this.StepVars)
             {
-                data.Value = this.StepperVM.VariableEvolution[i][(int)this.GraphSlider.Value];
+                data.Value = this.StepperVM.VariableEvolution[i][step];
                 i++;
             }
 
             i = 0;
             foreach (DataControl data in this.StepObjs)
             {
-                data.Value = this.StepperVM.ObjectiveEvolution_Abs[i][(int)this.GraphSlider.Value];
+                //Convert nullable bool to bool
+                bool? abs = ((SettingsControl)this.SettingsExpander.Content).DisplayModeButton.IsChecked;
+                bool ModeIsAbsolute = abs.HasValue && abs.Value;
+
+                if (ModeIsAbsolute)
+                    data.Value = StepperVM.ObjectiveEvolution_Abs[i][step];
+                else
+                    data.Value = StepperVM.ObjectiveEvolution_Norm[i][step];
+
                 i++;
             }
 
@@ -406,7 +415,34 @@ namespace Stepper
         //BUTTON RESET
         private void ButtonReset_Click(object sender, RoutedEventArgs e)
         {
+            int step = (int)this.GraphSlider.Value;
+
+            //Dont bother resetting if slider is on most recent step
+            if (step == this.GraphSlider.Maximum)
+                return;
+
             this.StepperVM.Reset();
+
+            //Update objective value display from menu
+            for (int i = 0; i < this.Objectives.Count; i++)
+            {
+                //Convert nullable bool to bool
+                bool? abs = ((SettingsControl)this.SettingsExpander.Content).DisplayModeButton.IsChecked;
+                bool ModeIsAbsolute = abs.HasValue && abs.Value;
+
+                if (ModeIsAbsolute)
+                    Objectives[i].Value = StepperVM.ObjectiveEvolution_Abs[i][step];
+                else
+                    Objectives[i].Value = StepperVM.ObjectiveEvolution_Norm[i][step];
+            }
+
+            //Update gradient value display from menu
+            for (int i=0; i<this.Gradients.Count; i++)
+            {
+                double? value = StepperVM.GradientEvolution[this.StepperVM.ObjIndex][i][step];
+                if (value.HasValue)
+                    Gradients[i].Value = (double)value;
+            }
         }
 
         //CLOSE MENU CLICK
@@ -428,6 +464,13 @@ namespace Stepper
         {
             this.ChartPanel.Children.Remove(this.Chart_Norm);
             this.ChartPanel.Children.Add(this.Chart_Abs);
+
+            int i = 0;
+            foreach (DataControl objective in this.Objectives)
+            {
+                objective.Value = this.StepperVM.ObjectiveEvolution_Abs[i].Last();
+                i++;
+            }
         }
 
         //DISPLAY NORMALIZED
@@ -435,6 +478,13 @@ namespace Stepper
         {
             this.ChartPanel.Children.Remove(this.Chart_Abs);
             this.ChartPanel.Children.Add(this.Chart_Norm);
+
+            int i = 0;
+            foreach (DataControl objective in this.Objectives)
+            {
+                objective.Value = this.StepperVM.ObjectiveEvolution_Norm[i].Last();
+                i++;
+            }
         }
 
         //KEY DOWN
@@ -449,11 +499,29 @@ namespace Stepper
                 this.ButtonPlay_Click(this.ButtonStepIso, new RoutedEventArgs());
         }
 
-        //EXPORT to .CSV
-        //Exports all ObjectiveEvolution, VariableEvolution, and GradientEvolution data
+        //EXPORT BUTTON
+        //Launches dialog prompting user for a file path
         private void ExportButton_Click(object sender, RoutedEventArgs e)
         {
+            this.ExportCSVWindow.IsOpen = true;
+        }
 
+        //EXPORT to .CSV
+        //Exports all ObjectiveEvolution, VariableEvolution, and GradientEvolution data
+        private void ExportCSV(object sender, MaterialDesignThemes.Wpf.DialogClosingEventArgs eventArgs)
+        {
+            //CANCEL
+            //Don't export file if user clicked cancel
+            if (!Equals(eventArgs.Parameter, true)) return;
+
+            //EXPORT
+            //So long as file path is not empty
+            var CSVFilename = this.Filepath.Text;
+            if (string.IsNullOrWhiteSpace(CSVFilename))
+                return;
+
+            this.StepperVM.ExportCSV_Log(CSVFilename);
+            this.StepperVM.ExportCSV_Raw(CSVFilename);
         }
     }
 }
