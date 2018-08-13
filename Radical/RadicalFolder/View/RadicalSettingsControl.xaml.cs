@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.ComponentModel;
 using NLoptNet;
 using Radical;
+using System.Diagnostics;
 
 namespace DSOptimization
 {
@@ -88,6 +89,12 @@ namespace DSOptimization
         {
             MoreInformationButton.Visibility = Visibility.Visible;
             LessInformationButton.Visibility = Visibility.Collapsed;
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
     }
 }

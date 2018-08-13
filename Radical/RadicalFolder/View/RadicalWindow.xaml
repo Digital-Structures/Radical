@@ -57,7 +57,7 @@
                     <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{StaticResource Primary200Foreground}"/>
                     <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{StaticResource Primary500}"/>
                     <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary500Foreground}"/>
-                    <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary800}"/>
+                    <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary800}" Opacity="1"/>
                     <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary800Foreground}"/>
 
                 </ResourceDictionary>
@@ -68,10 +68,10 @@
                         <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Orange.Accent.xaml" />
                     </ResourceDictionary.MergedDictionaries>
 
-                    <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#ffc654"/>
-                    <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="{StaticResource Primary700Foreground}"/>
-
+                    <SolidColorBrush x:Key="SecondaryAccentBrush" Color="{StaticResource Accent400}"/>
+                    <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="{DynamicResource Accent400Foreground}"/>
                 </ResourceDictionary>
+                
             </ResourceDictionary.MergedDictionaries>
 
             <Storyboard x:Key="MenuOpen">
@@ -282,14 +282,14 @@
                 </StackPanel>
             </ScrollViewer>
             </Grid>
-            <Grid Name="ResetButtons" Grid.Row="2" Width="0">
+            <Grid Name="ResetButtons" Grid.Row="2" Width="0" Margin="-10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <Button x:Name="ButtonRestart" Click="ButtonRestart_Click" Grid.Column="0" Width="Auto" Height="40"  Style="{StaticResource MaterialDesignRaisedLightButton}" Margin="25,0,20,15">
-                    <TextBlock>Reset System</TextBlock>
+                <Button x:Name="ButtonRestart" Click="ButtonRestart_Click" Grid.Column="0" Width="Auto" Height="40"  Background="Transparent" BorderBrush="{StaticResource SecondaryAccentBrush}" BorderThickness="1" Margin="25,0,20,15">
+                    <TextBlock Foreground="{StaticResource SecondaryAccentBrush}">Reset System</TextBlock>
                 </Button>
 
                 <Button x:Name="ButtonOptimalResult" Click="ButtonOptimalResult_Click" Grid.Column="1" Width="Auto" Height="40"  Style="{StaticResource MaterialDesignRaisedLightButton}"  Margin="20,0,30,15">
@@ -340,15 +340,15 @@
                 <StackPanel x:Name="SettingsClose"  Orientation="Horizontal" Visibility="Collapsed">
                     <Button x:Name="ButtonSettingsClose"  Height="50" HorizontalAlignment="Left" Background="{x:Null}" BorderBrush="{x:Null}" 
                             Visibility="Visible" Click="ButtonSettingsClose_Click">
-                        <materialDesign:PackIcon Kind="ArrowRight" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" Width="30" Height="30"></materialDesign:PackIcon>
+                        <materialDesign:PackIcon Kind="ArrowRight" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Width="30" Height="30"></materialDesign:PackIcon>
                     </Button>
                     <Button Height="50" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}" >
-                        <materialDesign:PackIcon Kind="Export" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" Width="30" Height="30"></materialDesign:PackIcon>
+                        <materialDesign:PackIcon Kind="Export" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Width="30" Height="30"></materialDesign:PackIcon>
                     </Button>
                 </StackPanel>
                 <Button x:Name="ButtonSettingsOpen" Width="60" Height="50" HorizontalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}"
                                 Visibility="Visible" Click="ButtonSettingsOpen_Click">
-                    <materialDesign:PackIcon Kind="DotsHorizontal" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" Width="30" Height="30"></materialDesign:PackIcon>
+                    <materialDesign:PackIcon Kind="DotsHorizontal" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Width="30" Height="30"></materialDesign:PackIcon>
                 </Button>
             </Grid>
 

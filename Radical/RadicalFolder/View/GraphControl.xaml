@@ -23,17 +23,17 @@
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0" HorizontalAlignment="Stretch">
-                <Grid>
+                <Grid Margin="0,10,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock FontSize="27" FontFamily="Global User Interface" Foreground="{DynamicResource BackgroundHueLightForegroundBrush}"
-                                TextAlignment="Right" Padding="50, 20, 20, 0" VerticalAlignment="Center" Text="{Binding LineGraphName, Mode=TwoWay}" Grid.Column="0"/>
+                                TextAlignment="Right" Padding="50, 0, 0, 0" VerticalAlignment="Center" Text="{Binding LineGraphName, Mode=TwoWay}" Grid.Column="0"/>
                    
                     <TextBlock FontSize="35" FontFamily="Global User Interface" Foreground="{DynamicResource BackgroundHueLightForegroundBrush}"
-                            TextAlignment="Right" Padding="0, 10, 75, 0" VerticalAlignment="Center" Text="{Binding FinalOptimizedValueString, Mode=TwoWay}" Grid.Column="1"/>
+                            TextAlignment="Right" Padding="0, 0, 50, 0" VerticalAlignment="Center" Text="{Binding FinalOptimizedValueString, Mode=TwoWay}" Grid.Column="1"/>
 
                 </Grid>
             </Grid>
@@ -54,14 +54,20 @@
                     <lvc:CartesianChart.Series>
                         <lvc:LineSeries Title="{Binding LineGraphName}" LineSmoothness="0.25" Name="Plotter" Values="{Binding ChartValues}" 
                                         DataLabels="False" PointGeometrySize="0" Margin="0,0,0,0"
-                                        Stroke="{DynamicResource SecondaryAccentBrush}" Fill="{x:Null}">
+                                        Stroke="{DynamicResource SecondaryAccentBrush}">
+                            <lvc:LineSeries.Fill>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" Opacity="0.75">
+                                    <GradientStop Color="White" Offset="1.0"/>
+                                    <GradientStop Color="Orange" Offset="0.0" />
+                                </LinearGradientBrush>
+                            </lvc:LineSeries.Fill>
                         </lvc:LineSeries>
                     </lvc:CartesianChart.Series>
 
                     <lvc:CartesianChart.AxisX>
                         <lvc:Axis Name="ChartAxisX" MaxValue="{Binding MaxXAxis}">
                             <lvc:Axis.Sections>
-                                <lvc:AxisSection Name="AxisSectionX" Value="{Binding MouseIteration, Mode=TwoWay}" Visibility="{Binding ChartLineVisibility, Mode=TwoWay}" DisableAnimations="True" StrokeThickness="1" Stroke="{DynamicResource PrimaryHueDarkBrush}">
+                                <lvc:AxisSection Panel.ZIndex="1" Name="AxisSectionX" Value="{Binding MouseIteration, Mode=TwoWay}" Visibility="{Binding ChartLineVisibility, Mode=TwoWay}" DisableAnimations="True" StrokeThickness="1" Stroke="{DynamicResource PrimaryHueDarkBrush}">
                                 </lvc:AxisSection>
                             </lvc:Axis.Sections>
                             <lvc:Axis.Separator>

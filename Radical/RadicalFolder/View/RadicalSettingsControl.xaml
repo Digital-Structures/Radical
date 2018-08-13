@@ -26,7 +26,7 @@
                 </DoubleAnimationUsingKeyFrames>
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Brush.Opacity)" Storyboard.TargetName="InfoBackgroundBrush">
                     <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0.3"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0.9"/>
                 </DoubleAnimationUsingKeyFrames>
             </Storyboard>
 
@@ -36,7 +36,7 @@
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0" />
                 </DoubleAnimationUsingKeyFrames>
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Brush.Opacity)" Storyboard.TargetName="InfoBackgroundBrush">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="0.3"/>
+                    <EasingDoubleKeyFrame KeyTime="0" Value="0.9"/>
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
                 </DoubleAnimationUsingKeyFrames>
             </Storyboard>
@@ -67,7 +67,7 @@
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Row="0">
-            <materialDesign:PackIcon Kind="Refresh" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" VerticalAlignment="Bottom" Width="25" Height="25"></materialDesign:PackIcon>
+            <materialDesign:PackIcon Kind="Refresh" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" VerticalAlignment="Bottom" Width="25" Height="25"></materialDesign:PackIcon>
             <ComboBox Name="ComboBoxRefreshMode" materialDesign:HintAssist.Hint="Refresh Mode" HorizontalAlignment="Right" SelectedIndex="0" 
                      SelectedValue="{Binding Mode, Mode=OneWayToSource}" SelectionChanged="RefreshMode_SelectionChanged" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}"
                      FontSize="14" ItemsSource="{Binding Source={rad:EnumBindingSource {x:Type rad:RefreshMode}}}">
@@ -75,21 +75,21 @@
             <!--Having the local namespace be DSOptimization seems to cause some other problems (specifically in the ItemsSource for the Refresh combobox) there are work arounds but it is not ideal-->
         </DockPanel>
         <DockPanel Grid.Row="1">
-            <materialDesign:PackIcon Kind="SortNumeric" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" VerticalAlignment="Bottom" Width="20" Height="20"></materialDesign:PackIcon>
+            <materialDesign:PackIcon Kind="SortNumeric" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" VerticalAlignment="Bottom" Width="20" Height="20"></materialDesign:PackIcon>
             <TextBox Text="{Binding Niterations, Mode=OneWayToSource, FallbackValue=1000 }" materialDesign:HintAssist.Hint="Number of Iterations"
                                  HorizontalAlignment="Right" TextAlignment="Right"
                                  PreviewTextInput="TextBox_PreviewTextInput_Int" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"
                                  FontSize="14" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}"></TextBox>
         </DockPanel>
         <DockPanel Grid.Row="2">
-            <materialDesign:PackIcon Kind="ChartLine"  Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" VerticalAlignment="Bottom" Width="20" Height="20"></materialDesign:PackIcon>
+            <materialDesign:PackIcon Kind="ChartLine"  Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" VerticalAlignment="Bottom" Width="20" Height="20"></materialDesign:PackIcon>
             <TextBox Name="ConvergeText" Text="{Binding ConvCrit, Mode=OneWayToSource, FallbackValue=0.001 }" materialDesign:HintAssist.Hint="Relative Convergence Limit"
-                                 HorizontalAlignment="Right"
+                                 HorizontalAlignment="Right" TextAlignment="Right"
                                  PreviewTextInput="TextBox_PreviewTextInput_Float" PreviewMouseDown="TextBox_PreviewMouseDown" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"
                                  FontSize="14" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}"></TextBox>
         </DockPanel>
         <DockPanel Grid.Row="3">
-            <materialDesign:PackIcon Kind="Factory" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" VerticalAlignment="Bottom" Width="20" Height="20"></materialDesign:PackIcon>
+            <materialDesign:PackIcon Kind="Factory" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" VerticalAlignment="Bottom" Width="20" Height="20"></materialDesign:PackIcon>
             <ComboBox Name="PrimaryAlgorithm" HorizontalAlignment="Right"  materialDesign:HintAssist.Hint="Algorithm" IsEditable="True" IsReadOnly="True"
                                   ItemsSource="{Binding AvailableAlgs, Mode=OneWay}" 
                                   SelectedItem="{Binding PrimaryAlgorithm, Mode=OneWayToSource, FallbackValue={x:Static nlopt:NLoptAlgorithm.LN_COBYLA}}"
@@ -97,7 +97,7 @@
             </ComboBox>
         </DockPanel>
         <DockPanel Grid.Row="4">
-            <materialDesign:PackIcon Name="SecAlgIcon" Kind="Calculator" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" VerticalAlignment="Bottom" Visibility="Collapsed" Width="20" Height="20"></materialDesign:PackIcon>
+            <materialDesign:PackIcon Name="SecAlgIcon" Kind="Calculator" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" VerticalAlignment="Bottom" Visibility="Collapsed" Width="20" Height="20"></materialDesign:PackIcon>
             <ComboBox Name="SecondaryAlgorithm" Visibility="Collapsed"  HorizontalAlignment="Right" 
                                   ItemsSource="{Binding AvailableSecondaryAlgs, Mode=OneWay}" 
                                   SelectedItem="{Binding SecondaryAlgorithm, Mode=OneWayToSource, FallbackValue={x:Static nlopt:NLoptAlgorithm.LN_BOBYQA}}"
@@ -127,6 +127,33 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
 
+                <Button x:Name="MoreInformationButton" Click="MoreInformation_Click" Grid.Row="0" Width="20" Height="20" Margin="0,0,7,-8"
+                                        Style="{StaticResource MaterialDesignFloatingActionButton}" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth2" BorderBrush="{DynamicResource SecondaryAccentBrush}" Background="Transparent">
+                    <materialDesign:PackIcon Kind="Help" Height="16" Width="16" Foreground="{DynamicResource SecondaryAccentBrush}"/>
+                </Button>
+
+                <Grid Grid.Row="0" Name="InformationText" Height="0" Margin="25,20,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock TextWrapping="Wrap" Grid.Row="0" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}" FontSize="16">
+                        <TextBlock.Background>
+                            <SolidColorBrush x:Name="InfoBackgroundBrush" Color="Transparent" />
+                        </TextBlock.Background>
+                         Optimization Algorithms
+                    </TextBlock>
+
+                    <TextBlock TextWrapping="Wrap" Grid.Row="1" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}" Margin="10,5,0,0">
+                        <Run Text="These algorithms are super cool! They all do different things. You can learn more about them " />
+                        <Hyperlink NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate" Foreground="{DynamicResource SecondaryAccentBrush}">
+                             here
+                        </Hyperlink>
+                    </TextBlock>
+                </Grid>
+
                 <Border Name="HelpBorder" Grid.Row="1" Background="{DynamicResource MaterialDesignDivider}"
                         Height="2"
                         HorizontalAlignment="Stretch"
@@ -135,25 +162,12 @@
                         Margin="0,-8,0,0">
                 </Border>
 
-                <Button x:Name="MoreInformationButton" Click="MoreInformation_Click" Grid.Row="0" Width="20" Height="20" Margin="0,0,7,-8"
-                                        Style="{StaticResource MaterialDesignFloatingActionButton}" HorizontalAlignment="Right" VerticalAlignment="Center"
-                                        materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="{DynamicResource SecondaryAccentBrush}" BorderBrush="{DynamicResource SecondaryAccentBrush}">
-                    <materialDesign:PackIcon Kind="Help" Height="16" Width="16" Foreground="{DynamicResource SecondaryAccentForegroundBrush}"/>
-                </Button>
-
-                <TextBlock Name="InformationText" TextWrapping="Wrap" Grid.Row="0" Height="0" Padding="20">
-                    <TextBlock.Background>
-                        <SolidColorBrush x:Name="InfoBackgroundBrush" Color="{StaticResource TEMPBackgroundHueDarkBrush}" />
-                    </TextBlock.Background>
-                    More information goes here! So much information that it will need to go around and wrap More information goes here! So much information that it will need to go around and wrapMore information goes here! So much information that it will need to go around and wrapMore information goes here! So much information that it will need to go around and wrapMore information goes here! So much information that it will need to go around and wrapMore information goes here! So much information that it will need to go around and wrapMore information goes here! So much information that it will need to go around and wrap
-                </TextBlock>
-
                 <Button x:Name="LessInformationButton" Click="LessInformation_Click" Grid.Row="1" Width="20" Height="20" Margin="0,-8,7,0"
                                         Style="{StaticResource MaterialDesignFloatingActionButton}" Visibility="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Center"
-                                        materialDesign:ShadowAssist.ShadowDepth="Depth2" Background="{DynamicResource SecondaryAccentBrush}" BorderBrush="{DynamicResource SecondaryAccentBrush}">
-                    <materialDesign:PackIcon Kind="Minus" Height="16" Width="16" Foreground="{DynamicResource SecondaryAccentForegroundBrush}"/>
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth2" BorderBrush="{DynamicResource SecondaryAccentBrush}">
+                    <materialDesign:PackIcon Kind="Minus" Height="16" Width="16" Foreground="{DynamicResource SecondaryAccentBrush}"/>
                 </Button>
-
+                
             </Grid>
         </DockPanel>
 

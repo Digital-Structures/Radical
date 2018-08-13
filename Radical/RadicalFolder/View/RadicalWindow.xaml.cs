@@ -563,12 +563,15 @@ namespace Radical
         //Updates variables in Rhino
         public void UpdateRhino()
         {
+            bool finished = false; 
             System.Action run = delegate ()
             {
                 Grasshopper.Kernel.GH_SolutionMode refresh = Grasshopper.Kernel.GH_SolutionMode.Default;
                 Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, refresh);
+                finished = true;
             };
             Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
+            while (!finished) { }
         }
 
         #region Unimplemented
