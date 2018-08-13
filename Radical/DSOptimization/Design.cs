@@ -5,7 +5,7 @@ using System.Text;
 using Rhino.Geometry;
 using Grasshopper;
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
+using Grasshopper.Kernel.Data;
 using LiveCharts;
 using NLoptNet;
 using LiveCharts.Helpers;
@@ -70,6 +70,15 @@ namespace DSOptimization
             {
                 this.Constraints.Add(new Constraint(MyComponent, Constraint.ConstraintType.morethan, i));
             }
+
+            MyComponent.numVars = this.Variables.Count;
+        }
+
+        public void UpdateComponentOutputs(List<List<double?>> GradientData)
+        {
+            MyComponent.AppendToObjectives(this.Objectives);
+            MyComponent.AppendToVariables(this.Variables.Select(var => var.CurrentValue).ToList());
+            MyComponent.AppendToGradients(GradientData);
         }
 
         //SAMPLE

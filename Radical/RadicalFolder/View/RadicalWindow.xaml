@@ -148,7 +148,38 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" x:Name="GridMenu">
+        <!--Error Message-->
+        <materialDesign:DialogHost Name="ConstraintsNotice" IsOpen="{Binding OpenDialog, Mode=TwoWay}"
+                                       Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel Margin="16" Width="Auto" MaxWidth="400">
+
+                    <TextBlock FontSize="24" Foreground="{DynamicResource SecondaryAccentBrush}" HorizontalAlignment="Center">
+                        Notice</TextBlock>
+
+                    <TextBlock FontSize="16" TextWrapping="Wrap" HorizontalAlignment="Center" Foreground="{DynamicResource SecondaryAccentBrush}">
+                        You've entered multiple objectives.</TextBlock>
+
+                    <TextBlock FontSize="16" TextWrapping="Wrap" HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryHueDarkBrush}">
+                        Radical does not support multi-objective optimization and will consider only your first objective.
+                        If you would like all objectives to be considered, please use Stepper.</TextBlock>
+
+                    <Button Background="Transparent"
+                            Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                            IsDefault="True"
+                            Margin="10"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                            Command="materialDesign:DialogHost.CloseDialogCommand">
+                        <Button.CommandParameter>
+                            <sys:Boolean>True</sys:Boolean>
+                        </Button.CommandParameter>
+                        CONTINUE
+                    </Button>
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+
+        <Grid Grid.Column="0" x:Name="GridMenu" HorizontalAlignment="Right">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>

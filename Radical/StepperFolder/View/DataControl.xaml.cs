@@ -17,24 +17,26 @@ using DSOptimization;
 
 namespace Stepper
 {
-    /// <summary>
-    /// Interaction logic for UserControl1.xaml
-    /// </summary>
-    public partial class StepDataControl : UserControl
+    //DATA CONTROL
+    //Versatile UI display element for storing information about objectives or variables
+    //Value is updated in StepperWindow 
+    public partial class DataControl : UserControl
     {
+        //Takes either an Objective VM or Variable VM
         private IStepDataElement MyData;
 
-        public StepDataControl()
+        public DataControl()
         {
             InitializeComponent();
         }
 
-        public StepDataControl(IStepDataElement data)
+        public DataControl(IStepDataElement data)
         {
             this.MyData = data;
 
             MyData.PropertyChanged += new PropertyChangedEventHandler(VarPropertyChanged);
-            
+
+            this.DataContext = this;
             InitializeComponent();
 
             this.Value = MyData.Value;
@@ -48,6 +50,8 @@ namespace Stepper
         }
 
         //VALUE
+        //Value can be a gradient, current value, or value at a previous step
+        //Updated from StepperWindow.xaml.cx
         private double val;
         public double Value
         {
@@ -64,6 +68,7 @@ namespace Stepper
         }
 
         //NAME
+        //Name property is tied to the name associated with the control's VM
         private string name;
         public string VariableName
         {
@@ -76,6 +81,8 @@ namespace Stepper
                     this.VarName.Text = name;
                 }
 
+                if (this.VariableName != this.MyData.Name)
+                    this.MyData.Name = this.VariableName;
             }
         }
     }

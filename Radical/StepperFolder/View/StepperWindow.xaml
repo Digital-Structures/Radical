@@ -3,9 +3,9 @@
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-            xmlns:local="clr-namespace:Stepper"
+            xmlns:local="clr-namespace:Stepper" 
             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-            xmlns:sys="clr-namespace:System;assembly=mscorlib"
+            xmlns:system="clr-namespace:System;assembly=mscorlib"
             xmlns:Converters="clr-namespace:MaterialDesignThemes.Wpf.Converters;assembly=MaterialDesignThemes.Wpf" 
             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
             xmlns:nlopt="clr-namespace:NLoptNet;assembly=NLoptNet"
@@ -37,8 +37,8 @@
 
                     <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{StaticResource Primary100}"/>
                     <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{StaticResource Primary100Foreground}"/>
-                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{StaticResource Primary400}"/>
-                    <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary400Foreground}"/>
+                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{StaticResource Primary300}"/>
+                    <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary300Foreground}"/>
                     <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary800}"/>
                     <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary800Foreground}"/>
                 </ResourceDictionary>
@@ -94,6 +94,36 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
+        <!--Constraints Warning Message-->
+        <materialDesign:DialogHost Name="ConstraintsNotice" IsOpen="{Binding OpenDialog, Mode=TwoWay}"
+                                       Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel Margin="16" Width="Auto" MaxWidth="400">
+
+                    <TextBlock FontSize="24" Foreground="{DynamicResource SecondaryAccentBrush}" HorizontalAlignment="Center">
+                        Notice</TextBlock>
+                    
+                    <TextBlock FontSize="16" TextWrapping="Wrap" HorizontalAlignment="Center" Foreground="{DynamicResource SecondaryAccentBrush}">
+                        You've entered some constraints.</TextBlock>
+
+                    <TextBlock FontSize="16" TextWrapping="Wrap" HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryHueDarkBrush}">
+                        Stepper does not support constrained optimization and will ignore constraint inputs.
+                        If you would like your constraints to be considered, please use Radical.</TextBlock>
+
+                    <Button Background="Transparent"
+                            IsDefault="True"
+                            Margin="10"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                            Command="materialDesign:DialogHost.CloseDialogCommand">
+                        <Button.CommandParameter>
+                            <system:Boolean>True</system:Boolean>
+                        </Button.CommandParameter>
+                        CONTINUE
+                    </Button>
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+
         <Grid Grid.Column="0" Name="LeftMenu">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"></RowDefinition>
@@ -111,53 +141,56 @@
                 </Button>
             </Grid>
 
-            <Expander Grid.Row="1" Name="VariablesExpander" Width="0" Padding="20,0" Background="Transparent" Foreground="{DynamicResource LightTextBrush}">
-                <Expander.Header>
-                    <TextBlock FontSize="24" Foreground="{DynamicResource LightTextBrush}"> Variables</TextBlock>
-                </Expander.Header>
-                <StackPanel>
-                    <Border Background="{DynamicResource MaterialDesignDivider}"
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <Expander Name="VariablesExpander" IsExpanded="True" Width="0" Padding="20,0"
+                          Background="Transparent" Foreground="{DynamicResource LightTextBrush}">
+                    <Expander.Header>
+                        <TextBlock FontSize="24" Foreground="{DynamicResource LightTextBrush}"> Variables</TextBlock>
+                    </Expander.Header>
+                    <StackPanel>
+                        <Border Background="{DynamicResource MaterialDesignDivider}"
                                 Height="1"
                                 HorizontalAlignment="Stretch"
                                 SnapsToDevicePixels="True" />
-                    <Expander Name="SlidersExpander" Padding ="20,0,0,0" Visibility="Visible" Background="Transparent" Foreground="{DynamicResource LightTextBrush}">
-                        <Expander.Header>
-                            <StackPanel Orientation="Horizontal" Margin="-20,-25">
-                                <Border Background="{DynamicResource PrimaryHueMidBrush}" Width="5" VerticalAlignment="Stretch"></Border>
-                                <Label Padding="30,10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource LightTextBrush}">
-                                    Sliders
-                                </Label>
-                            </StackPanel>
-                        </Expander.Header>
-                        <StackPanel  Name="Sliders" HorizontalAlignment="Stretch">
-                            <Border Background="{DynamicResource PrimaryHueMidBrush}"
+                        <Expander Name="SlidersExpander" Padding ="20,0,0,0" Visibility="Visible" Background="Transparent" Foreground="{DynamicResource LightTextBrush}">
+                            <Expander.Header>
+                                <StackPanel Orientation="Horizontal" Margin="-20,-25">
+                                    <Border Background="{DynamicResource PrimaryHueMidBrush}" Width="5" VerticalAlignment="Stretch"></Border>
+                                    <Label Padding="30,10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource LightTextBrush}">
+                                        Sliders
+                                    </Label>
+                                </StackPanel>
+                            </Expander.Header>
+                            <StackPanel  Name="Sliders" HorizontalAlignment="Stretch">
+                                <Border Background="{DynamicResource PrimaryHueMidBrush}"
                                         Height="1"
                                         HorizontalAlignment="Stretch"
                                         SnapsToDevicePixels="True" />
-                        </StackPanel>
-                    </Expander>
-                    <Border Background="{DynamicResource MaterialDesignDivider}"
+                            </StackPanel>
+                        </Expander>
+                        <Border Background="{DynamicResource MaterialDesignDivider}"
                                 Height="1"
                                 HorizontalAlignment="Stretch"
                                 SnapsToDevicePixels="True" />
-                    <Expander Name="GeometriesExpander" Padding="20,0,0,0" Visibility="Visible" Background="Transparent" Foreground="{DynamicResource LightTextBrush}">
-                        <Expander.Header>
-                            <StackPanel Orientation="Horizontal" Margin="-20,-25">
-                                <Border Background="{DynamicResource PrimaryHueMidBrush}" Width="5" VerticalAlignment="Stretch"></Border>
-                                <Label Padding="30,10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource LightTextBrush}">
-                                    Geometries
-                                </Label>
-                            </StackPanel>
-                        </Expander.Header>
-                        <StackPanel Name="Geometries" HorizontalAlignment="Stretch">
-                            <Border Background="{DynamicResource PrimaryHueMidBrush}"
+                        <Expander Name="GeometriesExpander" Padding="20,0,0,0" Visibility="Visible" Background="Transparent" Foreground="{DynamicResource LightTextBrush}">
+                            <Expander.Header>
+                                <StackPanel Orientation="Horizontal" Margin="-20,-25">
+                                    <Border Background="{DynamicResource PrimaryHueMidBrush}" Width="5" VerticalAlignment="Stretch"></Border>
+                                    <Label Padding="30,10" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource LightTextBrush}">
+                                        Geometries
+                                    </Label>
+                                </StackPanel>
+                            </Expander.Header>
+                            <StackPanel Name="Geometries" HorizontalAlignment="Stretch">
+                                <Border Background="{DynamicResource PrimaryHueMidBrush}"
                                         Height="1"
                                         HorizontalAlignment="Stretch"
                                         SnapsToDevicePixels="True" />
-                        </StackPanel>
-                    </Expander>
-                </StackPanel>
-            </Expander>
+                            </StackPanel>
+                        </Expander>
+                    </StackPanel>
+                </Expander>
+            </ScrollViewer>
         </Grid>
 
         <materialDesign:Card Name="ChartCard" Grid.Column="1" Margin="10,0" Padding="20,10" VerticalAlignment="Bottom" Background="{DynamicResource MaterialDesignPaper}">
@@ -171,8 +204,8 @@
                 <DockPanel Name="ChartPanel" Grid.Row="0">
                 </DockPanel>
 
-                <Slider Name="GraphSlider" Grid.Row="1" HorizontalAlignment="Stretch" Margin="38,10,15,10" Foreground="{DynamicResource SecondaryAccentBrush}" Visibility="Hidden"
-                        Value="{Binding TrackedStep, Mode=TwoWay}" Minimum="0" Maximum="{Binding NumSteps}" FontSize="12" TickFrequency="1" IsSnapToTickEnabled="True"
+                <Slider Name="GraphSlider" Grid.Row="1" HorizontalAlignment="Stretch" Margin="38,10,17,10" Foreground="{DynamicResource SecondaryAccentBrush}" Visibility="Hidden"
+                        Value="{Binding TrackedStep, Mode=OneWayToSource}" Minimum="0" Maximum="{Binding NumSteps}" FontSize="12" TickFrequency="1" IsSnapToTickEnabled="True"
                         ValueChanged="GraphSlider_ValueChanged"></Slider>
 
                 <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" MaxHeight="200">
@@ -187,7 +220,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Grid.Column="0" FontSize="22" Foreground="{DynamicResource PrimaryHueDarkBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"> 
-                                    Current Step: </TextBlock>
+                                    Current Step:</TextBlock>
 
                                 <TextBlock Grid.Column="1" Text="{Binding Path=Value, ElementName=GraphSlider}"
                                            FontSize="22" Foreground="{DynamicResource PrimaryHueDarkBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"></TextBlock>
@@ -212,7 +245,7 @@
                         </Expander.Header>
                         <StackPanel>
                             <Border BorderBrush="{DynamicResource PrimaryHueLightBrush}" BorderThickness="1" Margin="0,0,0,10"></Border>
-                            
+
                             <TextBlock Foreground="{DynamicResource PrimaryHueDarkBrush}" FontSize="16" Padding="10,0,0,0">
                                 Objectives
                             </TextBlock>
@@ -248,26 +281,160 @@
 
         <Grid Grid.Column="2" Name="RightMenus">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
-                <Expander Name="ObjectivesExpander" HorizontalAlignment="Stretch" Background="Transparent" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+            <!--Export Csv Dialogue-->
+            <materialDesign:DialogHost Name="ExportCSVWindow" IsOpen="False" DialogClosing="ExportCSV"
+                                       Grid.RowSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <materialDesign:DialogHost.DialogContent>
+                    <StackPanel Margin="16" Width="Auto" MaxWidth="300">
+
+                        <TextBlock FontSize="24" Foreground="{DynamicResource SecondaryAccentBrush}" HorizontalAlignment="Center">
+                        Export your data as .csv</TextBlock>
+
+                        <TextBlock FontSize="16" TextWrapping="Wrap" HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryHueDarkBrush}">
+                        please enter a file path... </TextBlock>
+
+                        <TextBox Name="Filepath" HorizontalAlignment="Center" MinWidth="75" MaxWidth="250" TextWrapping="Wrap"></TextBox>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Background="Transparent"
+                            IsDefault="True"
+                            Margin="10"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                            Command="materialDesign:DialogHost.CloseDialogCommand">
+                                <Button.CommandParameter>
+                                    <system:Boolean>True</system:Boolean>
+                                </Button.CommandParameter>
+                                EXPORT
+                            </Button>
+
+                            <Button Background="Transparent"
+                            IsCancel="True"
+                            Margin="10"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                            Command="materialDesign:DialogHost.CloseDialogCommand">
+                                <Button.CommandParameter>
+                                    <system:Boolean>False</system:Boolean>
+                                </Button.CommandParameter>
+                                CANCEL
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:DialogHost.DialogContent>
+            </materialDesign:DialogHost>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Opacity="0.75" FontSize="16"
+                           Width="50" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Right">
+                        Export Data
+                </TextBlock>
+
+                <Button Grid.Column="1" Name="ExportButton" Height="50" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}"
+                        Click="ExportButton_Click">
+                    <materialDesign:PackIcon Kind="Export" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Width="30" Height="30"></materialDesign:PackIcon>
+                </Button>
+            </Grid>
+
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+                <Expander Name="ObjectiveData" Background="Transparent" IsExpanded="False" Padding="20,0">
                     <Expander.Header>
-                        <TextBlock FontSize="24" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"> Objective Data</TextBlock>
+                        <TextBlock FontSize="24" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" > Objective Data</TextBlock>
                     </Expander.Header>
                     <StackPanel>
-                        <StackPanel Name="ObjectivesPanel">
-                        </StackPanel>
-                        <StackPanel Name="GradientDataPanel">
-                        </StackPanel>
+                        <Border Background="{DynamicResource MaterialDesignDivider}"
+                                Height="1"
+                                HorizontalAlignment="Stretch"
+                                SnapsToDevicePixels="True" />
+                        <Expander Name="ObjectivesExpander" Padding ="20,0,0,0" Visibility="Visible" IsExpanded="True"
+                                  Background="Transparent" Foreground="{DynamicResource LightTextBrush}">
+                            <Expander.Header>
+                                <StackPanel Orientation="Horizontal" Margin="-20,-25">
+                                    <Border Background="{DynamicResource PrimaryHueMidBrush}" Width="5" VerticalAlignment="Stretch"></Border>
+                                    <Label Padding="30,10" VerticalAlignment="Center" FontSize="20" Foreground="{DynamicResource LightTextBrush}">
+                                        Objectives
+                                    </Label>
+                                </StackPanel>
+                            </Expander.Header>
+                            <StackPanel  HorizontalAlignment="Stretch">
+                                <Border Background="{DynamicResource MaterialDesignDivider}"
+                                        Height="1"
+                                        HorizontalAlignment="Stretch"
+                                        SnapsToDevicePixels="True" />
+
+                                <ItemsControl Name="ObjData" Padding="25,0">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <UniformGrid Columns="2">
+                                                <!-- Grid for displaying current objective values -->
+                                            </UniformGrid>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Expander>
+                        <Border Background="{DynamicResource MaterialDesignDivider}"
+                                Height="1"
+                                HorizontalAlignment="Stretch"
+                                SnapsToDevicePixels="True" />
+                        <Expander Name="GradientsExpander" Padding ="20,0,0,0" Visibility="Visible" Background="Transparent" Foreground="{DynamicResource LightTextBrush}">
+                            <Expander.Header>
+                                <StackPanel Orientation="Horizontal" Margin="-20,-25">
+                                    <Border Background="{DynamicResource PrimaryHueMidBrush}" Width="5" VerticalAlignment="Stretch"></Border>
+                                    <Label Padding="30,10" VerticalAlignment="Center" FontSize="20" Foreground="{DynamicResource LightTextBrush}">
+                                        Gradients
+                                    </Label>
+                                </StackPanel>
+                            </Expander.Header>
+                            <StackPanel  HorizontalAlignment="Stretch">
+                                <Border Background="{DynamicResource MaterialDesignDivider}"
+                                        Height="1"
+                                        HorizontalAlignment="Stretch"
+                                        SnapsToDevicePixels="True" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Opacity="0.75" FontSize="16" Padding="25,5,5,5">
+                                        Current Objective:
+                                    </TextBlock>
+
+                                    <TextBlock Grid.Column="1" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Opacity="0.75" FontSize="16" Padding="5"
+                                       Text="{Binding CurrentObjectiveName}" HorizontalAlignment="Left">
+                                    </TextBlock>
+                                </Grid>
+
+                                <ItemsControl Name="GradientData" Padding="25,0">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <UniformGrid Columns="2">
+                                                <!-- Grid for displaying gradient values before last step -->
+                                            </UniformGrid>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Expander>
+                        <Border Background="{DynamicResource MaterialDesignDivider}"
+                                Height="1"
+                                HorizontalAlignment="Stretch"
+                                SnapsToDevicePixels="True" />
                     </StackPanel>
                 </Expander>
             </ScrollViewer>
 
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
                 <Expander Name="SettingsExpander" IsExpanded="True" HorizontalAlignment="Stretch" Background="Transparent" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
                     <Expander.Header>
                         <TextBlock FontSize="24" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"> Optimization Settings</TextBlock>
@@ -275,7 +442,7 @@
                 </Expander>
             </ScrollViewer>
 
-            <Grid Name="ButtonGrid" Grid.Row="2" VerticalAlignment="Bottom" Height="150">
+            <Grid Name="ButtonGrid" Grid.Row="3" VerticalAlignment="Bottom" Height="150">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>

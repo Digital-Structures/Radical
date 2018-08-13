@@ -86,8 +86,9 @@ namespace DSOptimization
             set
             {
                 //Update value if change is in bounds
-                if (value<=this.Max && value>=this.Min &&
-                    CheckPropertyChanged<double>("Value", ref _value, ref value))
+                if (!(value <= this.Max && value >= this.Min))
+                    this.OpenDialog = true;
+                else if (CheckPropertyChanged<double>("Value", ref _value, ref value))
                 {
                     DesignVar.UpdateValue(this._value);
 
@@ -109,8 +110,7 @@ namespace DSOptimization
                 //Invalid Bounds, display an error
                 if (value > this._max)
                 {
-                    System.Windows.MessageBox.Show(String.Format("Incompatible bounds!\n" +
-                                                                    "Min:{0} > Max:{1}\n", value, this._max));
+                    this.OpenDialog = true;
                 }
 
                 else if (CheckPropertyChanged<double>("Min", ref _min, ref value))
@@ -140,9 +140,7 @@ namespace DSOptimization
                 //Invalid Bounds, display an error
                 if (value < this._min)
                 {
-                    System.Windows.MessageBox.Show(String.Format("Incompatible bounds!\n" +
-                                                                    "Max:{0} < Min:{1}\n" +
-                                                                    "Resetting Max to {2}\n", value, this._min, this._max));
+                    this.OpenDialog = true;
                 }
                 else if (CheckPropertyChanged<double>("Max", ref _max, ref value))
                 {
@@ -158,10 +156,19 @@ namespace DSOptimization
             }
         }
 
+        //OPEN DIALOG
+        //Boolean to determine whether a bounds error was thrown
+        private bool opendialog;
+        public virtual bool OpenDialog
+        {
+            get { return this.opendialog; }
+            set { CheckPropertyChanged<bool>("OpenDialog", ref opendialog, ref value); }
+        }
+
         //IS ACTIVE
         //Determines whether variable will be considered in optimization
         private bool _isactive;
-        public virtual bool IsActive
+        public bool IsActive
         {
             get
             {
@@ -174,15 +181,6 @@ namespace DSOptimization
                     DesignVar.IsActive = this._isactive;
                 }
             }
-        }
-
-        //GRADIENT
-        //Stores the gradient of the variable for a given objective
-        private double _grad;
-        public double Gradient
-        {
-            get { return _grad; }
-            set { CheckPropertyChanged<double>("Gradient", ref _grad, ref value); }
         }
 
         //OPTIMIZATION FINISHED

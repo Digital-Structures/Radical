@@ -22,6 +22,7 @@ namespace Stepper
     public partial class SettingsControl : UserControl
     {
         private StepperWindow MyWindow;
+        private StepperVM Stepper;
 
         public SettingsControl()
         {
@@ -29,11 +30,20 @@ namespace Stepper
         }
 
         //CONSTRUCTOR
-        public SettingsControl(StepperVM Stepper, StepperWindow Window)
+        public SettingsControl(StepperVM stepper, StepperWindow window)
         {
+            this.MyWindow = window;
+            this.Stepper = stepper;
+
             this.DataContext = Stepper;
-            this.MyWindow = Window;
             InitializeComponent();
+        }
+
+        //SELECTION CHANGED
+        //Notify the VM that the current objective changed
+        private void ChosenObjective_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.Stepper.FirePropertyChanged("CurrentObjectiveName");
         }
 
         //CHECKED

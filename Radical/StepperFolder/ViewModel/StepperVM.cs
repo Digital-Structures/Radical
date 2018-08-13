@@ -28,6 +28,7 @@ namespace Stepper
         public ChartValues<ChartValues<double>> ObjectiveEvolution_Norm;
         public ChartValues<ChartValues<double>> ObjectiveEvolution_Abs;
         public List<List<double>> VariableEvolution;
+        public List<List<List<double?>>> GradientEvolution;
 
         public List<ObjectiveVM> Objectives;
         public List<VarVM> Variables { get; set; }
@@ -53,6 +54,11 @@ namespace Stepper
             this.step = 0.05;
             this.trackedstep = 0;
 
+            //Warn user that system can't handle constraints
+            this.opendialog = false;
+            if (this.Design.Constraints.Any())
+                this.OpenDialog = true;
+
             //Variable Lists
             //Separate for display
             this.NumVars = new List<VarVM>();
@@ -71,26 +77,31 @@ namespace Stepper
             this.ObjectiveEvolution_Norm = new ChartValues<ChartValues<double>>();
             this.ObjectiveEvolution_Abs = new ChartValues<ChartValues<double>>();
             this.Objectives = new List<ObjectiveVM>();
-            int i = 0;
 
+            this.GradientEvolution = new List<List<List<double?>>>();
+
+            int i = 0;
             //Set up list of objective evolution
             foreach (double objective in this.Design.Objectives)
             {
                 ObjectiveVM Obj = new ObjectiveVM(objective, this);
                 Obj.Name = this.Component.Params.Input[0].Sources[i].NickName;
-                Obj.IsActive = (this.ObjIndex == i);
 
                 this.Objectives.Add(Obj);
                 this.ObjectiveEvolution_Norm.Add(new ChartValues<double> { 1 });
                 this.ObjectiveEvolution_Abs.Add(new ChartValues<double> { objective });
+                this.GradientEvolution.Add(new List<List<double?>>());
                 i++;
             }
 
-            //Set up list of variable value evolution 
+            //Set up list of variable value and gradient evolution 
             this.VariableEvolution = new List<List<double>>();
             foreach (VarVM var in this.Variables)
             {
                 this.VariableEvolution.Add(new List<double> { var.Value });
+
+                foreach (List<List<double?>> objective in this.GradientEvolution)
+                    objective.Add(new List<double?>());
             }
 
             //Set up both charts
@@ -98,6 +109,16 @@ namespace Stepper
             this.ObjectiveChart_Abs = new StepperGraphVM(ObjectiveEvolution_Abs);
             this.ObjectiveNamesChanged();
         }
+
+        //OPEN DIALOG
+        //Boolean to notify user if he's entered constraints
+        private bool opendialog;
+        public virtual bool OpenDialog
+        {
+            get { return this.opendialog; }
+            set { CheckPropertyChanged<bool>("OpenDialog", ref opendialog, ref value); }
+        }
+
 
         //OBJECTIVE NAMES
         //For combo box drop down
@@ -120,6 +141,12 @@ namespace Stepper
         {
             get { return index; }
             set { CheckPropertyChanged<int>("ObjIndex", ref index, ref value); }
+        }
+
+        //OBJECTIVE NAME
+        public string CurrentObjectiveName
+        {
+            get { return this.Objectives[ObjIndex].Name; }
         }
 
         //STEP SIZE
@@ -193,9 +220,12 @@ namespace Stepper
             }
         }
 
-        //Objective Names Changed
+        //OBJECTIVE NAMES CHANGED
+        //Need to rebind chart legend to names list
         public void ObjectiveNamesChanged()
         {
+            var index = this.ObjIndex;
+
             FirePropertyChanged("ObjectiveNames");
 
             if (this.ObjectiveChart_Abs != null)
@@ -209,21 +239,13 @@ namespace Stepper
                     i++;
                 }
             }
+
+            this.ObjIndex = index;
         }
 
-        //OPTIMIZE
-        public void Optimize(StepperOptimizer.Direction dir)
+        //UPDATE EVOLUTION DATA
+        public void UpdateEvolutionData(List<List<double?>> GradientData)
         {
-            StepperOptimizer optimizer = new StepperOptimizer(this.Design, this.ObjIndex, dir, this.StepSize);
-            optimizer.Optimize();
-
-            //Update variable values at the end of the optimization
-            foreach (GroupVarVM var in this.GroupVars)
-                var.OptimizationFinished();
-            foreach (List<VarVM> geo in this.GeoVars)
-                foreach (VarVM var in geo)
-                    var.OptimizationFinished();
-
             //Update objective evolution
             int i = 0;
             foreach (ChartValues<double> objective in this.ObjectiveEvolution_Abs)
@@ -245,17 +267,49 @@ namespace Stepper
                 i++;
             }
 
+            //Store gradient data for export csv
+            for (int j=0; j<this.Objectives.Count; j++)
+            {
+                for (int k = 0; k < this.Variables.Count; k++)
+                {
+                    var subList = this.GradientEvolution[j][k];
+
+                    if (GradientData.Any())
+                        subList.Add(GradientData[j][k]);
+                    else
+                    {
+                        subList.Add(null);
+                    }                        
+                }
+            }
+
             //Rescale X-Axis every 10 steps for appearance
             FirePropertyChanged("NumSteps");
             this.ObjectiveChart_Norm.XAxisSteps = this.NumSteps / 10 + 1;
             this.ObjectiveChart_Abs.XAxisSteps = this.NumSteps / 10 + 1;
         }
 
+        //OPTIMIZE
+        public void Optimize(StepperOptimizer.Direction dir, List<List<double?>> GradientData)
+        {
+            StepperOptimizer optimizer = new StepperOptimizer(this.Design, this.ObjIndex, dir, this.StepSize);
+            optimizer.Optimize(GradientData);
+
+            //Update variable values at the end of the optimization
+            foreach (GroupVarVM var in this.GroupVars)
+                var.OptimizationFinished();
+            foreach (List<VarVM> geo in this.GeoVars)
+                foreach (VarVM var in geo)
+                    var.OptimizationFinished();
+
+            this.UpdateEvolutionData(GradientData);
+        }
+
         //RESET
         //Allow user to return to previous step systems
         public void Reset()
         {
-            var step = this.TrackedStep;
+            var step = this.TrackedStep;           
 
             int i = 0;
             foreach(VarVM var in this.Variables)
@@ -263,6 +317,150 @@ namespace Stepper
                 var.Value = this.VariableEvolution[i][step];
                 i++;
             }
+
+            this.UpdateEvolutionData(new List<List<double?>>());
+            //this.Design.UpdateComponentOutputs(new List<List<double?>>());
+        }
+
+        //EXPORT CSV LOG
+        //Formats and exports all data for readability
+        public void ExportCSV_Log(string filename)
+        {
+            var ObjData = this.ObjectiveEvolution_Abs;
+            var VarData = this.VariableEvolution;
+            var GradData = this.GradientEvolution;
+
+            var numObjs = ObjData.Count;
+            var numVars = VarData.Count;
+
+            string output = "";
+
+            //There's a lot of data to be exported
+            //Construct some headers in the csv so things make sense in excel
+            //These rows can always be deleted in post-processing
+            #region Construct Headers
+            //First row is only Gradients header
+            for (int i = 0; i < (numObjs + numVars + 2); i++)
+            {
+                output += ",";
+            }
+            output += "Gradients" + "\r\n";
+
+            //Second row has Objective and Variable headers
+            string line = "Objectives,";
+            for (int i = 0; i < numObjs; i++)
+            {
+                line += ",";
+            }
+
+            line += "Variables,";
+            for (int i = 0; i < numVars; i++)
+            {
+                line += ",";
+            }
+
+            for (int i = 0; i < numObjs; i++)
+            {
+                line += this.ObjectiveNames[i] + ",";
+
+                for (int j = 0; j < numVars; j++)
+                {
+                    line += ",";
+                }
+            }
+            output += line + "\r\n";
+
+            //Third row has Objective and Variable name headers
+            line = "";
+            for (int i = 0; i < numObjs; i++)
+            {
+                line += this.ObjectiveNames[i] + ",";
+            }
+
+            line += ",";
+            for (int i = 0; i < numObjs+1; i++)
+            {
+                foreach (VarVM var in this.Variables)
+                {
+                    line += var.Name + ",";
+                }
+
+                if (i == 0)
+                    line += ",";
+            }
+            output += line + "\r\n";
+            #endregion
+
+            #region Add Data
+            for (int i=0; i<this.NumSteps+1; i++)
+            {
+                line = "";
+                for (int j= 0; j<numObjs; j++)
+                {
+                    line += this.ObjectiveEvolution_Abs[j][i] + ",";
+                }
+
+                line += ",";
+                for (int j = 0; j < numVars; j++)
+                {
+                    line += this.VariableEvolution[j][i] + ",";
+                }
+
+                line += ",";
+
+                if (i<this.GradientEvolution[0][0].Count && this.GradientEvolution[0][0][i] != null)
+                {
+                    for (int j = 0; j < numObjs; j++)
+                    {
+                        for (int k = 0; k < numVars; k++)
+                            line += this.GradientEvolution[j][k][i] + ",";
+                    }
+                }
+
+                output += line + "\r\n";
+            }
+            #endregion
+
+            System.IO.StreamWriter file = new System.IO.StreamWriter(@"" + filename + "_log.csv");
+            file.Write(output);
+            file.Close();
+        }
+
+        //EXPORT CSV RAW
+        //Formats and exports only variable and objective data for easy processing
+        public void ExportCSV_Raw(string filename)
+        {
+            var ObjData = this.ObjectiveEvolution_Abs;
+            var VarData = this.VariableEvolution;
+            var GradData = this.GradientEvolution;
+
+            var numObjs = ObjData.Count;
+            var numVars = VarData.Count;
+
+            string output = "";
+
+            #region Add Data
+            string line;
+            for (int i = 0; i < this.NumSteps + 1; i++)
+            {
+                line = "";
+                for (int j = 0; j < numVars; j++)
+                {
+                    line += this.VariableEvolution[j][i] + ",";
+                }
+
+                for (int j = 0; j < numObjs; j++)
+                {
+                    line += this.ObjectiveEvolution_Abs[j][i] + ",";
+                }
+
+                output += line + "\r\n";
+            }
+            #endregion
+
+            System.IO.StreamWriter file = new System.IO.StreamWriter(@"" + filename + "_raw.csv");
+            file.Write(output);
+            file.Close();
         }
 
         //ON WINDOW CLOSING

@@ -38,7 +38,7 @@ namespace Stepper
         {
             this.Design = design;
 
-            numVars = Design.Variables.Count;
+            numVars = Design.ActiveVariables.Count;
             numObjs = Design.Objectives.Count;
             FDstep = 0.01;
 
@@ -54,7 +54,7 @@ namespace Stepper
             this.Dir = dir;
             this.StepSize = stepSize;
 
-            numVars = Design.Variables.Count;
+            numVars = Design.ActiveVariables.Count;
             numObjs = Design.Objectives.Count;
             FDstep = 0.01;
 
@@ -78,11 +78,11 @@ namespace Stepper
 
                 for (int j = 0; j < numVars; j++)
                 {
-                    DesignMapStepperOne[i].Add(Design.Variables[j].CurrentValue);
-                    DesignMapStepperTwo[i].Add(Design.Variables[j].CurrentValue);
+                    DesignMapStepperOne[i].Add(Design.ActiveVariables[j].CurrentValue);
+                    DesignMapStepperTwo[i].Add(Design.ActiveVariables[j].CurrentValue);
                 }
 
-                IVariable var = Design.Variables[i];
+                IVariable var = Design.ActiveVariables[i];
                 double difference = 0.5 * FDstep * (var.Max - var.Min);
 
                 double left = var.CurrentValue - difference;
@@ -97,7 +97,7 @@ namespace Stepper
             DesignMapStepperCombined.AddRange(DesignMapStepperTwo);
 
             // Add dummy at end to resent sliders
-            DesignMapStepperCombined.Add(Design.Variables.Select(var => var.CurrentValue).ToList());
+            DesignMapStepperCombined.Add(Design.ActiveVariables.Select(var => var.CurrentValue).ToList());
 
             return DesignMapStepperCombined;
         }
@@ -114,7 +114,7 @@ namespace Stepper
                     int i = 0;
                     foreach (double val in sample)
                     {
-                        Design.Variables[i].UpdateValue(val);
+                        Design.ActiveVariables[i].UpdateValue(val);
                         i++;
                     }
                     Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
@@ -131,12 +131,12 @@ namespace Stepper
             }
         }
 
-        public List<List<double>> CalculateGradient()
+        public List<List<double?>> CalculateGradient()
         {
             var DesignMap = GenerateDesignMap();
             Iterate(DesignMap);
 
-            var Gradient = new List<List<double>>();
+            var Gradient = new List<List<double?>>();
 
             double maxObj = double.MinValue;
             double minObj = double.MaxValue;
@@ -144,7 +144,7 @@ namespace Stepper
             // find the gradient for each objective by taking finite differences of every variable
             for (int j = 0; j < numObjs; j++)
             {
-                Gradient.Add(new List<double>());
+                Gradient.Add(new List<double?>());
 
                 for (int i = 0; i < numVars; i++)
                 {
@@ -170,7 +170,7 @@ namespace Stepper
                 for (int i = 0; i < numVars; i++)
                 {
                     Gradient[j][i] = (Gradient[j][i] / maxAbs);
-                    vecLength = vecLength + Gradient[j][i] * Gradient[j][i];
+                    vecLength = vecLength + (double)Gradient[j][i] * (double)Gradient[j][i];
                 }
 
                 for (int i = 0; i < numVars; i++)
@@ -182,10 +182,8 @@ namespace Stepper
             return Gradient;
         }
 
-        public void Optimize()
+        public void Optimize(List<List<double?>> Gradient)
         {
-            var Gradient = this.CalculateGradient();
-
             //// FIND THE ORTHOGONAL VECTORS
             ////double[][] gradientArray = Gradient.Select(a => a.ToArray()).ToArray();
             List<List<string>> lst = new List<List<string>>();
@@ -195,7 +193,7 @@ namespace Stepper
             {
                 for (int i = 0; i < Gradient[j].Count; i++)
                 {
-                    gradientArray[j, i] = Gradient[j][i];
+                    gradientArray[j, i] = (double)Gradient[j][i];
                 }
             }
 
@@ -256,18 +254,18 @@ namespace Stepper
             //Set all sliders to their optimized values
             for (int i = 0; i < numVars; i++)
             {
-                IVariable var = Design.Variables[i];
+                IVariable var = Design.ActiveVariables[i];
                 double SteppedValue;
 
                 switch(this.Dir)
                 {
                     case Direction.Maximize:
-                        SteppedValue = var.CurrentValue + Gradient[this.ObjIndex][i] * this.StepSize * (var.Max - var.Min);
+                        SteppedValue = var.CurrentValue + (double)Gradient[this.ObjIndex][i] * this.StepSize * (var.Max - var.Min);
                         var.CurrentValue = SteppedValue;
                         break;
 
                     case Direction.Minimize:
-                        SteppedValue = var.CurrentValue - Gradient[this.ObjIndex][i] * this.StepSize * (var.Max - var.Min);
+                        SteppedValue = var.CurrentValue - (double)Gradient[this.ObjIndex][i] * this.StepSize * (var.Max - var.Min);
                         var.CurrentValue = SteppedValue;
                         break;
 
@@ -277,6 +275,9 @@ namespace Stepper
                         break;
                 }
             }
+
+            //Append data to the end of component output lists
+            this.Design.UpdateComponentOutputs(Gradient);
         }
     }
 }

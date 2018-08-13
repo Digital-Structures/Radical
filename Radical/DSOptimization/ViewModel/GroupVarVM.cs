@@ -53,11 +53,16 @@ namespace DSOptimization
             set
             {
                 //Update value if change is in bounds
-                if (value <= this.Max && value >= this.Min &&
-                    CheckPropertyChanged<double>("Value", ref _value, ref value))
+                if (!(value <= this.Max && value >= this.Min))
+                    this.OpenDialog = true;
+                else if( CheckPropertyChanged<double>("Value", ref _value, ref value))
                 {
                     foreach (VarVM var in this.MyVars)
+                    {
                         var.Value = value;
+                        if (var.OpenDialog)
+                            this.OpenDialog = true;
+                    }
 
                     //Refresh to change value on the grasshopper canvas
                     Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
@@ -78,14 +83,17 @@ namespace DSOptimization
                 //Invalid Bounds, display an error
                 if (value > this._max)
                 {
-                    System.Windows.MessageBox.Show(String.Format("Incompatible bounds!\n" +
-                                                                    "Min:{0} > Max:{1}\n", value, this._max));
+                    this.OpenDialog = true;
                 }
 
                 else if (CheckPropertyChanged<double>("Min", ref _min, ref value))
                 {
                     foreach (VarVM var in this.MyVars)
+                    {
                         var.Min = value;
+                        if (var.OpenDialog)
+                            this.OpenDialog = true;
+                    }
                 }
             }
         }
@@ -102,15 +110,35 @@ namespace DSOptimization
                 //Invalid Bounds, display an error
                 if (value < this._min)
                 {
-                    System.Windows.MessageBox.Show(String.Format("Incompatible bounds!\n" +
-                                                                    "Min:{0} > Max:{1}\n", this._min, value));
+                    this.OpenDialog = true;
                 }
 
                 else if (CheckPropertyChanged<double>("Max", ref _max, ref value))
                 {
                     foreach (VarVM var in this.MyVars)
+                    {
                         var.Max = value;
+                        if (var.OpenDialog)
+                            this.OpenDialog = true;
+                    }
                 }
+            }
+        }
+
+        //OPEN DIALOG
+        private bool opendialog;
+        public override bool OpenDialog
+        {
+            get
+            {
+                return this.opendialog;
+            }
+            set
+            {
+                CheckPropertyChanged<bool>("OpenDialog", ref opendialog, ref value);
+                if (!value)
+                    foreach (VarVM var in this.MyVars)
+                        var.OpenDialog = false;
             }
         }
 

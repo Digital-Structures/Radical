@@ -46,6 +46,11 @@ namespace Radical
             this.Component = component;
             this.Design = design;
 
+            //Warn user that system can't handle multiple objectives
+            this.opendialog = false;
+            if (this.Design.Objectives.Count>1)
+                this.OpenDialog = true;
+
             this.Constraints = new List<ConstVM>();
 
             this.ObjectiveEvolution = new ChartValues<double>();
@@ -71,6 +76,15 @@ namespace Radical
 
             this.OriginalObjectiveValue = this.Design.Objectives.ElementAt(0);
             this.SmallestObjectiveValue = this.Design.Objectives.ElementAt(0);
+        }
+
+        //OPEN DIALOG
+        //Boolean to notify the user if he's using multiple objectives
+        private bool opendialog;
+        public virtual bool OpenDialog
+        {
+            get { return this.opendialog; }
+            set { CheckPropertyChanged<bool>("OpenDialog", ref opendialog, ref value); }
         }
 
         //ACTIVE GRAPHS
