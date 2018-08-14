@@ -101,6 +101,7 @@
             <ComboBox Name="SecondaryAlgorithm" Visibility="Collapsed"  HorizontalAlignment="Right" 
                                   ItemsSource="{Binding AvailableSecondaryAlgs, Mode=OneWay}" 
                                   SelectedItem="{Binding SecondaryAlgorithm, Mode=OneWayToSource, FallbackValue={x:Static nlopt:NLoptAlgorithm.LN_BOBYQA}}"
+                                  materialDesign:HintAssist.HintOpacity="1"
                                   materialDesign:HintAssist.Hint="Secondary Algorithm" IsEditable="True" IsReadOnly="True" FontSize="15" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}">
             </ComboBox>
         </DockPanel>

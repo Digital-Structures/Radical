@@ -14,7 +14,8 @@
             Background="{DynamicResource PrimaryHueDarkBrush}"
             TextElement.FontWeight="Medium"
             TextElement.FontSize="12"
-            FontFamily="Global User Interface">
+            FontFamily="Global User Interface"
+            SizeChanged="UpdateGraphSize">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -59,6 +60,10 @@
                     <EasingDoubleKeyFrame KeyTime="0" Value="60"/>
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="505"/>
                 </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="VarTree">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="505"/>
+                </DoubleAnimationUsingKeyFrames>
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="VariablesExpander">
                     <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="505"/>
@@ -68,6 +73,10 @@
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="LeftMenu">
                     <EasingDoubleKeyFrame KeyTime="0" Value="505"/>
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="60"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="VarTree">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="505"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
                 </DoubleAnimationUsingKeyFrames>
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="VariablesExpander">
                     <EasingDoubleKeyFrame KeyTime="0" Value="505"/>
@@ -141,7 +150,7 @@
                 </Button>
             </Grid>
 
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer  x:Name="VarTree" Width="0" Grid.Row="1" VerticalScrollBarVisibility="Auto">
                 <Expander Name="VariablesExpander" IsExpanded="True" Width="0" Padding="20,0"
                           Background="Transparent" Foreground="{DynamicResource LightTextBrush}">
                     <Expander.Header>
@@ -289,7 +298,7 @@
 
             <!--Export Csv Dialogue-->
             <materialDesign:DialogHost Name="ExportCSVWindow" IsOpen="False" DialogClosing="ExportCSV"
-                                       Grid.RowSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                       Grid.RowSpan="4" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="200,0,0,0">
                 <materialDesign:DialogHost.DialogContent>
                     <StackPanel Margin="16" Width="Auto" MaxWidth="300">
 
@@ -424,6 +433,12 @@
                                         </ItemsPanelTemplate>
                                     </ItemsControl.ItemsPanel>
                                 </ItemsControl>
+
+                                <Border Background="{DynamicResource MaterialDesignDivider}"
+                                    Height="1"
+                                    HorizontalAlignment="Stretch"
+                                    SnapsToDevicePixels="True">
+                                </Border>      
                             </StackPanel>
                         </Expander>
                         <Border Background="{DynamicResource MaterialDesignDivider}"

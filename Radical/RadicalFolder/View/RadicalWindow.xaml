@@ -16,8 +16,7 @@
         TextElement.FontSize="12"
         FontFamily="Global User Interface"
         
-        SizeChanged="UpdateGraphSize"
-        >
+        SizeChanged="UpdateGraphSize">
 
     <UserControl.Resources>
         <ResourceDictionary>

@@ -331,6 +331,11 @@ namespace Stepper
             this.StepperVM.OnWindowClosing();
         }
 
+        private void UpdateGraphSize(object sender, RoutedEventArgs e)
+        {
+            ChartCard.Height = MainGrid.ActualHeight;
+        }
+
         //BUTTON PLAY
         //Runs one step of the animation on click
         private void ButtonPlay_Click(object sender, RoutedEventArgs e)
