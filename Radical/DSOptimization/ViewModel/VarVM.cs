@@ -93,7 +93,7 @@ namespace DSOptimization
                     DesignVar.UpdateValue(this._value);
 
                     //Refresh to change value on the grasshopper canvas
-                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
+                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
                 }
             }
         }

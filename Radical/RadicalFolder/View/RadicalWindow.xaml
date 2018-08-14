@@ -292,7 +292,7 @@
                     <TextBlock Foreground="{StaticResource SecondaryAccentBrush}">Reset System</TextBlock>
                 </Button>
 
-                <Button x:Name="ButtonOptimalResult" Click="ButtonOptimalResult_Click" Grid.Column="1" Width="Auto" Height="40"  Style="{StaticResource MaterialDesignRaisedLightButton}"  Margin="20,0,30,15">
+                <Button x:Name="ButtonOptimalResult" Click="ButtonOptimalResult_Click" Grid.Column="1" Width="Auto" Height="40" Background="Transparent" BorderBrush="{StaticResource SecondaryAccentBrush}" Margin="20,0,30,15">
                     <TextBlock>Set To Optimal Value</TextBlock>
                 </Button>
             </Grid>

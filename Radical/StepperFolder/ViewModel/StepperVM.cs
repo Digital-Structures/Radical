@@ -302,6 +302,7 @@ namespace Stepper
                 foreach (VarVM var in geo)
                     var.OptimizationFinished();
 
+            Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
             this.UpdateEvolutionData(GradientData);
         }
 

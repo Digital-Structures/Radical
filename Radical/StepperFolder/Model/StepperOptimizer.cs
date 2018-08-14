@@ -117,10 +117,12 @@ namespace Stepper
                         Design.ActiveVariables[i].UpdateValue(val);
                         i++;
                     }
-                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
+                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
 
                     this.ObjectiveData.Add(Design.Objectives);
                 }
+                //Grasshopper.Kernel.GH_SolutionMode.Silent
+                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
                 finished = true;
             };
             Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
