@@ -366,6 +366,12 @@ namespace Stepper
                 else
                     dir = StepperOptimizer.Direction.Isoperformance;
 
+                if (!this.StepperVM.IsoperformancePossible() && dir == StepperOptimizer.Direction.Isoperformance)
+                {
+                    this.StepperVM.OpenIsoDialog = true;
+                    return;
+                }
+
                 this.StepperVM.Optimize(dir, GradientData);
 
                 //Update objective value display from menu

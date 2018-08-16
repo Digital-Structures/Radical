@@ -274,6 +274,6 @@ namespace DSOptimization
             }
             return base.RespondToMouseDoubleClick(sender, e);
         }
-        
+
     }
 }

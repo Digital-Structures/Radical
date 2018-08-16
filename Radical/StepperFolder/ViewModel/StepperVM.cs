@@ -55,9 +55,11 @@ namespace Stepper
             this.trackedstep = 0;
 
             //Warn user that system can't handle constraints
-            this.opendialog = false;
+            this._opendialog = false;
             if (this.Design.Constraints.Any())
                 this.OpenDialog = true;
+
+            this._openisodialog = false; 
 
             //Variable Lists
             //Separate for display
@@ -112,11 +114,20 @@ namespace Stepper
 
         //OPEN DIALOG
         //Boolean to notify user if he's entered constraints
-        private bool opendialog;
+        private bool _opendialog;
         public virtual bool OpenDialog
         {
-            get { return this.opendialog; }
-            set { CheckPropertyChanged<bool>("OpenDialog", ref opendialog, ref value); }
+            get { return this._opendialog; }
+            set { CheckPropertyChanged<bool>("OpenDialog", ref _opendialog, ref value); }
+        }
+
+        //OPEN ISO DIALOG
+        //Bool to notify user of isoperformance inavailability 
+        private bool _openisodialog;
+        public virtual bool OpenIsoDialog
+        {
+            get { return this._openisodialog; }
+            set { CheckPropertyChanged<bool>("OpenIsoDialog", ref _openisodialog, ref value); }
         }
 
 
@@ -321,6 +332,15 @@ namespace Stepper
 
             this.UpdateEvolutionData(new List<List<double?>>());
             //this.Design.UpdateComponentOutputs(new List<List<double?>>());
+        }
+
+        public bool IsoperformancePossible()
+        {
+            if (Design.ActiveVariables.Count > Design.Objectives.Count && Design.ActiveVariables.Count >= 2)
+            {
+                return true; 
+            }
+            return false; 
         }
 
         //EXPORT CSV LOG

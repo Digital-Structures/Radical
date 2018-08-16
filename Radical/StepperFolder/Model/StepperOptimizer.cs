@@ -302,7 +302,7 @@ namespace Stepper
             var nullspace = matrixGrad.Kernel();
 
             // Convert array to List of nullspace vectors
-            if (numVars > numObjs)
+            if (numVars > numObjs && numVars >= 2)
             {
                 for (int i = 0; i < numVars - numObjs; i++)
                 {
@@ -320,6 +320,7 @@ namespace Stepper
 
             dir = testrand;
 
+            #region commented out code
             // Ensure that direction is "interesting"
 
             //for (int i = testrand; i < numVars - numObjs - 1; i++)
@@ -347,8 +348,7 @@ namespace Stepper
 
             //    }
             //}
-
-            List<double> IsoPerfDirList = IsoPerf[dir];
+            #endregion
 
             // step in the right direction based on the gradient vector
 
@@ -371,6 +371,7 @@ namespace Stepper
                         break;
 
                     case Direction.Isoperformance:
+                        List<double> IsoPerfDirList = IsoPerf[dir];
                         SteppedValue = var.CurrentValue + IsoPerfDirList[i] * this.StepSize * numVars;
                         var.CurrentValue = SteppedValue;
                         break;

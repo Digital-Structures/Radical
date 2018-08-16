@@ -133,6 +133,35 @@
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
 
+        <!--Isoperformance Warning Message-->
+        <materialDesign:DialogHost Name="IsoperformanceNotice" IsOpen="{Binding OpenIsoDialog, Mode=TwoWay}"
+                                       Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel Margin="16" Width="Auto" MaxWidth="400">
+
+                    <TextBlock FontSize="24" Foreground="{DynamicResource SecondaryAccentBrush}" HorizontalAlignment="Center">
+                        Notice</TextBlock>
+
+                    <TextBlock FontSize="16" TextWrapping="Wrap" HorizontalAlignment="Center" Foreground="{DynamicResource SecondaryAccentBrush}" TextAlignment="Center">
+                        The isoperformance step is unavailable for this setup.</TextBlock>
+
+                    <TextBlock FontSize="16" TextWrapping="Wrap" HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryHueDarkBrush}" TextAlignment="Center">
+                        You must have two or more variables <LineBreak></LineBreak> and more variables than objectives. </TextBlock>
+
+                    <Button Background="Transparent"
+                            IsDefault="True"
+                            Margin="10"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                            Command="materialDesign:DialogHost.CloseDialogCommand">
+                        <Button.CommandParameter>
+                            <system:Boolean>True</system:Boolean>
+                        </Button.CommandParameter>
+                        CONTINUE
+                    </Button>
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+
         <Grid Grid.Column="0" Name="LeftMenu">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"></RowDefinition>
