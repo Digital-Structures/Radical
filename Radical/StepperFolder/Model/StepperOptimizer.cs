@@ -62,6 +62,88 @@ namespace Stepper
             IsoPerf = new List<List<double>>();
         }
 
+        public List<List<double>> GenerateDesignMapForwardStep()
+        {
+            var DesignMapStepperOne = new List<List<double>>();
+
+            var DesignMapStepperCombined = new List<List<double>>();
+
+            //Create Design Map, list of points to be tested
+            for (int i = 0; i < numVars; i++)
+            {
+                DesignMapStepperOne.Add(new List<double>());
+
+                for (int j = 0; j < numVars; j++)
+                {
+                    DesignMapStepperOne[i].Add(Design.ActiveVariables[j].CurrentValue);
+                }
+
+                IVariable var = Design.ActiveVariables[i];
+                double difference = 0.5 * FDstep * (var.Max - var.Min);
+
+                double left = var.CurrentValue - difference;
+
+                DesignMapStepperOne[i][i] = left;
+            }
+
+            // Combine lists
+            DesignMapStepperCombined.AddRange(DesignMapStepperOne);
+
+            // Add dummy at end to resent sliders
+            DesignMapStepperCombined.Add(Design.ActiveVariables.Select(var => var.CurrentValue).ToList());
+
+            return DesignMapStepperCombined;
+        }
+
+        public List<List<double?>> CalculateGradientForwardStep()
+        {
+            var DesignMap = GenerateDesignMapForwardStep();
+            Iterate(DesignMap);
+
+            var Gradient = new List<List<double?>>();
+
+            double maxObj = double.MinValue;
+            double minObj = double.MaxValue;
+
+            // find the gradient for each objective by taking finite differences of every variable
+            for (int j = 0; j < numObjs; j++)
+            {
+                Gradient.Add(new List<double?>());
+
+                for (int i = 0; i < numVars; i++)
+                {
+                    double left = ObjectiveData[i][j];
+
+                    double difference = (Design.Objectives[j] - left) / (FDstep);
+
+                    if (difference > maxObj) { maxObj = difference; }
+                    if (difference < minObj) { minObj = difference; }
+
+                    Gradient[j].Add((double)difference);
+                }
+
+                //Normalize by max/min difference
+                double maxAbs = double.MinValue;
+                double vecLength = 0;
+
+                if (Math.Abs(maxObj) > maxAbs) { maxAbs = Math.Abs(maxObj); }
+                if (Math.Abs(minObj) > maxAbs) { maxAbs = Math.Abs(minObj); }
+
+                for (int i = 0; i < numVars; i++)
+                {
+                    Gradient[j][i] = (Gradient[j][i] / maxAbs);
+                    vecLength = vecLength + (double)Gradient[j][i] * (double)Gradient[j][i];
+                }
+
+                for (int i = 0; i < numVars; i++)
+                {
+                    Gradient[j][i] = (Gradient[j][i] / Math.Sqrt(vecLength));
+                }
+            }
+
+            return Gradient;
+        }
+
         public List<List<double>> GenerateDesignMap()
         {
             //var DifOne = new List<List<double>>();
@@ -117,16 +199,24 @@ namespace Stepper
                         Design.ActiveVariables[i].UpdateValue(val);
                         i++;
                     }
-                    foreach (IDesignGeometry geo in this.Design.Geometries)
+
+                    if (this.Design.Geometries.Any())
                     {
-                        geo.Update();
+                        foreach (IDesignGeometry geo in this.Design.Geometries)
+                        {
+                            geo.Update();
+                        }
+                        Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
                     }
-                
-                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
+                    else
+                    {
+                        Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
+                    }
 
                     this.ObjectiveData.Add(Design.Objectives);
                 }
-                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
+
+                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
                 finished = true;
             };
             Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
@@ -139,7 +229,8 @@ namespace Stepper
 
         public List<List<double?>> CalculateGradient()
         {
-            var DesignMap = GenerateDesignMap();
+            //var DesignMap = GenerateDesignMap();
+            var DesignMap = GenerateDesignMapForwardStep();
             Iterate(DesignMap);
 
             var Gradient = new List<List<double?>>();
@@ -164,7 +255,6 @@ namespace Stepper
 
                     Gradient[j].Add((double)difference);
                 }
-
 
                 //Normalize by max/min difference
                 double maxAbs = double.MinValue;

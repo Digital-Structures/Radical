@@ -345,7 +345,8 @@ namespace Stepper
 
             //Always calculate and store gradient
             StepperOptimizer calculator = new StepperOptimizer(this.StepperVM.Design);
-            var GradientData = calculator.CalculateGradient();
+            //var GradientData = calculator.CalculateGradient();
+            var GradientData = calculator.CalculateGradientForwardStep();
 
             int obj = this.StepperVM.ObjIndex;
 
