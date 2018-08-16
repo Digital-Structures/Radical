@@ -270,7 +270,7 @@ namespace Stepper
             //Store gradient data for export csv
             for (int j=0; j<this.Objectives.Count; j++)
             {
-                for (int k = 0; k < this.Variables.Count; k++)
+                for (int k = 0; k < this.Variables.Where(var => var.IsActive).Count(); k++)
                 {
                     var subList = this.GradientEvolution[j][k];
 

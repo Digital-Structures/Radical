@@ -105,6 +105,7 @@ namespace Radical
                 }
 
                 Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, refresh);
+
                 finished = true;
             };
             Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
@@ -199,6 +200,11 @@ namespace Radical
                 AppendStoredValues();
                 this.RadicalVM.AutomateStepSize(true);
                 this.RadicalVM.UpdateCurrentScoreDisplay();
+                System.Action run = delegate ()
+                {
+                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
+                };
+                Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
             }
             this.RadicalWindow.OptimizationFinished();
 
@@ -229,7 +235,7 @@ namespace Radical
             {
                 vargeo.Update();
             }
-            Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
+            Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
             return c.CurrentValue - c.LimitValue;
         }
 

@@ -64,8 +64,8 @@ namespace Stepper
 
         public List<List<double>> GenerateDesignMap()
         {
-            var DifOne = new List<List<double>>();
-            var DifTwo = new List<List<double>>();
+            //var DifOne = new List<List<double>>();
+            //var DifTwo = new List<List<double>>();
             var DesignMapStepperOne = new List<List<double>>();
             var DesignMapStepperTwo = new List<List<double>>();
             var DesignMapStepperCombined = new List<List<double>>();
@@ -117,12 +117,16 @@ namespace Stepper
                         Design.ActiveVariables[i].UpdateValue(val);
                         i++;
                     }
-                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
+                    foreach (IDesignGeometry geo in this.Design.Geometries)
+                    {
+                        geo.Update();
+                    }
+                
+                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
 
                     this.ObjectiveData.Add(Design.Objectives);
                 }
-                //Grasshopper.Kernel.GH_SolutionMode.Silent
-                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
+                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
                 finished = true;
             };
             Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
@@ -195,6 +199,11 @@ namespace Stepper
             {
                 for (int i = 0; i < Gradient[j].Count; i++)
                 {
+                    //Temporary check for null gradients, usually pop up for surface objectives which are not implemented 
+                    if (double.IsNaN((double)Gradient[j][i]))
+                    {
+                        return; 
+                    }
                     gradientArray[j, i] = (double)Gradient[j][i];
                 }
             }

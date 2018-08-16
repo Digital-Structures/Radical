@@ -298,7 +298,7 @@
 
             <!--Export Csv Dialogue-->
             <materialDesign:DialogHost Name="ExportCSVWindow" IsOpen="False" DialogClosing="ExportCSV"
-                                       Grid.RowSpan="4" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="200,0,0,0">
+                                       Grid.RowSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <materialDesign:DialogHost.DialogContent>
                     <StackPanel Margin="16" Width="Auto" MaxWidth="300">
 

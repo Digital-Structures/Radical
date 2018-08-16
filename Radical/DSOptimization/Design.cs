@@ -70,8 +70,8 @@ namespace DSOptimization
             {
                 this.Constraints.Add(new Constraint(MyComponent, Constraint.ConstraintType.morethan, i));
             }
-
-            MyComponent.numVars = this.Variables.Count;
+            
+            MyComponent.numVars = this.Variables.Where(var => var.IsActive).Count();
         }
 
         public void UpdateComponentOutputs(List<List<double?>> GradientData)

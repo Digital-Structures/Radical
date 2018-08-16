@@ -12,10 +12,10 @@
         mc:Ignorable="d"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource PrimaryHueDarkBrush}"
+        Opacity="1"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="12"
         FontFamily="Global User Interface"
-        
         SizeChanged="UpdateGraphSize">
 
     <UserControl.Resources>
