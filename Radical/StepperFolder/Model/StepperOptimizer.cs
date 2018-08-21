@@ -62,6 +62,7 @@ namespace Stepper
             IsoPerf = new List<List<double>>();
         }
 
+        #region forward step
         public List<List<double>> GenerateDesignMapForwardStep()
         {
             var DesignMapStepperOne = new List<List<double>>();
@@ -143,7 +144,9 @@ namespace Stepper
 
             return Gradient;
         }
+        #endregion
 
+        #region half steps
         public List<List<double>> GenerateDesignMap()
         {
             //var DifOne = new List<List<double>>();
@@ -184,52 +187,8 @@ namespace Stepper
             return DesignMapStepperCombined;
         }
 
-        public void Iterate(List<List<double>> DesignMap)
-        {
-            bool finished = false;
-
-            //Invoke a delegate to solve threading issue
-            System.Action run = delegate ()
-            {
-                foreach (List<double> sample in DesignMap)
-                {
-                    int i = 0;
-                    foreach (double val in sample)
-                    {
-                        Design.ActiveVariables[i].UpdateValue(val);
-                        i++;
-                    }
-
-                    if (this.Design.Geometries.Any())
-                    {
-                        foreach (IDesignGeometry geo in this.Design.Geometries)
-                        {
-                            geo.Update();
-                        }
-                        Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
-                    }
-                    else
-                    {
-                        Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
-                    }
-
-                    this.ObjectiveData.Add(Design.Objectives);
-                }
-
-                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
-                finished = true;
-            };
-            Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
-
-            //Wait for iteration thread to finish
-            while (!finished)
-            {
-            }
-        }
-
         public List<List<double?>> CalculateGradient()
         {
-            //var DesignMap = GenerateDesignMap();
             var DesignMap = GenerateDesignMapForwardStep();
             Iterate(DesignMap);
 
@@ -277,6 +236,51 @@ namespace Stepper
 
             return Gradient;
         }
+        #endregion
+
+        public void Iterate(List<List<double>> DesignMap)
+        {
+            bool finished = false;
+
+            //Invoke a delegate to solve threading issue
+            System.Action run = delegate ()
+            {
+                foreach (List<double> sample in DesignMap)
+                {
+                    int i = 0;
+                    foreach (double val in sample)
+                    {
+                        Design.ActiveVariables[i].UpdateValue(val);
+                        i++;
+                    }
+
+                    if (this.Design.Geometries.Any())
+                    {
+                        foreach (IDesignGeometry geo in this.Design.Geometries)
+                        {
+                            geo.Update();
+                        }
+                        Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
+                    }
+                    else
+                    {
+                        Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
+                    }
+
+                    this.ObjectiveData.Add(Design.Objectives);
+                }
+
+                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
+
+                finished = true;
+            };
+            Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
+
+            //Wait for iteration thread to finish
+            while (!finished)
+            {
+            }
+        }
 
         public void Optimize(List<List<double?>> Gradient)
         {
@@ -302,7 +306,7 @@ namespace Stepper
             var nullspace = matrixGrad.Kernel();
 
             // Convert array to List of nullspace vectors
-            if (numVars > numObjs && numVars >= 2)
+            if (numVars > numObjs)
             {
                 for (int i = 0; i < numVars - numObjs; i++)
                 {

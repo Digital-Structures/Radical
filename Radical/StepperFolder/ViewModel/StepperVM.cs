@@ -278,6 +278,7 @@ namespace Stepper
                 i++;
             }
 
+
             //Store gradient data for export csv
             for (int j=0; j<this.Objectives.Count; j++)
             {
@@ -313,6 +314,10 @@ namespace Stepper
                 foreach (VarVM var in geo)
                     var.OptimizationFinished();
 
+            foreach (IDesignGeometry geo in this.Design.Geometries)
+            {
+                geo.Update();
+            }
             Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
             this.UpdateEvolutionData(GradientData);
         }
@@ -328,6 +333,15 @@ namespace Stepper
             {
                 var.Value = this.VariableEvolution[i][step];
                 i++;
+            }
+
+            foreach (IDesignGeometry geo in this.Design.Geometries)
+            {
+                geo.Update();
+            }
+            if (this.Design.Geometries.Any())
+            {
+                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
             }
 
             this.UpdateEvolutionData(new List<List<double?>>());

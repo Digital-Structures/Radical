@@ -38,7 +38,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="TabItem">
-                                <Border Name="Border" BorderThickness="1,1,1,0" BorderBrush="Gray" CornerRadius="4,4,0,0" Margin="3,0">
+                                <Border Name="Border" BorderThickness="1,1,1,0" BorderBrush="Transparent" CornerRadius="4,4,0,0" Margin="3,0">
                                     <ContentPresenter x:Name="ContentSite"
                                         VerticalAlignment="Center"
                                         HorizontalAlignment="Center"
