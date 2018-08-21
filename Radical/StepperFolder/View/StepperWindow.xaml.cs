@@ -532,8 +532,13 @@ namespace Stepper
             if (string.IsNullOrWhiteSpace(CSVFilename))
                 return;
 
-            this.StepperVM.ExportCSV_Log(CSVFilename);
-            this.StepperVM.ExportCSV_Raw(CSVFilename);
+            //If 
+            String filepath = @"" + CSVFilename + "_log.csv";
+            if (!System.IO.Directory.Exists(filepath))
+                return;
+
+            this.StepperVM.ExportCSV_Log(filepath);
+            this.StepperVM.ExportCSV_Raw(filepath);
         }
     }
 }

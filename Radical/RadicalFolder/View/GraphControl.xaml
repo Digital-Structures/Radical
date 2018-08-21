@@ -57,7 +57,7 @@
                                         Stroke="{DynamicResource SecondaryAccentBrush}">
                             <lvc:LineSeries.Fill>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" Opacity="0.75">
-                                    <GradientStop Color="White" Offset="1.0"/>
+                                    <GradientStop Color="{Binding ElementName=Card, Path=Background.Color}" Offset="2.0"/>
                                     <GradientStop Color="Orange" Offset="0.0" />
                                 </LinearGradientBrush>
                             </lvc:LineSeries.Fill>

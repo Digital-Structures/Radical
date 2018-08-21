@@ -128,7 +128,7 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <Button x:Name="MoreInformationButton" Click="MoreInformation_Click" Grid.Row="0" Width="20" Height="20" Margin="0,0,7,-8"
+                <Button x:Name="MoreInformationButton" Click="MoreInformation_Click" Grid.Row="0" Width="20" Height="20" Margin="0,0,7,-10"
                                         Style="{StaticResource MaterialDesignFloatingActionButton}" HorizontalAlignment="Right" VerticalAlignment="Center"
                                         materialDesign:ShadowAssist.ShadowDepth="Depth2" BorderBrush="{DynamicResource SecondaryAccentBrush}" Background="Transparent">
                     <materialDesign:PackIcon Kind="Help" Height="16" Width="16" Foreground="{DynamicResource SecondaryAccentBrush}"/>
@@ -143,11 +143,11 @@
                         <RowDefinition Height="Auto"></RowDefinition>
                     </Grid.RowDefinitions>
 
-                    <TextBlock TextWrapping="Wrap" Grid.Row="0" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}" FontSize="16" Padding="10">
+                    <TextBlock TextWrapping="Wrap" Grid.Row="0" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}" FontSize="16" Padding="10,10,10,0" HorizontalAlignment="Center">
                          Optimization Algorithms
                     </TextBlock>
 
-                    <TextBlock TextWrapping="Wrap" Grid.Row="1" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}" Margin="10,5,0,0" Padding="10">
+                    <TextBlock TextWrapping="Wrap" Grid.Row="1" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}" Padding="10" HorizontalAlignment="Center">
                         <Run Text="These algorithms are super cool! They all do different things. You can learn more about them " />
                         <Hyperlink NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate" Foreground="{DynamicResource SecondaryAccentBrush}">here</Hyperlink>
                     </TextBlock>

@@ -337,7 +337,7 @@
                         <TextBlock FontSize="16" TextWrapping="Wrap" HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryHueDarkBrush}">
                         please enter a file path... </TextBlock>
 
-                        <TextBox Name="Filepath" HorizontalAlignment="Center" MinWidth="75" MaxWidth="250" TextWrapping="Wrap"></TextBox>
+                        <TextBox Name="Filepath" HorizontalAlignment="Center" MinWidth="75" MaxWidth="250" TextWrapping="Wrap">C:\</TextBox>
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Button Background="Transparent"

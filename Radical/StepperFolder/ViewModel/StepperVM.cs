@@ -454,9 +454,9 @@ namespace Stepper
 
                 output += line + "\r\n";
             }
-            #endregion
+            #endregion 
 
-            System.IO.StreamWriter file = new System.IO.StreamWriter(@"" + filename + "_log.csv");
+            System.IO.StreamWriter file = new System.IO.StreamWriter(filename);
             file.Write(output);
             file.Close();
         }
@@ -492,7 +492,7 @@ namespace Stepper
                 output += line + "\r\n";
             }
             #endregion
-
+            
             System.IO.StreamWriter file = new System.IO.StreamWriter(@"" + filename + "_raw.csv");
             file.Write(output);
             file.Close();
