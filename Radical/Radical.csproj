@@ -180,19 +180,19 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="RadicalFolder\x64\COPYING" />
-    <None Include="RadicalFolder\x64\COPYRIGHT" />
+    <None Include="x64\COPYING" />
+    <None Include="x64\COPYRIGHT" />
     <None Include="StepperFolder\x32\COPYING" />
     <None Include="StepperFolder\x32\COPYRIGHT" />
     <None Include="StepperFolder\x64\COPYING" />
     <None Include="StepperFolder\x64\COPYRIGHT" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="RadicalFolder\x64\libnlopt-0.def" />
-    <Content Include="RadicalFolder\x64\libnlopt-0.dll">
+    <Content Include="x64\libnlopt-0.def" />
+    <Content Include="x64\libnlopt-0.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="RadicalFolder\x64\nlopt.h" />
+    <Content Include="x64\nlopt.h" />
     <Content Include="StepperFolder\x32\libnlopt-0.def" />
     <Content Include="StepperFolder\x32\libnlopt-0.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
