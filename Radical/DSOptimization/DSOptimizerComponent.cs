@@ -125,13 +125,28 @@ namespace DSOptimization
             DA.GetDataList(2, variables);
             this.NumVariables = variables;
 
+            //Check if inputs are valid type by checking GUID, might not actually work between diff computers and different versions of GH
+            Guid numGuid = new Guid("57da07bd-ecab-415d-9d86-af36d7073abc");
+            foreach (IGH_Param param in this.Params.Input[2].Sources)
+            {
+                //if (param.ComponentGuid != numGuid)
+                if(param.Name != "Number Slider")
+                {
+                    this.InputsSatisfied = false;
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "One or more NumVars are invalid");
+                    return;
+                }
+                
+                
+            }
+
             //assign surface variables
             List<Surface> surfaces= new List<Surface>();
             DA.GetDataList(3, surfaces);
             if (Params.Input[3].Sources.Count > 0 && surfaces.Count == 0)
             {
                 this.InputsSatisfied = false;
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Your surfaces are messed up");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "One or more surfaces are invalid");
                 return;
             }
             foreach (Surface s in surfaces)
@@ -139,7 +154,7 @@ namespace DSOptimization
                 if (s.UserData == null)
                 {
                     this.InputsSatisfied = false;
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Your surfaces are messed up");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "One or more surfaces are invalid");
                     return;
                 }
             }
@@ -151,7 +166,7 @@ namespace DSOptimization
             if (Params.Input[4].Sources.Count > 0 && curves.Count == 0)
             {
                 this.InputsSatisfied = false;
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Your curves are messed up");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "One or more curves are invalidp");
                 return;
             }
             foreach (Curve c in curves)
@@ -159,7 +174,7 @@ namespace DSOptimization
                 if (c == null)
                 {
                     this.InputsSatisfied = false;
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Your curves are messed up");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "One or more curves are invalid");
                     return;
                 }
             }

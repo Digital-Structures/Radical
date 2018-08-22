@@ -32,7 +32,7 @@
       
     
     <Grid Background="{StaticResource PrimaryHueDarkBrush3}">
-        <TabControl Background="{StaticResource PrimaryHueDarkBrush2}">
+        <TabControl Background="{StaticResource PrimaryHueDarkBrush2}" SelectionChanged="TabControl_SelectionChanged">
             <TabControl.Resources>
                 <Style TargetType="TabItem">
                     <Setter Property="Template">
@@ -64,16 +64,26 @@
                         </Setter.Value>
                     </Setter>
                 </Style>
+                <Style x:Key="TabItemText" TargetType="{x:Type TextBlock}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=TabItem}}" Value="True">
+                            <Setter Property="Foreground" Value="Black"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=TabItem}}" Value="False">
+                            <Setter Property="Foreground" Value="White"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
             </TabControl.Resources>
             <TabItem Name="StepperTab" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Background="{StaticResource PrimaryHueDarkBrush2}">
                 <TabItem.Header>
-                    <TextBlock FontSize="18"> Stepper</TextBlock>
+                    <TextBlock FontSize="18" Style="{StaticResource TabItemText}">Stepper</TextBlock>
                 </TabItem.Header>
             </TabItem>
 
             <TabItem Name="RadicalTab" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
                 <TabItem.Header>
-                    <TextBlock FontSize="18"> Radical</TextBlock>
+                    <TextBlock Name="RadicalTabText" FontSize="18" Style="{StaticResource TabItemText}">Radical</TextBlock>
                 </TabItem.Header>
             </TabItem>
         </TabControl>

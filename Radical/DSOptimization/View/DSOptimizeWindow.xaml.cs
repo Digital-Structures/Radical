@@ -44,5 +44,9 @@ namespace DSOptimization
             this.MyComponent.IsWindowOpen = false;
         }
 
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
