@@ -67,10 +67,10 @@
                 <Style x:Key="TabItemText" TargetType="{x:Type TextBlock}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=TabItem}}" Value="True">
-                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="Foreground" Value="White"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=TabItem}}" Value="False">
-                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="Foreground" Value="Black"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
