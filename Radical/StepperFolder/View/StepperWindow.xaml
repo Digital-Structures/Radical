@@ -335,16 +335,21 @@
                         Export your data as .csv</TextBlock>
 
                         <TextBlock FontSize="16" TextWrapping="Wrap" HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryHueDarkBrush}">
-                        please enter a file path... </TextBlock>
+                        please enter a valid file path... </TextBlock>
 
-                        <TextBox Name="Filepath" HorizontalAlignment="Center" MinWidth="75" MaxWidth="250" TextWrapping="Wrap">C:\</TextBox>
+                        <TextBox Name="Filepath" TextAlignment="Left" HorizontalAlignment="Center" MinWidth="75" MaxWidth="250" TextWrapping="Wrap" TextChanged="Filepath_TextChanged">C:\</TextBox>
+
+                        <TextBox Name="Filename" TextAlignment="Center" HorizontalAlignment="Center" MinWidth="75" MaxWidth="250" TextWrapping="Wrap" materialDesign:HintAssist.Hint="filename">Untitled</TextBox>
+
+                        <!--<TextBlock FontSize="14" TextWrapping="Wrap" HorizontalAlignment="Center" Foreground="#B00020" Visibility="{Binding FilePathErrorVisibility, FallbackValue=Collapsed}">
+                        *your file path is invalid</TextBlock>-->
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Button Background="Transparent"
+                            <Button Name="ExportWindowButton"  Background="Transparent"
                             IsDefault="True"
                             Margin="10"
                             materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                            Command="materialDesign:DialogHost.CloseDialogCommand">
+                            Command="materialDesign:DialogHost.CloseDialogCommand" IsEnabled="False">
                                 <Button.CommandParameter>
                                     <system:Boolean>True</system:Boolean>
                                 </Button.CommandParameter>

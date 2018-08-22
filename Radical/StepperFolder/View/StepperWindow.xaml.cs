@@ -526,19 +526,34 @@ namespace Stepper
             //Don't export file if user clicked cancel
             if (!Equals(eventArgs.Parameter, true)) return;
 
-            //EXPORT
-            //So long as file path is not empty
-            var CSVFilename = this.Filepath.Text;
+            var CSVFilepath = this.Filepath.Text;
+            var CSVFilename = this.Filename.Text;
             if (string.IsNullOrWhiteSpace(CSVFilename))
-                return;
-
-            //If 
-            String filepath = @"" + CSVFilename + "_log.csv";
-            if (!System.IO.Directory.Exists(filepath))
-                return;
+            {
+                CSVFilename = "Untitled";
+            }
+            String filepath = @"" + CSVFilepath + "/" + CSVFilename + "_" + DateTime.Now.ToFileTime() + "_log.csv";
 
             this.StepperVM.ExportCSV_Log(filepath);
             this.StepperVM.ExportCSV_Raw(filepath);
+        }
+
+        private void Filepath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var CSVFilepath = this.Filepath.Text;
+            String filepath = @"" + CSVFilepath;
+
+            if (this.ExportCSVWindow.IsOpen)
+            {
+                if (System.IO.Directory.Exists(filepath))
+                {
+                    this.ExportWindowButton.IsEnabled = true;
+                }
+                else
+                {
+                    this.ExportWindowButton.IsEnabled = false;
+                }
+            }
         }
     }
 }

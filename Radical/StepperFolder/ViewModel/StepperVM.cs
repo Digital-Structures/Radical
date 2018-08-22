@@ -357,6 +357,13 @@ namespace Stepper
             return false; 
         }
 
+        private Visibility _filepatherrorvisibility;
+        public Visibility FilePathErrorVisibility
+        {
+            get { return this._filepatherrorvisibility; }
+            set { CheckPropertyChanged<Visibility>("FilePathErrorVisibility", ref _filepatherrorvisibility, ref value); }
+        }
+
         //EXPORT CSV LOG
         //Formats and exports all data for readability
         public void ExportCSV_Log(string filename)
