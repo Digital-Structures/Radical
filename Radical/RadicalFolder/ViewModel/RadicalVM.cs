@@ -54,10 +54,13 @@ namespace Radical
             this.Constraints = new List<ConstVM>();
 
             this.ObjectiveEvolution = new ChartValues<double>();
+            this.ObjectiveEvolution.Add(this.Design.Objectives[0]);
             this.ConstraintsEvolution = new ChartValues<ChartValues<double>>();
             foreach (Constraint c in this.Design.Constraints)
             {
-                this.ConstraintsEvolution.Add(new ChartValues<double>());
+                ChartValues<double> cv = new ChartValues<double>();
+                cv.Add(c.CurrentValue);
+                this.ConstraintsEvolution.Add(cv);
             }
 
             this.Graphs = new Dictionary<string, List<GraphVM>>();
@@ -251,6 +254,7 @@ namespace Radical
             int max = MainGVM.DefaultMaxXAxis;
 
             MainGVM.ChartValues.Clear();
+            MainGVM.ChartValues.Add(this.Design.Objectives[0]);
             MainGVM.XAxisStep = 1;
             MainGVM.MaxXAxis = max;
             MainGVM.ChartLineVisibility = Visibility.Collapsed;
@@ -259,6 +263,7 @@ namespace Radical
             {
                 GraphVM ConstraintGVM = this.Graphs["Constraints"].ElementAt(i);
                 ConstraintGVM.ChartValues.Clear();
+                ConstraintGVM.ChartValues.Add(this.Design.Constraints.ElementAt(i).CurrentValue);
                 ConstraintGVM.XAxisStep = 1;
                 ConstraintGVM.MaxXAxis = max;
                 ConstraintGVM.ChartLineVisibility = Visibility.Collapsed;
