@@ -111,6 +111,11 @@
     <Compile Include="DSOptimization\View\DSOptimizeWindow.xaml.cs">
       <DependentUpon>DSOptimizeWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="RadicalFolder\Components\IExplorationComponent.cs" />
     <Compile Include="RadicalFolder\Components\IOptimizationComponent.cs" />
     <Compile Include="DSOptimization\Model\GeoVariable.cs" />
@@ -188,6 +193,7 @@
     <None Include="StepperFolder\x64\COPYRIGHT" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\DSOpt.png" />
     <Content Include="x64\libnlopt-0.def" />
     <Content Include="x64\libnlopt-0.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -254,7 +260,12 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

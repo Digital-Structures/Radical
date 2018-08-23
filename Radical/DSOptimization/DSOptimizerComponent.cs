@@ -41,8 +41,8 @@ namespace DSOptimization
         /// </summary>
         public DSOptimizerComponent()
           : base("DS Optimizer", "DSOpt",
-              "Optimization Component",
-              "DSE", "Optimization")
+              "Optimization component featuring Radical and Stepper",
+              "DSE", "Optimize")
         {
             this.Objectives = new List<double>();
             this.ObjectiveHistory = new DataTree<double>();
@@ -242,7 +242,7 @@ namespace DSOptimization
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return null;
+                return Radical.Properties.Resources.DSOpt;
             }
         }
 
