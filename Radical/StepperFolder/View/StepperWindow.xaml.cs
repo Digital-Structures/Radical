@@ -532,7 +532,10 @@ namespace Stepper
             {
                 CSVFilename = "Untitled";
             }
-            String filepath = @"" + CSVFilepath + "/" + CSVFilename + "_" + DateTime.Now.ToFileTime() + "_log.csv";
+
+            String timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+            
+            String filepath = @"" + CSVFilepath + "/" + CSVFilename + "_" + timestamp;
 
             this.StepperVM.ExportCSV_Log(filepath);
             this.StepperVM.ExportCSV_Raw(filepath);

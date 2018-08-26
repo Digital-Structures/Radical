@@ -463,7 +463,7 @@ namespace Stepper
             }
             #endregion 
 
-            System.IO.StreamWriter file = new System.IO.StreamWriter(filename);
+            System.IO.StreamWriter file = new System.IO.StreamWriter(filename + "_log.csv");
             file.Write(output);
             file.Close();
         }
