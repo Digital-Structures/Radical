@@ -166,7 +166,7 @@ namespace DSOptimization
             if (Params.Input[4].Sources.Count > 0 && curves.Count == 0)
             {
                 this.InputsSatisfied = false;
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "One or more curves are invalidp");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "One or more curves are invalid");
                 return;
             }
             foreach (Curve c in curves)
@@ -180,6 +180,8 @@ namespace DSOptimization
             }
 
             this.InputsSatisfied = true;
+
+
 
             DA.SetDataTree(0, this.ObjectiveHistory);
             DA.SetDataTree(1, this.VariableHistory);
@@ -242,7 +244,7 @@ namespace DSOptimization
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return Radical.Properties.Resources.DSOpt;
+                return Radical.Properties.Resources.DSOpt2;
             }
         }
 
