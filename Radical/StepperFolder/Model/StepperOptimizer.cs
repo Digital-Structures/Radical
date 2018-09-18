@@ -189,7 +189,7 @@ namespace Stepper
 
         public List<List<double?>> CalculateGradient()
         {
-            var DesignMap = GenerateDesignMapForwardStep();
+            var DesignMap = GenerateDesignMap();
             Iterate(DesignMap);
 
             var Gradient = new List<List<double?>>();
