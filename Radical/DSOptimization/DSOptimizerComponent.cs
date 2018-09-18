@@ -178,6 +178,7 @@ namespace DSOptimization
                     return;
                 }
             }
+            this.CrvVariables = curves.Select(x => x.ToNurbsCurve()).ToList();
 
             this.InputsSatisfied = true;
 
