@@ -194,6 +194,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\DSOpt.png" />
+    <None Include="Resources\DSOpt2.png" />
     <Content Include="x64\libnlopt-0.def" />
     <Content Include="x64\libnlopt-0.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -264,6 +265,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
