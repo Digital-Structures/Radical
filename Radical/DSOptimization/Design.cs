@@ -74,7 +74,7 @@ namespace DSOptimization
             MyComponent.numVars = this.Variables.Where(var => var.IsActive).Count();
         }
 
-        public void UpdateComponentOutputs(List<List<double?>> GradientData)
+        public void UpdateComponentOutputs(List<List<double>> GradientData)
         {
             MyComponent.AppendToObjectives(this.Objectives);
             MyComponent.AppendToVariables(this.Variables.Select(var => var.CurrentValue).ToList());

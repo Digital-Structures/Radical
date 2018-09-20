@@ -217,7 +217,7 @@ namespace DSOptimization
             }
         }
 
-        public void AppendToGradients (List<List<double?>> values)
+        public void AppendToGradients (List<List<double>> values)
         { 
             int i = 0;
             foreach (double obj in this.Objectives)

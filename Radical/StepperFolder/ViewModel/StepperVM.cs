@@ -255,7 +255,7 @@ namespace Stepper
         }
 
         //UPDATE EVOLUTION DATA
-        public void UpdateEvolutionData(List<List<double?>> GradientData)
+        public void UpdateEvolutionData(List<List<double>> GradientData)
         {
             //Update objective evolution
             int i = 0;
@@ -302,7 +302,7 @@ namespace Stepper
         }
 
         //OPTIMIZE
-        public void Optimize(StepperOptimizer.Direction dir, List<List<double?>> GradientData)
+        public void Optimize(StepperOptimizer.Direction dir, List<List<double>> GradientData)
         {
             StepperOptimizer optimizer = new StepperOptimizer(this.Design, this.ObjIndex, dir, this.StepSize);
             optimizer.Optimize(GradientData);
@@ -344,7 +344,7 @@ namespace Stepper
                 Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
             }
 
-            this.UpdateEvolutionData(new List<List<double?>>());
+            this.UpdateEvolutionData(new List<List<double>>());
             //this.Design.UpdateComponentOutputs(new List<List<double?>>());
         }
 

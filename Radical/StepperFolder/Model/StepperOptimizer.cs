@@ -62,11 +62,31 @@ namespace Stepper
             IsoPerf = new List<List<double>>();
         }
 
+        public List<List<double>> CalculateGradient()
+        {
+            Boolean onEdge = false;
+            foreach(IVariable v in Design.ActiveVariables)
+            {
+                if(v.Min == v.CurrentValue || v.Max == v.CurrentValue)
+                {
+                    onEdge = true;
+                    break;
+                }
+            }
+            if (onEdge)
+            {
+                return CalculateGradientHalfStep();
+            }
+            else
+            {
+                return CalculateGradientForwardStep();
+            }
+        }
+
         #region forward step
         public List<List<double>> GenerateDesignMapForwardStep()
         {
             var DesignMapStepperOne = new List<List<double>>();
-
             var DesignMapStepperCombined = new List<List<double>>();
 
             //Create Design Map, list of points to be tested
@@ -96,12 +116,12 @@ namespace Stepper
             return DesignMapStepperCombined;
         }
 
-        public List<List<double?>> CalculateGradientForwardStep()
+        public List<List<double>> CalculateGradientForwardStep()
         {
             var DesignMap = GenerateDesignMapForwardStep();
             Iterate(DesignMap);
 
-            var Gradient = new List<List<double?>>();
+            var Gradient = new List<List<double>>();
 
             double maxObj = double.MinValue;
             double minObj = double.MaxValue;
@@ -109,7 +129,7 @@ namespace Stepper
             // find the gradient for each objective by taking finite differences of every variable
             for (int j = 0; j < numObjs; j++)
             {
-                Gradient.Add(new List<double?>());
+                Gradient.Add(new List<double>());
 
                 for (int i = 0; i < numVars; i++)
                 {
@@ -132,13 +152,23 @@ namespace Stepper
 
                 for (int i = 0; i < numVars; i++)
                 {
-                    Gradient[j][i] = (Gradient[j][i] / maxAbs);
+                    if (maxAbs != 0)
+                    {
+                        Gradient[j][i] = (Gradient[j][i] / maxAbs);
+                    }
+                    else
+                    {
+                        Gradient[j][i] = 0;
+                    }
                     vecLength = vecLength + (double)Gradient[j][i] * (double)Gradient[j][i];
                 }
 
                 for (int i = 0; i < numVars; i++)
                 {
-                    Gradient[j][i] = (Gradient[j][i] / Math.Sqrt(vecLength));
+                    if(Gradient[j][i] != 0)
+                    {
+                        Gradient[j][i] = (Gradient[j][i] / Math.Sqrt(vecLength));
+                    }
                 }
             }
 
@@ -147,7 +177,7 @@ namespace Stepper
         #endregion
 
         #region half steps
-        public List<List<double>> GenerateDesignMap()
+        public List<List<double>> GenerateDesignMapHalfStep()
         {
             //var DifOne = new List<List<double>>();
             //var DifTwo = new List<List<double>>();
@@ -187,12 +217,12 @@ namespace Stepper
             return DesignMapStepperCombined;
         }
 
-        public List<List<double?>> CalculateGradient()
+        public List<List<double>> CalculateGradientHalfStep()
         {
-            var DesignMap = GenerateDesignMap();
+            var DesignMap = GenerateDesignMapHalfStep();
             Iterate(DesignMap);
 
-            var Gradient = new List<List<double?>>();
+            var Gradient = new List<List<double>>();
 
             double maxObj = double.MinValue;
             double minObj = double.MaxValue;
@@ -200,7 +230,7 @@ namespace Stepper
             // find the gradient for each objective by taking finite differences of every variable
             for (int j = 0; j < numObjs; j++)
             {
-                Gradient.Add(new List<double?>());
+                Gradient.Add(new List<double>());
 
                 for (int i = 0; i < numVars; i++)
                 {
@@ -222,15 +252,36 @@ namespace Stepper
                 if (Math.Abs(maxObj) > maxAbs) { maxAbs = Math.Abs(maxObj); }
                 if (Math.Abs(minObj) > maxAbs) { maxAbs = Math.Abs(minObj); }
 
+                //for (int i = 0; i < numVars; i++)
+                //{
+                //    Gradient[j][i] = (Gradient[j][i] / maxAbs);
+                //    vecLength = vecLength + (double)Gradient[j][i] * (double)Gradient[j][i];
+                //}
+
+                //for (int i = 0; i < numVars; i++)
+                //{
+                //    Gradient[j][i] = (Gradient[j][i] / Math.Sqrt(vecLength));
+                //}
+
                 for (int i = 0; i < numVars; i++)
                 {
-                    Gradient[j][i] = (Gradient[j][i] / maxAbs);
+                    if (maxAbs != 0)
+                    {
+                        Gradient[j][i] = (Gradient[j][i] / maxAbs);
+                    }
+                    else
+                    {
+                        Gradient[j][i] = 0;
+                    }
                     vecLength = vecLength + (double)Gradient[j][i] * (double)Gradient[j][i];
                 }
 
                 for (int i = 0; i < numVars; i++)
                 {
-                    Gradient[j][i] = (Gradient[j][i] / Math.Sqrt(vecLength));
+                    if (Gradient[j][i] != 0)
+                    {
+                        Gradient[j][i] = (Gradient[j][i] / Math.Sqrt(vecLength));
+                    }
                 }
             }
 
@@ -282,7 +333,7 @@ namespace Stepper
             }
         }
 
-        public void Optimize(List<List<double?>> Gradient)
+        public void Optimize(List<List<double>> Gradient)
         {
             //// FIND THE ORTHOGONAL VECTORS
             ////double[][] gradientArray = Gradient.Select(a => a.ToArray()).ToArray();

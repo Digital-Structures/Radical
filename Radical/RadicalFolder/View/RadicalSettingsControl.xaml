@@ -148,8 +148,8 @@
                     </TextBlock>
 
                     <TextBlock TextWrapping="Wrap" Grid.Row="1" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}" Padding="10" HorizontalAlignment="Center">
-                        <Run Text="These algorithms are super cool! They all do different things. You can learn more about them " />
-                        <Hyperlink NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate" Foreground="{DynamicResource SecondaryAccentBrush}">here</Hyperlink>
+                        <Hyperlink NavigateUri="https://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/" RequestNavigate="Hyperlink_RequestNavigate" Foreground="{DynamicResource SecondaryAccentBrush}">Learn more</Hyperlink>
+                         <Run Text=" about these algorithms." />
                     </TextBlock>
                 </Grid>
 
