@@ -312,6 +312,7 @@ namespace Stepper
                             geo.Update();
                         }
                         Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
+
                     }
                     else
                     {
