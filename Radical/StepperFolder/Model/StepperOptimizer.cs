@@ -33,6 +33,9 @@ namespace Stepper
         private List<List<double>> ObjectiveData;
         private List<List<double>> IsoPerf;
 
+        //array of objects that should not be expired until the final round
+        private List<IGH_ActiveObject> NonExpirables; 
+
         //CONSTRUCTOR for Gradient Calculation only
         public StepperOptimizer(Design design)
         {
@@ -44,6 +47,14 @@ namespace Stepper
 
             ObjectiveData = new List<List<double>>();
             IsoPerf = new List<List<double>>();
+            NonExpirables = FindWhichOnesToExpire();
+        }
+
+        public void ConvertFromCalculatorToOptimizer(int objIndex, Direction dir, double stepSize)
+        {
+            this.ObjIndex = objIndex;
+            this.Dir = dir;
+            this.StepSize = stepSize;
         }
 
         //CONSTRUCTOR for complete step optimization
@@ -60,6 +71,30 @@ namespace Stepper
 
             ObjectiveData = new List<List<double>>();
             IsoPerf = new List<List<double>>();
+            NonExpirables = FindWhichOnesToExpire();
+        }
+
+        public List<IGH_ActiveObject> FindWhichOnesToExpire()
+        {
+            //find all active objects on the board
+            //find downstream of every object
+            //if downstream does not contain DS Opt then do not expire that component 
+            //In the example diagram on the website this wouldnt exactly work but we are assumming it would for our cases
+
+            List<IGH_ActiveObject> dont_expire = new List<IGH_ActiveObject>();
+
+            List<IGH_ActiveObject> active = Grasshopper.Instances.ActiveCanvas.Document.ActiveObjects();
+            foreach(IGH_ActiveObject a in active)
+            {
+                List<IGH_ActiveObject> downstream = Grasshopper.Instances.ActiveCanvas.Document.FindAllDownstreamObjects(a);
+                if(!downstream.Contains(this.Design.MyComponent))
+                {
+                    dont_expire.Add(a);
+                }
+            }
+
+            return dont_expire;
+           
         }
 
         public List<List<double>> CalculateGradient()
@@ -311,18 +346,35 @@ namespace Stepper
                         {
                             geo.Update();
                         }
-                        Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
+
+                        // this.DownStreamExpire()
+
+                        //doesn't do anything... 
+                        //Grasshopper.Instances.ActiveCanvas.Document.ExpirePreview(false);
+
+                        foreach(IGH_ActiveObject a in this.NonExpirables)
+                        {
+                            a.ExpireSolution(false);
+                        }
+                        Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
 
                     }
                     else
                     {
+                        foreach (IGH_ActiveObject a in this.NonExpirables)
+                        {
+                            a.ExpireSolution(false);
+                        }
                         Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
                     }
 
                     this.ObjectiveData.Add(Design.Objectives);
                 }
 
-                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
+                //this.DownStreamExpire();
+
+                //Grasshopper.Instances.ActiveCanvas.Document.ExpirePreview(false);
+                //Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
 
                 finished = true;
             };
@@ -332,6 +384,20 @@ namespace Stepper
             while (!finished)
             {
             }
+        }
+
+        public void DownStreamExpire()
+        {
+            List<IGH_ActiveObject> active = Grasshopper.Instances.ActiveCanvas.Document.ActiveObjects();
+            List<IGH_ActiveObject> downstream = Grasshopper.Instances.ActiveCanvas.Document.FindAllDownstreamObjects(active);
+            foreach (IGH_ActiveObject d in downstream)
+            {
+                //Grasshopper.Instances.ActiveCanvas.Document.Ex
+                d.ExpireSolution(true);
+            }
+            
+
+            Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
         }
 
         public void Optimize(List<List<double>> Gradient)

@@ -302,9 +302,10 @@ namespace Stepper
         }
 
         //OPTIMIZE
-        public void Optimize(StepperOptimizer.Direction dir, List<List<double>> GradientData)
+        public void Optimize(StepperOptimizer.Direction dir, List<List<double>> GradientData, StepperOptimizer optimizer)
         {
-            StepperOptimizer optimizer = new StepperOptimizer(this.Design, this.ObjIndex, dir, this.StepSize);
+            //StepperOptimizer optimizer = new StepperOptimizer(this.Design, this.ObjIndex, dir, this.StepSize);
+            optimizer.ConvertFromCalculatorToOptimizer(this.ObjIndex, dir, this.StepSize);
             optimizer.Optimize(GradientData);
 
             //Update variable values at the end of the optimization
@@ -318,7 +319,10 @@ namespace Stepper
             {
                 geo.Update();
             }
-            Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
+
+            //optimizer.DownStreamExpire();
+            //Grasshopper.Instances.ActiveCanvas.Document.ExpirePreview(false);
+            Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
             this.UpdateEvolutionData(GradientData);
         }
 
