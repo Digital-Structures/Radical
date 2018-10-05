@@ -89,7 +89,11 @@ namespace Stepper
                 List<IGH_ActiveObject> downstream = Grasshopper.Instances.ActiveCanvas.Document.FindAllDownstreamObjects(a);
                 if(!downstream.Contains(this.Design.MyComponent))
                 {
-                    dont_expire.Add(a);
+                    // Make sure it isn't the DSOpt component itself
+                    if (a != this.Design.MyComponent)
+                    {
+                        dont_expire.Add(a);
+                    }
                 }
             }
 
@@ -328,9 +332,24 @@ namespace Stepper
         {
             bool finished = false;
 
+
+            //convert nonExpired list of Active objects to nonEnabled list of Document Objects
+
+            List<IGH_DocumentObject> nonEnabled = new List<IGH_DocumentObject>();
+
+            foreach (IGH_ActiveObject a in this.NonExpirables)
+            {
+                //a.ExpireSolution(false);
+                nonEnabled.Add((IGH_DocumentObject)a);
+            }
+
             //Invoke a delegate to solve threading issue
             System.Action run = delegate ()
             {
+
+                //Turn off all components not needed for gradient calculation and stepping 
+                Grasshopper.Instances.ActiveCanvas.Document.SetEnabledFlags(nonEnabled, false);
+
                 foreach (List<double> sample in DesignMap)
                 {
                     int i = 0;
@@ -361,11 +380,19 @@ namespace Stepper
                     }
                     else
                     {
-                        foreach (IGH_ActiveObject a in this.NonExpirables)
-                        {
-                            a.ExpireSolution(false);
-                        }
+                        List<IGH_ActiveObject> meee = Grasshopper.Instances.ActiveCanvas.Document.ActiveObjects();
+
+                        // COMMENTED OUT; Functionality achieved by turning off components instead
+                        //foreach (IGH_ActiveObject a in this.NonExpirables)
+                        //{
+                            //a.ExpireSolution(false);  
+
+                        //}
+
+
                         Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
+                        //Grasshopper.Instances.ActiveCanvas.Document.ScheduleSolution(1);
+
                     }
 
                     this.ObjectiveData.Add(Design.Objectives);
@@ -374,7 +401,10 @@ namespace Stepper
                 //this.DownStreamExpire();
 
                 //Grasshopper.Instances.ActiveCanvas.Document.ExpirePreview(false);
-                //Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
+
+                //Turn back on components and recalculate after final step
+                Grasshopper.Instances.ActiveCanvas.Document.SetEnabledFlags(nonEnabled, true);
+                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Default);
 
                 finished = true;
             };
