@@ -27,7 +27,7 @@ namespace DSOptimization
         public List<NurbsSurface> SrfVariables { get; set; }
         public List<NurbsCurve> CrvVariables { get; set; }
 
-        public List<IGH_ActiveObject> NumObjects { get; set; }
+        public IList<IGH_Param> NumObjects{ get { return this.Params.Input[2].Sources; } }
 
         private DataTree<double> ObjectiveHistory;
         private DataTree<double> VariableHistory;
@@ -61,7 +61,7 @@ namespace DSOptimization
             this.open = false; //Is window open
             this.InputsSatisfied = false;
 
-            this.NumObjects = new List<IGH_ActiveObject>();
+            //this.NumObjects = new List<IGH_ActiveObject>();
         }
 
         //Determine whether there is already a Radical window open
@@ -142,10 +142,12 @@ namespace DSOptimization
                 }
             }
 
-            foreach (IGH_Param param in this.Params.Input[2].Sources)
-            {
-                this.NumObjects.Add((IGH_ActiveObject)param);
-            }
+            //this.NumObjects = new List<IGH_ActiveObject>();
+
+            //foreach (IGH_Param param in this.Params.Input[2].Sources)
+            //{
+            //    this.NumObjects.Add((IGH_ActiveObject)param);
+            //}
 
             //assign surface variables
             List<Surface> surfaces= new List<Surface>();
