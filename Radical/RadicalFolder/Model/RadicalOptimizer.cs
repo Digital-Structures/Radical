@@ -169,15 +169,13 @@ namespace Radical
                     this.RadicalVM.ConstraintsEvolution[i].Add(score);
                 }
             }
-
             try
             {
                 this.RadicalWindow.source.Token.ThrowIfCancellationRequested();
             }
             catch
             {
-                //throw;
-                //System.Windows.MessageBox.Show("Giello!");
+                throw new OperationCanceledException();
             }
 
             return objective;
