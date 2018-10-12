@@ -137,8 +137,8 @@ namespace Stepper
             }
 
 
-            Disable = disable;
-            Expire = new List<IGH_ActiveObject>();
+            Disable = actually_disable;
+            Expire = expire;
         }
 
 
