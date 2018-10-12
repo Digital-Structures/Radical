@@ -177,6 +177,7 @@ namespace Radical
             catch
             {
                 //throw;
+                //System.Windows.MessageBox.Show("Giello!");
             }
 
             return objective;
