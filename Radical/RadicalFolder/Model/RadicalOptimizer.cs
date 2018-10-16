@@ -176,7 +176,7 @@ namespace Radical
             }
             catch
             {
-                //throw;
+                throw new OperationCanceledException();
             }
 
             return objective;
