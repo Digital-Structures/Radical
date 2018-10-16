@@ -176,7 +176,12 @@ namespace Radical
             }
             catch
             {
+<<<<<<< HEAD
                 throw new OperationCanceledException();
+=======
+                //throw;
+                //System.Windows.MessageBox.Show("Giello!");
+>>>>>>> 8b8dbf84b67b2f9590a83499fe3e0b22ccf2fe30
             }
 
             return objective;

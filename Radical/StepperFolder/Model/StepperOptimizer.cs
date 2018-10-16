@@ -34,7 +34,8 @@ namespace Stepper
         private List<List<double>> IsoPerf;
 
         //array of objects that should not be expired until the final round
-        private List<IGH_ActiveObject> NonExpirables; 
+        private List<IGH_ActiveObject> Disable;
+        private List<IGH_ActiveObject> Expire;
 
         //CONSTRUCTOR for Gradient Calculation only
         public StepperOptimizer(Design design)
@@ -47,7 +48,9 @@ namespace Stepper
 
             ObjectiveData = new List<List<double>>();
             IsoPerf = new List<List<double>>();
-            NonExpirables = FindWhichOnesToExpire();
+            //FindWhichOnesToDisable2();
+            FindWhichOnesToDisable();
+            
         }
 
         public void ConvertFromCalculatorToOptimizer(int objIndex, Direction dir, double stepSize)
@@ -71,35 +74,151 @@ namespace Stepper
 
             ObjectiveData = new List<List<double>>();
             IsoPerf = new List<List<double>>();
-            NonExpirables = FindWhichOnesToExpire();
+            //FindWhichOnesToDisable2();
+            FindWhichOnesToDisable();
         }
 
-        public List<IGH_ActiveObject> FindWhichOnesToExpire()
+        public void FindWhichOnesToDisable()
         {
             //find all active objects on the board
             //find downstream of every object
             //if downstream does not contain DS Opt then do not expire that component 
             //In the example diagram on the website this wouldnt exactly work but we are assumming it would for our cases
 
-            List<IGH_ActiveObject> dont_expire = new List<IGH_ActiveObject>();
+            List<IGH_ActiveObject> disable = new List<IGH_ActiveObject>();
 
             List<IGH_ActiveObject> active = Grasshopper.Instances.ActiveCanvas.Document.ActiveObjects();
             foreach(IGH_ActiveObject a in active)
             {
                 List<IGH_ActiveObject> downstream = Grasshopper.Instances.ActiveCanvas.Document.FindAllDownstreamObjects(a);
-                if(!downstream.Contains(this.Design.MyComponent))
+                if (!downstream.Contains(this.Design.MyComponent))
                 {
                     // Make sure it isn't the DSOpt component itself
                     if (a != this.Design.MyComponent)
-                    {
-                        dont_expire.Add(a);
+                    { 
+                        disable.Add(a);
                     }
                 }
             }
 
-            return dont_expire;
-           
+            //NEXT PART
+
+            List<IGH_ActiveObject> actually_disable = new List<IGH_ActiveObject>();
+            List<IGH_ActiveObject> expire = new List<IGH_ActiveObject>();
+
+            IList<IGH_Param> sliders = this.Design.MyComponent.NumObjects;
+            List<List<IGH_ActiveObject>> sliders_downstream = new List<List<IGH_ActiveObject>>();
+
+            foreach (IGH_Param s in sliders)
+            {
+                List<IGH_ActiveObject> downstream = Grasshopper.Instances.ActiveCanvas.Document.FindAllDownstreamObjects((IGH_ActiveObject)s);
+                sliders_downstream.Add(downstream);
+            }
+
+            foreach (IGH_ActiveObject d in disable)
+            {
+                Boolean found = false;
+                foreach (List<IGH_ActiveObject> dstream in sliders_downstream)
+                {
+                    if (dstream.Contains(d))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found)
+                {
+                    actually_disable.Add(d);
+                }
+                else
+                {
+                    expire.Add(d);
+                }
+            }
+
+
+            Disable = actually_disable;
+            Expire = expire;
         }
+
+
+        public List<IGH_ActiveObject> FindWhichOnesToDisable2()
+        {
+            List<IGH_ActiveObject> meeew = Grasshopper.Instances.ActiveCanvas.Document.ActiveObjects();
+            List<IGH_ActiveObject> disable = new List<IGH_ActiveObject>();
+
+            IList<IGH_Param> sliders = this.Design.MyComponent.NumObjects;
+            List<List<IGH_ActiveObject>> sliders_downstream = new List<List<IGH_ActiveObject>>();
+
+            foreach (IGH_Param s in sliders)
+            {
+                List<IGH_ActiveObject> downstream = Grasshopper.Instances.ActiveCanvas.Document.FindAllDownstreamObjects((IGH_ActiveObject)s);
+                sliders_downstream.Add(downstream);
+            }
+
+            List<IGH_ActiveObject> active = Grasshopper.Instances.ActiveCanvas.Document.ActiveObjects();
+            foreach (IGH_ActiveObject a in active)
+            {
+                if (sliders.Contains(a) || a == this.Design.MyComponent)
+                {
+                }
+
+                else if (a != this.Design.MyComponent)
+                {
+                    Boolean found = false;
+                    foreach (List<IGH_ActiveObject> d in sliders_downstream)
+                    {
+                        if (d.Contains(a))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        if (a != this.Design.MyComponent)
+                        {
+                            a.ExpireSolution(false);
+                            //disable.Add(a);
+                        }
+                    }
+                    else
+                    {
+                        List<IGH_ActiveObject> downstream = Grasshopper.Instances.ActiveCanvas.Document.FindAllDownstreamObjects(a);
+                        if (!downstream.Contains(this.Design.MyComponent))
+                        {
+                            if (a != this.Design.MyComponent)
+                            {
+                                disable.Add(a);
+                            }
+                        }
+                    }
+                }
+            }
+
+            //Grasshopper.Instances.ActiveCanvas.Document.SetEnabledFlags(disable, false);
+
+            //List<IGH_ActiveObject> meee = Grasshopper.Instances.ActiveCanvas.Document.ActiveObjects();
+
+            if (disable.Contains(this.Design.MyComponent))
+            {
+                bool sad = true;
+            }
+
+            List<IGH_DocumentObject> nonEnabled = new List<IGH_DocumentObject>();
+
+            foreach (IGH_ActiveObject a in disable)
+            {
+                //a.ExpireSolution(false);
+                nonEnabled.Add((IGH_DocumentObject)a);
+            }
+
+            Grasshopper.Instances.ActiveCanvas.Document.SetEnabledFlags(nonEnabled, true);
+
+            return disable;
+        }
+
 
         public List<List<double>> CalculateGradient()
         {
@@ -332,16 +451,22 @@ namespace Stepper
         {
             bool finished = false;
 
-
             //convert nonExpired list of Active objects to nonEnabled list of Document Objects
 
             List<IGH_DocumentObject> nonEnabled = new List<IGH_DocumentObject>();
+            //List<IGH_DocumentObject> nonExpired = new List<IGH_DocumentObject>();
 
-            foreach (IGH_ActiveObject a in this.NonExpirables)
+            foreach (IGH_ActiveObject a in this.Disable)
             {
                 //a.ExpireSolution(false);
                 nonEnabled.Add((IGH_DocumentObject)a);
             }
+
+            //foreach (IGH_ActiveObject a in this.Disable)
+            //{
+            //    a.ExpireSolution(false);
+            //    nonExpired.Add((IGH_DocumentObject)a);
+            //}
 
             //Invoke a delegate to solve threading issue
             System.Action run = delegate ()
@@ -349,6 +474,10 @@ namespace Stepper
 
                 //Turn off all components not needed for gradient calculation and stepping 
                 Grasshopper.Instances.ActiveCanvas.Document.SetEnabledFlags(nonEnabled, false);
+                foreach (IGH_ActiveObject a in this.Expire)
+                {
+                    a.ExpireSolution(false);
+                }
 
                 foreach (List<double> sample in DesignMap)
                 {
@@ -371,7 +500,7 @@ namespace Stepper
                         //doesn't do anything... 
                         //Grasshopper.Instances.ActiveCanvas.Document.ExpirePreview(false);
 
-                        foreach(IGH_ActiveObject a in this.NonExpirables)
+                        foreach (IGH_ActiveObject a in this.Disable)
                         {
                             a.ExpireSolution(false);
                         }
@@ -380,7 +509,7 @@ namespace Stepper
                     }
                     else
                     {
-                        List<IGH_ActiveObject> meee = Grasshopper.Instances.ActiveCanvas.Document.ActiveObjects();
+                        //List<IGH_ActiveObject> meee = Grasshopper.Instances.ActiveCanvas.Document.ActiveObjects();
 
                         // COMMENTED OUT; Functionality achieved by turning off components instead
                         //foreach (IGH_ActiveObject a in this.NonExpirables)
@@ -404,7 +533,7 @@ namespace Stepper
 
                 //Turn back on components and recalculate after final step
                 Grasshopper.Instances.ActiveCanvas.Document.SetEnabledFlags(nonEnabled, true);
-                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Default);
+                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Default);
 
                 finished = true;
             };
