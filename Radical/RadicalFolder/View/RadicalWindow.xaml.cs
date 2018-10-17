@@ -472,7 +472,7 @@ namespace Radical
                 }
                 catch (OperationCanceledException)
                 {
-                    System.Windows.MessageBox.Show("Cancelled");
+                    //System.Windows.MessageBox.Show("Cancelled");
                 }
                // UpdateAllGraphs();
                 ButtonPause.Visibility = Visibility.Collapsed;

@@ -29,6 +29,8 @@ namespace Radical
         public ChartValues<double> StoredMainValues;
         public ChartValues<ChartValues<double>> StoredConstraintValues;
 
+        public Boolean SolutionInProcess;
+
         //static bool verbose = true;
         public double? MinValue; //init objective
 
@@ -39,6 +41,8 @@ namespace Radical
             this.RadicalWindow = radwindow;
             this.RadicalVM = this.RadicalWindow.RadicalVM;
             this.MainAlg = this.RadicalVM.PrimaryAlgorithm;
+
+            this.SolutionInProcess = false;
             //this.SecondaryAlg = NLoptAlgorithm.LN_COBYLA;
             BuildWrapper();
             SetBounds();
@@ -104,7 +108,9 @@ namespace Radical
                     geo.Update();
                 }
 
+                this.SolutionInProcess = true;
                 Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, refresh);
+                this.SolutionInProcess = false; 
 
                 finished = true;
             };
@@ -176,12 +182,11 @@ namespace Radical
             }
             catch
             {
-<<<<<<< HEAD
+                while (this.SolutionInProcess)
+                {
+
+                }
                 throw new OperationCanceledException();
-=======
-                //throw;
-                //System.Windows.MessageBox.Show("Giello!");
->>>>>>> 8b8dbf84b67b2f9590a83499fe3e0b22ccf2fe30
             }
 
             return objective;
@@ -212,7 +217,9 @@ namespace Radical
                 this.RadicalVM.UpdateCurrentScoreDisplay();
                 System.Action run = delegate ()
                 {
+                    this.SolutionInProcess = true;
                     Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
+                    this.SolutionInProcess = false;
                 };
                 Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
             }
@@ -245,7 +252,11 @@ namespace Radical
             {
                 vargeo.Update();
             }
+
+            this.SolutionInProcess = true;
             Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
+            this.SolutionInProcess = false;
+
             return c.CurrentValue - c.LimitValue;
         }
 
