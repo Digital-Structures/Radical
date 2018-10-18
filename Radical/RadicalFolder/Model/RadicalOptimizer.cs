@@ -109,8 +109,8 @@ namespace Radical
                 }
 
                 this.SolutionInProcess = true;
-                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, refresh);
-                this.SolutionInProcess = false; 
+                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, refresh);
+                //this.SolutionInProcess = false; 
 
                 finished = true;
             };
@@ -176,6 +176,8 @@ namespace Radical
                 }
             }
 
+            this.SolutionInProcess = false;
+
             try
             {
                 this.RadicalWindow.source.Token.ThrowIfCancellationRequested();
@@ -186,6 +188,20 @@ namespace Radical
                 {
 
                 }
+
+                bool final_refresh_done = false;
+                System.Action lastrun = delegate ()
+                {
+                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
+                    final_refresh_done = true;
+                };
+                Rhino.RhinoApp.MainApplicationWindow.Invoke(lastrun);
+
+                while (!final_refresh_done)
+                {
+
+                }
+
                 throw new OperationCanceledException();
             }
 
