@@ -10,6 +10,7 @@ using LiveCharts;
 using LiveCharts.Helpers;
 using LiveCharts.Wpf;
 using DSOptimization;
+using Grasshopper.Kernel;
 
 namespace Radical
 {
@@ -30,6 +31,10 @@ namespace Radical
         public ChartValues<ChartValues<double>> StoredConstraintValues;
 
         public Boolean SolutionInProcess;
+
+        //array of objects that should not be expired until the final round
+        private List<IGH_ActiveObject> Disable;
+        private List<IGH_ActiveObject> Expire;
 
         //static bool verbose = true;
         public double? MinValue; //init objective
@@ -74,6 +79,7 @@ namespace Radical
         {
             this.Solver = new NLoptSolver(MainAlg, nVars, this.RadicalVM.ConvCrit, this.RadicalVM.Niterations);
         }
+
         public void BuildWrapper(double relStopTol, int niter)
         {
             this.Solver = new NLoptSolver(MainAlg, nVars, relStopTol, niter);
@@ -83,6 +89,63 @@ namespace Radical
         {
             Solver.SetLowerBounds(Design.Variables.Select(x => x.Min).ToArray());
             Solver.SetUpperBounds(Design.Variables.Select(x => x.Max).ToArray());
+        }
+
+        public void FindWhichOnesToDisable()
+        {
+            //find all active objects on the board
+            //find downstream of every object
+            //if downstream does not contain DS Opt then do not expire that component 
+            //In the example diagram on the website this wouldnt exactly work but we are assumming it would for our cases
+
+            List<IGH_ActiveObject> disable = new List<IGH_ActiveObject>();
+
+            List<IGH_ActiveObject> active = Grasshopper.Instances.ActiveCanvas.Document.ActiveObjects();
+            foreach (IGH_ActiveObject a in active)
+            {
+                List<IGH_ActiveObject> downstream = Grasshopper.Instances.ActiveCanvas.Document.FindAllDownstreamObjects(a);
+                if (!downstream.Contains(this.Design.MyComponent))
+                {
+                    // Make sure it isn't the DSOpt component itself
+                    if (a != this.Design.MyComponent)
+                    {
+                        disable.Add(a);
+                    }
+                }
+            }
+
+            //NEXT PART
+
+            List<IGH_ActiveObject> actually_disable = new List<IGH_ActiveObject>();
+            List<IGH_ActiveObject> expire = new List<IGH_ActiveObject>();
+
+            IList<IGH_Param> sliders = this.Design.MyComponent.NumObjects;
+            List<List<IGH_ActiveObject>> sliders_downstream = new List<List<IGH_ActiveObject>>();
+
+            foreach (IGH_Param s in sliders)
+            {
+                List<IGH_ActiveObject> downstream = Grasshopper.Instances.ActiveCanvas.Document.FindAllDownstreamObjects((IGH_ActiveObject)s);
+                sliders_downstream.Add(downstream);
+            }
+
+            foreach (IGH_ActiveObject d in disable)
+            {
+                Boolean found = false;
+                foreach (List<IGH_ActiveObject> dstream in sliders_downstream)
+                {
+                    if (dstream.Contains(d))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found) { actually_disable.Add(d); }
+                else { expire.Add(d); }
+            }
+
+            Disable = actually_disable;
+            Expire = expire;
         }
 
         public double Objective(double[] x)
@@ -189,6 +252,11 @@ namespace Radical
 
                 }
 
+                if (this.RadicalVM.Mode == RefreshMode.Silent)
+                {
+                    EndSilentMode();
+                }
+
                 bool final_refresh_done = false;
                 System.Action lastrun = delegate ()
                 {
@@ -213,6 +281,7 @@ namespace Radical
             return true; 
         }
 
+        //Why are we returning here?
         public NloptResult RunOptimization()
         {
             //STARTED
@@ -228,20 +297,27 @@ namespace Radical
             //Updates graph if the optimization ends in silent mode
             if (this.RadicalWindow.RadicalVM.Mode == RefreshMode.Silent)
             {
-                AppendStoredValues();
-                this.RadicalVM.AutomateStepSize(true);
-                this.RadicalVM.UpdateCurrentScoreDisplay();
-                System.Action run = delegate ()
-                {
-                    this.SolutionInProcess = true;
-                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
-                    this.SolutionInProcess = false;
-                };
-                Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
+                EndSilentMode();
             }
             this.RadicalWindow.OptimizationFinished();
 
             return result;
+        }
+
+        //Steps to take when we end using silent mode, particularly when:
+            //optimization finishes in silent mode
+            //we pause optimization when it is in silent mode
+        public void EndSilentMode()
+        {
+            AppendStoredValues();
+            this.RadicalVM.AutomateStepSize(true);
+            this.RadicalVM.UpdateCurrentScoreDisplay();
+            System.Action run = delegate ()
+            {
+                this.SolutionInProcess = true;
+                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
+            };
+            Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
         }
 
         //Adds optimization values to array that updates graph display 
@@ -277,6 +353,7 @@ namespace Radical
         }
 
         //UNIMPLEMENTED
+        //Can we delete this?
         public double Objective(double[] x, ref double[] grad)
         {
             for (int i = 0; i < nVars; i++)
