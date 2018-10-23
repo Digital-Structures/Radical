@@ -154,9 +154,19 @@ namespace Radical
 
             //SLIDERS
             /***This is probably not the best way to do this as it involves looping over geometry variables already stored***/
+            int _count = 0;
             foreach (var numVar in this.Design.Variables.Where(numVar => numVar is SliderVariable))
             {
-                this.NumVars.Add(new VarVM(numVar));
+                VarVM v = new VarVM(numVar);
+
+                //following code is to ensure that sliders still have variable names in Stepper / Radical 
+                //when users don't give them nicknames
+                if (v.Name == "")
+                {
+                    v.Name = v.DesignVar.Parameter.TypeName + " " + _count;
+                }
+                this.NumVars.Add(v);
+                _count += 1;
             }
         }
 

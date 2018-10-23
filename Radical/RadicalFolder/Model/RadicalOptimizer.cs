@@ -172,8 +172,7 @@ namespace Radical
                 }
 
                 this.SolutionInProcess = true;
-                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, refresh);
-                //this.SolutionInProcess = false; 
+                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, refresh);
 
                 finished = true;
             };
@@ -243,19 +242,18 @@ namespace Radical
 
             try
             {
-                this.RadicalWindow.source.Token.ThrowIfCancellationRequested();
-            }
-            catch
-            {
+                while (!finished)
+                {
+
+                }
                 while (this.SolutionInProcess)
                 {
 
                 }
-
-                if (this.RadicalVM.Mode == RefreshMode.Silent)
-                {
-                    EndSilentMode();
-                }
+                this.RadicalWindow.source.Token.ThrowIfCancellationRequested();
+            }
+            catch
+            {
 
                 bool final_refresh_done = false;
                 System.Action lastrun = delegate ()
@@ -268,6 +266,11 @@ namespace Radical
                 while (!final_refresh_done)
                 {
 
+                }
+
+                if (this.RadicalVM.Mode == RefreshMode.Silent)
+                {
+                    EndSilentMode();
                 }
 
                 throw new OperationCanceledException();
