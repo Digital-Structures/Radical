@@ -12,6 +12,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Margin="0,5">
@@ -35,7 +36,7 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,5" FontSize="18"> Step Size: </TextBlock>
+            <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,5" FontSize="18"> Gradient Step Size: </TextBlock>
             
             <TextBox Grid.Column="1" Text="{Binding StepSize, Mode=OneWayToSource, FallbackValue=0.05}" materialDesign:HintAssist.Hint="Step Size"
                                  HorizontalAlignment="Right" TextAlignment="Right" VerticalContentAlignment="Center"                            
@@ -43,6 +44,19 @@
         </Grid>
 
         <Grid Grid.Row="2" Margin="0,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,5" FontSize="18"> Internal Step Size:</TextBlock>
+
+            <TextBox Grid.Column="1" Text="{Binding FDStepSize, Mode=OneWayToSource, FallbackValue=0.01}" materialDesign:HintAssist.Hint="Internal Step Size"
+                                 HorizontalAlignment="Right" TextAlignment="Right" VerticalContentAlignment="Center"                            
+                                 FontSize="18"></TextBox>
+        </Grid>
+
+        <Grid Grid.Row="3" Margin="0,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>

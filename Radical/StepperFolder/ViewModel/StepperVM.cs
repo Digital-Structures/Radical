@@ -52,6 +52,7 @@ namespace Stepper
             this.Design = design;
             this.index = 0;
             this.step = 0.05;
+            this.fdstep = 0.01;
             this.trackedstep = 0;
 
             //Warn user that system can't handle constraints
@@ -166,6 +167,14 @@ namespace Stepper
         {
             get { return step; }
             set { CheckPropertyChanged<double>("StepSize", ref step, ref value); }
+        }
+
+        //FD STEP SIZE
+        private double fdstep;
+        public double FDStepSize
+        {
+            get { return fdstep; }
+            set { CheckPropertyChanged<double>("FDStepSize", ref fdstep, ref value);}
         }
 
         //TRACKED STEP

@@ -47,10 +47,10 @@
             <Grid Grid.Row="2" Name="ChartRow" Margin="25,0">
                 <lvc:CartesianChart Name="Chart"
                     PreviewMouseMove="Chart_MouseMove" Background="{x:Null}" Margin="0,0,0,0"
-                    PreviewMouseWheel="Graph_PreviewMouseWheel" DisableAnimations="True">
-                    <lvc:CartesianChart.DataTooltip>
+                    PreviewMouseWheel="Graph_PreviewMouseWheel" DisableAnimations="True" Hoverable="False" DataTooltip="{x:Null}">
+                    <!--<lvc:CartesianChart.DataTooltip>
                         <lvc:DefaultTooltip ShowSeries="True" ShowTitle="False" />
-                    </lvc:CartesianChart.DataTooltip>
+                    </lvc:CartesianChart.DataTooltip>-->
                     <lvc:CartesianChart.Series>
                         <lvc:LineSeries Title="{Binding LineGraphName}" LineSmoothness="0.25" Name="Plotter" Values="{Binding ChartValues}" 
                                         DataLabels="False" PointGeometrySize="0" Margin="0,0,0,0"

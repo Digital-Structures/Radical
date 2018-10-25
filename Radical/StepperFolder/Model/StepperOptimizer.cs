@@ -38,19 +38,20 @@ namespace Stepper
         private List<IGH_ActiveObject> Expire;
 
         //CONSTRUCTOR for Gradient Calculation only
-        public StepperOptimizer(Design design)
+        public StepperOptimizer(Design design, double FDStepSize)
         {
             this.Design = design;
 
             numVars = Design.ActiveVariables.Count;
             numObjs = Design.Objectives.Count;
-            FDstep = 0.01;
+            //FDstep = 0.01;
 
             ObjectiveData = new List<List<double>>();
             IsoPerf = new List<List<double>>();
             //FindWhichOnesToDisable2();
             FindWhichOnesToDisable();
-            
+            this.FDstep = FDStepSize;
+
         }
 
         public void ConvertFromCalculatorToOptimizer(int objIndex, Direction dir, double stepSize)
@@ -61,7 +62,7 @@ namespace Stepper
         }
 
         //CONSTRUCTOR for complete step optimization
-        public StepperOptimizer(Design design, int objIndex, Direction dir, double stepSize)
+        public StepperOptimizer(Design design, int objIndex, Direction dir, double stepSize, double FDStepSize)
         {
             this.Design = design;
             this.ObjIndex = objIndex;
@@ -70,7 +71,7 @@ namespace Stepper
 
             numVars = Design.ActiveVariables.Count;
             numObjs = Design.Objectives.Count;
-            FDstep = 0.01;
+            this.FDstep = FDStepSize; 
 
             ObjectiveData = new List<List<double>>();
             IsoPerf = new List<List<double>>();
