@@ -38,9 +38,9 @@
 
             <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,5" FontSize="18"> Gradient Step Size: </TextBlock>
             
-            <TextBox Grid.Column="1" Text="{Binding StepSize, Mode=OneWayToSource, FallbackValue=0.05}" materialDesign:HintAssist.Hint="Step Size"
+            <TextBox Grid.Column="1" Text="{Binding StepSize, Mode=TwoWay, FallbackValue=0.05}" materialDesign:HintAssist.Hint="Step Size"
                                  HorizontalAlignment="Right" TextAlignment="Right" VerticalContentAlignment="Center"                            
-                                 FontSize="18"></TextBox>
+                                 FontSize="18" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"></TextBox>
         </Grid>
 
         <Grid Grid.Row="2" Margin="0,5">
@@ -51,9 +51,9 @@
 
             <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,5" FontSize="18"> Internal Step Size:</TextBlock>
 
-            <TextBox Grid.Column="1" Text="{Binding FDStepSize, Mode=OneWayToSource, FallbackValue=0.01}" materialDesign:HintAssist.Hint="Internal Step Size"
+            <TextBox Grid.Column="1" Text="{Binding FDStepSize, Mode=TwoWay, FallbackValue=0.01}" materialDesign:HintAssist.Hint="Internal Step Size"
                                  HorizontalAlignment="Right" TextAlignment="Right" VerticalContentAlignment="Center"                            
-                                 FontSize="18"></TextBox>
+                                 FontSize="18" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"></TextBox>
         </Grid>
 
         <Grid Grid.Row="3" Margin="0,5">

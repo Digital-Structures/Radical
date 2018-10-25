@@ -23,6 +23,7 @@ namespace Stepper
     {
         private StepperWindow MyWindow;
         private StepperVM Stepper;
+        private String PreviousText;
 
         public SettingsControl()
         {
@@ -34,6 +35,7 @@ namespace Stepper
         {
             this.MyWindow = window;
             this.Stepper = stepper;
+            this.PreviousText = "";
 
             this.DataContext = Stepper;
             InitializeComponent();
@@ -58,6 +60,43 @@ namespace Stepper
         private void ToggleButton_Unchecked(object sender, RoutedEventArgs e)
         {
             this.MyWindow.DisplayNormalized();
+        }
+
+        //GOT FOCUS
+        //Clear box contents when it's active
+        protected void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox box = (TextBox)sender;
+            PreviousText = box.Text;
+            box.Clear();
+        }
+
+        //LOST FOCUS
+        //If TextBox is left empty, set value to 0
+        protected void TextBox_LostFocus(object sender, EventArgs e)
+        {
+            TextBox box = (TextBox)sender;
+
+            if (box.Text == "")
+                box.Text = PreviousText; //Should default to previous value
+        }
+
+        //PREVIEW KEY DOWN
+        //Allow pressing enter to save textbox content
+        protected void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                //Exit the Text Box
+                Keyboard.ClearFocus();
+                TextBox_LostFocus(sender, e);
+
+                //Update the value of the Text Box after exiting
+                TextBox box = (TextBox)sender;
+                DependencyProperty prop = TextBox.TextProperty;
+                BindingExpression binding = BindingOperations.GetBindingExpression(box, prop);
+                if (binding != null) { binding.UpdateSource(); }
+            }
         }
     }
 }

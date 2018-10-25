@@ -174,7 +174,13 @@ namespace Stepper
         public double FDStepSize
         {
             get { return fdstep; }
-            set { CheckPropertyChanged<double>("FDStepSize", ref fdstep, ref value);}
+            set
+            {
+                if(value > 0 && value <= 0.5)
+                {
+                    CheckPropertyChanged<double>("FDStepSize", ref fdstep, ref value);
+                }
+            }
         }
 
         //TRACKED STEP
