@@ -119,6 +119,13 @@ namespace DSOptimization
             }
             this.Objectives = obj;
 
+            if (Params.Input[0].Sources.Count > 0 && this.Objectives.Count == 0)
+            {
+                this.InputsSatisfied = false;
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "One or more objectives are invalid");
+                return;
+            }
+
             //assign constraints
             List<double> constraints = new List<double>();
             DA.GetDataList(1, constraints);
@@ -188,6 +195,13 @@ namespace DSOptimization
                 }
             }
             this.CrvVariables = curves.Select(x => x.ToNurbsCurve()).ToList();
+
+            if(NumVariables.Count + SrfVariables.Count + CrvVariables.Count == 0)
+            {
+                this.InputsSatisfied = false;
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "You have no inputs");
+                return;
+            }
 
             this.InputsSatisfied = true;
 

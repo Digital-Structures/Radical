@@ -44,11 +44,9 @@ namespace Stepper
 
             numVars = Design.ActiveVariables.Count;
             numObjs = Design.Objectives.Count;
-            //FDstep = 0.01;
 
             ObjectiveData = new List<List<double>>();
             IsoPerf = new List<List<double>>();
-            //FindWhichOnesToDisable2();
             FindWhichOnesToDisable();
             this.FDstep = FDStepSize;
 
@@ -75,7 +73,6 @@ namespace Stepper
 
             ObjectiveData = new List<List<double>>();
             IsoPerf = new List<List<double>>();
-            //FindWhichOnesToDisable2();
             FindWhichOnesToDisable();
         }
 
@@ -141,85 +138,6 @@ namespace Stepper
             Disable = actually_disable;
             Expire = expire;
         }
-
-
-        public List<IGH_ActiveObject> FindWhichOnesToDisable2()
-        {
-            List<IGH_ActiveObject> meeew = Grasshopper.Instances.ActiveCanvas.Document.ActiveObjects();
-            List<IGH_ActiveObject> disable = new List<IGH_ActiveObject>();
-
-            IList<IGH_Param> sliders = this.Design.MyComponent.NumObjects;
-            List<List<IGH_ActiveObject>> sliders_downstream = new List<List<IGH_ActiveObject>>();
-
-            foreach (IGH_Param s in sliders)
-            {
-                List<IGH_ActiveObject> downstream = Grasshopper.Instances.ActiveCanvas.Document.FindAllDownstreamObjects((IGH_ActiveObject)s);
-                sliders_downstream.Add(downstream);
-            }
-
-            List<IGH_ActiveObject> active = Grasshopper.Instances.ActiveCanvas.Document.ActiveObjects();
-            foreach (IGH_ActiveObject a in active)
-            {
-                if (sliders.Contains(a) || a == this.Design.MyComponent)
-                {
-                }
-
-                else if (a != this.Design.MyComponent)
-                {
-                    Boolean found = false;
-                    foreach (List<IGH_ActiveObject> d in sliders_downstream)
-                    {
-                        if (d.Contains(a))
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (!found)
-                    {
-                        if (a != this.Design.MyComponent)
-                        {
-                            a.ExpireSolution(false);
-                            //disable.Add(a);
-                        }
-                    }
-                    else
-                    {
-                        List<IGH_ActiveObject> downstream = Grasshopper.Instances.ActiveCanvas.Document.FindAllDownstreamObjects(a);
-                        if (!downstream.Contains(this.Design.MyComponent))
-                        {
-                            if (a != this.Design.MyComponent)
-                            {
-                                disable.Add(a);
-                            }
-                        }
-                    }
-                }
-            }
-
-            //Grasshopper.Instances.ActiveCanvas.Document.SetEnabledFlags(disable, false);
-
-            //List<IGH_ActiveObject> meee = Grasshopper.Instances.ActiveCanvas.Document.ActiveObjects();
-
-            if (disable.Contains(this.Design.MyComponent))
-            {
-                bool sad = true;
-            }
-
-            List<IGH_DocumentObject> nonEnabled = new List<IGH_DocumentObject>();
-
-            foreach (IGH_ActiveObject a in disable)
-            {
-                //a.ExpireSolution(false);
-                nonEnabled.Add((IGH_DocumentObject)a);
-            }
-
-            Grasshopper.Instances.ActiveCanvas.Document.SetEnabledFlags(nonEnabled, true);
-
-            return disable;
-        }
-
 
         public List<List<double>> CalculateGradient()
         {

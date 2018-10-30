@@ -21,8 +21,29 @@ namespace DSOptimization
         //Minimum value obtained through the optimization process
         public double BestSolutionValue { get; set; }
 
+        public Design Design;
+
         //CONSTRUCTOR
         //default values obtained from original Grasshopper component variables
+        public VarVM(IVariable dvar, Design d)
+        {
+            DesignVar = dvar;
+            this.Design = d;
+
+            //value trackers
+            this.OriginalValue = DesignVar.CurrentValue;
+            this.BestSolutionValue = DesignVar.CurrentValue;
+
+            this._name = DesignVar.Parameter.NickName;
+
+            this._value = DesignVar.CurrentValue;
+            this._min = DesignVar.Min;
+            this._max = DesignVar.Max;
+            this.IsActive = true;
+
+            this.OptRunning = false;
+        }
+
         public VarVM(IVariable dvar)
         {
             DesignVar = dvar;
@@ -90,10 +111,18 @@ namespace DSOptimization
                     this.OpenDialog = true;
                 else if (CheckPropertyChanged<double>("Value", ref _value, ref value))
                 {
-                    DesignVar.UpdateValue(this._value);
-
-                    //Refresh to change value on the grasshopper canvas
-                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
+                    System.Action run = delegate ()
+                    {
+                        for(int i = 0; i < this.Design.ActiveVariables.Count; i++)
+                        {
+                            if(Design.ActiveVariables[i] == DesignVar)
+                            {
+                                Design.ActiveVariables[i].UpdateValue(value);
+                                return;
+                            }
+                        }
+                    };
+                    Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
                 }
             }
         }

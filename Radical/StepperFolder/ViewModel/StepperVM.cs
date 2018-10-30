@@ -223,7 +223,7 @@ namespace Stepper
                 int varIndex = 0;
                 foreach (GeoVariable var in geo.Variables)
                 {
-                    VarVM geoVar = new VarVM(var);
+                    VarVM geoVar = new VarVM(var, this.Design);
                     int dir = var.Dir;
 
                     //Logical default naming of variable
@@ -244,7 +244,7 @@ namespace Stepper
             int _count = 0;
             foreach (var numVar in this.Design.Variables.Where(numVar => numVar is SliderVariable))
             {
-                VarVM v = new VarVM(numVar);
+                VarVM v = new VarVM(numVar, this.Design);
 
                 //following code is to ensure that sliders still have variable names in Stepper / Radical 
                 //when users don't give them nicknames
