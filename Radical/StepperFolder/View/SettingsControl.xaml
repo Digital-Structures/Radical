@@ -21,12 +21,12 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,5" FontSize="18"> Active Objective:</TextBlock>
+            <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="35,1" FontSize="13"> Active Objective:</TextBlock>
 
-            <ComboBox Grid.Column="1" Name="ChosenObjective" HorizontalAlignment="Right" HorizontalContentAlignment="Right"
+            <ComboBox Grid.Column="1" Name="ChosenObjective" HorizontalAlignment="Right" HorizontalContentAlignment="Right" Margin="0,0,10,0"
                                   ItemsSource="{Binding ObjectiveNames, Mode=OneWay}" SelectionChanged="ChosenObjective_SelectionChanged"
                                   SelectedIndex="{Binding ObjIndex, Mode=TwoWay, FallbackValue=0}"
-                                  IsEditable="True" IsReadOnly="True" FontSize="18">
+                                  IsEditable="True" IsReadOnly="True" FontSize="13">
             </ComboBox>
         </Grid>
 
@@ -36,11 +36,11 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,5" FontSize="18"> Gradient Step Size: </TextBlock>
+            <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="35,1" FontSize="13"> Gradient Step Size: </TextBlock>
             
             <TextBox Grid.Column="1" Text="{Binding StepSize, Mode=TwoWay, FallbackValue=0.05}" materialDesign:HintAssist.Hint="Step Size"
-                                 HorizontalAlignment="Right" TextAlignment="Right" VerticalContentAlignment="Center"                            
-                                 FontSize="18" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"></TextBox>
+                                 HorizontalAlignment="Right" TextAlignment="Right" VerticalContentAlignment="Center"  Margin="0,0,10,0"                           
+                                 FontSize="13" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"></TextBox>
         </Grid>
 
         <Grid Grid.Row="2" Margin="0,5">
@@ -49,14 +49,14 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,5" FontSize="18"> Internal Step Size:</TextBlock>
+            <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="35,1" FontSize="13"> Internal Step Size:</TextBlock>
 
             <TextBox Grid.Column="1" Text="{Binding FDStepSize, Mode=TwoWay, FallbackValue=0.01}" materialDesign:HintAssist.Hint="Internal Step Size"
-                                 HorizontalAlignment="Right" TextAlignment="Right" VerticalContentAlignment="Center"                            
-                                 FontSize="18" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"></TextBox>
+                                 HorizontalAlignment="Right" TextAlignment="Right" VerticalContentAlignment="Center"  Margin="0,0,10,0"                          
+                                 FontSize="13" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"></TextBox>
         </Grid>
 
-        <Grid Grid.Row="3" Margin="0,5">
+        <Grid Grid.Row="3" Margin="0,7,10,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -64,14 +64,14 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,5" FontSize="18"> Objective Display Mode:</TextBlock>
+            <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="35,1" FontSize="13" Padding="0,0,0,7"> Display Mode:</TextBlock>
 
-            <TextBlock Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">Normalized</TextBlock>
+            <TextBlock Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="10" Padding="0,0,0,7">Normalized</TextBlock>
 
-            <ToggleButton Grid.Column="2" Name="DisplayModeButton" Width="60"
-                          IsChecked="False" Checked="ToggleButton_Checked" Unchecked="ToggleButton_Unchecked" ></ToggleButton>
-            
-            <TextBlock Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center">Absolute</TextBlock>
+            <ToggleButton Grid.Column="2" Name="DisplayModeButton" Width="60" VerticalAlignment="Center" 
+                          IsChecked="False" Checked="ToggleButton_Checked" Unchecked="ToggleButton_Unchecked" Padding="0,0,0,12"></ToggleButton>
+
+            <TextBlock Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10" Padding="0,0,0,7">Absolute</TextBlock>
         </Grid>
 
     </Grid>

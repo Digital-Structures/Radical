@@ -12,12 +12,12 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <TextBox Name="VarName" Text="{Binding VariableName, StringFormat=n2}" FontSize="16" Foreground="Gray" TextDecorations="None"
+        <TextBox Name="VarName" Text="{Binding VariableName, StringFormat=n2}" FontSize="12" Foreground="Gray" TextDecorations="None"
                      Grid.Column="0" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0"
                      Visibility="Visible"
                      ></TextBox>
 
-        <TextBlock Name="ValueText" Text="0.00" Grid.Column="1" FontSize="16" Foreground="DarkGray"
+        <TextBlock Name="ValueText" Text="0.00" Grid.Column="1" FontSize="12" Foreground="DarkGray"
                      Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0"
                      ></TextBlock>
     </Grid>

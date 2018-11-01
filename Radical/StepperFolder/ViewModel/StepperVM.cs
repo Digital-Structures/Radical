@@ -373,9 +373,13 @@ namespace Stepper
             {
                 Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
             }
+            else
+            {
+                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
+            }
 
             this.UpdateEvolutionData(new List<List<double>>());
-            //this.Design.UpdateComponentOutputs(new List<List<double?>>());
+            //this.Design.UpdateComponentOutputs(new List<List<double>>());
         }
 
         public bool IsoperformancePossible()

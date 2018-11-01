@@ -61,7 +61,21 @@ namespace Stepper
                 if (value != val)
                 {
                     val = value;
-                    this.ValueText.Text = String.Format("{0:0.00}", val);
+
+                    
+
+                    //Implement a way to do scientific notation !!! 
+                    //implement it both ways
+
+                    if(val > 1000)
+                    {
+                        this.ValueText.Text =  String.Format("{0:0.0e0}", val);
+                    }
+                    else
+                    {
+                        this.ValueText.Text = String.Format("{0:0.00}", val);
+                    }
+                    
                 }
 
             }

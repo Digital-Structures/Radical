@@ -561,5 +561,42 @@ namespace Stepper
                 }
             }
         }
+
+        //Control which expanders are open
+        private void ObjectiveData_Expanded(object sender, RoutedEventArgs e)
+        {
+            if (SettingsExpander.IsExpanded)
+            {
+                SettingsExpander.IsExpanded = false;
+            }
+            if (StepData.IsExpanded)
+            {
+                StepData.IsExpanded = false;
+            }
+        }
+
+        private void SettingsExpander_Expanded(object sender, RoutedEventArgs e)
+        {
+            if (ObjectiveData.IsExpanded)
+            {
+                ObjectiveData.IsExpanded = false;
+            }
+            if (StepData.IsExpanded)
+            {
+                StepData.IsExpanded = false;
+            }
+        }
+
+        private void StepData_Expanded(object sender, RoutedEventArgs e)
+        {
+            if (ObjectiveData.IsExpanded)
+            {
+                ObjectiveData.IsExpanded = false;
+            }
+            if (SettingsExpander.IsExpanded)
+            {
+                SettingsExpander.IsExpanded = false;
+            }
+        }
     }
 }
