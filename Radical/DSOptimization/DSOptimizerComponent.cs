@@ -16,6 +16,7 @@ using Radical.Components;
 using Radical.Integration;
 using System.Threading;
 using Stepper;
+using Grasshopper.Kernel.Special;
 
 namespace DSOptimization
 { 
@@ -136,10 +137,22 @@ namespace DSOptimization
             DA.GetDataList(2, variables);
             this.NumVariables = variables;
 
+            //this did not work, check what the smallest GH value can be
+            //change the param value somewhere internally
+            //trace to where the graph is actually being made
+            //for(int i = 0; i < this.NumVariables.Count; i++)
+            //{
+            //    if(this.NumVariables[i] == 0){
+            //        this.NumVariables[i] = 1 * 10 ^ -12;
+            //    }
+            //}
+
             //Check if inputs are valid type by checking GUID, might not actually work between diff computers and different versions of GH
             Guid numGuid = new Guid("57da07bd-ecab-415d-9d86-af36d7073abc");
             foreach (IGH_Param param in this.Params.Input[2].Sources)
             {
+                //if(param.)
+
                 //if (param.ComponentGuid != numGuid)
                 if(param.Name != "Number Slider")
                 {
@@ -307,7 +320,7 @@ namespace DSOptimization
                 {
                     Window viewer = new DSOptimizeWindow(design, this.MyComponent);
                     viewer.Show();
-                   System.Windows.Threading.Dispatcher.Run();
+                    System.Windows.Threading.Dispatcher.Run();
                 });
 
                 viewerThread.SetApartmentState(ApartmentState.STA); // needs to be STA or throws exception

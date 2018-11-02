@@ -44,8 +44,16 @@ namespace DSOptimization
             //Sliders
             foreach (IGH_Param param in MyComponent.Params.Input[2].Sources)
             {
+                SliderVariable s = new SliderVariable(param);
+                if(s.CurrentValue == 0)
+                {
+                    s.UpdateValue(0.001);
+                    double g = s.CurrentValue;
+                }
                 this.Variables.Add(new SliderVariable(param));
             }
+            Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
+
             //Surfaces
             for (int i = 0; i < MyComponent.Params.Input[3].Sources.Count; i++)
             {

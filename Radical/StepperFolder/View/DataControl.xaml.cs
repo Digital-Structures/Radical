@@ -62,12 +62,10 @@ namespace Stepper
                 {
                     val = value;
 
-                    
-
                     //Implement a way to do scientific notation !!! 
                     //implement it both ways
 
-                    if(val > 1000)
+                    if(val > 99999)
                     {
                         this.ValueText.Text =  String.Format("{0:0.0e0}", val);
                     }
@@ -75,9 +73,7 @@ namespace Stepper
                     {
                         this.ValueText.Text = String.Format("{0:0.00}", val);
                     }
-                    
                 }
-
             }
         }
 

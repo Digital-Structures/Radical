@@ -111,6 +111,9 @@ namespace Stepper
             this.ObjectiveChart_Norm = new StepperGraphVM(ObjectiveEvolution_Norm);
             this.ObjectiveChart_Abs = new StepperGraphVM(ObjectiveEvolution_Abs);
             this.ObjectiveNamesChanged();
+
+            //Check for zero's that will cause trouble
+
         }
 
         //OPEN DIALOG
