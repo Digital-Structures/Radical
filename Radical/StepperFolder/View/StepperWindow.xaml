@@ -355,8 +355,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
 
@@ -423,21 +423,7 @@
                 </Button>
             </Grid>
 
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                <StackPanel>
-                    <Expander Name="SettingsExpander" IsExpanded="False" Background="Transparent" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Expanded="SettingsExpander_Expanded">
-                        <Expander.Header>
-                            <TextBlock FontSize="20" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"> Optimization Settings</TextBlock>
-                        </Expander.Header>
-                    </Expander>
-                    <Border Background="{DynamicResource MaterialDesignDivider}"
-                            Height="1"
-                            HorizontalAlignment="Stretch"
-                            SnapsToDevicePixels="True" />
-                </StackPanel>
-            </ScrollViewer>
-
-            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
                 <StackPanel>
                     <Expander Name="ObjectiveData" Background="Transparent" IsExpanded="False" Padding="20,0" Expanded="ObjectiveData_Expanded">
                         <Expander.Header>
@@ -542,7 +528,7 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
                 <StackPanel>
                     <Expander Name="StepData" Background="Transparent" IsExpanded="False" Padding="20,0" Expanded="StepData_Expanded">
                         <Expander.Header>
@@ -584,6 +570,20 @@
                                 Height="1"
                                 HorizontalAlignment="Stretch"
                                 SnapsToDevicePixels="True" />
+                </StackPanel>
+            </ScrollViewer>
+
+            <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <Expander Name="SettingsExpander" IsExpanded="False" Background="Transparent" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Expanded="SettingsExpander_Expanded">
+                        <Expander.Header>
+                            <TextBlock FontSize="20" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"> Optimization Settings</TextBlock>
+                        </Expander.Header>
+                    </Expander>
+                    <Border Background="{DynamicResource MaterialDesignDivider}"
+                            Height="1"
+                            HorizontalAlignment="Stretch"
+                            SnapsToDevicePixels="True" />
                 </StackPanel>
             </ScrollViewer>
 

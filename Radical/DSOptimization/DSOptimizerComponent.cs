@@ -137,23 +137,10 @@ namespace DSOptimization
             DA.GetDataList(2, variables);
             this.NumVariables = variables;
 
-            //this did not work, check what the smallest GH value can be
-            //change the param value somewhere internally
-            //trace to where the graph is actually being made
-            //for(int i = 0; i < this.NumVariables.Count; i++)
-            //{
-            //    if(this.NumVariables[i] == 0){
-            //        this.NumVariables[i] = 1 * 10 ^ -12;
-            //    }
-            //}
-
             //Check if inputs are valid type by checking GUID, might not actually work between diff computers and different versions of GH
             Guid numGuid = new Guid("57da07bd-ecab-415d-9d86-af36d7073abc");
             foreach (IGH_Param param in this.Params.Input[2].Sources)
             {
-                //if(param.)
-
-                //if (param.ComponentGuid != numGuid)
                 if(param.Name != "Number Slider")
                 {
                     this.InputsSatisfied = false;
@@ -161,13 +148,6 @@ namespace DSOptimization
                     return;
                 }
             }
-
-            //this.NumObjects = new List<IGH_ActiveObject>();
-
-            //foreach (IGH_Param param in this.Params.Input[2].Sources)
-            //{
-            //    this.NumObjects.Add((IGH_ActiveObject)param);
-            //}
 
             //assign surface variables
             List<Surface> surfaces= new List<Surface>();
@@ -218,8 +198,6 @@ namespace DSOptimization
 
             this.InputsSatisfied = true;
 
-
-
             DA.SetDataTree(0, this.ObjectiveHistory);
             DA.SetDataTree(1, this.VariableHistory);
             DA.SetDataTree(2, this.GradientHistory);
@@ -238,7 +216,6 @@ namespace DSOptimization
 
                 i++;
             }
-                
         }
 
         public void AppendToVariables (List<double> values)

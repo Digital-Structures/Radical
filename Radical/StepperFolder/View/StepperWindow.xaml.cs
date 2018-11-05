@@ -424,7 +424,6 @@ namespace Stepper
 
                 i++;
             }
-
         }
 
         //BUTTON RESET

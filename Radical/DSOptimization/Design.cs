@@ -47,8 +47,14 @@ namespace DSOptimization
                 SliderVariable s = new SliderVariable(param);
                 if(s.CurrentValue == 0)
                 {
-                    s.UpdateValue(0.001);
-                    double g = s.CurrentValue;
+                    if(s.Max >= 0.001)
+                    {
+                        s.UpdateValue(0.001);
+                    }
+                    else
+                    {
+                        s.UpdateValue(-0.001);
+                    }
                 }
                 this.Variables.Add(new SliderVariable(param));
             }

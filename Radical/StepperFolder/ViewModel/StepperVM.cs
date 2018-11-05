@@ -372,13 +372,23 @@ namespace Stepper
             {
                 geo.Update();
             }
+
+            bool finished = false;
+
             if (this.Design.Geometries.Any())
             {
                 Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
+                finished = true;
             }
             else
             {
                 Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
+                finished = true;
+            }
+
+            while (!finished)
+            {
+
             }
 
             this.UpdateEvolutionData(new List<List<double>>());
