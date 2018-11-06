@@ -14,11 +14,11 @@
 
         <TextBox Name="VarName" Text="{Binding VariableName, StringFormat=n2}" FontSize="12" Foreground="Gray" TextDecorations="None"
                      Grid.Column="0" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0"
-                     Visibility="Visible"
+                     Visibility="Visible" MaxWidth="60"
                      ></TextBox>
 
         <TextBlock Name="ValueText" Text="0.00" Grid.Column="1" FontSize="12" Foreground="DarkGray"
-                     Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0"
+                     Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0"  
                      ></TextBlock>
     </Grid>
 </UserControl>
