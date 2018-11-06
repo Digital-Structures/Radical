@@ -172,7 +172,7 @@ namespace Radical
                 }
 
                 this.SolutionInProcess = true;
-                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, refresh);
+                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, refresh);
 
                 finished = true;
             };
