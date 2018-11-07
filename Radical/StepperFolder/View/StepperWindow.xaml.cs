@@ -553,7 +553,7 @@ namespace Stepper
             }
             catch
             {
-                //open pop up window
+                this.InvalidPathWindow.IsOpen = true;
             }
         }
 

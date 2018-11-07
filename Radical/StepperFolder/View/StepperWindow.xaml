@@ -255,12 +255,6 @@
                             <!--<ColumnDefinition Width="Auto"></ColumnDefinition>-->
                         </Grid.ColumnDefinitions>
 
-                        <!--<TextBlock Grid.Column="0" FontSize="22" Foreground="{DynamicResource PrimaryHueDarkBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"> 
-                                    Current Step:</TextBlock>-->
-
-                        <!--<TextBlock Grid.Column="1" Text="{Binding Path=Value, ElementName=GraphSlider}"
-                                           FontSize="22" Foreground="{DynamicResource PrimaryHueDarkBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"></TextBlock>-->
-
                         <Button Grid.Column="0" Style="{StaticResource MaterialDesignRaisedAccentButton}" Click="ButtonReset_Click"
                                          MaxWidth="400" HorizontalAlignment="Center">
                             <Grid>
@@ -276,78 +270,10 @@
                             </Grid>
                         </Button>
 
-                        <!--<TextBlock Grid.Column="3" FontSize="22" Foreground="{DynamicResource PrimaryHueDarkBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"> Display Data</TextBlock>-->
                     </Grid>
                 </StackPanel>
 
-                <!--<ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" MaxHeight="200">
-                    <Expander>
-                        <Expander.Header>
-                            <Grid Margin="-15,0,0,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0" FontSize="22" Foreground="{DynamicResource PrimaryHueDarkBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"> 
-                                    Current Step:</TextBlock>
-
-                                <TextBlock Grid.Column="1" Text="{Binding Path=Value, ElementName=GraphSlider}"
-                                           FontSize="22" Foreground="{DynamicResource PrimaryHueDarkBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"></TextBlock>
-
-                                <Button Grid.Column="2" Style="{StaticResource MaterialDesignRaisedAccentButton}" Click="ButtonReset_Click"
-                                        Margin="10,0" MaxWidth="400" HorizontalAlignment="Center">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                            <ColumnDefinition Width="*"></ColumnDefinition>
-                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                        </Grid.ColumnDefinitions>
-
-                                        <materialDesign:PackIcon Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,10,0" Kind="Refresh" Height="30" Width="30"/>
-                                        <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"> RESET to CURRENT STEP</TextBlock>
-                                        <materialDesign:PackIcon Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="40,0,0,0" Kind="Refresh" Height="30" Width="30"/>
-                                    </Grid>
-                                </Button>
-
-                                <TextBlock Grid.Column="3" FontSize="22" Foreground="{DynamicResource PrimaryHueDarkBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"> Display Data</TextBlock>
-                            </Grid>
-                        </Expander.Header>
-                        <StackPanel>
-                            <Border BorderBrush="{DynamicResource PrimaryHueLightBrush}" BorderThickness="1" Margin="0,0,0,10"></Border>
-
-                            <TextBlock Foreground="{DynamicResource PrimaryHueDarkBrush}" FontSize="16" Padding="10,0,0,0">
-                                Objectives
-                            </TextBlock>
-
-                            <ItemsControl Name="StepObjData">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <UniformGrid Columns="4">
-                                             Grid for displaying variable values at a step 
-                                        </UniformGrid>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
-
-                            <TextBlock Foreground="{DynamicResource PrimaryHueDarkBrush}" FontSize="16" Padding="10,0,0,0">
-                                Variables
-                            </TextBlock>
-
-                            <ItemsControl Name="StepVarData">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <UniformGrid Columns="4">
-                                             Grid for displaying variable values at a step 
-                                        </UniformGrid>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
-                        </StackPanel>-->
-                    <!--</Expander>
-                </ScrollViewer>-->
+                
             </Grid>
         </materialDesign:Card>
 
@@ -404,6 +330,39 @@
                     </StackPanel>
                 </materialDesign:DialogHost.DialogContent>
             </materialDesign:DialogHost>
+
+
+
+            <!--Export Csv Dialogue-->
+            <materialDesign:DialogHost Name="InvalidPathWindow" IsOpen="False" DialogClosing="ExportCSV"
+                                       Grid.RowSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <materialDesign:DialogHost.DialogContent>
+                    <StackPanel Margin="16" Width="Auto" MaxWidth="300">
+
+                        <TextBlock FontSize="24" Foreground="{DynamicResource SecondaryAccentBrush}" HorizontalAlignment="Center" Padding="0,0,0,4">
+                        Write Permission Denied</TextBlock>
+
+                        <TextBlock FontSize="12" TextWrapping="Wrap" HorizontalAlignment="Center" TextAlignment="Center" Foreground="{DynamicResource PrimaryHueDarkBrush}" Padding="0,0,0,3">
+                        You do not have permission to save a new file in the file path provided. Please go back and choose a different file path.</TextBlock>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Background="Transparent"
+                            IsCancel="True"
+                            Margin="5"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                            Command="materialDesign:DialogHost.CloseDialogCommand">
+                                <Button.CommandParameter>
+                                    <system:Boolean>False</system:Boolean>
+                                </Button.CommandParameter>
+                                Close
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:DialogHost.DialogContent>
+            </materialDesign:DialogHost>
+
+
+
 
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
