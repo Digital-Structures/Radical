@@ -23,6 +23,11 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using MaterialDesignThemes;
 using DSOptimization;
+using System.Security;
+using System.Security.Permissions;
+using System.Security.AccessControl;
+using System.IO;
+using System.Security.Principal;
 
 namespace Stepper
 {
@@ -539,8 +544,17 @@ namespace Stepper
             
             String filepath = @"" + CSVFilepath + "/" + CSVFilename + "_" + timestamp;
 
-            this.StepperVM.ExportCSV_Log(filepath);
-            this.StepperVM.ExportCSV_Raw(filepath);
+            try
+            {
+                //try saving the files
+                //might not be possible due to access restrictions
+                this.StepperVM.ExportCSV_Log(filepath);
+                this.StepperVM.ExportCSV_Raw(filepath);
+            }
+            catch
+            {
+                //open pop up window
+            }
         }
 
         private void Filepath_TextChanged(object sender, TextChangedEventArgs e)
@@ -560,6 +574,8 @@ namespace Stepper
                 }
             }
         }
+
+        
 
         //Control which expanders are open
         private void ObjectiveData_Expanded(object sender, RoutedEventArgs e)
