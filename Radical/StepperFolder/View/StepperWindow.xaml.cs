@@ -544,17 +544,22 @@ namespace Stepper
             
             String filepath = @"" + CSVFilepath + "/" + CSVFilename + "_" + timestamp;
 
-            try
-            {
-                //try saving the files
-                //might not be possible due to access restrictions
-                this.StepperVM.ExportCSV_Log(filepath);
-                this.StepperVM.ExportCSV_Raw(filepath);
-            }
-            catch
-            {
-                this.InvalidPathWindow.IsOpen = true;
-            }
+            this.StepperVM.ExportCSV_Log(filepath);
+            this.StepperVM.ExportCSV_Raw(filepath);
+
+            //TO BE PUT BACK IN WHEN WE FIGURE OUT THE OTHER ISSUE
+            //try
+            //{
+            //    //try saving the files
+            //    //might not be possible due to access restrictions
+            //    this.StepperVM.ExportCSV_Log(filepath);
+            //    this.StepperVM.ExportCSV_Raw(filepath);
+            //}
+            //catch(Exception e)
+            //{
+            //    Exception what = e; 
+            //    this.InvalidPathWindow.IsOpen = true;
+            //}
         }
 
         private void Filepath_TextChanged(object sender, TextChangedEventArgs e)

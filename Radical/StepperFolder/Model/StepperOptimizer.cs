@@ -208,17 +208,47 @@ namespace Stepper
             {
                 Gradient.Add(new List<double>());
 
-                for (int i = 0; i < numVars; i++)
+                //I feel like there are two ways we can make this for loop
+                //they are essentially equivalent we just have to decide what makes more sense
+
+                //option 1: variable for active index,  for i in range of ALL variables, if allvars[i ] is active then get that active index, else just add 0 
+
+                //option 2: harder to explain. essentially the same I think
+
+                int active_index = 0;
+                for (int i = 0; i < this.Design.Variables.Count; i++)
                 {
-                    double left = ObjectiveData[i][j];
+                    if (this.Design.Variables[i].IsActive)
+                    {
+                        double left = ObjectiveData[active_index][j];
 
-                    double difference = (Design.Objectives[j] - left) / (FDstep);
+                        double difference = (Design.Objectives[j] - left) / (FDstep);
 
-                    if (difference > maxObj) { maxObj = difference; }
-                    if (difference < minObj) { minObj = difference; }
+                        if (difference > maxObj) { maxObj = difference; }
+                        if (difference < minObj) { minObj = difference; }
 
-                    Gradient[j].Add((double)difference);
+                        Gradient[j].Add((double)difference);
+                        active_index += 1; 
+                    }
+                    else
+                    {
+                        Gradient[j].Add(0);
+                    }
                 }
+
+
+
+                //for (int i = 0; i < numVars; i++)
+                //{
+                //    double left = ObjectiveData[i][j];
+
+                //    double difference = (Design.Objectives[j] - left) / (FDstep);
+
+                //    if (difference > maxObj) { maxObj = difference; }
+                //    if (difference < minObj) { minObj = difference; }
+
+                //    Gradient[j].Add((double)difference);
+                //}
 
                 //Normalize by max/min difference
                 double maxAbs = double.MinValue;
@@ -227,7 +257,7 @@ namespace Stepper
                 if (Math.Abs(maxObj) > maxAbs) { maxAbs = Math.Abs(maxObj); }
                 if (Math.Abs(minObj) > maxAbs) { maxAbs = Math.Abs(minObj); }
 
-                for (int i = 0; i < numVars; i++)
+                for (int i = 0; i < this.Design.Variables.Count; i++)
                 {
                     if (maxAbs != 0)
                     {
@@ -240,7 +270,7 @@ namespace Stepper
                     vecLength = vecLength + (double)Gradient[j][i] * (double)Gradient[j][i];
                 }
 
-                for (int i = 0; i < numVars; i++)
+                for (int i = 0; i < this.Design.Variables.Count; i++)
                 {
                     if(Gradient[j][i] != 0)
                     {
@@ -309,17 +339,28 @@ namespace Stepper
             {
                 Gradient.Add(new List<double>());
 
-                for (int i = 0; i < numVars; i++)
+                int active_index = 0;
+                for (int i = 0; i < this.Design.Variables.Count; i++)
                 {
-                    double left = ObjectiveData[i][j];
-                    double right = ObjectiveData[numVars + i][j];
+                    if (this.Design.Variables[i].IsActive)
+                    {
+                        double left = ObjectiveData[active_index][j];
+                        double right = ObjectiveData[numVars + i][j];
 
-                    double difference = (right - left) / (FDstep);
+                        double difference = (right - left) / (FDstep);
 
-                    if (difference > maxObj) { maxObj = difference; }
-                    if (difference < minObj) { minObj = difference; }
+                        if (difference > maxObj) { maxObj = difference; }
+                        if (difference < minObj) { minObj = difference; }
 
-                    Gradient[j].Add((double)difference);
+                        Gradient[j].Add((double)difference);
+
+                        active_index += 1;
+                    }
+                    else
+                    {
+                        Gradient[j].Add(0);
+                    }
+                    
                 }
 
                 //Normalize by max/min difference
@@ -329,18 +370,7 @@ namespace Stepper
                 if (Math.Abs(maxObj) > maxAbs) { maxAbs = Math.Abs(maxObj); }
                 if (Math.Abs(minObj) > maxAbs) { maxAbs = Math.Abs(minObj); }
 
-                //for (int i = 0; i < numVars; i++)
-                //{
-                //    Gradient[j][i] = (Gradient[j][i] / maxAbs);
-                //    vecLength = vecLength + (double)Gradient[j][i] * (double)Gradient[j][i];
-                //}
-
-                //for (int i = 0; i < numVars; i++)
-                //{
-                //    Gradient[j][i] = (Gradient[j][i] / Math.Sqrt(vecLength));
-                //}
-
-                for (int i = 0; i < numVars; i++)
+                for (int i = 0; i < this.Design.Variables.Count; i++)
                 {
                     if (maxAbs != 0)
                     {
@@ -353,7 +383,7 @@ namespace Stepper
                     vecLength = vecLength + (double)Gradient[j][i] * (double)Gradient[j][i];
                 }
 
-                for (int i = 0; i < numVars; i++)
+                for (int i = 0; i < this.Design.Variables.Count; i++)
                 {
                     if (Gradient[j][i] != 0)
                     {
@@ -553,30 +583,63 @@ namespace Stepper
             // step in the right direction based on the gradient vector
 
             //Set all sliders to their optimized values
-            for (int i = 0; i < numVars; i++)
+            int active_index = 0; 
+            for(int i = 0; i < Design.Variables.Count; i++)
             {
-                IVariable var = Design.ActiveVariables[i];
-                double SteppedValue;
-
-                switch(this.Dir)
+                if (Design.Variables[i].IsActive)
                 {
-                    case Direction.Maximize:
-                        SteppedValue = var.CurrentValue + (double)Gradient[this.ObjIndex][i] * this.StepSize * (var.Max - var.Min);
-                        var.CurrentValue = SteppedValue;
-                        break;
+                    IVariable var = Design.ActiveVariables[active_index];
+                    double SteppedValue;
 
-                    case Direction.Minimize:
-                        SteppedValue = var.CurrentValue - (double)Gradient[this.ObjIndex][i] * this.StepSize * (var.Max - var.Min);
-                        var.CurrentValue = SteppedValue;
-                        break;
+                    switch (this.Dir)
+                    {
+                        case Direction.Maximize:
+                            SteppedValue = var.CurrentValue + (double)Gradient[this.ObjIndex][i] * this.StepSize * (var.Max - var.Min);
+                            var.CurrentValue = SteppedValue;
+                            break;
 
-                    case Direction.Isoperformance:
-                        List<double> IsoPerfDirList = IsoPerf[dir];
-                        SteppedValue = var.CurrentValue + IsoPerfDirList[i] * this.StepSize * numVars;
-                        var.CurrentValue = SteppedValue;
-                        break;
+                        case Direction.Minimize:
+                            SteppedValue = var.CurrentValue - (double)Gradient[this.ObjIndex][i] * this.StepSize * (var.Max - var.Min);
+                            var.CurrentValue = SteppedValue;
+                            break;
+
+                        case Direction.Isoperformance:
+                            List<double> IsoPerfDirList = IsoPerf[dir];
+                            SteppedValue = var.CurrentValue + IsoPerfDirList[i] * this.StepSize * numVars;
+                            var.CurrentValue = SteppedValue;
+                            break;
+                    }
+
+                    active_index += 1;
                 }
             }
+
+
+
+            //for (int i = 0; i < numVars; i++)
+            //{
+            //    IVariable var = Design.ActiveVariables[i];
+            //    double SteppedValue;
+
+            //    switch(this.Dir)
+            //    {
+            //        case Direction.Maximize:
+            //            SteppedValue = var.CurrentValue + (double)Gradient[this.ObjIndex][i] * this.StepSize * (var.Max - var.Min);
+            //            var.CurrentValue = SteppedValue;
+            //            break;
+
+            //        case Direction.Minimize:
+            //            SteppedValue = var.CurrentValue - (double)Gradient[this.ObjIndex][i] * this.StepSize * (var.Max - var.Min);
+            //            var.CurrentValue = SteppedValue;
+            //            break;
+
+            //        case Direction.Isoperformance:
+            //            List<double> IsoPerfDirList = IsoPerf[dir];
+            //            SteppedValue = var.CurrentValue + IsoPerfDirList[i] * this.StepSize * numVars;
+            //            var.CurrentValue = SteppedValue;
+            //            break;
+            //    }
+            //}
 
             //Append data to the end of component output lists
             this.Design.UpdateComponentOutputs(Gradient);
