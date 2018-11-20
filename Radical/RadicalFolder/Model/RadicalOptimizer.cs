@@ -281,6 +281,23 @@ namespace Radical
 
         public bool AllConstraintsSatisfied()
         {
+            foreach (Constraint c in this.Design.Constraints)
+            {
+                if (c.MyType.Equals(Constraint.ConstraintType.lessthan))
+                {
+                    if(!(c.CurrentValue < c.LimitValue))
+                    {
+                        return false;
+                    }
+                }
+                else if (c.MyType.Equals(Constraint.ConstraintType.morethan))
+                {
+                    if (!(c.CurrentValue > c.LimitValue))
+                    {
+                        return false;
+                    }
+                }
+            }
             return true; 
         }
 
