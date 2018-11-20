@@ -394,13 +394,26 @@ namespace Radical
                 group.OptimizationFinished();         
         }
 
-        //WINDOW CLOSING
+        //IDEALLY WHAT WILL BE USED
+        public void WindowClosing()
+        {
+            if (ButtonPause.Visibility == Visibility.Visible)
+            {
+                source.Cancel();
+            }
+        }
+
+        //WINDOW CLOSING - I believe this is no longer in use because of DSOpt closing function
         //Alert the component that the window has been closed
         //(and therefore a new window can open on double click)
-        public void RadicalWindow_Closing(object sender, CancelEventArgs e)
-        {
-            this.RadicalVM.OnWindowClosing();
-        }
+        //public void RadicalWindow_Closing(object sender, CancelEventArgs e)
+        //{
+        //    if(ButtonPause.Visibility == Visibility.Visible)
+        //    {
+        //        source.Cancel();
+        //    }
+        //    this.RadicalVM.OnWindowClosing();
+        //}
 
         //ANIMATION BEGAN
         private void AnimationBegan()

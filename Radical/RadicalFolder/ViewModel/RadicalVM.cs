@@ -280,13 +280,14 @@ namespace Radical
             }
         }
 
+        //Believe that this is no longer in use
         //ON WINDOW CLOSING
         //Alert the component that the window has been closed
         //(and therefore a new window can open on double click)
-        public void OnWindowClosing()
-        {
-            this.Component.IsWindowOpen = false;
-        }
+        //public void OnWindowClosing()
+        //{
+        //    this.Component.IsWindowOpen = false;
+        //}
 
         //GRAPH COLUMNS
         private int _cols;

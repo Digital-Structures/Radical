@@ -29,6 +29,7 @@ namespace DSOptimization
         }
 
         DSOptimizerComponent MyComponent;
+        RadicalWindow RadicalWindow;
 
         public DSOptimizeWindow(Design design, DSOptimizerComponent component)
         {
@@ -36,11 +37,15 @@ namespace DSOptimization
             InitializeComponent();
 
             this.StepperTab.Content = new StepperWindow(new StepperVM(design, component));
-            this.RadicalTab.Content = new RadicalWindow(new RadicalVM(design, component));
+            this.RadicalWindow = new RadicalWindow(new RadicalVM(design, component));
+            this.RadicalTab.Content = this.RadicalWindow;
         }
 
         public void Window_Closing(object sender, CancelEventArgs e)
         {
+            this.RadicalWindow.WindowClosing();
+            //if radical is running
+            //throw stop
             this.MyComponent.IsWindowOpen = false;
         }
 
