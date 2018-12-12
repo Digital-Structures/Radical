@@ -236,6 +236,12 @@ namespace Radical
                     double score = Design.Constraints[i].CurrentValue;
                     this.RadicalVM.ConstraintsEvolution[i].Add(score);
                 }
+
+
+                foreach(GraphVM gvm in this.RadicalVM.ActiveGraphs)
+                {
+                    gvm.ForceGraphUpdate();
+                }
             }
 
             this.SolutionInProcess = false;

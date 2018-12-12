@@ -293,7 +293,7 @@ namespace Stepper
                 double value = this.Design.Objectives[i];
                 objective.Add(value);
 
-                double normalized = value / objective[0];
+                double normalized = value / Math.Abs(objective[0]);
                 this.ObjectiveEvolution_Norm[i].Add(normalized);
 
                 i++;

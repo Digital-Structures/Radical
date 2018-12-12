@@ -34,5 +34,10 @@ namespace Stepper
             this.XAxis.LabelFormatter = val => val.ToString("n2");
             this.YAxis.LabelFormatter = val => val.ToString("n2");
         }
+
+        public void ForceGraphUpdate()
+        {
+            Graph.Update(true, true);
+        }
     }
 }

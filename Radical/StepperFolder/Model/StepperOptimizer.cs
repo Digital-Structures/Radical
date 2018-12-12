@@ -208,13 +208,6 @@ namespace Stepper
             {
                 Gradient.Add(new List<double>());
 
-                //I feel like there are two ways we can make this for loop
-                //they are essentially equivalent we just have to decide what makes more sense
-
-                //option 1: variable for active index,  for i in range of ALL variables, if allvars[i ] is active then get that active index, else just add 0 
-
-                //option 2: harder to explain. essentially the same I think
-
                 int active_index = 0;
                 for (int i = 0; i < this.Design.Variables.Count; i++)
                 {
@@ -235,20 +228,6 @@ namespace Stepper
                         Gradient[j].Add(0);
                     }
                 }
-
-
-
-                //for (int i = 0; i < numVars; i++)
-                //{
-                //    double left = ObjectiveData[i][j];
-
-                //    double difference = (Design.Objectives[j] - left) / (FDstep);
-
-                //    if (difference > maxObj) { maxObj = difference; }
-                //    if (difference < minObj) { minObj = difference; }
-
-                //    Gradient[j].Add((double)difference);
-                //}
 
                 //Normalize by max/min difference
                 double maxAbs = double.MinValue;
@@ -286,8 +265,6 @@ namespace Stepper
         #region half steps
         public List<List<double>> GenerateDesignMapHalfStep()
         {
-            //var DifOne = new List<List<double>>();
-            //var DifTwo = new List<List<double>>();
             var DesignMapStepperOne = new List<List<double>>();
             var DesignMapStepperTwo = new List<List<double>>();
             var DesignMapStepperCombined = new List<List<double>>();
@@ -403,19 +380,11 @@ namespace Stepper
             //convert nonExpired list of Active objects to nonEnabled list of Document Objects
 
             List<IGH_DocumentObject> nonEnabled = new List<IGH_DocumentObject>();
-            //List<IGH_DocumentObject> nonExpired = new List<IGH_DocumentObject>();
 
             foreach (IGH_ActiveObject a in this.Disable)
             {
-                //a.ExpireSolution(false);
                 nonEnabled.Add((IGH_DocumentObject)a);
             }
-
-            //foreach (IGH_ActiveObject a in this.Disable)
-            //{
-            //    a.ExpireSolution(false);
-            //    nonExpired.Add((IGH_DocumentObject)a);
-            //}
 
             //Invoke a delegate to solve threading issue
             System.Action run = delegate ()
@@ -444,11 +413,6 @@ namespace Stepper
                             geo.Update();
                         }
 
-                        // this.DownStreamExpire()
-
-                        //doesn't do anything... 
-                        //Grasshopper.Instances.ActiveCanvas.Document.ExpirePreview(false);
-
                         foreach (IGH_ActiveObject a in this.Disable)
                         {
                             a.ExpireSolution(false);
@@ -458,27 +422,11 @@ namespace Stepper
                     }
                     else
                     {
-                        //List<IGH_ActiveObject> meee = Grasshopper.Instances.ActiveCanvas.Document.ActiveObjects();
-
-                        // COMMENTED OUT; Functionality achieved by turning off components instead
-                        //foreach (IGH_ActiveObject a in this.NonExpirables)
-                        //{
-                            //a.ExpireSolution(false);  
-
-                        //}
-
-
                         Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
-                        //Grasshopper.Instances.ActiveCanvas.Document.ScheduleSolution(1);
-
                     }
 
                     this.ObjectiveData.Add(Design.Objectives);
                 }
-
-                //this.DownStreamExpire();
-
-                //Grasshopper.Instances.ActiveCanvas.Document.ExpirePreview(false);
 
                 //Turn back on components and recalculate after final step
                 Grasshopper.Instances.ActiveCanvas.Document.SetEnabledFlags(nonEnabled, true);
@@ -614,8 +562,7 @@ namespace Stepper
                 }
             }
 
-
-
+            #region Commented out code
             //for (int i = 0; i < numVars; i++)
             //{
             //    IVariable var = Design.ActiveVariables[i];
@@ -640,6 +587,7 @@ namespace Stepper
             //            break;
             //    }
             //}
+            #endregion
 
             //Append data to the end of component output lists
             this.Design.UpdateComponentOutputs(Gradient);

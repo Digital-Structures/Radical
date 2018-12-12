@@ -43,7 +43,8 @@ namespace Radical
 
             InitializeComponent();
 
-            this.GraphVM.Window = window; 
+            this.GraphVM.Window = window;
+            this.GraphVM.Graph = Chart;
 
             this.GraphVM.ChartLineVisibility = Visibility.Collapsed;
 
@@ -104,6 +105,13 @@ namespace Radical
         public void UpdateHeightHalfScreen()
         {
             this.GraphVM.UpdateHeightHalfScreen();
+        }
+
+        //forces graph to update when user clicks in stepper multiple times
+        //otherwise all the steps happen at the end and it is confusing
+        public void ForceGraphUpdate()
+        {
+            Chart.Update(true, true);
         }
 
     }

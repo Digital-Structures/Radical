@@ -23,11 +23,12 @@ namespace Radical
         public ChartValues<double> ChartValues { get; set; }
         public int DefaultMaxXAxis { get; set; }
         private int margin = 20;
-        private int space = 5; 
+        private int space = 5;
+        public CartesianChart Graph { get; set; }
 
         public GraphVM(ChartValues<double> scores, string name)
         {
-            ChartValues = scores; 
+            ChartValues = scores;
             _linegraph_name = name;
             _y = "0";
             _graphaxislabelsvisibility = Visibility.Hidden;
@@ -176,6 +177,18 @@ namespace Radical
             GraphGridHeight = (Window.MainGrid.ActualHeight - this.space - (2 * this.margin)) * 0.5;
         }
 
+        //forces graph to update when user clicks in stepper multiple times
+        //otherwise all the steps happen at the end and it is confusing
+        public void ForceGraphUpdate()
+        {
+            Window.Dispatcher.BeginInvoke(
+                       (Action)(() => { Graph.Update(true, true); }));
+
+
+            //System.Windows.Application.Current.Dispatcher.Invoke(
+            //           (Action)(() => { Graph.Update(true, true); }));
+        }
+
         #region Visibility
 
         //GRAPH VISIBILITY
@@ -216,6 +229,8 @@ namespace Radical
                 }
             }
         }
+
+        public object DispatcherHelper { get; private set; }
         #endregion
 
     }

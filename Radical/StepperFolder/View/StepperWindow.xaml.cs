@@ -382,18 +382,33 @@ namespace Stepper
 
                 this.StepperVM.Optimize(dir, GradientData, calculator);
 
+                //Convert nullable bool to bool
+                bool? abs = ((SettingsControl)this.SettingsExpander.Content).DisplayModeButton.IsChecked;
+                bool ModeIsAbsolute = abs.HasValue && abs.Value;
+
                 //Update objective value display from menu
                 for (int i = 0; i < this.Objectives.Count; i++)
                 {
-                    //Convert nullable bool to bool
-                    bool? abs = ((SettingsControl)this.SettingsExpander.Content).DisplayModeButton.IsChecked;
-                    bool ModeIsAbsolute = abs.HasValue && abs.Value;
-
                     if (ModeIsAbsolute)
+                    {
                         Objectives[i].Value = StepperVM.ObjectiveEvolution_Abs[i].Last();
+                    }
                     else
+                    {
                         Objectives[i].Value = StepperVM.ObjectiveEvolution_Norm[i].Last();
+                    }
                 }
+
+                if (ModeIsAbsolute)
+                {
+                    this.Chart_Abs.ForceGraphUpdate();
+                }
+                else
+                {
+                    this.Chart_Norm.ForceGraphUpdate();
+                }
+
+
             }
             else
             {
