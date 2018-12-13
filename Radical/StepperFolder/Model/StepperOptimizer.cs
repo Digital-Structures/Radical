@@ -306,7 +306,7 @@ namespace Stepper
             var DesignMap = GenerateDesignMapHalfStep();
             Iterate(DesignMap);
 
-            var Gradient = new List<List<double>>();
+             var Gradient = new List<List<double>>();
 
             double maxObj = double.MinValue;
             double minObj = double.MaxValue;
@@ -322,7 +322,7 @@ namespace Stepper
                     if (this.Design.Variables[i].IsActive)
                     {
                         double left = ObjectiveData[active_index][j];
-                        double right = ObjectiveData[numVars + i][j];
+                        double right = ObjectiveData[numVars + active_index][j];
 
                         double difference = (right - left) / (FDstep);
 
@@ -347,7 +347,7 @@ namespace Stepper
                 if (Math.Abs(maxObj) > maxAbs) { maxAbs = Math.Abs(maxObj); }
                 if (Math.Abs(minObj) > maxAbs) { maxAbs = Math.Abs(minObj); }
 
-                for (int i = 0; i < this.Design.Variables.Count; i++)
+                for (int i = 0; i < numVars; i++)
                 {
                     if (maxAbs != 0)
                     {
@@ -360,7 +360,7 @@ namespace Stepper
                     vecLength = vecLength + (double)Gradient[j][i] * (double)Gradient[j][i];
                 }
 
-                for (int i = 0; i < this.Design.Variables.Count; i++)
+                for (int i = 0; i < numVars; i++)
                 {
                     if (Gradient[j][i] != 0)
                     {
@@ -490,13 +490,18 @@ namespace Stepper
                 }
             }
 
-            // Randomly pick an isoperformance direction
-            Random rnd = new Random();
             int dir = new int();
-            int testrand = new int();
-            testrand = rnd.Next(numVars - numObjs);
+            dir = 0; //dummy value or else it won't compile
+            if (this.Dir == Direction.Isoperformance)
+            {
+                // Randomly pick an isoperformance direction
+                Random rnd = new Random();
+                int testrand = new int();
+                testrand = rnd.Next(numVars - numObjs);
 
-            dir = testrand;
+                dir = testrand;
+            }
+            
 
             #region commented out code
             // Ensure that direction is "interesting"
