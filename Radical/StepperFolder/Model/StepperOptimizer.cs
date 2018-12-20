@@ -479,21 +479,21 @@ namespace Stepper
             var matrixGrad = MathNet.Numerics.LinearAlgebra.Double.DenseMatrix.OfArray(gradientArray);
             var nullspace = matrixGrad.Kernel();
 
-            // Convert array to List of nullspace vectors
-            if (numVars > numObjs)
-            {
-                for (int i = 0; i < numVars - numObjs; i++)
-                {
-                    IsoPerf.Add(new List<double>());
-                    double[] IsoPerfDir = nullspace[i].ToArray();
-                    IsoPerf[i].AddRange(IsoPerfDir);
-                }
-            }
-
             int dir = new int();
             dir = 0; //dummy value or else it won't compile
             if (this.Dir == Direction.Isoperformance)
             {
+                // Convert array to List of nullspace vectors
+                if (numVars > numObjs)
+                {
+                    for (int i = 0; i < numVars - numObjs; i++)
+                    {
+                        IsoPerf.Add(new List<double>());
+                        double[] IsoPerfDir = nullspace[i].ToArray();
+                        IsoPerf[i].AddRange(IsoPerfDir);
+                    }
+                }
+
                 // Randomly pick an isoperformance direction
                 Random rnd = new Random();
                 int testrand = new int();

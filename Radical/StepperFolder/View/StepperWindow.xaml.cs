@@ -455,15 +455,15 @@ namespace Stepper
             if (step == this.GraphSlider.Maximum)
                 return;
 
-            this.StepperVM.Reset();
+            //this.StepperVM.Reset();
+
+            //Convert nullable bool to bool
+            bool? abs = ((SettingsControl)this.SettingsExpander.Content).DisplayModeButton.IsChecked;
+            bool ModeIsAbsolute = abs.HasValue && abs.Value;
 
             //Update objective value display from menu
             for (int i = 0; i < this.Objectives.Count; i++)
             {
-                //Convert nullable bool to bool
-                bool? abs = ((SettingsControl)this.SettingsExpander.Content).DisplayModeButton.IsChecked;
-                bool ModeIsAbsolute = abs.HasValue && abs.Value;
-
                 if (ModeIsAbsolute)
                     Objectives[i].Value = StepperVM.ObjectiveEvolution_Abs[i][step];
                 else
@@ -477,6 +477,20 @@ namespace Stepper
                 if (value.HasValue)
                     Gradients[i].Value = (double)value;
             }
+
+            this.StepperVM.Reset();
+            this.StepperVM.Reset();
+
+            this.StepperVM.UpdateEvolutionData(new List<List<double>>());
+
+            //if (ModeIsAbsolute)
+            //{
+            //    this.Chart_Abs.ForceGraphUpdate();
+            //}
+            //else
+            //{
+            //    this.Chart_Norm.ForceGraphUpdate();
+            //}
         }
 
         //CLOSE MENU CLICK

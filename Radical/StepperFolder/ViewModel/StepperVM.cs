@@ -359,40 +359,43 @@ namespace Stepper
         //Allow user to return to previous step systems
         public void Reset()
         {
-            var step = this.TrackedStep;           
-
-            int i = 0;
-            foreach(VarVM var in this.Variables)
-            {
-                var.Value = this.VariableEvolution[i][step];
-                i++;
-            }
-
-            foreach (IDesignGeometry geo in this.Design.Geometries)
-            {
-                geo.Update();
-            }
-
             bool finished = false;
+            var step = this.TrackedStep;
 
-            if (this.Design.Geometries.Any())
+            System.Action run = delegate ()
             {
-                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, Grasshopper.Kernel.GH_SolutionMode.Silent);
-                finished = true;
-            }
-            else
-            {
-                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
-                finished = true;
-            }
+                int i = 0;
+                foreach (VarVM var in this.Variables)
+                {
+                    var.Value = this.VariableEvolution[i][step];
+                    i++;
+                }
 
+                foreach (IDesignGeometry geo in this.Design.Geometries)
+                {
+                    geo.Update();
+                }
+
+
+                if (this.Design.Geometries.Any())
+                {
+                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, GH_SolutionMode.Default);
+                    finished = true;
+                }
+                else
+                {
+                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, GH_SolutionMode.Default);
+                    finished = true;
+                }
+
+                //this.Design.UpdateComponentOutputs(new List<List<double>>());
+            };
+            Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
             while (!finished)
             {
-
             }
 
-            this.UpdateEvolutionData(new List<List<double>>());
-            //this.Design.UpdateComponentOutputs(new List<List<double>>());
+            //this.UpdateEvolutionData(new List<List<double>>());
         }
 
         public bool IsoperformancePossible()
