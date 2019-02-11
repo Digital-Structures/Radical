@@ -367,7 +367,9 @@ namespace Stepper
                 int i = 0;
                 foreach (VarVM var in this.Variables)
                 {
-                    var.Value = this.VariableEvolution[i][step];
+                    //var.Value = this.VariableEvolution[i][step];
+
+                    this.Variables[i].Value = this.VariableEvolution[i][step];
                     i++;
                 }
 

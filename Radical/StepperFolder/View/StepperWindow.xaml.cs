@@ -426,7 +426,9 @@ namespace Stepper
             int i = 0;
             foreach (DataControl data in this.StepVars)
             {
-                data.Value = this.StepperVM.VariableEvolution[i][step];
+                this.StepVars[i].Value = this.StepperVM.VariableEvolution[i][step];
+                //this should be equivalent to the line above
+                //data.Value = this.StepperVM.VariableEvolution[i][step];
                 i++;
             }
 
@@ -437,10 +439,15 @@ namespace Stepper
                 bool? abs = ((SettingsControl)this.SettingsExpander.Content).DisplayModeButton.IsChecked;
                 bool ModeIsAbsolute = abs.HasValue && abs.Value;
 
-                if (ModeIsAbsolute)
-                    data.Value = StepperVM.ObjectiveEvolution_Abs[i][step];
+                if (ModeIsAbsolute) {
+                    this.StepVars[i].Value = StepperVM.ObjectiveEvolution_Abs[i][step];
+                    //data.Value = StepperVM.ObjectiveEvolution_Abs[i][step];
+                }
                 else
-                    data.Value = StepperVM.ObjectiveEvolution_Norm[i][step];
+                {
+                    this.StepVars[i].Value = StepperVM.ObjectiveEvolution_Abs[i][step];
+                    //data.Value = StepperVM.ObjectiveEvolution_Norm[i][step];
+                }
 
                 i++;
             }
