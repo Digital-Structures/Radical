@@ -87,10 +87,12 @@ namespace Radical
 
         public void SetBounds()
         {
-            Solver.SetLowerBounds(Design.Variables.Select(x => x.Min).ToArray());
-            Solver.SetUpperBounds(Design.Variables.Select(x => x.Max).ToArray());
+            Solver.SetLowerBounds(Design.ActiveVariables.Select(x => x.Min).ToArray()); // should we do it only for active variables?
+            Solver.SetUpperBounds(Design.ActiveVariables.Select(x => x.Max).ToArray());
         }
 
+
+        // NOT USED (Obsolete?)
         public void FindWhichOnesToDisable()
         {
             //find all active objects on the board
