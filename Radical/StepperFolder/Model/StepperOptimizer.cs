@@ -381,9 +381,13 @@ namespace Stepper
 
             List<IGH_DocumentObject> nonEnabled = new List<IGH_DocumentObject>();
 
+            // Should and could be done further up (saves a search) 
             foreach (IGH_ActiveObject a in this.Disable)
             {
-                nonEnabled.Add((IGH_DocumentObject)a);
+                if (!Instances.ActiveCanvas.Document.DisabledObjects().Contains(a))
+                {
+                    nonEnabled.Add((IGH_DocumentObject)a);
+                }                
             }
 
             //Invoke a delegate to solve threading issue
