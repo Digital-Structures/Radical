@@ -262,11 +262,11 @@ namespace Radical
             }
             catch
             {
-
+                //here??
                 bool final_refresh_done = false;
                 System.Action lastrun = delegate ()
                 {
-                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
+                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false);
                     final_refresh_done = true;
                 };
                 Rhino.RhinoApp.MainApplicationWindow.Invoke(lastrun);
@@ -303,6 +303,13 @@ namespace Radical
                     if (!(c.CurrentValue > c.LimitValue))
                     {
                         return false;
+                    }
+                }
+                else if (c.MyType.Equals(Constraint.ConstraintType.equalto))
+                {
+                    if(!(c.CurrentValue == c.LimitValue))
+                    {
+                        return false; 
                     }
                 }
             }
