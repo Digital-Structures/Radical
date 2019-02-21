@@ -11,6 +11,7 @@ using LiveCharts.Helpers;
 using LiveCharts.Wpf;
 using DSOptimization;
 using Grasshopper.Kernel;
+using Grasshopper;
 
 namespace Radical
 {
@@ -33,8 +34,8 @@ namespace Radical
         public Boolean SolutionInProcess;
 
         //array of objects that should not be expired until the final round
-        private List<IGH_ActiveObject> Disable;
-        private List<IGH_ActiveObject> Expire;
+        private List<IGH_DocumentObject> Disable = new List<IGH_DocumentObject>();
+        private List<IGH_ActiveObject> SetExpiredFalse = new List<IGH_ActiveObject>();
 
         //static bool verbose = true;
         public double? MinValue; //init objective
@@ -54,6 +55,8 @@ namespace Radical
 
             StoredMainValues = new ChartValues<double>();
             StoredConstraintValues = new ChartValues<ChartValues<double>>();
+
+            FindWhichOnesToDisable();
 
             if (Design.Constraints != null)
             {
@@ -92,26 +95,30 @@ namespace Radical
         }
 
 
-        // NOT USED (Obsolete?)
+        // TO DO
+        //Implement
         public void FindWhichOnesToDisable()
         {
             //find all active objects on the board
             //find downstream of every object
-            //if downstream does not contain DS Opt then do not expire that component 
-            //In the example diagram on the website this wouldnt exactly work but we are assumming it would for our cases
+            //if downstream contains DS Opt then do not expire that component 
 
             List<IGH_ActiveObject> disable = new List<IGH_ActiveObject>();
 
-            List<IGH_ActiveObject> active = Grasshopper.Instances.ActiveCanvas.Document.ActiveObjects();
-            foreach (IGH_ActiveObject a in active)
+            //if an active object does not DSOpt in the downstream, then we can consider disabling it
+            foreach (IGH_ActiveObject a in Grasshopper.Instances.ActiveCanvas.Document.ActiveObjects())
             {
-                List<IGH_ActiveObject> downstream = Grasshopper.Instances.ActiveCanvas.Document.FindAllDownstreamObjects(a);
-                if (!downstream.Contains(this.Design.MyComponent))
+                //check if the object is not already expired
+                if (!Instances.ActiveCanvas.Document.DisabledObjects().Contains(a))
                 {
-                    // Make sure it isn't the DSOpt component itself
-                    if (a != this.Design.MyComponent)
+                    List<IGH_ActiveObject> downstream = Grasshopper.Instances.ActiveCanvas.Document.FindAllDownstreamObjects(a);
+                    if (!downstream.Contains(this.Design.MyComponent))
                     {
-                        disable.Add(a);
+                        // Make sure it isn't the DSOpt component itself
+                        if (a != this.Design.MyComponent)
+                        {
+                            disable.Add(a);
+                        }
                     }
                 }
             }
@@ -121,15 +128,31 @@ namespace Radical
             List<IGH_ActiveObject> actually_disable = new List<IGH_ActiveObject>();
             List<IGH_ActiveObject> expire = new List<IGH_ActiveObject>();
 
-            IList<IGH_Param> sliders = this.Design.MyComponent.NumObjects;
-            List<List<IGH_ActiveObject>> sliders_downstream = new List<List<IGH_ActiveObject>>();
 
-            foreach (IGH_Param s in sliders)
+            //Now we consider what items are downstream of our input parameters
+            List<List<IGH_ActiveObject>> sliders_downstream = new List<List<IGH_ActiveObject>>();
+            List<List<IGH_ActiveObject>> curves_downstream = new List<List<IGH_ActiveObject>>();
+            List<List<IGH_ActiveObject>> surfaces_downstream = new List<List<IGH_ActiveObject>>();
+
+            foreach (IGH_Param s in this.Design.MyComponent.NumObjects)
             {
                 List<IGH_ActiveObject> downstream = Grasshopper.Instances.ActiveCanvas.Document.FindAllDownstreamObjects((IGH_ActiveObject)s);
                 sliders_downstream.Add(downstream);
             }
+            foreach (IGH_Param c in this.Design.MyComponent.CrvObjects)
+            {
+                List<IGH_ActiveObject> downstream = Grasshopper.Instances.ActiveCanvas.Document.FindAllDownstreamObjects((IGH_ActiveObject)c);
+                curves_downstream.Add(downstream);
+            }
+            foreach (IGH_Param s in this.Design.MyComponent.SrfObjects)
+            {
+                List<IGH_ActiveObject> downstream = Grasshopper.Instances.ActiveCanvas.Document.FindAllDownstreamObjects((IGH_ActiveObject)s);
+                surfaces_downstream.Add(downstream);
+            }
 
+
+            //here we attempt to minimize the number of objects that we are disabling and which ones we can simply set the expire flag to false
+            //if an object is downstream of an active parameter then we have to disable it so that it doesn't recompute 
             foreach (IGH_ActiveObject d in disable)
             {
                 Boolean found = false;
@@ -141,13 +164,39 @@ namespace Radical
                         break;
                     }
                 }
-
-                if (found) { actually_disable.Add(d); }
-                else { expire.Add(d); }
+                foreach (List<IGH_ActiveObject> dstream in curves_downstream)
+                {
+                    if (dstream.Contains(d))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                foreach (List<IGH_ActiveObject> dstream in surfaces_downstream)
+                {
+                    if (dstream.Contains(d))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found)
+                {
+                    actually_disable.Add(d);
+                }
+                else
+                {
+                    expire.Add(d);
+                }
             }
 
-            Disable = actually_disable;
-            Expire = expire;
+
+            //convert nonExpired list of Active objects to nonEnabled list of Document Objects
+            foreach (IGH_ActiveObject a in actually_disable)
+            {
+                Disable.Add((IGH_DocumentObject)a);
+            }
+            SetExpiredFalse = expire;
         }
 
         public double Objective(double[] x)
@@ -160,7 +209,14 @@ namespace Radical
 
             System.Action run = delegate ()
             {
-                //Grasshopper.Instances.ActiveCanvas.Enabled = false;
+                //Turn off all components not needed for gradient calculation and stepping 
+                Grasshopper.Instances.ActiveCanvas.Document.SetEnabledFlags(Disable, false);
+
+                //set other inactive objects expired flags to false
+                foreach (IGH_ActiveObject a in this.SetExpiredFalse)
+                {
+                    a.ExpireSolution(false);
+                }
 
                 for (int i = 0; i < nVars; i++)
                 {
@@ -173,9 +229,16 @@ namespace Radical
                     geo.Update();
                 }
 
-                this.SolutionInProcess = true;
-                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, refresh);
+                if (this.Design.Geometries.Any())
+                {
+                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, refresh);
+                }
+                else
+                {
+                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, refresh);
+                }
 
+                this.SolutionInProcess = true;
                 finished = true;
             };
             Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
@@ -262,10 +325,11 @@ namespace Radical
             }
             catch
             {
-                //here??
                 bool final_refresh_done = false;
                 System.Action lastrun = delegate ()
                 {
+                    //turn disabled guys back on 
+                    Grasshopper.Instances.ActiveCanvas.Document.SetEnabledFlags(Disable, true);
                     Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false);
                     final_refresh_done = true;
                 };
@@ -334,6 +398,21 @@ namespace Radical
             {
                 EndSilentMode();
             }
+
+            bool all_enabled = false; 
+            System.Action run = delegate ()
+            {
+                //turn disabled guys back on 
+                Grasshopper.Instances.ActiveCanvas.Document.SetEnabledFlags(Disable, true);
+                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Default);
+                all_enabled = true;
+            };
+            Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
+            while (!all_enabled)
+            {
+            }
+
+
             this.RadicalWindow.OptimizationFinished();
 
             return result;

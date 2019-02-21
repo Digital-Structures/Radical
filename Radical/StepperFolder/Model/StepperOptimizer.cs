@@ -34,7 +34,7 @@ namespace Stepper
         private List<List<double>> IsoPerf;
 
         //array of objects that should not be expired until the final round
-        private List<IGH_ActiveObject> Disable;
+        private List<IGH_DocumentObject> Disable = new List<IGH_DocumentObject>();
         private List<IGH_ActiveObject> SetExpiredFalse;
 
         //CONSTRUCTOR for Gradient Calculation only
@@ -169,8 +169,11 @@ namespace Stepper
                 }
             }
 
-
-            Disable = actually_disable;
+            //convert nonExpired list of Active objects to nonEnabled list of Document Objects
+            foreach (IGH_ActiveObject a in actually_disable)
+            {
+                Disable.Add((IGH_DocumentObject)a);
+            }
             SetExpiredFalse = expire;
         }
 
@@ -412,20 +415,14 @@ namespace Stepper
         {
             bool finished = false;
 
-            //convert nonExpired list of Active objects to nonEnabled list of Document Objects
-
-            List<IGH_DocumentObject> IGH_Disable = new List<IGH_DocumentObject>();
-            foreach (IGH_ActiveObject a in this.Disable)
-            {
-                IGH_Disable.Add((IGH_DocumentObject)a);
-            }
-
             //Invoke a delegate to solve threading issue
             System.Action run = delegate ()
             {
 
                 //Turn off all components not needed for gradient calculation and stepping 
-                Grasshopper.Instances.ActiveCanvas.Document.SetEnabledFlags(IGH_Disable, false);
+                Grasshopper.Instances.ActiveCanvas.Document.SetEnabledFlags(Disable, false);
+
+                //set other inactive objects expired flags to false
                 foreach (IGH_ActiveObject a in this.SetExpiredFalse)
                 {
                     a.ExpireSolution(false);
@@ -446,24 +443,14 @@ namespace Stepper
                         {
                             geo.Update();
                         }
-
-                        foreach (IGH_ActiveObject a in this.Disable)
-                        {
-                            a.ExpireSolution(false);
-                        }
-                        Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
-
-                    }
-                    else
-                    {
-                        Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
                     }
 
+                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
                     this.ObjectiveData.Add(Design.Objectives);
                 }
 
                 //Turn back on components and recalculate after final step
-                Grasshopper.Instances.ActiveCanvas.Document.SetEnabledFlags(IGH_Disable, true);
+                Grasshopper.Instances.ActiveCanvas.Document.SetEnabledFlags(Disable, true);
                 Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Default);
 
                 finished = true;
