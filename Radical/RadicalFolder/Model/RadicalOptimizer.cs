@@ -12,6 +12,7 @@ using LiveCharts.Wpf;
 using DSOptimization;
 using Grasshopper.Kernel;
 using Grasshopper;
+using System.Diagnostics;
 
 namespace Radical
 {
@@ -40,6 +41,8 @@ namespace Radical
         //static bool verbose = true;
         public double? MinValue; //init objective
 
+        public List<Boolean> Recomputed;
+
         // CONSTRUCTOR FOR RADICAL
         public RadicalOptimizer(Design design, RadicalWindow radwindow)
         {
@@ -58,12 +61,16 @@ namespace Radical
 
             FindWhichOnesToDisable();
 
+            //this.Recomputed.Add(false);
+
             if (Design.Constraints != null)
             {
                 foreach (Constraint c in Design.Constraints)
                 {
                     if (c.IsActive)
                     {
+                        //this.Recomputed.Add(false);
+
                         StoredConstraintValues.Add(new ChartValues<double>());
                         if (c.MyType == Constraint.ConstraintType.lessthan)
                             Solver.AddLessOrEqualZeroConstraint((x) => constraint(x, c));
@@ -95,8 +102,6 @@ namespace Radical
         }
 
 
-        // TO DO
-        //Implement
         public void FindWhichOnesToDisable()
         {
             //find all active objects on the board
@@ -201,6 +206,8 @@ namespace Radical
 
         public double Objective(double[] x)
         {
+            Debug.WriteLine("Obj");
+            x.ToList().ForEach(i => Debug.WriteLine(i.ToString()));
             bool finished = false;
 
             Grasshopper.Kernel.GH_SolutionMode refresh = Grasshopper.Kernel.GH_SolutionMode.Silent;
@@ -252,6 +259,7 @@ namespace Radical
             double objective = Design.Objectives[0];
 
             //When a new global objective minimum is reached all variable values at that point are recorded
+            //if constraints are computed after the objective then this might be why our return to optimal solution guy does not work ...
             if (objective < this.RadicalVM.SmallestObjectiveValue && AllConstraintsSatisfied())
             {
                 this.RadicalVM.SmallestObjectiveValue = objective; 
@@ -449,19 +457,6 @@ namespace Radical
 
         public double constraint(double[] x, Constraint c)
         {
-            for (int i = 0; i < nVars; i++)
-            {
-                IVariable var = Design.Variables[i];
-                var.UpdateValue(x[i]);
-            }
-            foreach (IDesignGeometry vargeo in Design.Geometries)
-            {
-                vargeo.Update();
-            }
-
-            this.SolutionInProcess = true;
-            Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
-            this.SolutionInProcess = false;
 
             return c.CurrentValue - c.LimitValue;
         }
