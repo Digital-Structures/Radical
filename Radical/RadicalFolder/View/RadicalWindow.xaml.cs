@@ -580,7 +580,7 @@ namespace Radical
             System.Action run = delegate ()
             {
                 Grasshopper.Kernel.GH_SolutionMode refresh = Grasshopper.Kernel.GH_SolutionMode.Default;
-                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true, refresh);
+                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, refresh);
                 finished = true;
             };
             Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
