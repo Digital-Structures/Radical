@@ -32,7 +32,7 @@ namespace Radical
         public ChartValues<double> StoredMainValues;
         public ChartValues<ChartValues<double>> StoredConstraintValues;
 
-        public Boolean SolutionInProcess;
+        //public Boolean SolutionInProcess;
 
         //array of objects that should not be expired until the final round
         private List<IGH_DocumentObject> Disable = new List<IGH_DocumentObject>();
@@ -51,7 +51,7 @@ namespace Radical
             this.RadicalVM = this.RadicalWindow.RadicalVM;
             this.MainAlg = this.RadicalVM.PrimaryAlgorithm;
 
-            this.SolutionInProcess = false;
+            //this.SolutionInProcess = false;
             //this.SecondaryAlg = NLoptAlgorithm.LN_COBYLA;
             BuildWrapper();
             SetBounds();
@@ -245,7 +245,7 @@ namespace Radical
                     Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, refresh);
                 }
 
-                this.SolutionInProcess = true;
+               // this.SolutionInProcess = true;
                 finished = true;
             };
             Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
@@ -317,18 +317,18 @@ namespace Radical
                 }
             }
 
-            this.SolutionInProcess = false;
+            //this.SolutionInProcess = false;
 
             try
             {
-                while (!finished)
-                {
+              //  while (!finished)
+               // {
 
-                }
-                while (this.SolutionInProcess)
-                {
-
-                }
+              //  }
+                //while (this.SolutionInProcess)
+                //{
+//
+               // }
                 this.RadicalWindow.source.Token.ThrowIfCancellationRequested();
             }
             catch
@@ -436,7 +436,7 @@ namespace Radical
             this.RadicalVM.UpdateCurrentScoreDisplay();
             System.Action run = delegate ()
             {
-                this.SolutionInProcess = true;
+                //this.SolutionInProcess = true;
                 Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
             };
             Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
@@ -457,7 +457,6 @@ namespace Radical
 
         public double constraint(double[] x, Constraint c)
         {
-
             return c.CurrentValue - c.LimitValue;
         }
 

@@ -1,33 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Windows.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.ComponentModel;
-using System.Threading;
-using System.Windows.Markup;
-using System.Globalization;
-using System.Reflection;
-using Radical;
-using LiveCharts;
-using LiveCharts.Wpf;
-using MaterialDesignThemes;
 using DSOptimization;
-using System.Security;
-using System.Security.Permissions;
-using System.Security.AccessControl;
-using System.IO;
-using System.Security.Principal;
 
 namespace Stepper
 {
@@ -489,15 +470,6 @@ namespace Stepper
             this.StepperVM.Reset();
 
             this.StepperVM.UpdateEvolutionData(new List<List<double>>());
-
-            //if (ModeIsAbsolute)
-            //{
-            //    this.Chart_Abs.ForceGraphUpdate();
-            //}
-            //else
-            //{
-            //    this.Chart_Norm.ForceGraphUpdate();
-            //}
         }
 
         //CLOSE MENU CLICK
@@ -582,20 +554,6 @@ namespace Stepper
 
             this.StepperVM.ExportCSV_Log(filepath);
             this.StepperVM.ExportCSV_Raw(filepath);
-
-            //TO BE PUT BACK IN WHEN WE FIGURE OUT THE OTHER ISSUE
-            //try
-            //{
-            //    //try saving the files
-            //    //might not be possible due to access restrictions
-            //    this.StepperVM.ExportCSV_Log(filepath);
-            //    this.StepperVM.ExportCSV_Raw(filepath);
-            //}
-            //catch(Exception e)
-            //{
-            //    Exception what = e; 
-            //    this.InvalidPathWindow.IsOpen = true;
-            //}
         }
 
         private void Filepath_TextChanged(object sender, TextChangedEventArgs e)
@@ -615,8 +573,6 @@ namespace Stepper
                 }
             }
         }
-
-        
 
         //Control which expanders are open
         private void ObjectiveData_Expanded(object sender, RoutedEventArgs e)
