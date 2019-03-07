@@ -27,6 +27,7 @@ namespace Radical
         //EVOLUTIONS for all objectives and constraints 
         public ChartValues<double> ObjectiveEvolution { get; set; }
         public ChartValues<ChartValues<double>> ConstraintsEvolution { get; set; }
+        public List<List<double>> NumVarEvolution { get; set; }
 
         public double OriginalObjectiveValue { get; set; }
         public double SmallestObjectiveValue { get; set; }
@@ -61,6 +62,13 @@ namespace Radical
                 ChartValues<double> cv = new ChartValues<double>();
                 cv.Add(c.CurrentValue);
                 this.ConstraintsEvolution.Add(cv);
+            }
+            this.NumVarEvolution = new List<List<double>>();
+            foreach(IVariable v in this.Design.ActiveVariables)
+            {
+                List<double> list_var = new List<double>();
+                list_var.Add(v.CurrentValue);
+                this.NumVarEvolution.Add(list_var);
             }
 
             this.Graphs = new Dictionary<string, List<GraphVM>>();
@@ -522,5 +530,137 @@ namespace Radical
         };
         #endregion
 
+        #region File Writing
+
+        private Visibility _filepatherrorvisibility;
+        public Visibility FilePathErrorVisibility
+        {
+            get { return this._filepatherrorvisibility; }
+            set { CheckPropertyChanged<Visibility>("FilePathErrorVisibility", ref _filepatherrorvisibility, ref value); }
+        }
+
+        //EXPORT CSV LOG
+        //Formats and exports all data for readability
+        public void ExportCSV_Log(string filename)
+        {
+            var ObjData = this.ObjectiveEvolution;
+            var ConData = this.ConstraintsEvolution;
+            var NumVarData = this.NumVarEvolution;
+
+            var numObjs = ObjData.Count;
+            var numCons = ConData.Count;
+            var numVars = NumVarData.Count;
+
+            string output = "";
+
+            //There's a lot of data to be exported
+            //Construct some headers in the csv so things make sense in excel
+            //These rows can always be deleted in post-processing
+            #region Construct Headers
+
+            //First row has Objective, Constraints, and Variable headers
+            string line = "Objectives,";
+
+            line += ","; //extra break
+
+
+            if(numCons != 0)
+            {
+                line += "Constraints,";
+                for (int i = 0; i < numCons; i++)
+                {
+                    line += ",";
+                }
+            }
+
+            line += ","; //extra break
+
+            line += "Variables,";
+            for (int i = 0; i < numVars; i++)
+            {
+                line += ",";
+            }
+
+            output += line + "\r\n";
+
+            //Second row has name headers
+            line = "";
+            line += "Objective,"; //we shall have it a generic name
+
+            line += ",";
+            foreach (ConstVM c in this.Constraints)
+            {
+                line += c.Name + ",";
+            }
+
+
+            line += ",";
+            foreach (VarVM var in this.NumVars)
+            {
+                line += var.Name + ",";
+            }
+
+            output += line + "\r\n";
+            #endregion
+
+            #region Add Data
+            //should be number of iterations
+            line = "";
+            for (int i = 0; i < this.ObjectiveEvolution.Count; i++)
+            {
+                line = "";
+                line += this.ObjectiveEvolution[i] + ",";
+                line += ",";
+                for (int j = 0; j < numCons; j++)
+                {
+                    line += this.ConstraintsEvolution[j][i] + ",";
+                }
+                line += ",";
+                for (int j = 0; j < numVars; j++)
+                {
+                    line += this.NumVarEvolution[j][i] + ",";
+                }
+                output += line + "\r\n";
+            }
+            #endregion 
+
+            System.IO.StreamWriter file = new System.IO.StreamWriter(filename + "_log.csv");
+            file.Write(output);
+            file.Close();
+        }
+
+        //EXPORT CSV RAW
+        //Formats and exports only variable and objective data for easy processing
+        public void ExportCSV_Raw(string filename)
+        {
+            var ObjData = this.ObjectiveEvolution;
+            var VarData = this.NumVarEvolution;
+
+            var numObjs = ObjData.Count;
+            var numVars = VarData.Count;
+
+            string output = "";
+
+            #region Add Data
+            string line;
+            for (int i = 0; i < this.ObjectiveEvolution.Count; i++)
+            {
+                line = "";
+                for (int j = 0; j < numVars; j++)
+                {
+                    line += this.NumVarEvolution[j][i] + ",";
+                }
+
+                line += this.ObjectiveEvolution[i] + ",";
+
+                output += line + "\r\n";
+            }
+            #endregion
+
+            System.IO.StreamWriter file = new System.IO.StreamWriter(@"" + filename + "_raw.csv");
+            file.Write(output);
+            file.Close();
+        }
+        #endregion
     }
 }

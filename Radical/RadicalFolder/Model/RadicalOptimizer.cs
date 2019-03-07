@@ -280,6 +280,12 @@ namespace Radical
                 }
             }
 
+            //store evolution of number variables 
+            for(int i = 0; i < this.RadicalVM.NumVarEvolution.Count; i++)
+            {
+                this.RadicalVM.NumVarEvolution[i].Add(Design.ActiveVariables[i].CurrentValue);
+            }
+
             //If RefreshMode == Silent then values are stored in a local list so that the graph is not updated
             if (this.RadicalVM.Mode == RefreshMode.Silent)
             {
@@ -314,25 +320,14 @@ namespace Radical
                     this.RadicalVM.ConstraintsEvolution[i].Add(score);
                 }
 
-
                 foreach(GraphVM gvm in this.RadicalVM.ActiveGraphs)
                 {
                     gvm.ForceGraphUpdate();
                 }
             }
 
-            //this.SolutionInProcess = false;
-
             try
             {
-              //  while (!finished)
-               // {
-
-              //  }
-                //while (this.SolutionInProcess)
-                //{
-//
-               // }
                 this.RadicalWindow.source.Token.ThrowIfCancellationRequested();
             }
             catch

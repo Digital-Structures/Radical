@@ -587,25 +587,53 @@ namespace Radical
             while (!finished) { }
         }
 
-        #region Unimplemented
-        private void OpenOptSettings(object sender, RoutedEventArgs e)
+        #region Export
+        //EXPORT BUTTON
+        //Launches dialog prompting user for a file path
+        private void ExportButton_Click(object sender, RoutedEventArgs e)
         {
+            this.ExportCSVWindow.IsOpen = true;
         }
 
-        private void Export_SVG(object sender, RoutedEventArgs e)
+        //EXPORT to .CSV
+        //Exports all ObjectiveEvolution, VariableEvolution, and GradientEvolution data
+        private void ExportCSV(object sender, MaterialDesignThemes.Wpf.DialogClosingEventArgs eventArgs)
         {
+            //CANCEL
+            //Don't export file if user clicked cancel
+            if (!Equals(eventArgs.Parameter, true)) return;
+
+            var CSVFilepath = this.Filepath.Text;
+            var CSVFilename = this.Filename.Text;
+            if (string.IsNullOrWhiteSpace(CSVFilename))
+            {
+                CSVFilename = "Untitled";
+            }
+
+            String timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+
+            String filepath = @"" + CSVFilepath + "/" + CSVFilename + "_" + timestamp;
+
+            this.RadicalVM.ExportCSV_Log(filepath);
+            this.RadicalVM.ExportCSV_Raw(filepath);
         }
 
-        private void Export_CSV(object sender, RoutedEventArgs e)
+        private void Filepath_TextChanged(object sender, TextChangedEventArgs e)
         {
-        }
+            var CSVFilepath = this.Filepath.Text;
+            String filepath = @"" + CSVFilepath;
 
-        void worker_DoWork(object sender, DoWorkEventArgs e)
-        {
-        }
-
-        void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
+            if (this.ExportCSVWindow.IsOpen)
+            {
+                if (System.IO.Directory.Exists(filepath))
+                {
+                    this.ExportWindowButton.IsEnabled = true;
+                }
+                else
+                {
+                    this.ExportWindowButton.IsEnabled = false;
+                }
+            }
         }
         #endregion
     }
