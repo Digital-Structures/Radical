@@ -76,6 +76,7 @@ namespace Radical
             this.OptRunning = false;
             this.OptRunning = false;
             this._advancedOptions = false;
+            this._disablingAllowed = true; 
 
             this.OriginalObjectiveValue = this.Design.Objectives.ElementAt(0);
             this.SmallestObjectiveValue = this.Design.Objectives.ElementAt(0);
@@ -427,6 +428,19 @@ namespace Radical
                 if (CheckPropertyChanged<bool>("AdvancedOptions", ref _advancedOptions, ref value))
                 {
                     FirePropertyChanged("AvailableAlgs");
+                }
+            }
+        }
+
+        //DISABLING ALLOWED
+        private bool _disablingAllowed;
+        public bool DisablingAllowed
+        {
+            get { return _disablingAllowed; }
+            set
+            {
+                if (CheckPropertyChanged<bool>("DisablingAllowed", ref _disablingAllowed, ref value))
+                {
                 }
             }
         }

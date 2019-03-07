@@ -107,17 +107,29 @@
         </DockPanel>
         <DockPanel Grid.Row="5">
             <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" FontSize="13" Margin="0,0,5,0">
+                <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" FontSize="13" Margin="0,0,5,0">
                     Show Advanced Algorithms
                 </TextBlock>
                 <CheckBox IsChecked="{Binding AdvancedOptions, Mode=TwoWay}" HorizontalAlignment="Right"
                           Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource SecondaryAccentForegroundBrush}"
-                          Grid.Column="1">
+                          Grid.Column="1" Grid.Row="0">
+                </CheckBox>
+
+                <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" FontSize="13" Margin="0,0,5,0">
+                    Allow Component Disabling
+                </TextBlock>
+                <CheckBox IsChecked="{Binding DisablingAllowed, Mode=TwoWay}" HorizontalAlignment="Right"
+                          Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource SecondaryAccentForegroundBrush}"
+                          Grid.Column="1" Grid.Row="1">
                 </CheckBox>
             </Grid>
         </DockPanel>

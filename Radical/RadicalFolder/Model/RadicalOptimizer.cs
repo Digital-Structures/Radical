@@ -43,6 +43,8 @@ namespace Radical
 
         public List<Boolean> Recomputed;
 
+        public bool DisablingAllowed; //if user want us to disable components that are not necessary in recomputation
+
         // CONSTRUCTOR FOR RADICAL
         public RadicalOptimizer(Design design, RadicalWindow radwindow)
         {
@@ -50,8 +52,8 @@ namespace Radical
             this.RadicalWindow = radwindow;
             this.RadicalVM = this.RadicalWindow.RadicalVM;
             this.MainAlg = this.RadicalVM.PrimaryAlgorithm;
+            this.DisablingAllowed = this.RadicalVM.DisablingAllowed;
 
-            //this.SolutionInProcess = false;
             //this.SecondaryAlg = NLoptAlgorithm.LN_COBYLA;
             BuildWrapper();
             SetBounds();
@@ -59,9 +61,10 @@ namespace Radical
             StoredMainValues = new ChartValues<double>();
             StoredConstraintValues = new ChartValues<ChartValues<double>>();
 
-            FindWhichOnesToDisable();
-
-            //this.Recomputed.Add(false);
+            if (this.DisablingAllowed)
+            {
+                FindWhichOnesToDisable();
+            }
 
             if (Design.Constraints != null)
             {
@@ -69,8 +72,6 @@ namespace Radical
                 {
                     if (c.IsActive)
                     {
-                        //this.Recomputed.Add(false);
-
                         StoredConstraintValues.Add(new ChartValues<double>());
                         if (c.MyType == Constraint.ConstraintType.lessthan)
                             Solver.AddLessOrEqualZeroConstraint((x) => constraint(x, c));
@@ -129,12 +130,12 @@ namespace Radical
             }
 
             //NEXT PART
+            //Now we consider what items are downstream of our input parameters
+            //If they are downstream our input parameters then we have disable them or else they will automatically recompute
 
             List<IGH_ActiveObject> actually_disable = new List<IGH_ActiveObject>();
             List<IGH_ActiveObject> expire = new List<IGH_ActiveObject>();
 
-
-            //Now we consider what items are downstream of our input parameters
             List<List<IGH_ActiveObject>> sliders_downstream = new List<List<IGH_ActiveObject>>();
             List<List<IGH_ActiveObject>> curves_downstream = new List<List<IGH_ActiveObject>>();
             List<List<IGH_ActiveObject>> surfaces_downstream = new List<List<IGH_ActiveObject>>();
@@ -195,12 +196,15 @@ namespace Radical
                 }
             }
 
-
-            //convert nonExpired list of Active objects to nonEnabled list of Document Objects
-            foreach (IGH_ActiveObject a in actually_disable)
+            if (this.RadicalVM.DisablingAllowed)
             {
-                Disable.Add((IGH_DocumentObject)a);
+                //convert nonExpired list of Active objects to nonEnabled list of Document Objects
+                foreach (IGH_ActiveObject a in actually_disable)
+                {
+                    Disable.Add((IGH_DocumentObject)a);
+                }
             }
+        
             SetExpiredFalse = expire;
         }
 
