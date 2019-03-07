@@ -330,7 +330,7 @@ namespace Stepper
             string name = button.Name;
 
             //Always calculate and store gradient
-            StepperOptimizer calculator = new StepperOptimizer(this.StepperVM.Design, this.StepperVM.FDStepSize);
+            StepperOptimizer calculator = new StepperOptimizer(this.StepperVM.Design, this.StepperVM.FDStepSize, this.StepperVM.DisablingAllowed);
 
             //return;
 

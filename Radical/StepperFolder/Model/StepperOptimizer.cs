@@ -37,8 +37,10 @@ namespace Stepper
         private List<IGH_DocumentObject> Disable = new List<IGH_DocumentObject>();
         private List<IGH_ActiveObject> SetExpiredFalse;
 
+        private bool DisablingAllowed;
+
         //CONSTRUCTOR for Gradient Calculation only
-        public StepperOptimizer(Design design, double FDStepSize)
+        public StepperOptimizer(Design design, double FDStepSize, bool disablingAllowed)
         {
             this.Design = design;
 
@@ -47,9 +49,11 @@ namespace Stepper
 
             ObjectiveData = new List<List<double>>();
             IsoPerf = new List<List<double>>();
-            FindWhichOnesToDisable();
-            this.FDstep = FDStepSize;
 
+            this.DisablingAllowed = disablingAllowed;
+            FindWhichOnesToDisable();
+
+            this.FDstep = FDStepSize;
         }
 
         public void ConvertFromCalculatorToOptimizer(int objIndex, Direction dir, double stepSize)
@@ -169,10 +173,13 @@ namespace Stepper
                 }
             }
 
-            //convert nonExpired list of Active objects to nonEnabled list of Document Objects
-            foreach (IGH_ActiveObject a in actually_disable)
+            if (this.DisablingAllowed)
             {
-                Disable.Add((IGH_DocumentObject)a);
+                //convert nonExpired list of Active objects to nonEnabled list of Document Objects
+                foreach (IGH_ActiveObject a in actually_disable)
+                {
+                    Disable.Add((IGH_DocumentObject)a);
+                }
             }
             SetExpiredFalse = expire;
         }

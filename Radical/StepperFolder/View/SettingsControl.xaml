@@ -13,6 +13,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Margin="0,5">
@@ -72,6 +73,21 @@
                           IsChecked="False" Checked="ToggleButton_Checked" Unchecked="ToggleButton_Unchecked" Padding="0,0,0,12"></ToggleButton>
 
             <TextBlock Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10" Padding="0,0,0,7">Absolute</TextBlock>
+        
+        </Grid>
+
+        <Grid Grid.Row="4"  Margin="30,7,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,3,0">
+                    Allow Component Disabling
+            </TextBlock>
+            <CheckBox IsChecked="{Binding DisablingAllowed, Mode=TwoWay}" HorizontalAlignment="Left"
+                          Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource SecondaryAccentForegroundBrush}"
+                          Grid.Column="0">
+            </CheckBox>
         </Grid>
 
     </Grid>
