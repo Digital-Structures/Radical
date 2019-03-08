@@ -435,8 +435,14 @@ namespace Radical
             this.RadicalVM.UpdateCurrentScoreDisplay();
             System.Action run = delegate ()
             {
-                //this.SolutionInProcess = true;
-                Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
+                if (this.Design.Geometries.Any())
+                {
+                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(true);
+                }
+                else
+                {
+                    Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false);
+                }
             };
             Rhino.RhinoApp.MainApplicationWindow.Invoke(run);
         }

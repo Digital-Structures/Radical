@@ -561,11 +561,9 @@ namespace Radical
             //First row has Objective, Constraints, and Variable headers
             string line = "Objectives,";
 
-            line += ","; //extra break
-
-
             if(numCons != 0)
             {
+                line += ","; //extra break
                 line += "Constraints,";
                 for (int i = 0; i < numCons; i++)
                 {
@@ -587,10 +585,14 @@ namespace Radical
             line = "";
             line += "Objective,"; //we shall have it a generic name
 
-            line += ",";
-            foreach (ConstVM c in this.Constraints)
+
+            if (numCons != 0)
             {
-                line += c.Name + ",";
+                line += ",";
+                foreach (ConstVM c in this.Constraints)
+                {
+                    line += c.Name + ",";
+                }
             }
 
 
@@ -610,11 +612,16 @@ namespace Radical
             {
                 line = "";
                 line += this.ObjectiveEvolution[i] + ",";
-                line += ",";
-                for (int j = 0; j < numCons; j++)
+                
+                if(numCons != 0)
                 {
-                    line += this.ConstraintsEvolution[j][i] + ",";
+                    line += ",";
+                    for (int j = 0; j < numCons; j++)
+                    {
+                        line += this.ConstraintsEvolution[j][i] + ",";
+                    }
                 }
+
                 line += ",";
                 for (int j = 0; j < numVars; j++)
                 {
