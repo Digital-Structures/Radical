@@ -52,7 +52,7 @@ namespace Radical
             this.RadicalWindow = radwindow;
             this.RadicalVM = this.RadicalWindow.RadicalVM;
             this.MainAlg = this.RadicalVM.PrimaryAlgorithm;
-            this.DisablingAllowed = this.RadicalVM.DisablingAllowed;
+            this.DisablingAllowed = !this.RadicalVM.DisablingNotAllowed;
 
             //this.SecondaryAlg = NLoptAlgorithm.LN_COBYLA;
             BuildWrapper();
@@ -196,7 +196,7 @@ namespace Radical
                 }
             }
 
-            if (this.RadicalVM.DisablingAllowed)
+            if (!this.RadicalVM.DisablingNotAllowed)
             {
                 //convert nonExpired list of Active objects to nonEnabled list of Document Objects
                 foreach (IGH_ActiveObject a in actually_disable)

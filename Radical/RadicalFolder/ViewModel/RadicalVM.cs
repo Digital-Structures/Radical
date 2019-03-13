@@ -84,7 +84,7 @@ namespace Radical
             this.OptRunning = false;
             this.OptRunning = false;
             this._advancedOptions = false;
-            this._disablingAllowed = true; 
+            this._disablingNotAllowed = false; 
 
             this.OriginalObjectiveValue = this.Design.Objectives.ElementAt(0);
             this.SmallestObjectiveValue = this.Design.Objectives.ElementAt(0);
@@ -441,13 +441,13 @@ namespace Radical
         }
 
         //DISABLING ALLOWED
-        private bool _disablingAllowed;
-        public bool DisablingAllowed
+        private bool _disablingNotAllowed;
+        public bool DisablingNotAllowed
         {
-            get { return _disablingAllowed; }
+            get { return _disablingNotAllowed; }
             set
             {
-                if (CheckPropertyChanged<bool>("DisablingAllowed", ref _disablingAllowed, ref value))
+                if (CheckPropertyChanged<bool>("DisablingAllowed", ref _disablingNotAllowed, ref value))
                 {
                 }
             }

@@ -22,7 +22,7 @@
             <Storyboard x:Key="MoreInfo">
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="InformationText">
                     <EasingDoubleKeyFrame KeyTime="0" Value="0" />
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="100"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="170"/>
                 </DoubleAnimationUsingKeyFrames>
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Brush.Opacity)" Storyboard.TargetName="InfoBackgroundBrush">
                     <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
@@ -32,7 +32,7 @@
 
             <Storyboard x:Key="LessInfo">
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="InformationText">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="100"/>
+                    <EasingDoubleKeyFrame KeyTime="0" Value="170"/>
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0" />
                 </DoubleAnimationUsingKeyFrames>
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Brush.Opacity)" Storyboard.TargetName="InfoBackgroundBrush">
@@ -105,7 +105,7 @@
                                   materialDesign:HintAssist.Hint="Secondary Algorithm" IsEditable="True" IsReadOnly="True" FontSize="15" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}">
             </ComboBox>
         </DockPanel>
-        <DockPanel Grid.Row="5">
+        <DockPanel Grid.Row="5" Margin="0,-5,0,0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"></RowDefinition>
@@ -116,37 +116,37 @@
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" FontSize="13" Margin="0,0,5,0">
-                    Show Advanced Algorithms
+                <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" FontSize="12" Margin="0,0,5,0">
+                    Show Advanced Algorithms*
                 </TextBlock>
                 <CheckBox IsChecked="{Binding AdvancedOptions, Mode=TwoWay}" HorizontalAlignment="Right"
                           Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource SecondaryAccentForegroundBrush}"
-                          Grid.Column="1" Grid.Row="0">
+                          Grid.Column="1" Grid.Row="0" Margin="0,0,7,0">
                 </CheckBox>
 
-                <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" FontSize="13" Margin="0,0,5,0">
-                    Allow Component Disabling
+                <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}" FontSize="12" Margin="0,0,5,0">
+                    Block Component Disabling**
                 </TextBlock>
-                <CheckBox IsChecked="{Binding DisablingAllowed, Mode=TwoWay}" HorizontalAlignment="Right"
+                <CheckBox IsChecked="{Binding DisablingNotAllowed, Mode=TwoWay}" HorizontalAlignment="Right"
                           Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource SecondaryAccentForegroundBrush}"
-                          Grid.Column="1" Grid.Row="1">
+                          Grid.Column="1" Grid.Row="1" Margin="0,0,7,0">
                 </CheckBox>
             </Grid>
         </DockPanel>
-        <DockPanel Grid.Row="6" Margin="0,8,0,0">
+        <DockPanel Grid.Row="6" Margin="0,10,0,0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <Button x:Name="MoreInformationButton" Click="MoreInformation_Click" Grid.Row="0" Width="20" Height="20" Margin="0,0,7,-10"
+                <Button x:Name="MoreInformationButton" Click="MoreInformation_Click" Grid.Row="0" Width="20" Height="20" Margin="0,-5,7,-10"
                                         Style="{StaticResource MaterialDesignFloatingActionButton}" HorizontalAlignment="Right" VerticalAlignment="Center"
                                         materialDesign:ShadowAssist.ShadowDepth="Depth2" BorderBrush="{DynamicResource SecondaryAccentBrush}" Background="Transparent">
                     <materialDesign:PackIcon Kind="Help" Height="16" Width="16" Foreground="{DynamicResource SecondaryAccentBrush}"/>
                 </Button>
 
-                <Grid Grid.Row="0" Name="InformationText" Height="0" Margin="25,20,0,0" >
+                <Grid Grid.Row="0" Name="InformationText" Height="0" Margin="25,10,0,0" >
                     <Grid.Background>
                         <SolidColorBrush x:Name="InfoBackgroundBrush" Color="White" />
                     </Grid.Background>
@@ -155,13 +155,20 @@
                         <RowDefinition Height="Auto"></RowDefinition>
                     </Grid.RowDefinitions>
 
+                    <!--
                     <TextBlock TextWrapping="Wrap" Grid.Row="0" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}" FontSize="16" Padding="10,10,10,0" HorizontalAlignment="Center">
                          Optimization Algorithms
+                    </TextBlock>-->
+
+                    <TextBlock TextWrapping="Wrap" Grid.Row="0" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}" Padding="10" HorizontalAlignment="Center">
+                        *
+                        <Hyperlink NavigateUri="https://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/" RequestNavigate="Hyperlink_RequestNavigate" Foreground="{DynamicResource SecondaryAccentBrush}">Click here</Hyperlink>
+                         <Run Text=" to learn more about the optimization algorithms Radical uses." />
                     </TextBlock>
 
-                    <TextBlock TextWrapping="Wrap" Grid.Row="1" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}" Padding="10" HorizontalAlignment="Center">
-                        <Hyperlink NavigateUri="https://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/" RequestNavigate="Hyperlink_RequestNavigate" Foreground="{DynamicResource SecondaryAccentBrush}">Learn more</Hyperlink>
-                         <Run Text=" about these algorithms." />
+                    <TextBlock TextWrapping="Wrap" Grid.Row="1" Margin ="10,10,10,5" Foreground="{DynamicResource BackgroundHueDarkForegroundBrush}" HorizontalAlignment="Center">
+                        **Radical may temporarily disable components in your Grasshopper script to avoid unnecessary computations.
+                        This is meant to speed up Radical, but if you experience problems with your script you can disable this functionality.
                     </TextBlock>
                 </Grid>
 

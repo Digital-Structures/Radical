@@ -162,7 +162,7 @@
 
                     <TextBlock FontSize="16" TextWrapping="Wrap" HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryHueDarkBrush}">
                         Radical does not support multi-objective optimization and will consider only your first objective.
-                        If you would like all objectives to be considered, please use Stepper.</TextBlock>
+                        </TextBlock>
 
                     <Button Background="Transparent"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
