@@ -13,25 +13,9 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Margin="0,5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
-            <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="35,1" FontSize="13"> Active Objective:</TextBlock>
-
-            <ComboBox Grid.Column="1" Name="ChosenObjective" HorizontalAlignment="Right" HorizontalContentAlignment="Right" Margin="0,0,10,0"
-                                  ItemsSource="{Binding ObjectiveNames, Mode=OneWay}" SelectionChanged="ChosenObjective_SelectionChanged"
-                                  SelectedIndex="{Binding ObjIndex, Mode=TwoWay, FallbackValue=0}"
-                                  IsEditable="True" IsReadOnly="True" FontSize="13">
-            </ComboBox>
-        </Grid>
-
-        <Grid Grid.Row="1" Margin="0,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -44,7 +28,7 @@
                                  FontSize="13" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"></TextBox>
         </Grid>
 
-        <Grid Grid.Row="2" Margin="0,5">
+        <Grid Grid.Row="1" Margin="0,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -57,7 +41,7 @@
                                  FontSize="13" PreviewKeyDown="TextBox_PreviewKeyDown" PreviewGotKeyboardFocus="TextBox_GotFocus" PreviewLostKeyboardFocus="TextBox_LostFocus"></TextBox>
         </Grid>
 
-        <Grid Grid.Row="3" Margin="0,7,10,0">
+        <Grid Grid.Row="2" Margin="0,7,10,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -76,15 +60,15 @@
         
         </Grid>
 
-        <Grid Grid.Row="4"  Margin="30,7,10,7">
+        <Grid Grid.Row="3"  Margin="30,0,10,7">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,3,0" Foreground="{DynamicResource BackgroundHueDarkSubtextForegroundBrush}">
-                    Allow Component Disabling
+                    Block Component Disabling
             </TextBlock>
-            <CheckBox IsChecked="{Binding DisablingAllowed, Mode=TwoWay}" HorizontalAlignment="Left"
+            <CheckBox IsChecked="{Binding DisablingNotAllowed, Mode=TwoWay}" HorizontalAlignment="Left"
                           Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource SecondaryAccentForegroundBrush}"
                           Grid.Column="0">
             </CheckBox>

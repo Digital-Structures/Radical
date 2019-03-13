@@ -112,7 +112,7 @@ namespace Stepper
             this.ObjectiveChart_Abs = new StepperGraphVM(ObjectiveEvolution_Abs);
             this.ObjectiveNamesChanged();
 
-            this._disablingAllowed = true;
+            this._disablingNotAllowed = false;
 
             //Check for zero's that will cause trouble
 
@@ -207,13 +207,13 @@ namespace Stepper
         }
 
                 //DISABLING ALLOWED
-        private bool _disablingAllowed;
-        public bool DisablingAllowed
+        private bool _disablingNotAllowed;
+        public bool DisablingNotAllowed
         {
-            get { return _disablingAllowed; }
+            get { return _disablingNotAllowed; }
             set
             {
-                if (CheckPropertyChanged<bool>("DisablingAllowed", ref _disablingAllowed, ref value))
+                if (CheckPropertyChanged<bool>("DisablingNotAllowed", ref _disablingNotAllowed, ref value))
                 {
                 }
             }

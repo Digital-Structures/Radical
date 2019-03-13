@@ -41,13 +41,6 @@ namespace Stepper
             InitializeComponent();
         }
 
-        //SELECTION CHANGED
-        //Notify the VM that the current objective changed
-        private void ChosenObjective_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            this.Stepper.FirePropertyChanged("CurrentObjectiveName");
-        }
-
         //CHECKED
         //Enables absolute objective value graph
         private void ToggleButton_Checked(object sender, RoutedEventArgs e)

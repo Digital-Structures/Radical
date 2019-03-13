@@ -447,7 +447,7 @@ namespace Radical
             get { return _disablingNotAllowed; }
             set
             {
-                if (CheckPropertyChanged<bool>("DisablingAllowed", ref _disablingNotAllowed, ref value))
+                if (CheckPropertyChanged<bool>("DisablingNotAllowed", ref _disablingNotAllowed, ref value))
                 {
                 }
             }

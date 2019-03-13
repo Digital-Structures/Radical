@@ -10,7 +10,7 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:nlopt="clr-namespace:NLoptNet;assembly=NLoptNet"
         mc:Ignorable="d"
-        Title="DS Optimization Tools" Height="600" Width="1000"
+        Title="DS Optimization Tools" Height="650" Width="1000"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="12"
         FontFamily="Global User Interface"

@@ -283,6 +283,7 @@
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
 
             <!--Export Csv Dialogue-->
@@ -552,7 +553,22 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <Grid Name="ButtonGrid" Grid.Row="3" VerticalAlignment="Bottom" Height="150">
+            <Grid Grid.Row="3" Margin="0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="24,0,0,0" FontSize="20" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"> Active Objective:</TextBlock>
+
+                <ComboBox Grid.Column="1" Name="ChosenObjective" HorizontalAlignment="Right" HorizontalContentAlignment="Right" Margin="0,0,10,0" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                  ItemsSource="{Binding ObjectiveNames, Mode=OneWay}" SelectionChanged="ChosenObjective_SelectionChanged"
+                                  SelectedIndex="{Binding ObjIndex, Mode=TwoWay, FallbackValue=0}"
+                                  IsEditable="True" IsReadOnly="True" FontSize="13">
+                </ComboBox>
+            </Grid>
+
+            <Grid Name="ButtonGrid" Grid.Row="4" VerticalAlignment="Bottom" Height="150">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>

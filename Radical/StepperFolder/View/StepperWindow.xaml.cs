@@ -330,7 +330,7 @@ namespace Stepper
             string name = button.Name;
 
             //Always calculate and store gradient
-            StepperOptimizer calculator = new StepperOptimizer(this.StepperVM.Design, this.StepperVM.FDStepSize, this.StepperVM.DisablingAllowed);
+            StepperOptimizer calculator = new StepperOptimizer(this.StepperVM.Design, this.StepperVM.FDStepSize, !this.StepperVM.DisablingNotAllowed);
 
             //return;
 
@@ -609,6 +609,13 @@ namespace Stepper
             {
                 SettingsExpander.IsExpanded = false;
             }
+        }
+
+        //SELECTION CHANGED
+        //Notify the VM that the current objective changed
+        private void ChosenObjective_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.StepperVM.FirePropertyChanged("CurrentObjectiveName");
         }
     }
 }
