@@ -437,6 +437,8 @@ namespace Stepper
         //BUTTON RESET
         private void ButtonReset_Click(object sender, RoutedEventArgs e)
         {
+            DateTime start = DateTime.Now;
+
             int step = (int)this.GraphSlider.Value;
 
             //Dont bother resetting if slider is on most recent step
@@ -469,7 +471,7 @@ namespace Stepper
             this.StepperVM.Reset();
             this.StepperVM.Reset();
 
-            this.StepperVM.UpdateEvolutionData(new List<List<double>>());
+            this.StepperVM.UpdateEvolutionData(new List<List<double>>(), start);
         }
 
         //CLOSE MENU CLICK

@@ -29,6 +29,7 @@ namespace Stepper
         public ChartValues<ChartValues<double>> ObjectiveEvolution_Abs;
         public List<List<double>> VariableEvolution;
         public List<List<List<double?>>> GradientEvolution;
+        public List<TimeSpan> TimeEvolution; 
 
         public List<ObjectiveVM> Objectives;
         public List<VarVM> Variables { get; set; }
@@ -80,6 +81,9 @@ namespace Stepper
             this.ObjectiveEvolution_Norm = new ChartValues<ChartValues<double>>();
             this.ObjectiveEvolution_Abs = new ChartValues<ChartValues<double>>();
             this.Objectives = new List<ObjectiveVM>();
+
+            this.TimeEvolution = new List<TimeSpan>();
+            this.TimeEvolution.Add(TimeSpan.Zero);
 
             this.GradientEvolution = new List<List<List<double?>>>();
 
@@ -299,7 +303,7 @@ namespace Stepper
         }
 
         //UPDATE EVOLUTION DATA
-        public void UpdateEvolutionData(List<List<double>> GradientData)
+        public void UpdateEvolutionData(List<List<double>> GradientData, DateTime start)
         {
             //Update objective evolution
             int i = 0;
@@ -343,6 +347,8 @@ namespace Stepper
             FirePropertyChanged("NumSteps");
             this.ObjectiveChart_Norm.XAxisSteps = this.NumSteps / 10 + 1;
             this.ObjectiveChart_Abs.XAxisSteps = this.NumSteps / 10 + 1;
+
+            this.TimeEvolution.Add(DateTime.Now.Subtract(start));
         }
 
         //OPTIMIZE
@@ -350,6 +356,9 @@ namespace Stepper
         {
             //StepperOptimizer optimizer = new StepperOptimizer(this.Design, this.ObjIndex, dir, this.StepSize);
             optimizer.ConvertFromCalculatorToOptimizer(this.ObjIndex, dir, this.StepSize);
+
+            DateTime start = DateTime.Now;
+
             optimizer.Optimize(GradientData);
 
             //Update variable values at the end of the optimization
@@ -367,7 +376,7 @@ namespace Stepper
             //optimizer.DownStreamExpire();
             //Grasshopper.Instances.ActiveCanvas.Document.ExpirePreview(false);
             Grasshopper.Instances.ActiveCanvas.Document.NewSolution(false, Grasshopper.Kernel.GH_SolutionMode.Silent);
-            this.UpdateEvolutionData(GradientData);
+            this.UpdateEvolutionData(GradientData, start);
         }
 
         //RESET
@@ -477,6 +486,9 @@ namespace Stepper
                     line += ",";
                 }
             }
+
+            line += "Times, ";
+
             output += line + "\r\n";
 
             //Third row has Objective and Variable name headers
@@ -494,8 +506,7 @@ namespace Stepper
                     line += var.Name + ",";
                 }
 
-                if (i == 0)
-                    line += ",";
+                line += ",";
             }
             output += line + "\r\n";
             #endregion
@@ -523,8 +534,22 @@ namespace Stepper
                     {
                         for (int k = 0; k < numVars; k++)
                             line += this.GradientEvolution[j][k][i] + ",";
+                        line += ",";
+                    }
+                    
+                }
+                if (i == this.NumSteps)
+                {
+                    for (int j = 0; j < numObjs; j++)
+                    {
+                        for (int k = 0; k < numVars; k++)
+                            line += ",";
+                        line += ",";
                     }
                 }
+
+                line += this.TimeEvolution[i].ToString();
+                line += ",";
 
                 output += line + "\r\n";
             }
