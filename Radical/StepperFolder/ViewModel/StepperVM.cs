@@ -548,7 +548,7 @@ namespace Stepper
                     }
                 }
 
-                line += this.TimeEvolution[i].ToString();
+                line += this.TimeEvolution[i].ToString("G");
                 line += ",";
 
                 output += line + "\r\n";

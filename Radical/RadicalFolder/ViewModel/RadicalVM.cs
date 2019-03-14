@@ -28,6 +28,8 @@ namespace Radical
         public ChartValues<double> ObjectiveEvolution { get; set; }
         public ChartValues<ChartValues<double>> ConstraintsEvolution { get; set; }
         public List<List<double>> NumVarEvolution { get; set; }
+        public List<TimeSpan> TimeEvolution;
+        public TimeSpan TotalRunTime;
 
         public double OriginalObjectiveValue { get; set; }
         public double SmallestObjectiveValue { get; set; }
@@ -70,6 +72,9 @@ namespace Radical
                 list_var.Add(v.CurrentValue);
                 this.NumVarEvolution.Add(list_var);
             }
+
+            this.TimeEvolution = new List<TimeSpan>();
+            this.TimeEvolution.Add(new TimeSpan(0,0,-10)); //make first timespan negative because no time has passed, this will not be returned in csv file
 
             this.Graphs = new Dictionary<string, List<GraphVM>>();
             this.Graphs.Add("Main", new List<GraphVM>());
@@ -183,7 +188,12 @@ namespace Radical
         public void Optimize(RadicalWindow radicalWindow)
         {
             RadicalOptimizer opt = new RadicalOptimizer(this.Design, radicalWindow);
+            DateTime start = DateTime.Now;
+
             opt.RunOptimization();
+
+            DateTime end = DateTime.Now;
+            TotalRunTime = end - start;
         }
 
         //OPTIMIZATION STARTED
@@ -579,6 +589,12 @@ namespace Radical
                 line += ",";
             }
 
+            //line += ","; //extra break
+            line += "Time Spans,";
+
+            line += ","; //extra break
+            line += "Total Calculation Time";
+
             output += line + "\r\n";
 
             //Second row has name headers
@@ -601,6 +617,11 @@ namespace Radical
             {
                 line += var.Name + ",";
             }
+
+            line += ",";
+            line += ",";
+            line += ",";
+            line += TotalRunTime.ToString("G");
 
             output += line + "\r\n";
             #endregion
@@ -627,6 +648,13 @@ namespace Radical
                 {
                     line += this.NumVarEvolution[j][i] + ",";
                 }
+
+                line += ",";
+                if (this.TimeEvolution[i] > TimeSpan.Zero)
+                {
+                    line += this.TimeEvolution[i].ToString("G");
+                }
+
                 output += line + "\r\n";
             }
             #endregion 

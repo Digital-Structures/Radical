@@ -210,8 +210,11 @@ namespace Radical
 
         public double Objective(double[] x)
         {
-            Debug.WriteLine("Obj");
-            x.ToList().ForEach(i => Debug.WriteLine(i.ToString()));
+            //Debug.WriteLine("Obj");
+            //x.ToList().ForEach(i => Debug.WriteLine(i.ToString()));
+
+            DateTime start_iteration = DateTime.Now; 
+
             bool finished = false;
 
             Grasshopper.Kernel.GH_SolutionMode refresh = Grasshopper.Kernel.GH_SolutionMode.Silent;
@@ -296,6 +299,7 @@ namespace Radical
                     double score = Design.Constraints[i].CurrentValue;
                     this.StoredConstraintValues[i].Add(score);
                 }
+
             }
             else
             {
@@ -353,6 +357,17 @@ namespace Radical
                 }
 
                 throw new OperationCanceledException();
+            }
+
+            DateTime end_iteration = DateTime.Now;
+
+            if ((this.StoredMainValues.Count + this.RadicalVM.ObjectiveEvolution.Count) % 10 == 0)
+            {
+                this.RadicalVM.TimeEvolution.Add(end_iteration - start_iteration);
+            }
+            else
+            {
+                this.RadicalVM.TimeEvolution.Add(new TimeSpan(0,0,-10));
             }
 
             return objective;
