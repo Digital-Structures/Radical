@@ -15,12 +15,11 @@ using System.Diagnostics;
 using Radical.Components;
 using Radical.Integration;
 using System.Threading;
-using Stepper;
 using Grasshopper.Kernel.Special;
 
 namespace DSOptimization
 { 
-    public class DSOptimizerComponent : GH_Component
+    public class RadicalComponent : GH_Component
     {
         public List<double> Objectives { get; set; }
         public List<double> Constraints { get; set; }
@@ -44,9 +43,9 @@ namespace DSOptimization
         /// <summary>
         /// Initializes a new instance of the RadicalComponent class.
         /// </summary>
-        public DSOptimizerComponent()
-          : base("DS Optimizer", "DSOpt",
-              "Optimization component featuring Radical and Stepper",
+        public RadicalComponent()
+          : base("Radical", "Radical",
+              "Optimization component featuring Radical",
               "DSE", "Optimize")
         {
             this.Objectives = new List<double>();
@@ -280,11 +279,11 @@ namespace DSOptimization
     {
         // custom attribute to override double click mouse event on component and open a WPF window
 
-        DSOptimizerComponent MyComponent;
+        RadicalComponent MyComponent;
 
         public DSOptimizationComponentAttributes(IGH_Component component) : base(component)
         {
-            MyComponent = (DSOptimizerComponent)component;
+            MyComponent = (RadicalComponent)component;
         }
 
         //[STAThread]
@@ -299,7 +298,8 @@ namespace DSOptimization
 
                 Thread viewerThread = new Thread(delegate ()
                 {
-                    Window viewer = new DSOptimizeWindow(design, this.MyComponent);
+                    RadicalVM radVM = new RadicalVM(design, this.MyComponent);
+                    Window viewer = new RadicalWindow(radVM);
                     viewer.Show();
                     System.Windows.Threading.Dispatcher.Run();
                 });

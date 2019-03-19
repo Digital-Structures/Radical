@@ -9,14 +9,14 @@ namespace DSOptimization
     public class Constraint
     {
         public enum ConstraintType { lessthan, morethan, equalto };
-        public DSOptimizerComponent MyComponent { get; set; }
+        public RadicalComponent MyComponent { get; set; }
         public double CurrentValue { get { return MyComponent.Constraints[ConstraintIndex]; } }
         public double LimitValue { get; set; }
         public ConstraintType MyType { get; set; }
         public int ConstraintIndex { get; set; }
         public double Gradient { get; set; }
 
-        public Constraint(DSOptimizerComponent mycomponent, ConstraintType constraintType, int constraintindex, 
+        public Constraint(RadicalComponent mycomponent, ConstraintType constraintType, int constraintindex, 
             double limit = 0, bool active = true)
         {
             MyComponent = mycomponent;

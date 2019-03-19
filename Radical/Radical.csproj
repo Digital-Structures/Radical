@@ -108,9 +108,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DSOptimization\IOptimizeToolVM.cs" />
-    <Compile Include="DSOptimization\View\DSOptimizeWindow.xaml.cs">
-      <DependentUpon>DSOptimizeWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -163,34 +160,13 @@
     <Compile Include="DSOptimization\View\VariableControl.xaml.cs">
       <DependentUpon>VariableControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StepperFolder\Model\StepperOptimizer.cs" />
-    <Compile Include="StepperFolder\Model\StepperInfo.cs" />
     <Compile Include="DSOptimization\ViewModel\IStepDataElement.cs" />
-    <Compile Include="StepperFolder\ViewModel\ObjectiveVM.cs" />
-    <Compile Include="StepperFolder\ViewModel\StepperGraphVM.cs" />
-    <Compile Include="StepperFolder\ViewModel\StepperVM.cs" />
-    <Compile Include="StepperFolder\View\SettingsControl.xaml.cs">
-      <DependentUpon>SettingsControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="StepperFolder\View\StepperGraphControl.xaml.cs">
-      <DependentUpon>StepperGraphControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="StepperFolder\View\StepperWindow.xaml.cs">
-      <DependentUpon>StepperWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="StepperFolder\View\DataControl.xaml.cs">
-      <DependentUpon>DataControl.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="x64\COPYING" />
     <None Include="x64\COPYRIGHT" />
-    <None Include="StepperFolder\x32\COPYING" />
-    <None Include="StepperFolder\x32\COPYRIGHT" />
-    <None Include="StepperFolder\x64\COPYING" />
-    <None Include="StepperFolder\x64\COPYRIGHT" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\DSOpt.png" />
@@ -200,25 +176,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="x64\nlopt.h" />
-    <Content Include="StepperFolder\x32\libnlopt-0.def" />
-    <Content Include="StepperFolder\x32\libnlopt-0.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StepperFolder\x32\nlopt.h" />
-    <Content Include="StepperFolder\x64\libnlopt-0.def" />
-    <Content Include="StepperFolder\x64\libnlopt-0.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StepperFolder\x64\nlopt.h" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="DSOptimization\View\ConstraintControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="DSOptimization\View\DSOptimizeWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="RadicalFolder\View\GraphControl.xaml">
       <SubType>Designer</SubType>
@@ -243,22 +205,6 @@
     <Page Include="DSOptimization\View\VariableControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="StepperFolder\View\SettingsControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="StepperFolder\View\StepperGraphControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="StepperFolder\View\StepperWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="StepperFolder\View\DataControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

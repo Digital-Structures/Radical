@@ -8,7 +8,7 @@ namespace DSOptimization
 {
     public interface IOptimizeToolVM
     {
-        DSOptimizerComponent Component { get; set; }
+        RadicalComponent Component { get; set; }
         List<GroupVarVM> GroupVars { get; set; }
         List<VarVM> NumVars { get; set; }
         List<List<VarVM>> GeoVars { get; set; }

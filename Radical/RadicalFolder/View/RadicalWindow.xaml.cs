@@ -32,7 +32,7 @@ namespace Radical
     /// <summary>
     /// Interaction logic for MaiWindow.xaml
     /// </summary>
-    public partial class RadicalWindow : UserControl
+    public partial class RadicalWindow : Window
     {
         private Dictionary<string, List<GraphControl>> GraphControls;
         private List<GroupVariableControl> GroupVars;
@@ -403,6 +403,14 @@ namespace Radical
             }
         }
 
+        public void Window_Closing(object sender, CancelEventArgs e)
+        {
+            this.WindowClosing();
+            //if radical is running
+            //throw stop
+            this.RadicalVM.OnWindowClosing();
+        }
+
         //WINDOW CLOSING - I believe this is no longer in use because of DSOpt closing function
         //Alert the component that the window has been closed
         //(and therefore a new window can open on double click)
@@ -636,6 +644,7 @@ namespace Radical
             }
         }
         #endregion
+
     }
 
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]

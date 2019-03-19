@@ -16,7 +16,7 @@ namespace Radical
     public class RadicalVM : BaseVM, IOptimizeToolVM
     {
         public List<GroupVarVM> GroupVars { get; set; }
-        public DSOptimizerComponent Component { get; set; }
+        public RadicalComponent Component { get; set; }
         public Design Design { get; set; }
         public List<ConstVM> Constraints { get; set; }
         public List<VarVM> NumVars { get; set; }
@@ -38,13 +38,13 @@ namespace Radical
         {
         }
 
-        public RadicalVM(DSOptimizerComponent component)
+        public RadicalVM(RadicalComponent component)
         {
             this.Component = component;
         }
 
         //CONSTRUCTOR
-        public RadicalVM(Design design, DSOptimizerComponent component)
+        public RadicalVM(Design design, RadicalComponent component)
         {
             this.Component = component;
             this.Design = design;
@@ -697,5 +697,10 @@ namespace Radical
             file.Close();
         }
         #endregion
+
+        public void OnWindowClosing()
+        {
+            this.Component.IsWindowOpen = false;
+        }
     }
 }

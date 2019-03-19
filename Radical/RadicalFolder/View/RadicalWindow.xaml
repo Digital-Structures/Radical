@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Radical.RadicalWindow"
+﻿<Window x:Class="Radical.RadicalWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -17,9 +17,10 @@
         TextElement.FontWeight="Medium"
         TextElement.FontSize="12"
         FontFamily="Global User Interface"
-        SizeChanged="UpdateGraphSize">
+        SizeChanged="UpdateGraphSize"
+        Closing="Window_Closing">
 
-    <UserControl.Resources>
+    <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
@@ -124,9 +125,9 @@
             </Storyboard>
             <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
         </ResourceDictionary>
-    </UserControl.Resources>
+    </Window.Resources>
 
-    <UserControl.Triggers>
+    <Window.Triggers>
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonOpenMenu">
             <BeginStoryboard Storyboard="{StaticResource MenuOpen}"></BeginStoryboard>
         </EventTrigger>
@@ -139,7 +140,7 @@
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonSettingsClose">
             <BeginStoryboard Storyboard="{StaticResource SettingsClose}"></BeginStoryboard>
         </EventTrigger>
-    </UserControl.Triggers>
+    </Window.Triggers>
 
     <Grid Name="MainGrid" Margin="15">
         <Grid.ColumnDefinitions>
@@ -462,4 +463,4 @@
             </Grid>
         </Grid>
     </Grid>
-</UserControl>
+</Window>

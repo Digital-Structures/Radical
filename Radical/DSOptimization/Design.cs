@@ -17,7 +17,7 @@ namespace DSOptimization
     //Collection of problem variables, constraints, and objectives to be optimized by Radical
     public class Design
     {
-        public DSOptimizerComponent MyComponent { get; set; }
+        public RadicalComponent MyComponent { get; set; }
 
         //INPUT PROPERTIES
         public List<IVariable> Variables { get; set; }
@@ -31,7 +31,7 @@ namespace DSOptimization
         public List<IVariable> ActiveVariables{ get { return Variables.Where(var => var.IsActive).ToList(); } }
 
         //CONSTRUCTOR
-        public Design(DSOptimizerComponent component)
+        public Design(RadicalComponent component)
         {
             //Access the component
             this.MyComponent = component;
