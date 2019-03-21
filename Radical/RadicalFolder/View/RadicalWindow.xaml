@@ -155,13 +155,13 @@
             <materialDesign:DialogHost.DialogContent>
                 <StackPanel Margin="16" Width="Auto" MaxWidth="400">
 
-                    <TextBlock FontSize="24" Foreground="{DynamicResource SecondaryAccentBrush}" HorizontalAlignment="Center">
+                    <TextBlock FontSize="24" Foreground="{DynamicResource SecondaryAccentBrush}" HorizontalAlignment="Center" TextAlignment="Center">
                         Notice</TextBlock>
 
-                    <TextBlock FontSize="16" TextWrapping="Wrap" HorizontalAlignment="Center" Foreground="{DynamicResource SecondaryAccentBrush}">
+                    <TextBlock FontSize="16" TextWrapping="Wrap" HorizontalAlignment="Center" Foreground="{DynamicResource SecondaryAccentBrush}" TextAlignment="Center">
                         You've entered multiple objectives.</TextBlock>
 
-                    <TextBlock FontSize="16" TextWrapping="Wrap" HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryHueDarkBrush}">
+                    <TextBlock FontSize="16" TextWrapping="Wrap" HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryHueDarkBrush}" TextAlignment="Center">
                         Radical does not support multi-objective optimization and will consider only your first objective.
                         </TextBlock>
 
