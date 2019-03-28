@@ -130,7 +130,7 @@
     <Compile Include="DSOptimization\Model\DesignSurface.cs" />
     <Compile Include="RadicalFolder\RadicalInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DSOptimization\DSOptimizerComponent.cs" />
+    <Compile Include="DSOptimization\RadicalComponent.cs" />
     <Compile Include="DSOptimization\ViewModel\BaseVM.cs" />
     <Compile Include="DSOptimization\ViewModel\GroupVarVM.cs" />
     <Compile Include="RadicalFolder\ViewModel\GraphVM.cs" />
